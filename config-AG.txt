@@ -1,0 +1,772 @@
+Venusaur-Mega @ Venusaurite
+Ability: Thick Fat
+Level: 50
+EVs: 244 HP / 124 Def / 76 SpA / 52 SpD / 12 Spe
+Points: 31 HP / 0 Atk / 16 Def / 10 SpA / 7 SpD / 2 Spe
+Bold Nature
+- Protect
+- Sludge Bomb
+- Giga Drain
+- Leech Seed
+
+Charizard-Mega-Y @ Charizardite Y
+Ability: Drought
+Level: 50
+Note: 高速喷
+EVs: 108 HP / 36 Def / 100 SpA / 12 SpD / 252 Spe
+Points: 14 HP / 0 Atk / 5 Def / 13 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Protect
+- Heat Wave
+- Solar Beam
+- Overheat
+
+Charizard-Mega-Y @ Charizardite Y
+Ability: Drought
+Level: 50
+Note: 肉喷
+EVs: 124 HP / 220 Def / 36 SpA / 4 SpD / 124 Spe
+Points: 16 HP / 0 Atk / 28 Def / 5 SpA / 1 SpD / 16 Spe
+Modest Nature
+- Protect
+- Heat Wave
+- Solar Beam
+- Overheat
+
+Charizard-Mega-X @ Charizardite X
+Ability: Tough Claws
+Level: 50
+Note: 雷电拳可以换羽栖
+EVs: 212 HP / 52 Atk / 4 Def / 4 SpD / 236 Spe
+Points: 27 HP / 7 Atk / 1 Def / 0 SpA / 1 SpD / 30 Spe
+Adamant Nature
+- Protect
+- Flare Blitz
+- Dragon Dance
+- Thunder Punch
+
+Blaziken-Mega @ Blazikenite
+Ability: Speed Boost
+Level: 50
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Flare Blitz
+- Close Combat
+- Rock Slide
+
+Chesnaught-Mega @ Chesnaughtite
+Ability: Bulletproof
+Level: 50
+EVs: 252 HP / 212 Def / 44 SpD
+Points: 32 HP / 0 Atk / 28 Def / 0 SpA / 6 SpD / 0 Spe
+Impish Nature
+- Protect
+- Body Press
+- Leech Seed
+- Wood Hammer
+
+Delphox-Mega @ Delphoxite
+Ability: Levitate
+Level: 50
+EVs: 68 HP / 84 Def / 116 SpA / 4 SpD / 236 Spe
+Points: 9 HP / 0 Atk / 11 Def / 15 SpA / 1 SpD / 30 Spe
+Timid Nature
+- Protect
+- Nasty Plot
+- Heat Wave
+- Psychic
+
+Meganium-Mega @ Meganiumite
+Ability: Mega Sol
+Level: 50
+Note: 输出
+EVs: 252 HP / 4 Def / 132 SpA / 12 SpD / 108 Spe
+Points: 32 HP / 0 Atk / 1 Def / 17 SpA / 2 SpD / 14 Spe
+Modest Nature
+- Protect
+- Weather Ball
+- Solar Beam
+- Dazzling Gleam
+
+Meganium-Mega @ Meganiumite
+Ability: Mega Sol
+Level: 50
+Note: 肉
+EVs: 252 HP / 28 Def / 52 SpA / 172 SpD / 4 Spe
+Points: 32 HP / 0 Atk / 4 Def / 7 SpA / 22 SpD / 1 Spe
+Modest Nature
+- Protect
+- Weather Ball
+- Solar Beam
+- Leech Seed
+
+Metagross-Mega @ Metagrossite
+Ability: Tough Claws
+Level: 50
+EVs: 28 HP / 220 Atk / 4 Def / 4 SpD / 252 Spe
+Points: 4 HP / 28 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Stomping Tantrum
+- Ice Punch
+- Heavy Slam
+
+Gengar-Mega @ Gengarite
+Ability: Shadow Tag
+Level: 50
+Note: 输出
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Sludge Bomb
+- Shadow Ball
+- Icy Wind
+
+Gengar-Mega @ Gengarite
+Ability: Shadow Tag
+Level: 50
+Note: 灭歌
+EVs: 188 HP / 4 Def / 76 SpA / 4 SpD / 236 Spe
+Points: 24 HP / 0 Atk / 1 Def / 10 SpA / 1 SpD / 30 Spe
+Modest Nature
+- Protect
+- Sludge Bomb
+- Shadow Ball
+- Perish Song
+
+Salamence-Mega @ Salamencite
+Ability: Aerilate
+Level: 50
+Note: 龙舞物攻
+EVs: 84 HP / 68 Atk / 4 Def / 252 SpD / 100 Spe
+Points: 11 HP / 9 Atk / 1 Def / 0 SpA / 32 SpD / 13 Spe
+Adamant Nature
+- Protect
+- Dragon Dance
+- Roost
+- Double-Edge
+
+Salamence-Mega @ Salamencite
+Ability: Aerilate
+Level: 50
+Note: 特攻配置
+EVs: 100 HP / 4 Def / 164 SpA / 20 SpD / 220 Spe
+Points: 13 HP / 0 Atk / 1 Def / 21 SpA / 3 SpD / 28 Spe
+Modest Nature
+- Protect
+- Hyper Voice
+- Tailwind
+- Flamethrower
+
+Salamence-Mega @ Salamencite
+Ability: Aerilate
+Level: 50
+Note: 双刀
+EVs: 4 Atk / 252 SpA / 252 Spe
+Points: 0 HP / 2 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Naive Nature
+- Protect
+- Hyper Voice
+- Double-Edge
+- Tailwind
+
+Gardevoir-Mega @ Gardevoirite
+Ability: Pixilate
+Level: 50
+EVs: 236 HP / 124 Def / 76 SpA / 20 SpD / 52 Spe
+Points: 30 HP / 0 Atk / 16 Def / 10 SpA / 3 SpD / 7 Spe
+Modest Nature
+- Protect
+- Hyper Voice
+- Expanding Force
+- Trick Room
+
+Kangaskhan-Mega @ Kangaskhanite
+Ability: Parental Bond
+Level: 50
+Note: 肉
+EVs: 36 HP / 212 Atk / 4 Def / 236 SpD / 20 Spe
+Points: 5 HP / 27 Atk / 1 Def / 0 SpA / 30 SpD / 3 Spe
+Adamant Nature
+- Fake Out
+- Sucker Punch
+- Double-Edge
+- Power-Up Punch
+
+Kangaskhan-Mega @ Kangaskhanite
+Ability: Parental Bond
+Level: 50
+Note: 输出
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Sucker Punch
+- Double-Edge
+- Power-Up Punch
+
+Mawile-Mega @ Mawilite
+Ability: Huge Power
+Level: 50
+EVs: 252 HP / 252 Atk / 4 SpD
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Protect
+- Sucker Punch
+- Rock Slide
+- Play Rough
+
+Starmie-Mega @ Starminite
+Ability: Pure Power
+Level: 50
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Aqua Jet
+- Liquidation
+- Zen Headbutt
+
+Slowbro-Mega @ Slowbronite
+Ability: Shell Armor
+Level: 50
+EVs: 252 HP / 252 Def / 4 SpD
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Iron Defense
+- Body Press
+- Scald
+- Protect
+
+Tyranitar-Mega @ Tyranitarite
+Ability: Sand Stream
+Level: 50
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Knock Off
+- Rock Slide
+- Dragon Dance
+
+Tyranitar @ Choice Scarf
+Ability: Sand Stream
+Level: 50
+Tera Type: Rock
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Knock Off
+- Ice Punch
+- Low Kick
+
+Excadrill @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Tera Type: Ground
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Iron Head
+- High Horsepower
+- X-Scissor
+
+Swampert-Mega @ Swampertite
+Ability: Swift Swim
+Level: 50
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Liquidation
+- High Horsepower
+- Ice Punch
+
+Greninja-Mega @ Greninjite
+Ability: Protean
+Level: 50
+EVs: 252 Atk / 4 SpA / 252 Spe
+Points: 0 HP / 32 Atk / 0 Def / 2 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Rock Slide
+- Gunk Shot
+- Icy Wind
+
+Manectric-Mega @ Manectite
+Ability: Intimidate
+Level: 50
+EVs: 172 HP / 4 Def / 68 SpA / 12 SpD / 252 Spe
+Points: 22 HP / 0 Atk / 1 Def / 9 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Protect
+- Thunderbolt
+- Snarl
+- Volt Switch
+
+Froslass-Mega @ Froslassite
+Ability: Snow Warning
+Level: 50
+EVs: 8 HP / 8 Def / 224 SpA / 8 SpD / 256 Spe
+Points: 4 HP / 0 Atk / 1 Def / 28 SpA / 1 SpD / 32 Spe
+Hardy Nature
+- Protect
+- Blizzard
+- Aurora Veil
+- Shadow Ball
+
+Whimsicott @ Focus Sash
+Ability: Prankster
+Level: 50
+Tera Type: Ghost
+Note: 万能气势披带
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Encore
+- Tailwind
+- Moonblast
+
+Whimsicott @ Covert Cloak
+Ability: Prankster
+Level: 50
+Tera Type: Ghost
+Note: 物防型
+EVs: 252 HP / 196 Def / 60 SpD
+Points: 32 HP / 0 Atk / 26 Def / 0 SpA / 8 SpD / 0 Spe
+Bold Nature
+- Fake Tears
+- Encore
+- Tailwind
+- Moonblast
+
+Grimmsnarl @ Light Clay
+Ability: Prankster
+Level: 50
+Note: 开墙
+EVs: 232 HP / 8 Atk / 128 Def / 120 SpD / 16 Spe
+Points: 32 HP / 1 Atk / 16 Def / 0 SpA / 15 SpD / 2 Spe
+Careful Nature
+- Light Screen
+- Reflect
+- Thunder Wave
+- Spirit Break
+
+Grimmsnarl @ Covert Cloak
+Ability: Prankster
+Level: 50
+Tera Type: Dark
+Note: 击掌
+EVs: 252 HP / 4 Atk / 108 Def / 116 SpD / 28 Spe
+Points: 32 HP / 1 Atk / 14 Def / 0 SpA / 15 SpD / 4 Spe
+Careful Nature
+- Fake Out
+- Fake Out
+- Parting Shot
+- Spirit Break
+
+Farigiraf @ Throat Spray
+Ability: Armor Tail
+Level: 50
+Tera Type: Normal
+Note: 输出型
+EVs: 100 HP / 84 Def / 156 SpA / 132 SpD / 36 Spe
+Points: 13 HP / 0 Atk / 11 Def / 20 SpA / 17 SpD / 5 Spe
+Modest Nature
+- Protect
+- Trick Room
+- Hyper Voice
+- Psychic
+
+Farigiraf @ Sitrus Berry
+Ability: Armor Tail
+Level: 50
+Tera Type: Fairy
+Note: 辅助型
+EVs: 180 HP / 172 Def / 156 SpD
+Points: 24 HP / 0 Atk / 22 Def / 0 SpA / 20 SpD / 0 Spe
+Bold Nature
+- Protect
+- Trick Room
+- Hyper Voice
+- Imprison
+
+Rillaboom @ Assault Vest
+Ability: Grassy Surge
+Level: 50
+Tera Type: Grass
+EVs: 252 HP / 116 Atk / 4 Def / 124 SpD / 12 Spe
+Points: 32 HP / 15 Atk / 1 Def / 0 SpA / 16 SpD / 2 Spe
+Adamant Nature
+- Fake Out
+- Wood Hammer
+- U-turn
+- Grassy Glide
+
+Incineroar @ Assault Vest
+Ability: Intimidate
+Level: 50
+Tera Type: Fire
+Note: 四攻反走
+EVs: 252 HP / 180 Def / 76 SpD
+Points: 32 HP / 0 Atk / 24 Def / 0 SpA / 10 SpD / 0 Spe
+Relaxed Nature
+- Fake Out
+- Darkest Lariat
+- Flare Blitz
+- U-turn
+
+Incineroar @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Tera Type: Fire
+Note: 常见配置，可以头盔&磷火
+EVs: 252 HP / 4 Atk / 108 Def / 100 SpD / 44 Spe
+Points: 32 HP / 1 Atk / 14 Def / 0 SpA / 13 SpD / 6 Spe
+Careful Nature
+- Fake Out
+- Darkest Lariat
+- Flare Blitz
+- Parting Shot
+
+Volcarona @ Leftovers
+Ability: Flame Body
+Level: 50
+Tera Type: Bug
+Note: 强化型
+EVs: 252 HP / 92 Def / 36 SpA / 4 SpD / 124 Spe
+Points: 32 HP / 0 Atk / 12 Def / 5 SpA / 1 SpD / 16 Spe
+Modest Nature
+- Protect
+- Quiver Dance
+- Heat Wave
+- Struggle Bug
+
+Volcarona @ Covert Cloak
+Ability: Flame Body
+Level: 50
+Tera Type: Bug
+EVs: 124 HP / 228 Def / 156 Spe
+Points: 16 HP / 0 Atk / 29 Def / 0 SpA / 0 SpD / 21 Spe
+Timid Nature
+- Rage Powder
+- Tailwind
+- Fiery Dance
+- Struggle Bug
+
+Amoonguss @ Rocky Helmet
+Ability: Effect Spore
+Level: 50
+Tera Type: Grass
+EVs: 236 HP / 156 Def / 116 SpD
+Points: 31 HP / 0 Atk / 20 Def / 0 SpA / 15 SpD / 0 Spe
+Hardy Nature
+- Spore
+- Sludge Bomb
+- Rage Powder
+- Protect
+
+Torkoal @ Choice Specs
+Ability: Drought
+Level: 50
+Tera Type: Fire
+EVs: 252 HP / 252 SpA / 4 SpD
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Eruption
+- Weather Ball
+- Heat Wave
+- Earth Power
+
+Hatterene @ Life Orb
+Ability: Magic Bounce
+Level: 50
+Tera Type: Psychic
+EVs: 252 HP / 4 Def / 252 SpA
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Protect
+- Trick Room
+- Expanding Force
+- Dazzling Gleam
+
+Indeedee-F @ Rocky Helmet
+Ability: Psychic Surge
+Level: 50
+Tera Type: Psychic
+EVs: 252 HP / 252 Def / 4 SpD
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Psychic
+- Follow Me
+- Helping Hand
+- Trick Room
+
+Ursaluna @ Flame Orb
+Ability: Guts
+Level: 50
+Tera Type: Ground
+EVs: 252 HP / 156 Atk / 100 SpD
+Points: 32 HP / 21 Atk / 0 Def / 0 SpA / 13 SpD / 0 Spe
+Brave Nature
+- Protect
+- Facade
+- Earthquake
+- Headlong Rush
+
+Ursaluna-Bloodmoon (M) @ Life Orb
+Ability: Mind's Eye
+Level: 50
+Tera Type: Ground
+EVs: 164 HP / 4 Def / 196 SpA / 52 SpD / 92 Spe
+Points: 21 HP / 0 Atk / 1 Def / 25 SpA / 7 SpD / 12 Spe
+Modest Nature
+- Protect
+- Blood Moon
+- Hyper Voice
+- Earth Power
+
+Basculegion (M) @ Mystic Water
+Ability: Swift Swim
+Level: 50
+Tera Type: Water
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Wave Crash
+- Last Respects
+- Aqua Jet
+
+Archaludon @ Assault Vest
+Ability: Stamina
+Level: 50
+Tera Type: Steel
+EVs: 252 HP / 4 Def / 44 SpA / 196 SpD / 12 Spe
+Points: 32 HP / 0 Atk / 1 Def / 6 SpA / 25 SpD / 2 Spe
+Modest Nature
+- Electro Shot
+- Snarl
+- Body Press
+- Dragon Pulse
+
+Archaludon @ Power Herb
+Ability: Sturdy
+Level: 50
+Tera Type: Steel
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Electro Shot
+- Draco Meteor
+- Flash Cannon
+- Protect
+
+Pelipper @ Focus Sash
+Ability: Drizzle
+Level: 50
+Tera Type: Water
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Hurricane
+- Weather Ball
+- Tailwind
+- Protect
+
+Politoed @ Sitrus Berry
+Ability: Drizzle
+Level: 50
+Tera Type: Water
+EVs: 244 HP / 228 Def / 36 SpD
+Points: 31 HP / 0 Atk / 30 Def / 0 SpA / 5 SpD / 0 Spe
+Sassy Nature
+- Protect
+- Muddy Water
+- Helping Hand
+- Perish Song
+
+Dragonite @ Loaded Dice
+Ability: Multiscale
+Level: 50
+Tera Type: Dragon
+Note: 加不到200速，需要得爽朗
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Outrage
+- Tailwind
+- Iron Head
+
+Armarouge @ Power Herb
+Ability: Flash Fire
+Level: 50
+Tera Type: Fire
+Note: 引火
+EVs: 252 HP / 252 SpA / 4 SpD
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Expanding Force
+- Meteor Beam
+- Armor Cannon
+- Trick Room
+
+Armarouge @ Weakness Policy
+Ability: Weak Armor
+Level: 50
+Tera Type: Fire
+Note: 碎裂铠甲
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Expanding Force
+- Heat Wave
+- Aura Sphere
+- Endure
+
+Dondozo @ Leftovers
+Ability: Unaware
+Level: 50
+Tera Type: Water
+Note: 耐久型
+EVs: 164 HP / 76 Atk / 4 Def / 252 SpD / 12 Spe
+Points: 21 HP / 10 Atk / 1 Def / 0 SpA / 32 SpD / 2 Spe
+Adamant Nature
+- Protect
+- Order Up
+- Earthquake
+- Wave Crash
+
+Dondozo @ Covert Cloak
+Ability: Unaware
+Level: 50
+Tera Type: Water
+Note: 进攻型
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Order Up
+- Earthquake
+- Wave Crash
+
+Tatsugiri @ Choice Scarf
+Ability: Commander
+Level: 50
+Tera Type: Dragon
+Note: 围巾
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Muddy Water
+- Draco Meteor
+- Hydro Pump
+- Icy Wind
+
+Tatsugiri @ Focus Sash
+Ability: Commander
+Level: 50
+Tera Type: Dragon
+Note: 气势披带
+EVs: 4 HP / 252 SpA / 252 Spe
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Muddy Water
+- Draco Meteor
+- Protect
+- Helping Hand
+
+Tatsugiri @ Safety Goggles
+Ability: Commander
+Level: 50
+Tera Type: Dragon
+Note: 耐久
+EVs: 252 HP / 140 Def / 76 SpA / 4 SpD / 36 Spe
+Points: 32 HP / 0 Atk / 18 Def / 10 SpA / 1 SpD / 5 Spe
+Modest Nature
+- Muddy Water
+- Draco Meteor
+- Protect
+- Helping Hand
+
+Maushold @ Wide Lens
+Ability: Technician
+Level: 50
+Tera Type: Normal
+Note: 进攻型
+EVs: 4 HP / 252 Atk / 252 Spe
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Population Bomb
+- Encore
+- Follow Me
+
+Maushold @ Safety Goggles
+Ability: Friend Guard
+Level: 50
+Tera Type: Normal
+Note: 辅助型
+EVs: 252 HP / 156 Def / 100 SpD
+Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
+Impish Nature
+- Protect
+- Helping Hand
+- Super Fang
+- Follow Me
+
+Sinistcha-Masterpiece @ Rocky Helmet
+Ability: Hospitality
+Level: 50
+Tera Type: Grass
+EVs: 244 HP / 28 Def / 4 SpA / 228 SpD / 4 Spe
+Points: 31 HP / 0 Atk / 4 Def / 1 SpA / 29 SpD / 1 Spe
+Serious Nature
+- Trick Room
+- Rage Powder
+- Matcha Gotcha
+- Strength Sap
+
+Kingambit @ Black Glasses
+Ability: Defiant
+Level: 50
+Tera Type: Dark
+Note: 剑舞
+EVs: 252 HP / 252 Atk / 4 SpD
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Swords Dance
+- Kowtow Cleave
+- Sucker Punch
+
+Kingambit @ Assault Vest
+Ability: Defiant
+Level: 50
+Tera Type: Dark
+EVs: 244 HP / 212 Atk / 52 SpD
+Points: 31 HP / 28 Atk / 0 Def / 0 SpA / 7 SpD / 0 Spe
+Adamant Nature
+- Brick Break
+- Iron Head
+- Kowtow Cleave
+- Sucker Punch
+
+Ninetales-Alola @ Light Clay
+Ability: Snow Warning
+Level: 50
+Tera Type: Ice
+EVs: 220 HP / 20 Def / 4 SpA / 60 SpD / 204 Spe
+Points: 28 HP / 0 Atk / 3 Def / 1 SpA / 8 SpD / 26 Spe
+Timid Nature
+- Blizzard
+- Aurora Veil
+- Moonblast
+- Icy Wind
