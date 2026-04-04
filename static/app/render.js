@@ -194,6 +194,7 @@ export function renderAnalysis(state) {
   document.getElementById("analysis-overview").innerHTML = `
     <div class="metric-card"><strong>${analysis.weaknesses.length}</strong><span>${t(language, "analysis.weaknesses")}</span></div>
     <div class="metric-card"><strong>${analysis.blindSpots.length}</strong><span>${t(language, "analysis.blindSpots")}</span></div>
+    <div class="metric-card"><strong>${t(language, `analysis.speedMode.${analysis.speedContext.mode}`)}</strong><span>${t(language, "analysis.speedPlan")}</span></div>
     <div class="metric-card"><strong>${analysis.structure.physical}</strong><span>${t(language, "analysis.physical")}</span></div>
     <div class="metric-card"><strong>${analysis.structure.special}</strong><span>${t(language, "analysis.special")}</span></div>
     <div class="metric-card"><strong>${analysis.structure.support}</strong><span>${t(language, "analysis.support")}</span></div>
@@ -218,9 +219,10 @@ export function renderAnalysis(state) {
   document.getElementById("analysis-speed").innerHTML = analysis.speed.map((entry) => `
     <article class="entry-card compact">
       <div class="entry-main">
-        <div class="entry-title"><strong>${entry.label}</strong><span class="source-tag">Spe ${entry.speed}</span></div>
+        <div class="entry-title"><strong>${entry.label}</strong><span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
       <p class="entry-line">${t(language, "analysis.aheadOf", {value: entry.aheadOf.join(" / ") || t(language, "analysis.noMajorTier")})}</p>
       <p class="muted">${t(language, "analysis.nextThreat", {value: entry.nextThreat})}</p>
+      ${entry.trickRoomAheadOf.length ? `<p class="muted">${t(language, "analysis.trickRoomAhead", {value: entry.trickRoomAheadOf.join(" / ")})}</p>` : ""}
       </div>
     </article>
   `).join("");

@@ -1,6 +1,43 @@
 import {TYPE_CHART, TYPE_ORDER} from "./constants.js";
 import {t} from "./i18n.js";
-import {getTypeLabel, uniqueStrings} from "./utils.js";
+import {getTypeLabel, normalizeName, uniqueStrings} from "./utils.js";
+
+const TRICK_ROOM_MOVE = "trickroom";
+const SPEED_MODE_STANDARD = "standard";
+const SPEED_MODE_TRICK_ROOM = "trickroom";
+const SPEED_MODE_HYBRID = "hybrid";
+
+function hasMove(config, moveName) {
+  const target = normalizeName(moveName);
+  return (config.moveNames || config.moves?.map((move) => move.name) || [])
+    .some((name) => normalizeName(name) === target);
+}
+
+function getMedianSpeed(speedTiers = []) {
+  const totalCount = speedTiers.reduce((sum, tier) => sum + tier.totalCount, 0);
+  if (!totalCount) return 0;
+  let seen = 0;
+  const midpoint = totalCount / 2;
+  for (const tier of [...speedTiers].sort((left, right) => left.speed - right.speed)) {
+    seen += tier.totalCount;
+    if (seen >= midpoint) return tier.speed;
+  }
+  return speedTiers[0]?.speed || 0;
+}
+
+export function getSpeedContext(team = [], speedTiers = []) {
+  const medianSpeed = getMedianSpeed(speedTiers);
+  const setterCount = team.filter((config) => hasMove(config, TRICK_ROOM_MOVE)).length;
+  const slowCount = team.filter((config) => (config.stats?.spe || 0) <= medianSpeed).length;
+  const fastCount = team.length - slowCount;
+  if (setterCount && slowCount >= fastCount) {
+    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount};
+  }
+  if (setterCount) {
+    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount};
+  }
+  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount};
+}
 
 export function getResistanceProfile(types = []) {
   return Object.fromEntries(
@@ -51,21 +88,26 @@ function summarizeOffensive(team, language) {
   })).sort((left, right) => right.effectiveness - left.effectiveness);
 }
 
-function summarizeSpeed(team, speedTiers, language) {
+function summarizeSpeed(team, speedTiers, language, speedContext) {
   return [...team]
     .sort((left, right) => (right.stats?.spe || 0) - (left.stats?.spe || 0))
     .map((config) => {
       const speed = config.stats?.spe || 0;
       const fasterThan = speedTiers.filter((tier) => tier.speed < speed).slice(0, 3);
       const slowerThan = speedTiers.find((tier) => tier.speed > speed);
+      const trickRoomAhead = speedTiers.filter((tier) => tier.speed > speed).slice(0, 3);
       return {
         id: config.id,
         label: config.displayLabel || config.displayName,
         speed,
+        isTrickRoomSetter: hasMove(config, TRICK_ROOM_MOVE),
         aheadOf: fasterThan.map((tier) => `${tier.speed} (${tier.entries[0]?.speciesLabel || tier.entries[0]?.displayLabel || tier.entries[0]?.speciesName || t(language, "common.unknown")})`),
         nextThreat: slowerThan
           ? `${slowerThan.speed} (${slowerThan.entries[0]?.speciesLabel || slowerThan.entries[0]?.displayLabel || slowerThan.entries[0]?.speciesName || t(language, "common.unknown")})`
           : t(language, "analysis.fastest"),
+        trickRoomAheadOf: speedContext.mode === SPEED_MODE_STANDARD
+          ? []
+          : trickRoomAhead.map((tier) => `${tier.speed} (${tier.entries[0]?.speciesLabel || tier.entries[0]?.displayLabel || tier.entries[0]?.speciesName || t(language, "common.unknown")})`),
       };
     });
 }
@@ -93,10 +135,12 @@ export function analyzeTeam(team, speedTiers = [], language = "zh") {
   const defensive = summarizeDefensive(team, language);
   const offensive = summarizeOffensive(team, language);
   const structure = summarizeStructure(team, language);
+  const speedContext = getSpeedContext(team, speedTiers);
   return {
     defensive,
     offensive,
-    speed: summarizeSpeed(team, speedTiers, language),
+    speed: summarizeSpeed(team, speedTiers, language, speedContext),
+    speedContext,
     structure,
     weaknesses: defensive.filter((entry) => entry.average > 1.15).slice(0, 6),
     blindSpots: offensive.filter((entry) => entry.effectiveness <= 1).slice(0, 8),
