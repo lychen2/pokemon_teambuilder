@@ -367,7 +367,7 @@ EVs: 252 HP / 4 Atk / 108 Def / 116 SpD / 28 Spe
 Points: 32 HP / 1 Atk / 14 Def / 0 SpA / 15 SpD / 4 Spe
 Careful Nature
 - Fake Out
-- Fake Out
+- Fake Tears
 - Parting Shot
 - Spirit Break
 
