@@ -28,6 +28,12 @@ export function normalizeName(text) {
   return String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+export function isMegaConfig(config = {}) {
+  const speciesId = normalizeName(config.speciesId);
+  const speciesName = String(config.speciesName || "");
+  return speciesId.includes("mega") || /(?:^|\b|-)\s*mega(?:\b|[-\s]|$)/i.test(speciesName);
+}
+
 export function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }

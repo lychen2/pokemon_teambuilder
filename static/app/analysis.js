@@ -6,6 +6,11 @@ const TRICK_ROOM_MOVE = "trickroom";
 const SPEED_MODE_STANDARD = "standard";
 const SPEED_MODE_TRICK_ROOM = "trickroom";
 const SPEED_MODE_HYBRID = "hybrid";
+const SPEED_PREVIEW_LIMIT = 3;
+const THREAT_PREVIEW_LIMIT = 3;
+const SUPER_EFFECTIVE_THRESHOLD = 2;
+const BLIND_SPOT_THRESHOLD = 0.5;
+const DEFENSIVE_TYPE_PAIRS = buildDefensiveTypePairs();
 
 function hasMove(config, moveName) {
   const target = normalizeName(moveName);
@@ -42,11 +47,7 @@ export function getSpeedContext(team = [], speedTiers = []) {
 export function getResistanceProfile(types = []) {
   return Object.fromEntries(
     TYPE_ORDER.map((attackType) => {
-      const multiplier = types.reduce((total, defendType) => {
-        const next = TYPE_CHART[attackType]?.[defendType];
-        return total * (next ?? 1);
-      }, 1);
-      return [attackType, multiplier];
+      return [attackType, getAttackMultiplier(attackType, types)];
     }),
   );
 }
@@ -54,13 +55,33 @@ export function getResistanceProfile(types = []) {
 export function getCoverageProfile(moveTypes = []) {
   return Object.fromEntries(
     TYPE_ORDER.map((defendType) => {
-      const best = moveTypes.reduce((maxValue, attackType) => {
-        const effect = TYPE_CHART[attackType]?.[defendType] ?? 1;
-        return Math.max(maxValue, effect);
-      }, 0);
-      return [defendType, best];
+      return [defendType, getBestAttackMultiplier(moveTypes, [defendType])];
     }),
   );
+}
+
+function getAttackMultiplier(attackType, defendTypes = []) {
+  return defendTypes.reduce((total, defendType) => {
+    const next = TYPE_CHART[attackType]?.[defendType];
+    return total * (next ?? 1);
+  }, 1);
+}
+
+function getBestAttackMultiplier(attackTypes = [], defendTypes = []) {
+  return attackTypes.reduce(
+    (maxValue, attackType) => Math.max(maxValue, getAttackMultiplier(attackType, defendTypes)),
+    0,
+  );
+}
+
+function buildDefensiveTypePairs() {
+  const pairs = [];
+  for (let leftIndex = 0; leftIndex < TYPE_ORDER.length; leftIndex += 1) {
+    for (let rightIndex = leftIndex + 1; rightIndex < TYPE_ORDER.length; rightIndex += 1) {
+      pairs.push([TYPE_ORDER[leftIndex], TYPE_ORDER[rightIndex]]);
+    }
+  }
+  return pairs;
 }
 
 function summarizeDefensive(team, language) {
@@ -88,26 +109,89 @@ function summarizeOffensive(team, language) {
   })).sort((left, right) => right.effectiveness - left.effectiveness);
 }
 
-function summarizeSpeed(team, speedTiers, language, speedContext) {
+function summarizeOffensivePairs(team, language) {
+  const teamMoveTypes = uniqueStrings(team.flatMap((config) => config.offensiveTypes || []));
+  return DEFENSIVE_TYPE_PAIRS
+    .map((types) => ({
+      types,
+      label: types.map((type) => getTypeLabel(type, language)).join(" / "),
+      effectiveness: getBestAttackMultiplier(teamMoveTypes, types),
+    }))
+    .filter((entry) => entry.effectiveness <= BLIND_SPOT_THRESHOLD)
+    .sort((left, right) => (
+      left.effectiveness - right.effectiveness
+      || left.label.localeCompare(right.label, "zh-Hans-CN")
+    ));
+}
+
+function getSortedSpeedTiers(speedTiers = []) {
+  return [...speedTiers].sort((left, right) => left.speed - right.speed);
+}
+
+function createTierReference(tier, language) {
+  const entry = tier?.entries?.[0];
+  if (!tier || !entry) {
+    return null;
+  }
+  return {
+    speed: tier.speed,
+    label: entry.speciesName || entry.displayName || entry.speciesLabel || t(language, "common.unknown"),
+    note: entry.note || "",
+  };
+}
+
+function getThreatSpeed(candidate) {
+  return Math.max(
+    Number(candidate.stats?.spe || 0),
+    Number(candidate.plusOneSpeed?.speed || 0),
+    Number(candidate.choiceScarfSpeed?.speed || 0),
+  );
+}
+
+function summarizePressureThreats(config, library = [], selectedSpeciesIds = new Set(), language = "zh") {
+  const memberSpeed = Number(config.stats?.spe || 0);
+  return library
+    .filter((candidate) => (
+      candidate.id !== config.id
+      && candidate.speciesId !== config.speciesId
+      && !selectedSpeciesIds.has(candidate.speciesId)
+    ))
+    .map((candidate) => ({
+      label: candidate.speciesName || candidate.displayName || t(language, "common.unknown"),
+      note: candidate.note || "",
+      speed: getThreatSpeed(candidate),
+      effectiveness: getBestAttackMultiplier(candidate.offensiveTypes || [], config.types || []),
+    }))
+    .filter((candidate) => candidate.speed > memberSpeed && candidate.effectiveness >= SUPER_EFFECTIVE_THRESHOLD)
+    .sort((left, right) => (
+      right.effectiveness - left.effectiveness
+      || left.speed - right.speed
+      || left.label.localeCompare(right.label, "zh-Hans-CN")
+    ))
+    .slice(0, THREAT_PREVIEW_LIMIT);
+}
+
+function summarizeSpeed(team, speedTiers, language, speedContext, library) {
+  const sortedSpeedTiers = getSortedSpeedTiers(speedTiers);
+  const selectedSpeciesIds = new Set(team.map((config) => config.speciesId).filter(Boolean));
   return [...team]
     .sort((left, right) => (right.stats?.spe || 0) - (left.stats?.spe || 0))
     .map((config) => {
       const speed = config.stats?.spe || 0;
-      const fasterThan = speedTiers.filter((tier) => tier.speed < speed).slice(0, 3);
-      const slowerThan = speedTiers.find((tier) => tier.speed > speed);
-      const trickRoomAhead = speedTiers.filter((tier) => tier.speed > speed).slice(0, 3);
+      const slowerTiers = sortedSpeedTiers.filter((tier) => tier.speed < speed);
+      const fasterTiers = sortedSpeedTiers.filter((tier) => tier.speed > speed);
       return {
         id: config.id,
-        label: config.displayLabel || config.displayName,
+        label: config.displayName,
+        note: config.note || "",
         speed,
         isTrickRoomSetter: hasMove(config, TRICK_ROOM_MOVE),
-        aheadOf: fasterThan.map((tier) => `${tier.speed} (${tier.entries[0]?.speciesLabel || tier.entries[0]?.displayLabel || tier.entries[0]?.speciesName || t(language, "common.unknown")})`),
-        nextThreat: slowerThan
-          ? `${slowerThan.speed} (${slowerThan.entries[0]?.speciesLabel || slowerThan.entries[0]?.displayLabel || slowerThan.entries[0]?.speciesName || t(language, "common.unknown")})`
-          : t(language, "analysis.fastest"),
+        aheadOf: slowerTiers.slice(-SPEED_PREVIEW_LIMIT).reverse().map((tier) => createTierReference(tier, language)).filter(Boolean),
+        nextThreat: createTierReference(fasterTiers[0], language),
         trickRoomAheadOf: speedContext.mode === SPEED_MODE_STANDARD
           ? []
-          : trickRoomAhead.map((tier) => `${tier.speed} (${tier.entries[0]?.speciesLabel || tier.entries[0]?.displayLabel || tier.entries[0]?.speciesName || t(language, "common.unknown")})`),
+          : fasterTiers.slice(0, SPEED_PREVIEW_LIMIT).map((tier) => createTierReference(tier, language)).filter(Boolean),
+        pressureThreats: summarizePressureThreats(config, library, selectedSpeciesIds, language),
       };
     });
 }
@@ -127,22 +211,24 @@ function summarizeStructure(team, language) {
   };
 }
 
-export function analyzeTeam(team, speedTiers = [], language = "zh") {
+export function analyzeTeam(team, speedTiers = [], language = "zh", library = []) {
   if (!team.length) {
     return null;
   }
 
   const defensive = summarizeDefensive(team, language);
   const offensive = summarizeOffensive(team, language);
+  const offensivePairs = summarizeOffensivePairs(team, language);
   const structure = summarizeStructure(team, language);
   const speedContext = getSpeedContext(team, speedTiers);
   return {
     defensive,
     offensive,
-    speed: summarizeSpeed(team, speedTiers, language, speedContext),
+    offensivePairs,
+    speed: summarizeSpeed(team, speedTiers, language, speedContext, library),
     speedContext,
     structure,
     weaknesses: defensive.filter((entry) => entry.average > 1.15).slice(0, 6),
-    blindSpots: offensive.filter((entry) => entry.effectiveness <= 1).slice(0, 8),
+    blindSpots: offensivePairs.slice(0, 8),
   };
 }

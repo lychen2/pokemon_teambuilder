@@ -155,6 +155,22 @@
   gap: 6px;
 }
 
+.speed-analysis-row {
+  align-items: flex-start;
+}
+
+.speed-analysis-label {
+  color: var(--muted);
+  min-width: 88px;
+}
+
+.speed-analysis-ref {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
 .speed-entry .sprite {
   transform: scale(0.8);
   transform-origin: left center;

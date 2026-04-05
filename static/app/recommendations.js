@@ -1,7 +1,7 @@
 import {SCORE_WEIGHTS, TYPE_ORDER} from "./constants.js";
 import {analyzeTeam, getCoverageProfile, getResistanceProfile} from "./analysis.js";
 import {t} from "./i18n.js";
-import {clamp, getTypeLabel, normalizeName} from "./utils.js";
+import {clamp, getTypeLabel, isMegaConfig, normalizeName} from "./utils.js";
 
 const TRICK_ROOM_MOVE = "trickroom";
 const SPEED_CONTROL_MOVES = new Set(["tailwind", "icywind", "electroweb", "thunderwave"]);
@@ -18,6 +18,7 @@ const DUPLICATE_TYPE_PENALTY = 0.4;
 const TRICK_ROOM_SETTER_BONUS = 1.5;
 const HYBRID_TRICK_ROOM_BONUS = 0.75;
 const TRICK_ROOM_BASE_WEIGHT = 4.5;
+const DUPLICATE_MEGA_PENALTY = 5;
 
 function getNormalizedMoveNames(config) {
   return (config.moveNames || config.moves?.map((move) => move.name) || []).map((name) => normalizeName(name));
@@ -150,6 +151,14 @@ function scoreQuality(candidate) {
   return clamp(statPart + movePart, 0, SCORE_WEIGHTS.quality);
 }
 
+function getContextPenalty(candidate, team) {
+  const teamHasMega = team.some((member) => isMegaConfig(member));
+  if (!teamHasMega || !isMegaConfig(candidate)) {
+    return 0;
+  }
+  return DUPLICATE_MEGA_PENALTY;
+}
+
 function buildReasons(candidate, breakdown, language, analysis) {
   const reasons = [];
   if (breakdown.resistance >= 4) reasons.push(t(language, "recommend.reason.resistance"));
@@ -171,7 +180,7 @@ export function recommendConfigs(library, team, speedTiers, language = "zh") {
     return [];
   }
 
-  const analysis = analyzeTeam(team, speedTiers, language);
+  const analysis = analyzeTeam(team, speedTiers, language, library);
   const currentSpecies = new Set(team.map((config) => config.speciesId));
 
   return library
@@ -183,8 +192,9 @@ export function recommendConfigs(library, team, speedTiers, language = "zh") {
         speed: scoreSpeed(candidate, speedTiers, analysis),
         synergy: scoreSynergy(team, candidate, analysis),
         quality: scoreQuality(candidate),
-        };
-      const score = Object.values(breakdown).reduce((sum, value) => sum + value, 0);
+      };
+      const contextPenalty = getContextPenalty(candidate, team);
+      const score = Object.values(breakdown).reduce((sum, value) => sum + value, 0) - contextPenalty;
       return {
         ...candidate,
         recommendationScore: score,

@@ -70,7 +70,7 @@ function refreshDerivedState() {
   });
   state.speedTiers = calculateSpeedTiers(state.library);
   state.speedLineTiers = calculateSpeedLineTiers(state.library);
-  state.analysis = analyzeTeam(state.team, state.speedTiers, state.language);
+  state.analysis = analyzeTeam(state.team, state.speedTiers, state.language, state.library);
   state.recommendations = recommendConfigs(state.library, state.team, state.speedTiers, state.language);
   persistState(state);
 }

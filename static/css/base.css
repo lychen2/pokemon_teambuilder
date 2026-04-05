@@ -311,6 +311,23 @@ textarea {
   overflow-wrap: anywhere;
 }
 
+.speed-analysis-name {
+  border: 1px solid var(--line);
+  background: white;
+}
+
+.speed-analysis-speed {
+  background: rgba(29, 42, 47, 0.06);
+  font-family: var(--mono-font);
+}
+
+.speed-analysis-threat {
+  border: 1px solid rgba(182, 77, 69, 0.2);
+  background: rgba(182, 77, 69, 0.08);
+  color: var(--bad);
+  font-family: var(--mono-font);
+}
+
 .info-pill {
   position: relative;
   gap: 6px;

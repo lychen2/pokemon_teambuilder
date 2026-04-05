@@ -74,8 +74,8 @@ export const NATURE_EFFECTS = {
 };
 
 export const SCORE_WEIGHTS = {
-  resistance: 8,
-  coverage: 8,
+  resistance: 12,
+  coverage: 12,
   speed: 6,
   synergy: 6,
   quality: 4,

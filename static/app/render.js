@@ -110,6 +110,29 @@ function notePillMarkup(config, language) {
   });
 }
 
+function speedDetailPillMarkup(entry) {
+  if (!entry) {
+    return "";
+  }
+  return `
+    <span class="speed-analysis-ref">
+      <span class="mini-pill speed-analysis-name">${escapeHtml(entry.label)}</span>
+      ${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}
+      <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
+      ${entry.effectiveness ? `<span class="mini-pill speed-analysis-threat">${escapeHtml(entry.effectiveness.toFixed(1))}x</span>` : ""}
+    </span>
+  `;
+}
+
+function speedAnalysisRowMarkup(label, contentMarkup) {
+  return `
+    <div class="entry-line entry-tags speed-analysis-row">
+      <span class="speed-analysis-label">${escapeHtml(label)}</span>
+      ${contentMarkup}
+    </div>
+  `;
+}
+
 export function renderLibrary(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
@@ -209,20 +232,35 @@ export function renderAnalysis(state) {
     </div>
   `).join("");
 
-  document.getElementById("analysis-offensive").innerHTML = analysis.offensive.slice(0, 10).map((entry) => `
-    <div class="chip-card ${entry.effectiveness >= 2 ? "good" : entry.effectiveness <= 1 ? "bad" : ""}">
+  document.getElementById("analysis-offensive").innerHTML = analysis.offensivePairs.length
+    ? analysis.offensivePairs.slice(0, 10).map((entry) => `
+    <div class="chip-card bad">
       <strong>${entry.label}</strong>
       <span>${t(language, "analysis.highest", {value: entry.effectiveness.toFixed(2)})}</span>
     </div>
-  `).join("");
+  `).join("")
+    : `<p class="empty-state">${t(language, "analysis.noBlindSpot")}</p>`;
 
   document.getElementById("analysis-speed").innerHTML = analysis.speed.map((entry) => `
     <article class="entry-card compact">
       <div class="entry-main">
-        <div class="entry-title"><strong>${entry.label}</strong><span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
-      <p class="entry-line">${t(language, "analysis.aheadOf", {value: entry.aheadOf.join(" / ") || t(language, "analysis.noMajorTier")})}</p>
-      <p class="muted">${t(language, "analysis.nextThreat", {value: entry.nextThreat})}</p>
-      ${entry.trickRoomAheadOf.length ? `<p class="muted">${t(language, "analysis.trickRoomAhead", {value: entry.trickRoomAheadOf.join(" / ")})}</p>` : ""}
+        <div class="entry-title"><strong>${escapeHtml(entry.label)}</strong>${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}<span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
+        ${speedAnalysisRowMarkup(
+          t(language, "analysis.aheadOfLabel"),
+          entry.aheadOf.length ? entry.aheadOf.map(speedDetailPillMarkup).join("") : `<span class="muted">${t(language, "analysis.noMajorTier")}</span>`,
+        )}
+        ${speedAnalysisRowMarkup(
+          t(language, "analysis.nextThreatLabel"),
+          entry.nextThreat ? speedDetailPillMarkup(entry.nextThreat) : `<span class="muted">${t(language, "analysis.fastest")}</span>`,
+        )}
+        ${entry.trickRoomAheadOf.length ? speedAnalysisRowMarkup(
+          t(language, "analysis.trickRoomAheadLabel"),
+          entry.trickRoomAheadOf.map(speedDetailPillMarkup).join(""),
+        ) : ""}
+        ${entry.pressureThreats.length ? speedAnalysisRowMarkup(
+          t(language, "analysis.pressureThreats"),
+          entry.pressureThreats.map(speedDetailPillMarkup).join(""),
+        ) : ""}
       </div>
     </article>
   `).join("");
