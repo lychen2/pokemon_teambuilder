@@ -22,7 +22,7 @@ export function persistState(state) {
     const payload = {
       library: state.library,
       team: state.team,
-      opponentTeam: state.opponentTeam,
+      opponentTeam: state.opponentTeam.map((entry) => ({speciesId: entry.speciesId})),
       activeView: state.activeView,
       savedTeams: state.savedTeams,
       savedOpponentTeams: state.savedOpponentTeams,

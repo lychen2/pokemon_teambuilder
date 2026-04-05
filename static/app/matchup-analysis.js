@@ -4,6 +4,8 @@ import {getAttackBias, getUtilityRoles} from "./team-roles.js";
 
 const PREVIEW_LIMIT = 3;
 const FOUR_SELECTION_SIZE = 4;
+const DUPLICATE_WEATHER_LEAD_PENALTY = 3;
+const DUPLICATE_WEATHER_LINEUP_PENALTY = 2.5;
 const LEAD_ROLE_BONUS = {
   fakeout: 4,
   tailwind: 3,
@@ -37,26 +39,71 @@ function getFastestSpeed(config) {
   );
 }
 
+function getVariantConfigs(entry) {
+  return Array.isArray(entry?.configs) && entry.configs.length ? entry.configs : [entry].filter(Boolean);
+}
+
+function isGroupedEntry(entry) {
+  return Array.isArray(entry?.configs) && entry.configs.length > 0;
+}
+
+function getMemberLabel(entry) {
+  if (isGroupedEntry(entry)) {
+    return entry?.speciesName || entry?.displayName || "Unknown";
+  }
+  return entry?.displayLabel || entry?.displayName || entry?.speciesName || "Unknown";
+}
+
+function averageValue(values = []) {
+  if (!values.length) {
+    return 0;
+  }
+  return values.reduce((sum, value) => sum + Number(value || 0), 0) / values.length;
+}
+
+function aggregateSnapshots(snapshots = []) {
+  return {
+    score: averageValue(snapshots.map((snapshot) => snapshot.score)),
+    effectiveness: averageValue(snapshots.map((snapshot) => snapshot.effectiveness)),
+    resistance: averageValue(snapshots.map((snapshot) => snapshot.resistance)),
+    speed: Math.max(...snapshots.map((snapshot) => snapshot.speed), 0),
+  };
+}
+
 function getOffenseStat(config) {
   return Math.max(Number(config.stats?.atk || 0), Number(config.stats?.spa || 0));
 }
 
 function getTaggedTeam(team = [], side) {
-  return team.map((config) => ({...config, matchupSide: side}));
+  return team.flatMap((entry) => getVariantConfigs(entry).map((config) => ({...config, matchupSide: side})));
 }
 
 function buildMemberRef(config) {
+  const variants = getVariantConfigs(config);
   return {
-    id: config.id,
-    label: config.displayName || config.speciesName || "Unknown",
+    id: isGroupedEntry(config) ? config.speciesId : config.id,
+    label: getMemberLabel(config),
     note: config.note || "",
-    speed: Number(config.stats?.spe || 0),
+    speed: Math.max(...variants.map((entry) => Number(entry.stats?.spe || 0)), 0),
+    variantCount: variants.length,
   };
+}
+
+function countRoleMembers(team = [], roleId) {
+  return team.reduce((count, config) => {
+    return count + (getUtilityRoles(config).includes(roleId) ? 1 : 0);
+  }, 0);
+}
+
+function getDuplicateRolePenalty(team = [], roleId, penaltyPerExtra) {
+  const duplicateCount = Math.max(0, countRoleMembers(team, roleId) - 1);
+  return duplicateCount * penaltyPerExtra;
 }
 
 function getLeadUtilityBonus(pair = []) {
   const roles = new Set(pair.flatMap((config) => getUtilityRoles(config)));
-  return [...roles].reduce((sum, roleId) => sum + Number(LEAD_ROLE_BONUS[roleId] || 0), 0);
+  const roleBonus = [...roles].reduce((sum, roleId) => sum + Number(LEAD_ROLE_BONUS[roleId] || 0), 0);
+  return roleBonus - getDuplicateRolePenalty(pair, "weather", DUPLICATE_WEATHER_LEAD_PENALTY);
 }
 
 function getPressureSnapshot(attacker, defender) {
@@ -86,6 +133,22 @@ function getAnswerSnapshot(candidate, target) {
   return {score, effectiveness: pressure.effectiveness, resistance: incoming, speed: pressure.speed};
 }
 
+function getPressureAgainstMember(attacker, defender) {
+  return aggregateSnapshots(
+    getVariantConfigs(attacker).flatMap((attackerConfig) => {
+      return getVariantConfigs(defender).map((defenderConfig) => getPressureSnapshot(attackerConfig, defenderConfig));
+    }),
+  );
+}
+
+function getAnswerIntoMember(candidate, target) {
+  return aggregateSnapshots(
+    getVariantConfigs(candidate).flatMap((candidateConfig) => {
+      return getVariantConfigs(target).map((targetConfig) => getAnswerSnapshot(candidateConfig, targetConfig));
+    }),
+  );
+}
+
 function getPairEntries(team = [], size) {
   const entries = [];
   function walk(startIndex, picked) {
@@ -108,10 +171,10 @@ function getPairEntries(team = [], size) {
 
 function scorePairIntoPair(myPair, theirPair) {
   const pressure = theirPair.reduce((sum, foe) => {
-    return sum + Math.max(...myPair.map((ally) => getAnswerSnapshot(ally, foe).score));
+    return sum + Math.max(...myPair.map((ally) => getAnswerIntoMember(ally, foe).score));
   }, 0);
   const exposure = myPair.reduce((sum, ally) => {
-    return sum + Math.max(...theirPair.map((foe) => getPressureSnapshot(foe, ally).score));
+    return sum + Math.max(...theirPair.map((foe) => getPressureAgainstMember(foe, ally).score));
   }, 0);
   return pressure - exposure * 0.65;
 }
@@ -125,7 +188,7 @@ function summarizeLeadPair(pair, opponentPairs) {
       const target = enemyPair
         .map((foe) => ({
           foe,
-          score: Math.max(...pair.map((ally) => getAnswerSnapshot(ally, foe).score)),
+          score: Math.max(...pair.map((ally) => getAnswerIntoMember(ally, foe).score)),
         }))
         .sort((left, right) => right.score - left.score)[0]?.foe;
       return target ? [target] : [];
@@ -150,16 +213,17 @@ function summarizeLeadPairs(team, opponentTeam) {
 
 function scoreLineup(lineup, opponentTeam, leadPairs) {
   const answerScore = opponentTeam.reduce((sum, foe) => {
-    return sum + Math.max(...lineup.map((ally) => getAnswerSnapshot(ally, foe).score));
+    return sum + Math.max(...lineup.map((ally) => getAnswerIntoMember(ally, foe).score));
   }, 0);
   const exposure = lineup.reduce((sum, ally) => {
-    return sum + Math.max(...opponentTeam.map((foe) => getPressureSnapshot(foe, ally).score));
+    return sum + Math.max(...opponentTeam.map((foe) => getPressureAgainstMember(foe, ally).score));
   }, 0);
   const roles = new Set(lineup.flatMap((config) => getUtilityRoles(config)));
   const leadBonus = leadPairs
     .filter((entry) => entry.members.every((member) => lineup.some((config) => config.id === member.id)))
     .sort((left, right) => right.score - left.score)[0]?.score || 0;
-  return answerScore - exposure * 0.45 + roles.size * 0.75 + leadBonus * 0.5;
+  const weatherPenalty = getDuplicateRolePenalty(lineup, "weather", DUPLICATE_WEATHER_LINEUP_PENALTY);
+  return answerScore - exposure * 0.45 + roles.size * 0.75 + leadBonus * 0.5 - weatherPenalty;
 }
 
 function summarizeRecommendedFour(team, opponentTeam, leadPairs) {
@@ -175,7 +239,7 @@ function summarizeThreats(team, opponentTeam) {
   return team.map((member) => ({
     member: buildMemberRef(member),
     threats: opponentTeam
-      .map((foe) => ({member: buildMemberRef(foe), ...getPressureSnapshot(foe, member)}))
+      .map((foe) => ({member: buildMemberRef(foe), ...getPressureAgainstMember(foe, member)}))
       .sort((left, right) => right.score - left.score)
       .slice(0, PREVIEW_LIMIT),
   }));
@@ -185,7 +249,7 @@ function summarizeAnswers(team, opponentTeam) {
   return opponentTeam.map((foe) => ({
     member: buildMemberRef(foe),
     answers: team
-      .map((ally) => ({member: buildMemberRef(ally), ...getAnswerSnapshot(ally, foe)}))
+      .map((ally) => ({member: buildMemberRef(ally), ...getAnswerIntoMember(ally, foe)}))
       .sort((left, right) => right.score - left.score)
       .slice(0, PREVIEW_LIMIT),
   }));

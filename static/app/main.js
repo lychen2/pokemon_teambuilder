@@ -2,12 +2,22 @@ import {analyzeTeam} from "./analysis.js";
 import {calculateSpeedLineTiers, calculateSpeedTiers, loadDatasets} from "./data.js";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
 import {analyzeMatchup} from "./matchup-analysis.js";
+import {
+  buildOpponentLibrary,
+  createSavedOpponentSnapshot,
+  findOpponentEntry,
+  loadSavedOpponentSelection,
+  normalizeSavedOpponentTeams,
+  restoreOpponentTeam,
+  syncOpponentTeam,
+} from "./matchup-selection.js";
 import {clearPersistedState, loadPersistedState, persistState} from "./persistence.js";
 import {recommendConfigs} from "./recommendations.js";
 import {renderAnalysis, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam} from "./render.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
 import {formatConfigName, normalizeName} from "./utils.js";
 
+const MAX_TEAM_SIZE = 6;
 const state = {
   datasets: null,
   language: DEFAULT_LANGUAGE,
@@ -19,6 +29,7 @@ const state = {
   matchupSearch: "",
   library: [],
   filteredLibrary: [],
+  matchupLibrary: [],
   speedTiers: [],
   speedLineTiers: [],
   team: [],
@@ -77,6 +88,9 @@ function refreshDerivedState() {
   });
   state.speedTiers = calculateSpeedTiers(state.library);
   state.speedLineTiers = calculateSpeedLineTiers(state.library);
+  state.matchupLibrary = buildOpponentLibrary(state.library);
+  state.opponentTeam = syncOpponentTeam(state.opponentTeam, state.library);
+  state.savedOpponentTeams = normalizeSavedOpponentTeams(state.savedOpponentTeams, state.library);
   state.analysis = analyzeTeam(state.team, state.speedTiers, state.language, state.library);
   state.matchup = analyzeMatchup(state.team, state.opponentTeam);
   if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
@@ -153,18 +167,18 @@ function findConfigById(configId) {
 
 function addConfig(configId) {
   const config = findConfigById(configId);
-  if (!config || state.team.length >= 6) return;
+  if (!config || state.team.length >= MAX_TEAM_SIZE) return;
   if (state.team.some((member) => member.id === config.id)) return;
   state.team = [...state.team, config];
   refreshDerivedState();
   renderAll();
 }
 
-function addOpponentConfig(configId) {
-  const config = findConfigById(configId);
-  if (!config || state.opponentTeam.length >= 6) return;
-  if (state.opponentTeam.some((member) => member.id === config.id)) return;
-  state.opponentTeam = [...state.opponentTeam, config];
+function addOpponentSpecies(speciesId) {
+  const opponentEntry = findOpponentEntry(state.library, speciesId);
+  if (!opponentEntry || state.opponentTeam.length >= MAX_TEAM_SIZE) return;
+  if (state.opponentTeam.some((member) => member.speciesId === opponentEntry.speciesId)) return;
+  state.opponentTeam = [...state.opponentTeam, opponentEntry];
   refreshDerivedState();
   renderAll();
 }
@@ -175,8 +189,8 @@ function removeConfig(configId) {
   renderAll();
 }
 
-function removeOpponentConfig(configId) {
-  state.opponentTeam = state.opponentTeam.filter((config) => config.id !== configId);
+function removeOpponentSpecies(speciesId) {
+  state.opponentTeam = state.opponentTeam.filter((config) => config.speciesId !== speciesId);
   refreshDerivedState();
   renderAll();
 }
@@ -211,14 +225,7 @@ function replaceConfig(configId, nextConfig) {
     return null;
   }
   state.team = state.team.map((config) => (config.id === configId ? updatedConfig : config));
-  state.opponentTeam = state.opponentTeam.map((config) => (config.id === configId ? updatedConfig : config));
   state.savedTeams = state.savedTeams.map((team) => ({
-    ...team,
-    labels: team.configIds.map((id, index) => (
-      id === configId ? (updatedConfig.displayLabel || updatedConfig.displayName) : team.labels[index]
-    )),
-  }));
-  state.savedOpponentTeams = state.savedOpponentTeams.map((team) => ({
     ...team,
     labels: team.configIds.map((id, index) => (
       id === configId ? (updatedConfig.displayLabel || updatedConfig.displayName) : team.labels[index]
@@ -311,13 +318,7 @@ function saveConfigEdit() {
 function syncTeamWithLibrary() {
   const validIds = new Set(state.library.map((config) => config.id));
   state.team = state.team.filter((member) => validIds.has(member.id));
-  state.opponentTeam = state.opponentTeam.filter((member) => validIds.has(member.id));
   state.savedTeams = state.savedTeams.map((team) => {
-    const configIds = team.configIds.filter((id) => validIds.has(id));
-    const labels = team.labels.filter((_, index) => validIds.has(team.configIds[index]));
-    return {...team, configIds, labels};
-  });
-  state.savedOpponentTeams = state.savedOpponentTeams.map((team) => {
     const configIds = team.configIds.filter((id) => validIds.has(id));
     const labels = team.labels.filter((_, index) => validIds.has(team.configIds[index]));
     return {...team, configIds, labels};
@@ -475,12 +476,7 @@ function saveCurrentOpponentTeam() {
     setStatus("status.teamNameRequired");
     return;
   }
-  const snapshot = {
-    id: `opponent:${Date.now()}`,
-    name,
-    configIds: state.opponentTeam.map((config) => config.id),
-    labels: state.opponentTeam.map((config) => config.displayLabel || config.displayName),
-  };
+  const snapshot = createSavedOpponentSnapshot(state.opponentTeam, name);
   state.savedOpponentTeams = [snapshot, ...state.savedOpponentTeams];
   input.value = "";
   refreshDerivedState();
@@ -505,8 +501,7 @@ function loadSavedOpponentTeam(teamId) {
   if (!target) {
     return;
   }
-  const byId = new Map(state.library.map((config) => [config.id, config]));
-  state.opponentTeam = target.configIds.map((id) => byId.get(id)).filter(Boolean);
+  state.opponentTeam = loadSavedOpponentSelection(target, state.library);
   refreshDerivedState();
   renderAll();
   setStatus("status.loadedOpponentTeam", {name: target.name});
@@ -605,8 +600,8 @@ function bindEvents() {
   });
 
   document.getElementById("matchup-library-list").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-add-opponent-config]");
-    if (button) addOpponentConfig(button.dataset.addOpponentConfig);
+    const button = event.target.closest("[data-add-opponent-species]");
+    if (button) addOpponentSpecies(button.dataset.addOpponentSpecies);
   });
 
   document.getElementById("team-list").addEventListener("click", (event) => {
@@ -615,8 +610,8 @@ function bindEvents() {
   });
 
   document.getElementById("opponent-team-list").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-remove-opponent-config]");
-    if (button) removeOpponentConfig(button.dataset.removeOpponentConfig);
+    const button = event.target.closest("[data-remove-opponent-species]");
+    if (button) removeOpponentSpecies(button.dataset.removeOpponentSpecies);
   });
 
   document.getElementById("saved-team-list").addEventListener("click", (event) => {
@@ -799,15 +794,13 @@ async function initialize() {
       .filter((config) => libraryIds.has(config.id));
   }
   if (persisted?.opponentTeam) {
-    const libraryIds = new Set(state.library.map((config) => config.id));
-    state.opponentTeam = hydrateConfigs(persisted.opponentTeam, state.datasets, 50)
-      .filter((config) => libraryIds.has(config.id));
+    state.opponentTeam = restoreOpponentTeam(persisted.opponentTeam, state.library);
   }
   if (persisted?.savedTeams) {
     state.savedTeams = persisted.savedTeams;
   }
   if (persisted?.savedOpponentTeams) {
-    state.savedOpponentTeams = persisted.savedOpponentTeams;
+    state.savedOpponentTeams = normalizeSavedOpponentTeams(persisted.savedOpponentTeams, state.library);
   }
   if (persisted?.activeView) {
     state.activeView = persisted.activeView;

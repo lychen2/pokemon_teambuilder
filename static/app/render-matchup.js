@@ -1,5 +1,8 @@
 import {t} from "./i18n.js";
+import {filterOpponentLibrary, getOpponentVariantCount} from "./matchup-selection.js";
 import {getTypeLabel} from "./utils.js";
+
+const CONFIG_PREVIEW_LIMIT = 3;
 
 function escapeHtml(text) {
   return String(text || "")
@@ -46,6 +49,7 @@ function threatPillMarkup(entry, language) {
   return `
     <span class="speed-analysis-ref">
       <span class="mini-pill speed-analysis-name">${escapeHtml(entry.member.label)}</span>
+      ${entry.member.variantCount > 1 ? `<span class="mini-pill">${t(language, "matchup.variantCount", {count: entry.member.variantCount})}</span>` : ""}
       <span class="mini-pill">${t(language, "matchup.effectiveness", {value: entry.effectiveness.toFixed(1)})}</span>
       <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
       ${"resistance" in entry ? `<span class="mini-pill">${t(language, "matchup.resistance", {value: entry.resistance.toFixed(1)})}</span>` : ""}
@@ -53,28 +57,49 @@ function threatPillMarkup(entry, language) {
   `;
 }
 
-function quickPickCardMarkup(config, language) {
+function buildConfigSummary(labels = []) {
+  if (!labels.length) {
+    return "";
+  }
+  const preview = labels.slice(0, CONFIG_PREVIEW_LIMIT).join(" / ");
+  return labels.length > CONFIG_PREVIEW_LIMIT ? `${preview} / ...` : preview;
+}
+
+function buildSpeedSummary(entry, language) {
+  const minSpeed = Number(entry.speedRange?.min || 0);
+  const maxSpeed = Number(entry.speedRange?.max || 0);
+  if (minSpeed === maxSpeed) {
+    return `${t(language, "common.speed")} ${maxSpeed}`;
+  }
+  return `${t(language, "common.speed")} ${minSpeed}-${maxSpeed}`;
+}
+
+function quickPickCardMarkup(entry, language) {
+  const variantCount = getOpponentVariantCount(entry);
   return `
     <article class="entry-card compact matchup-picker-card">
       <div class="entry-main">
-        <div class="entry-title">${spriteMarkup(config)}<strong>${escapeHtml(config.displayName)}</strong></div>
-        <div class="entry-meta">${typePills(config.types, language)}</div>
-        <p class="muted">${t(language, "common.speed")} ${config.stats?.spe || 0}</p>
+        <div class="entry-title">${spriteMarkup(entry)}<strong>${escapeHtml(entry.speciesName)}</strong><span class="source-tag">${t(language, "matchup.variantCount", {count: variantCount})}</span></div>
+        <div class="entry-meta">${typePills(entry.types, language)}</div>
+        <p class="muted">${buildConfigSummary(entry.labels)}</p>
+        <p class="muted">${buildSpeedSummary(entry, language)}</p>
       </div>
-      <button type="button" class="ghost-button" data-add-opponent-config="${config.id}">${t(language, "matchup.addOpponent")}</button>
+      <button type="button" class="ghost-button" data-add-opponent-species="${entry.speciesId}">${t(language, "matchup.addOpponent")}</button>
     </article>
   `;
 }
 
-function opponentCardMarkup(config, language) {
+function opponentCardMarkup(entry, language) {
+  const variantCount = getOpponentVariantCount(entry);
   return `
     <article class="team-card">
       <div class="entry-main">
-        <div class="entry-title">${spriteMarkup(config)}<strong>${escapeHtml(config.displayName)}</strong></div>
-        <div class="entry-meta">${typePills(config.types, language)}</div>
-        <p class="muted">${t(language, "common.speed")} ${config.stats?.spe || 0}</p>
+        <div class="entry-title">${spriteMarkup(entry)}<strong>${escapeHtml(entry.speciesName)}</strong><span class="source-tag">${t(language, "matchup.variantCount", {count: variantCount})}</span></div>
+        <div class="entry-meta">${typePills(entry.types, language)}</div>
+        <p class="muted">${buildConfigSummary(entry.labels)}</p>
+        <p class="muted">${buildSpeedSummary(entry, language)}</p>
       </div>
-      <button type="button" class="ghost-button danger-button sidebar-action" data-remove-opponent-config="${config.id}">${t(language, "team.remove")}</button>
+      <button type="button" class="ghost-button danger-button sidebar-action" data-remove-opponent-species="${entry.speciesId}">${t(language, "team.remove")}</button>
     </article>
   `;
 }
@@ -83,7 +108,7 @@ function savedOpponentCardMarkup(entry, language) {
   return `
     <article class="entry-card compact saved-team-card">
       <div class="entry-main">
-        <div class="entry-title"><strong>${escapeHtml(entry.name)}</strong><span class="source-tag">${entry.configIds.length} / 6</span></div>
+        <div class="entry-title"><strong>${escapeHtml(entry.name)}</strong><span class="source-tag">${entry.speciesIds.length} / 6</span></div>
         <p class="muted">${escapeHtml(entry.labels.join(" / ") || t(language, "common.emptyTeam"))}</p>
       </div>
       <div class="card-actions">
@@ -130,7 +155,7 @@ function speedLineCardMarkup(tier, language) {
           ${tier.entries.map((entry) => `
             <span class="speed-entry">
               ${spriteMarkup(entry)}
-              <span>${escapeHtml(entry.speciesName || entry.displayName)}</span>
+              <span>${escapeHtml(entry.displayLabel || entry.displayName || entry.speciesName)}</span>
             </span>
             ${sideTagMarkup(entry, language)}
           `).join("")}
@@ -142,23 +167,20 @@ function speedLineCardMarkup(tier, language) {
 
 function renderBuilder(state) {
   const language = state.language;
-  const searchToken = String(state.matchupSearch || "").trim().toLowerCase();
-  const filtered = state.library.filter((config) => {
-    if (!searchToken) return true;
-    return `${config.displayName} ${config.speciesName} ${config.moveNames?.join(" ") || ""}`.toLowerCase().includes(searchToken);
-  });
+  const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch);
   document.getElementById("opponent-team-list").innerHTML = state.opponentTeam.length
-    ? state.opponentTeam.map((config) => opponentCardMarkup(config, language)).join("")
+    ? state.opponentTeam.map((entry) => opponentCardMarkup(entry, language)).join("")
     : `<div class="team-card empty-slot">${t(language, "matchup.opponentPlaceholder")}</div>`;
   document.getElementById("saved-opponent-list").innerHTML = state.savedOpponentTeams.length
     ? state.savedOpponentTeams.map((entry) => savedOpponentCardMarkup(entry, language)).join("")
     : `<p class="empty-state">${t(language, "matchup.savedEmpty")}</p>`;
   document.getElementById("matchup-library-summary").textContent = t(language, "matchup.librarySummary", {
-    total: state.library.length,
+    species: state.matchupLibrary.length,
+    sets: state.library.length,
     filtered: filtered.length,
   });
   document.getElementById("matchup-library-list").innerHTML = filtered.length
-    ? filtered.map((config) => quickPickCardMarkup(config, language)).join("")
+    ? filtered.map((entry) => quickPickCardMarkup(entry, language)).join("")
     : `<p class="empty-state">${t(language, "library.empty")}</p>`;
 }
 

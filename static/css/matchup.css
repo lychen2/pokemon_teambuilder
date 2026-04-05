@@ -1,13 +1,29 @@
 .matchup-builder-grid {
   margin-bottom: 18px;
+  align-items: start;
 }
 
 .matchup-team-grid {
   margin-bottom: 16px;
 }
 
+.matchup-opponent-panel,
+.matchup-picker-panel {
+  min-height: 0;
+}
+
+.matchup-picker-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: min(720px, calc(100vh - 260px));
+}
+
 .matchup-picker-list {
   margin-top: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 6px;
 }
 
 .matchup-picker-card {
@@ -38,6 +54,15 @@
 }
 
 @media (max-width: 900px) {
+  .matchup-picker-panel {
+    max-height: none;
+  }
+
+  .matchup-picker-list {
+    overflow: visible;
+    padding-right: 0;
+  }
+
   .matchup-picker-card {
     grid-template-columns: 1fr;
   }
