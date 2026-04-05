@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./static/css/layout.css">
     <link rel="stylesheet" href="./static/css/shell.css">
     <link rel="stylesheet" href="./static/css/analysis.css">
+    <link rel="stylesheet" href="./static/css/matchup.css">
   </head>
   <body>
     <header class="hero">
@@ -88,6 +89,7 @@
           <nav class="view-tabs" aria-label="功能切换">
             <button type="button" class="view-tab active" data-view="library-view" data-i18n="tabs.library">配置库</button>
             <button type="button" class="view-tab" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
+            <button type="button" class="view-tab" data-view="matchup-view" data-i18n="tabs.matchup">对局分析</button>
             <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
             <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
           </nav>
@@ -114,6 +116,43 @@
             <section id="analysis-coverage-panel" class="analysis-detail-panel active" data-analysis-panel="coverage"></section>
             <section id="analysis-roles-panel" class="analysis-detail-panel" data-analysis-panel="roles"></section>
             <section id="analysis-cores-panel" class="analysis-detail-panel" data-analysis-panel="cores"></section>
+          </section>
+
+          <section id="matchup-view" class="view-panel">
+            <div class="section-head">
+              <h2 data-i18n="views.matchupTitle">对局分析</h2>
+              <p class="muted" data-i18n="views.matchupCopy">快速选择对面六只，保存常见对局，并生成 12 只速度线、首发和四选建议。</p>
+            </div>
+            <div class="analysis-detail-grid matchup-builder-grid">
+              <section class="subpanel">
+                <div class="section-head">
+                  <h3 data-i18n="matchup.opponentTitle">对面队伍</h3>
+                  <button id="clear-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.clearOpponent">清空对面</button>
+                </div>
+                <p class="muted" data-i18n="matchup.opponentCopy">从当前配置库里快速勾出对面的 6 只宝可梦。</p>
+                <div id="opponent-team-list" class="team-grid matchup-team-grid"></div>
+                <div class="saved-team-panel matchup-save-panel">
+                  <h3 data-i18n="matchup.saveTitle">保存对面队伍</h3>
+                  <div class="saved-team-form">
+                    <input id="saved-opponent-name" type="text" placeholder="输入对局名称" data-i18n-placeholder="matchup.savePlaceholder">
+                    <button id="save-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.saveCurrent">保存当前对面</button>
+                  </div>
+                  <div id="saved-opponent-list" class="stack-list compact-list"></div>
+                </div>
+              </section>
+              <section class="subpanel">
+                <div class="section-head">
+                  <h3 data-i18n="matchup.quickPickTitle">快速选择</h3>
+                  <p id="matchup-library-summary" class="muted"></p>
+                </div>
+                <label>
+                  <span data-i18n="matchup.searchLabel">搜索配置库</span>
+                  <input id="matchup-search" type="search" placeholder="搜索对面宝可梦 / 招式" data-i18n-placeholder="matchup.searchPlaceholder">
+                </label>
+                <div id="matchup-library-list" class="stack-list compact-list view-list matchup-picker-list"></div>
+              </section>
+            </div>
+            <div id="matchup-analysis" class="analysis-detail-panel active"></div>
           </section>
 
           <section id="recommend-view" class="view-panel">

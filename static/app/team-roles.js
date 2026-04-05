@@ -20,12 +20,30 @@ const PRIORITY_MOVES = new Set(["aquajet", "bulletpunch", "extremespeed", "icesh
 const INTIMIDATE_ABILITIES = new Set(["intimidate"]);
 const POWDER_IMMUNE_ABILITIES = new Set(["overcoat"]);
 const POWDER_IMMUNE_ITEMS = new Set(["safetygoggles"]);
-const BULKY_SUPPORT_THRESHOLD = 90;
-const TANK_BULK_THRESHOLD = 85;
-const FRAIL_SWEEPER_BULK_THRESHOLD = 75;
-const FAST_ATTACKER_SPEED_THRESHOLD = 95;
-const SWEEPER_ATTACK_THRESHOLD = 105;
-const WALLBREAKER_ATTACK_THRESHOLD = 120;
+const BULKY_SUPPORT_THRESHOLD = 128;
+const TANK_BULK_THRESHOLD = 130;
+const FRAIL_SWEEPER_BULK_THRESHOLD = 118;
+const FAST_ATTACKER_SPEED_THRESHOLD = 135;
+const SWEEPER_ATTACK_THRESHOLD = 155;
+const WALLBREAKER_ATTACK_THRESHOLD = 175;
+const OFFENSE_LEAN_THRESHOLD = 24;
+const SUPPORT_SIGNAL_ROLES = new Set([
+  "speedcontrol",
+  "tailwind",
+  "trickroom",
+  "screens",
+  "weather",
+  "terrain",
+  "fakeout",
+  "redirection",
+  "guard",
+  "pivot",
+  "disruption",
+  "statdrop",
+  "recovery",
+  "antisetup",
+  "intimidate",
+]);
 
 export const TACTICAL_ROLE_ORDER = ["speedcontrol", "tailwind", "trickroom", "screens", "weather", "terrain", "setup"];
 export const SUPPORT_ROLE_ORDER = ["fakeout", "redirection", "guard", "pivot", "disruption", "statdrop", "recovery", "antisetup", "priority", "intimidate", "powderimmune"];
@@ -64,7 +82,7 @@ export function hasMove(config, moveName) {
 }
 
 function getBulkScore(config) {
-  const stats = config.baseStats || {};
+  const stats = config.stats || config.baseStats || {};
   return (
     Number(stats.hp || 0)
     + Number(stats.def || 0)
@@ -73,8 +91,82 @@ function getBulkScore(config) {
 }
 
 function getOffenseScore(config) {
-  const stats = config.baseStats || {};
+  const stats = config.stats || config.baseStats || {};
   return Math.max(Number(stats.atk || 0), Number(stats.spa || 0));
+}
+
+function getMoveCounts(config) {
+  const categories = (config.moves || []).map((move) => move.category || "Status");
+  return {
+    physical: categories.filter((category) => category === "Physical").length,
+    special: categories.filter((category) => category === "Special").length,
+    status: categories.filter((category) => category === "Status").length,
+    total: categories.length,
+  };
+}
+
+function getRoleMetrics(config) {
+  const moveCounts = getMoveCounts(config);
+  const utilityRoles = getUtilityRoles(config);
+  const supportSignalCount = utilityRoles.filter((roleId) => SUPPORT_SIGNAL_ROLES.has(roleId)).length;
+  const damagingCount = moveCounts.physical + moveCounts.special;
+  const bulkScore = getBulkScore(config);
+  const offenseScore = getOffenseScore(config);
+  const speed = Number(config.stats?.spe || config.baseStats?.spe || 0);
+  const hasSetup = hasTrackedMove(config, SETUP_MOVES);
+  const isSupport = (
+    !damagingCount
+    || moveCounts.status >= 3
+    || supportSignalCount >= 3 && damagingCount <= 3
+    || supportSignalCount >= 2 && moveCounts.status >= 1 && damagingCount <= 2
+  );
+  return {
+    ...moveCounts,
+    bulkScore,
+    offenseScore,
+    speed,
+    hasSetup,
+    supportSignalCount,
+    damagingCount,
+    isSupport,
+  };
+}
+
+function getPrimaryStructureRole(config) {
+  const metrics = getRoleMetrics(config);
+  if (metrics.isSupport) {
+    return metrics.bulkScore >= BULKY_SUPPORT_THRESHOLD ? "bulkysupport" : "support";
+  }
+  const isFastOffense = metrics.speed >= FAST_ATTACKER_SPEED_THRESHOLD
+    && metrics.offenseScore >= SWEEPER_ATTACK_THRESHOLD;
+  if (isFastOffense) {
+    return metrics.bulkScore < FRAIL_SWEEPER_BULK_THRESHOLD ? "frailsweeper" : "sweeper";
+  }
+  if (metrics.bulkScore >= TANK_BULK_THRESHOLD) {
+    return "tank";
+  }
+  if (metrics.bulkScore >= TANK_BULK_THRESHOLD - 5 && metrics.supportSignalCount >= 1) {
+    return "tank";
+  }
+  if (
+    (metrics.offenseScore >= WALLBREAKER_ATTACK_THRESHOLD || metrics.hasSetup)
+    && metrics.offenseScore >= metrics.bulkScore + OFFENSE_LEAN_THRESHOLD
+  ) {
+    return "sweeper";
+  }
+  if (
+    metrics.offenseScore >= SWEEPER_ATTACK_THRESHOLD
+    && metrics.offenseScore >= metrics.bulkScore + OFFENSE_LEAN_THRESHOLD
+  ) {
+    return "sweeper";
+  }
+  if (metrics.damagingCount >= 3 && metrics.offenseScore > metrics.bulkScore) {
+    return "sweeper";
+  }
+  if (metrics.supportSignalCount) {
+    return "support";
+  }
+  return "tank";
 }
 
 export function getUtilityRoles(config) {
@@ -101,41 +193,13 @@ export function getUtilityRoles(config) {
 }
 
 export function getAttackBias(config) {
-  const categories = (config.moves || []).map((move) => move.category);
-  const physicalCount = categories.filter((category) => category === "Physical").length;
-  const specialCount = categories.filter((category) => category === "Special").length;
-  if (!physicalCount && !specialCount) return "support";
-  if (physicalCount === specialCount) return "mixed";
-  return physicalCount > specialCount ? "physical" : "special";
+  const metrics = getRoleMetrics(config);
+  if (metrics.isSupport) return "support";
+  if (!metrics.physical && !metrics.special) return "support";
+  if (metrics.physical === metrics.special) return "mixed";
+  return metrics.physical > metrics.special ? "physical" : "special";
 }
 
 export function getStructureRoles(config) {
-  const roles = [];
-  const attackBias = getAttackBias(config);
-  const moveCount = (config.moves || []).length;
-  const supportMoveCount = (config.moves || []).filter((move) => move.category === "Status").length;
-  const bulkScore = getBulkScore(config);
-  const offenseScore = getOffenseScore(config);
-  const speed = Number(config.baseStats?.spe || 0);
-  const hasSetup = hasTrackedMove(config, SETUP_MOVES);
-  const isSupport = attackBias === "support" || (supportMoveCount >= 3 && moveCount > 0);
-  if (isSupport) {
-    roles.push("support");
-  }
-  if (isSupport && bulkScore >= BULKY_SUPPORT_THRESHOLD) {
-    roles.push("bulkysupport");
-  }
-  if (!isSupport && bulkScore >= TANK_BULK_THRESHOLD) {
-    roles.push("tank");
-  }
-  if (!isSupport && (offenseScore >= SWEEPER_ATTACK_THRESHOLD || hasSetup)) {
-    roles.push("sweeper");
-  }
-  if (!isSupport && speed >= FAST_ATTACKER_SPEED_THRESHOLD && bulkScore < FRAIL_SWEEPER_BULK_THRESHOLD && offenseScore >= SWEEPER_ATTACK_THRESHOLD) {
-    roles.push("frailsweeper");
-  }
-  if (!roles.length && !isSupport && offenseScore >= WALLBREAKER_ATTACK_THRESHOLD) {
-    roles.push("sweeper");
-  }
-  return roles;
+  return [getPrimaryStructureRole(config)];
 }

@@ -1,0 +1,44 @@
+.matchup-builder-grid {
+  margin-bottom: 18px;
+}
+
+.matchup-team-grid {
+  margin-bottom: 16px;
+}
+
+.matchup-picker-list {
+  margin-top: 12px;
+}
+
+.matchup-picker-card {
+  align-items: center;
+}
+
+.matchup-picker-card .entry-main {
+  gap: 6px;
+}
+
+.matchup-overview {
+  margin-bottom: 18px;
+}
+
+.matchup-save-panel {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+#matchup-analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+#matchup-analysis .compact-list {
+  max-height: 360px;
+}
+
+@media (max-width: 900px) {
+  .matchup-picker-card {
+    grid-template-columns: 1fr;
+  }
+}

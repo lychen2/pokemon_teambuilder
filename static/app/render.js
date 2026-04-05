@@ -1,5 +1,6 @@
 import {t} from "./i18n.js";
 import {renderAnalysisView} from "./render-analysis.js";
+import {renderMatchupView} from "./render-matchup.js";
 import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel} from "./utils.js";
 
 function escapeHtml(text) {
@@ -183,6 +184,10 @@ export function renderSavedTeams(state) {
 
 export function renderAnalysis(state) {
   renderAnalysisView(state);
+}
+
+export function renderMatchup(state) {
+  renderMatchupView(state);
 }
 
 export function renderRecommendations(state) {

@@ -22,8 +22,10 @@ export function persistState(state) {
     const payload = {
       library: state.library,
       team: state.team,
+      opponentTeam: state.opponentTeam,
       activeView: state.activeView,
       savedTeams: state.savedTeams,
+      savedOpponentTeams: state.savedOpponentTeams,
       language: state.language,
     };
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
