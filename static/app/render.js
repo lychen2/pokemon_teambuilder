@@ -1,4 +1,5 @@
 import {t} from "./i18n.js";
+import {renderAnalysisView} from "./render-analysis.js";
 import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel} from "./utils.js";
 
 function escapeHtml(text) {
@@ -110,29 +111,6 @@ function notePillMarkup(config, language) {
   });
 }
 
-function speedDetailPillMarkup(entry) {
-  if (!entry) {
-    return "";
-  }
-  return `
-    <span class="speed-analysis-ref">
-      <span class="mini-pill speed-analysis-name">${escapeHtml(entry.label)}</span>
-      ${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}
-      <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
-      ${entry.effectiveness ? `<span class="mini-pill speed-analysis-threat">${escapeHtml(entry.effectiveness.toFixed(1))}x</span>` : ""}
-    </span>
-  `;
-}
-
-function speedAnalysisRowMarkup(label, contentMarkup) {
-  return `
-    <div class="entry-line entry-tags speed-analysis-row">
-      <span class="speed-analysis-label">${escapeHtml(label)}</span>
-      ${contentMarkup}
-    </div>
-  `;
-}
-
 export function renderLibrary(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
@@ -204,66 +182,7 @@ export function renderSavedTeams(state) {
 }
 
 export function renderAnalysis(state) {
-  const language = state.language;
-  if (!state.analysis) {
-    document.getElementById("analysis-overview").innerHTML = `<p class="empty-state">${t(language, "analysis.empty")}</p>`;
-    document.getElementById("analysis-defensive").innerHTML = "";
-    document.getElementById("analysis-offensive").innerHTML = "";
-    document.getElementById("analysis-speed").innerHTML = "";
-    return;
-  }
-
-  const {analysis} = state;
-  document.getElementById("analysis-overview").innerHTML = `
-    <div class="metric-card"><strong>${analysis.weaknesses.length}</strong><span>${t(language, "analysis.weaknesses")}</span></div>
-    <div class="metric-card"><strong>${analysis.blindSpots.length}</strong><span>${t(language, "analysis.blindSpots")}</span></div>
-    <div class="metric-card"><strong>${t(language, `analysis.speedMode.${analysis.speedContext.mode}`)}</strong><span>${t(language, "analysis.speedPlan")}</span></div>
-    <div class="metric-card"><strong>${analysis.structure.physical}</strong><span>${t(language, "analysis.physical")}</span></div>
-    <div class="metric-card"><strong>${analysis.structure.special}</strong><span>${t(language, "analysis.special")}</span></div>
-    <div class="metric-card"><strong>${analysis.structure.support}</strong><span>${t(language, "analysis.support")}</span></div>
-    <div class="metric-card"><strong>${analysis.structure.duplicateTypes.join(" / ") || t(language, "common.none")}</strong><span>${t(language, "analysis.duplicateTypes")}</span></div>
-  `;
-
-  document.getElementById("analysis-defensive").innerHTML = analysis.defensive.slice(0, 10).map((entry) => `
-    <div class="chip-card ${entry.average > 1.15 ? "bad" : entry.average < 0.9 ? "good" : ""}">
-      <strong>${entry.label}</strong>
-      <span>${t(language, "analysis.average", {value: entry.average.toFixed(2)})}</span>
-      <span>${t(language, "analysis.weakResistImmune", {weak: entry.weakCount, resist: entry.resistCount, immune: entry.immuneCount})}</span>
-    </div>
-  `).join("");
-
-  document.getElementById("analysis-offensive").innerHTML = analysis.offensivePairs.length
-    ? analysis.offensivePairs.slice(0, 10).map((entry) => `
-    <div class="chip-card bad">
-      <strong>${entry.label}</strong>
-      <span>${t(language, "analysis.highest", {value: entry.effectiveness.toFixed(2)})}</span>
-    </div>
-  `).join("")
-    : `<p class="empty-state">${t(language, "analysis.noBlindSpot")}</p>`;
-
-  document.getElementById("analysis-speed").innerHTML = analysis.speed.map((entry) => `
-    <article class="entry-card compact">
-      <div class="entry-main">
-        <div class="entry-title"><strong>${escapeHtml(entry.label)}</strong>${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}<span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
-        ${speedAnalysisRowMarkup(
-          t(language, "analysis.aheadOfLabel"),
-          entry.aheadOf.length ? entry.aheadOf.map(speedDetailPillMarkup).join("") : `<span class="muted">${t(language, "analysis.noMajorTier")}</span>`,
-        )}
-        ${speedAnalysisRowMarkup(
-          t(language, "analysis.nextThreatLabel"),
-          entry.nextThreat ? speedDetailPillMarkup(entry.nextThreat) : `<span class="muted">${t(language, "analysis.fastest")}</span>`,
-        )}
-        ${entry.trickRoomAheadOf.length ? speedAnalysisRowMarkup(
-          t(language, "analysis.trickRoomAheadLabel"),
-          entry.trickRoomAheadOf.map(speedDetailPillMarkup).join(""),
-        ) : ""}
-        ${entry.pressureThreats.length ? speedAnalysisRowMarkup(
-          t(language, "analysis.pressureThreats"),
-          entry.pressureThreats.map(speedDetailPillMarkup).join(""),
-        ) : ""}
-      </div>
-    </article>
-  `).join("");
+  renderAnalysisView(state);
 }
 
 export function renderRecommendations(state) {

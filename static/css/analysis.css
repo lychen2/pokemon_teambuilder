@@ -1,0 +1,153 @@
+.analysis-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.analysis-tab {
+  width: auto;
+  min-width: 120px;
+  padding-inline: 18px;
+  background: var(--panel-alt);
+}
+
+.analysis-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.analysis-detail-panel {
+  display: none;
+}
+
+.analysis-detail-panel.active {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.analysis-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.analysis-list-stack,
+.analysis-role-grid,
+.analysis-core-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.analysis-role-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.analysis-list-card,
+.analysis-core-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: white;
+}
+
+.analysis-list-card.good,
+.analysis-core-card.good {
+  border-color: rgba(47, 125, 97, 0.35);
+}
+
+.analysis-list-card.bad,
+.analysis-core-card.bad {
+  border-color: rgba(182, 77, 69, 0.35);
+}
+
+.analysis-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.analysis-inline-pills,
+.analysis-member-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.analysis-member-pill {
+  border: 1px solid var(--line);
+  background: rgba(247, 240, 229, 0.68);
+}
+
+.analysis-alert-pill {
+  border: 1px solid rgba(182, 77, 69, 0.2);
+  background: rgba(182, 77, 69, 0.08);
+  color: var(--bad);
+}
+
+.analysis-good-pill {
+  border: 1px solid rgba(47, 125, 97, 0.2);
+  background: rgba(47, 125, 97, 0.08);
+  color: var(--good);
+}
+
+.analysis-label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.analysis-role-card strong,
+.analysis-core-card strong {
+  font-size: 15px;
+}
+
+.analysis-core-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.analysis-core-member {
+  border: 1px solid var(--line);
+  background: rgba(247, 240, 229, 0.82);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.analysis-focus-select {
+  width: auto;
+  min-width: 220px;
+}
+
+.analysis-role-members,
+.analysis-core-copy {
+  line-height: 1.6;
+}
+
+.analysis-gap-pills {
+  margin-top: 4px;
+}
+
+@media (max-width: 1100px) {
+  .analysis-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .analysis-tab {
+    flex: 1 1 100px;
+    min-width: 0;
+  }
+
+  .analysis-focus-select {
+    width: 100%;
+    min-width: 0;
+  }
+}

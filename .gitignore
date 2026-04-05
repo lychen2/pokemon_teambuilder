@@ -3,3 +3,4 @@
 .serena/
 __pycache__/
 *.pyc
+pokepast-archive-*.json

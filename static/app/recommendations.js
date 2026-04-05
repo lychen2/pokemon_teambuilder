@@ -1,15 +1,14 @@
 import {SCORE_WEIGHTS, TYPE_ORDER} from "./constants.js";
 import {analyzeTeam, getCoverageProfile, getResistanceProfile} from "./analysis.js";
 import {t} from "./i18n.js";
-import {clamp, getTypeLabel, isMegaConfig, normalizeName} from "./utils.js";
+import {RECOMMENDATION_ROLE_IDS, getAttackBias, getUtilityRoles, hasMove} from "./team-roles.js";
+import {clamp, getTypeLabel, isMegaConfig} from "./utils.js";
 
-const TRICK_ROOM_MOVE = "trickroom";
-const SPEED_CONTROL_MOVES = new Set(["tailwind", "icywind", "electroweb", "thunderwave"]);
-const PIVOT_MOVES = new Set(["partingshot", "uturn", "voltswitch", "flipturn", "batonpass", "teleport", "chillyreception"]);
-const REDIRECTION_MOVES = new Set(["followme", "ragepowder"]);
-const GUARD_MOVES = new Set(["wideguard", "quickguard"]);
-const DISRUPTION_MOVES = new Set(["taunt", "encore", "haze", "spore", "willowisp", "nuzzle"]);
 const SUPPORT_MOVES_PER_MEMBER_TARGET = 1.5;
+const THREAT_COVER_SCORE = 3;
+const THREAT_IMMUNITY_SCORE = 4;
+const TEAM_PATCH_SCORE = 1.5;
+const SHARED_TYPE_PENALTY = 1.2;
 const MISSING_ROLE_SCORE = 1.2;
 const OFFENSE_BALANCE_SCORE = 1.5;
 const SUPPORT_BIAS_SCORE = 1;
@@ -20,51 +19,43 @@ const HYBRID_TRICK_ROOM_BONUS = 0.75;
 const TRICK_ROOM_BASE_WEIGHT = 4.5;
 const DUPLICATE_MEGA_PENALTY = 5;
 
-function getNormalizedMoveNames(config) {
-  return (config.moveNames || config.moves?.map((move) => move.name) || []).map((name) => normalizeName(name));
-}
-
-function hasTrackedMove(config, movePool) {
-  return getNormalizedMoveNames(config).some((name) => movePool.has(name));
-}
-
-function hasMove(config, moveName) {
-  return getNormalizedMoveNames(config).includes(normalizeName(moveName));
-}
-
-function getUtilityRoles(config) {
-  const roles = [];
-  if (hasTrackedMove(config, PIVOT_MOVES)) roles.push("pivot");
-  if (hasTrackedMove(config, REDIRECTION_MOVES)) roles.push("redirection");
-  if (hasTrackedMove(config, GUARD_MOVES)) roles.push("guard");
-  if (hasTrackedMove(config, DISRUPTION_MOVES)) roles.push("disruption");
-  if (hasTrackedMove(config, SPEED_CONTROL_MOVES)) roles.push("speedcontrol");
-  if (hasMove(config, TRICK_ROOM_MOVE)) roles.push("trickroom");
-  if (hasMove(config, "Fake Out")) roles.push("fakeout");
-  return roles;
-}
-
-function getAttackBias(config) {
-  const physicalCount = (config.moves || []).filter((move) => move.category === "Physical").length;
-  const specialCount = (config.moves || []).filter((move) => move.category === "Special").length;
-  if (!physicalCount && !specialCount) return "support";
-  if (physicalCount === specialCount) return "mixed";
-  return physicalCount > specialCount ? "physical" : "special";
-}
-
 function countCoveredEntries(speedTiers, predicate) {
   return speedTiers.filter(predicate).reduce((sum, tier) => sum + tier.totalCount, 0);
 }
 
+function getThreatTypes(analysis) {
+  const pressureTypes = analysis.defensive
+    .filter((entry) => entry.weakCount > entry.resistCount + entry.immuneCount)
+    .map((entry) => entry.type);
+  if (pressureTypes.length) {
+    return pressureTypes;
+  }
+  return analysis.weaknesses.map((entry) => entry.type);
+}
+
+function getCoverSummary(candidate, analysis) {
+  const profile = getResistanceProfile(candidate.types);
+  const threatTypes = getThreatTypes(analysis);
+  const teamWeaknessTypes = analysis.weaknesses.map((entry) => entry.type);
+  return {
+    threatTypes,
+    coveredThreats: threatTypes.filter((type) => (profile[type] ?? 1) < 1),
+    immuneThreats: threatTypes.filter((type) => (profile[type] ?? 1) === 0),
+    patchedWeaknesses: teamWeaknessTypes.filter((type) => (profile[type] ?? 1) < 1),
+  };
+}
+
 function scoreResistance(candidate, analysis) {
   const profile = getResistanceProfile(candidate.types);
+  const coverSummary = getCoverSummary(candidate, analysis);
   const total = analysis.weaknesses.reduce((score, weakness) => {
     const multiplier = profile[weakness.type] ?? 1;
-    if (multiplier === 0 || multiplier <= 0.25) return score + 2;
-    if (multiplier <= 0.5) return score + 1.5;
-    if (multiplier >= 2) return score - 0.5;
+    if (multiplier === 0) return score + THREAT_IMMUNITY_SCORE;
+    if (multiplier <= 0.25) return score + 3;
+    if (multiplier <= 0.5) return score + THREAT_COVER_SCORE;
+    if (multiplier >= 2) return score - 1;
     return score;
-  }, 0);
+  }, 0) + (coverSummary.coveredThreats.length * TEAM_PATCH_SCORE);
   return clamp(total, 0, SCORE_WEIGHTS.resistance);
 }
 
@@ -105,7 +96,7 @@ function scoreTrickRoomSpeed(candidate, speedTiers) {
 function scoreSpeed(candidate, speedTiers, analysis) {
   const standardScore = scoreStandardSpeed(candidate, speedTiers);
   const trickRoomScore = scoreTrickRoomSpeed(candidate, speedTiers);
-  const isTrickRoomSetter = hasMove(candidate, TRICK_ROOM_MOVE);
+  const isTrickRoomSetter = hasMove(candidate, "trickroom");
   if (analysis.speedContext.mode === "trickroom") {
     return clamp(trickRoomScore + (isTrickRoomSetter ? TRICK_ROOM_SETTER_BONUS : 0), 0, SCORE_WEIGHTS.speed);
   }
@@ -117,9 +108,10 @@ function scoreSpeed(candidate, speedTiers, analysis) {
 
 function scoreSynergy(team, candidate, analysis) {
   const teamTypes = new Set(team.flatMap((member) => member.types || []));
-  const teamRoles = new Set(team.flatMap((member) => getUtilityRoles(member)));
-  const candidateRoles = getUtilityRoles(candidate);
+  const teamRoles = new Set(team.flatMap((member) => getUtilityRoles(member)).filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)));
+  const candidateRoles = getUtilityRoles(candidate).filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId));
   const candidateBias = getAttackBias(candidate);
+  const coverSummary = getCoverSummary(candidate, analysis);
   const needsSpecial = analysis.structure.physical > analysis.structure.special + 2;
   const needsPhysical = analysis.structure.special > analysis.structure.physical + 2;
   const supportTarget = team.length * SUPPORT_MOVES_PER_MEMBER_TARGET;
@@ -135,11 +127,13 @@ function scoreSynergy(team, candidate, analysis) {
   const duplicateTypes = (candidate.types || []).filter((type) => teamTypes.has(type)).length;
   const missingRoles = candidateRoles.filter((role) => !teamRoles.has(role)).length;
   const total = (
-    missingRoles * MISSING_ROLE_SCORE
+    coverSummary.coveredThreats.length * 1.5
+    + missingRoles * MISSING_ROLE_SCORE
     + balanceScore
     + supportScore
     + newTypes * NEW_TYPE_SCORE
     - duplicateTypes * DUPLICATE_TYPE_PENALTY
+    - ((duplicateTypes && !coverSummary.coveredThreats.length) ? SHARED_TYPE_PENALTY : 0)
   );
   return clamp(total, 0, SCORE_WEIGHTS.synergy);
 }
@@ -160,12 +154,18 @@ function getContextPenalty(candidate, team) {
 }
 
 function buildReasons(candidate, breakdown, language, analysis) {
+  const coverSummary = getCoverSummary(candidate, analysis);
   const reasons = [];
+  if (coverSummary.coveredThreats.length) {
+    reasons.push(t(language, "recommend.reason.coverThreats", {
+      value: coverSummary.coveredThreats.map((type) => getTypeLabel(type, language)).join(" / "),
+    }));
+  }
   if (breakdown.resistance >= 4) reasons.push(t(language, "recommend.reason.resistance"));
   if (breakdown.coverage >= 4) reasons.push(t(language, "recommend.reason.coverage"));
   if (breakdown.speed >= 3) {
     reasons.push(
-      analysis.speedContext.mode === "trickroom" && (hasMove(candidate, TRICK_ROOM_MOVE) || (candidate.stats?.spe || 0) <= analysis.speedContext.medianSpeed)
+      analysis.speedContext.mode === "trickroom" && (hasMove(candidate, "trickroom") || (candidate.stats?.spe || 0) <= analysis.speedContext.medianSpeed)
         ? t(language, "recommend.reason.trickRoom", {speed: candidate.stats?.spe || 0})
         : t(language, "recommend.reason.speed", {speed: candidate.stats?.spe || 0}),
     );
@@ -186,6 +186,7 @@ export function recommendConfigs(library, team, speedTiers, language = "zh") {
   return library
     .filter((candidate) => !currentSpecies.has(candidate.speciesId))
     .map((candidate) => {
+      const coverSummary = getCoverSummary(candidate, analysis);
       const breakdown = {
         resistance: scoreResistance(candidate, analysis),
         coverage: scoreCoverage(candidate, analysis),
@@ -198,14 +199,20 @@ export function recommendConfigs(library, team, speedTiers, language = "zh") {
       return {
         ...candidate,
         recommendationScore: score,
+        coveredThreats: coverSummary.coveredThreats,
         breakdown,
         reasons: buildReasons(candidate, breakdown, language, analysis),
-        weaknessHelp: analysis.weaknesses.map((entry) => {
-          const multiplier = getResistanceProfile(candidate.types)[entry.type] ?? 1;
-          return `${getTypeLabel(entry.type, language)} ${multiplier}x`;
-        }).slice(0, 3),
+        weaknessHelp: coverSummary.coveredThreats.length
+          ? coverSummary.coveredThreats.map((type) => getTypeLabel(type, language)).slice(0, 3)
+          : analysis.weaknesses.map((entry) => {
+            const multiplier = getResistanceProfile(candidate.types)[entry.type] ?? 1;
+            return `${getTypeLabel(entry.type, language)} ${multiplier}x`;
+          }).slice(0, 3),
       };
     })
-    .sort((left, right) => right.recommendationScore - left.recommendationScore)
+    .sort((left, right) => (
+      right.coveredThreats.length - left.coveredThreats.length
+      || right.recommendationScore - left.recommendationScore
+    ))
     .slice(0, 12);
 }

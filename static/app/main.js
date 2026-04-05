@@ -12,6 +12,8 @@ const state = {
   language: DEFAULT_LANGUAGE,
   status: null,
   activeView: "library-view",
+  activeAnalysisTab: "coverage",
+  activeCoreConfigId: null,
   search: "",
   library: [],
   filteredLibrary: [],
@@ -71,6 +73,9 @@ function refreshDerivedState() {
   state.speedTiers = calculateSpeedTiers(state.library);
   state.speedLineTiers = calculateSpeedLineTiers(state.library);
   state.analysis = analyzeTeam(state.team, state.speedTiers, state.language, state.library);
+  if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
+    state.activeCoreConfigId = state.team[0]?.id || null;
+  }
   state.recommendations = recommendConfigs(state.library, state.team, state.speedTiers, state.language);
   persistState(state);
 }
@@ -126,6 +131,13 @@ function setActiveView(viewId) {
   document.querySelectorAll(".view-panel").forEach((panel) => {
     panel.classList.toggle("active", panel.id === viewId);
   });
+}
+
+function setActiveAnalysisTab(tabId, rerender = true) {
+  state.activeAnalysisTab = tabId || "coverage";
+  if (rerender) {
+    renderAnalysis(state);
+  }
 }
 
 function findConfigById(configId) {
@@ -449,6 +461,23 @@ function bindEvents() {
     const button = event.target.closest("[data-view]");
     if (!button) return;
     setActiveView(button.dataset.view);
+  });
+
+  document.getElementById("analysis-tabs").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-analysis-tab]");
+    if (!button || button.dataset.analysisTab === state.activeAnalysisTab) {
+      return;
+    }
+    setActiveAnalysisTab(button.dataset.analysisTab);
+  });
+
+  document.getElementById("analysis-cores-panel").addEventListener("change", (event) => {
+    const select = event.target.closest("[data-core-focus]");
+    if (!select || select.value === state.activeCoreConfigId) {
+      return;
+    }
+    state.activeCoreConfigId = select.value || null;
+    renderAnalysis(state);
   });
 
   document.getElementById("language-switch").addEventListener("click", (event) => {

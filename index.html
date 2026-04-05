@@ -7,10 +7,12 @@
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="stylesheet" href="./static/css/base.css">
     <link rel="stylesheet" href="./static/css/layout.css">
+    <link rel="stylesheet" href="./static/css/shell.css">
+    <link rel="stylesheet" href="./static/css/analysis.css">
   </head>
   <body>
     <header class="hero">
-      <div>
+      <div class="hero-main">
         <p class="eyebrow" data-i18n="hero.eyebrow">Static Team Builder</p>
         <h1 data-i18n="hero.title">宝可梦队伍组建分析</h1>
         <p class="hero-copy" data-i18n="hero.copy">
@@ -82,57 +84,53 @@
           </details>
         </section>
 
-        <nav class="view-tabs panel" aria-label="功能切换">
-          <button type="button" class="view-tab active" data-view="library-view" data-i18n="tabs.library">配置库</button>
-          <button type="button" class="view-tab" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
-          <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
-          <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
-        </nav>
+        <section class="workspace-stack panel">
+          <nav class="view-tabs" aria-label="功能切换">
+            <button type="button" class="view-tab active" data-view="library-view" data-i18n="tabs.library">配置库</button>
+            <button type="button" class="view-tab" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
+            <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
+            <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
+          </nav>
 
-        <section id="library-view" class="panel view-panel active">
-          <div class="section-head">
-            <h2 data-i18n="views.libraryTitle">配置库</h2>
-            <p id="library-summary" class="muted"></p>
-          </div>
-          <div id="library-list" class="stack-list view-list"></div>
-        </section>
-
-        <section id="analysis-view" class="panel view-panel">
-          <div class="section-head">
-            <h2 data-i18n="views.analysisTitle">队伍分析</h2>
-            <p class="muted" data-i18n="views.analysisCopy">分析基于队伍已选配置的属性、招式和速度数据。</p>
-          </div>
-          <div id="analysis-overview" class="analysis-overview"></div>
-          <div class="analysis-columns">
-            <div class="subpanel">
-              <h3 data-i18n="views.defensiveTitle">抗性与弱点</h3>
-              <div id="analysis-defensive" class="chip-list"></div>
+          <section id="library-view" class="view-panel active">
+            <div class="section-head">
+              <h2 data-i18n="views.libraryTitle">配置库</h2>
+              <p id="library-summary" class="muted"></p>
             </div>
-            <div class="subpanel">
-              <h3 data-i18n="views.offensiveTitle">打击面</h3>
-              <div id="analysis-offensive" class="chip-list"></div>
+            <div id="library-list" class="stack-list view-list"></div>
+          </section>
+
+          <section id="analysis-view" class="view-panel">
+            <div class="section-head">
+              <h2 data-i18n="views.analysisTitle">队伍分析</h2>
+              <p class="muted" data-i18n="views.analysisCopy">分析基于队伍已选配置的属性、招式和速度数据。</p>
             </div>
-          </div>
-          <div class="subpanel">
-            <h3 data-i18n="views.speedTitle">速度结构</h3>
-            <div id="analysis-speed" class="stack-list compact-list"></div>
-          </div>
-        </section>
+            <div id="analysis-overview" class="analysis-overview"></div>
+            <nav id="analysis-tabs" class="analysis-tabs" aria-label="分析维度">
+              <button type="button" class="analysis-tab active" data-analysis-tab="coverage" data-i18n="analysis.tab.coverage">Coverage</button>
+              <button type="button" class="analysis-tab" data-analysis-tab="roles" data-i18n="analysis.tab.roles">Roles</button>
+              <button type="button" class="analysis-tab" data-analysis-tab="cores" data-i18n="analysis.tab.cores">Cores</button>
+            </nav>
+            <section id="analysis-coverage-panel" class="analysis-detail-panel active" data-analysis-panel="coverage"></section>
+            <section id="analysis-roles-panel" class="analysis-detail-panel" data-analysis-panel="roles"></section>
+            <section id="analysis-cores-panel" class="analysis-detail-panel" data-analysis-panel="cores"></section>
+          </section>
 
-        <section id="recommend-view" class="panel view-panel">
-          <div class="section-head">
-            <h2 data-i18n="views.recommendTitle">组队推荐</h2>
-            <p class="muted" data-i18n="views.recommendCopy">推荐候选只来自你当前导入的配置库。</p>
-          </div>
-          <div id="recommend-list" class="stack-list compact-list view-list"></div>
-        </section>
+          <section id="recommend-view" class="view-panel">
+            <div class="section-head">
+              <h2 data-i18n="views.recommendTitle">组队推荐</h2>
+              <p class="muted" data-i18n="views.recommendCopy">推荐候选只来自你当前导入的配置库。</p>
+            </div>
+            <div id="recommend-list" class="stack-list compact-list view-list"></div>
+          </section>
 
-        <section id="speed-view" class="panel view-panel">
-          <div class="section-head">
-            <h2 data-i18n="views.speedLineTitle">常见速度线</h2>
-            <p id="speed-summary" class="muted"></p>
-          </div>
-          <div id="speed-tiers" class="stack-list compact-list view-list"></div>
+          <section id="speed-view" class="view-panel">
+            <div class="section-head">
+              <h2 data-i18n="views.speedLineTitle">常见速度线</h2>
+              <p id="speed-summary" class="muted"></p>
+            </div>
+            <div id="speed-tiers" class="stack-list compact-list view-list"></div>
+          </section>
         </section>
       </section>
     </main>
