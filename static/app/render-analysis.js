@@ -9,6 +9,33 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
+function buildTextTooltipMarkup(detail, language) {
+  return `
+    <div class="tooltip-stack">
+      <div class="tooltip-desc-box">${escapeHtml(detail || t(language, "tooltip.noDetail"))}</div>
+    </div>
+  `;
+}
+
+function renderTooltipPill(label, detail, language, className = "") {
+  const pillClassName = ["info-pill", className].filter(Boolean).join(" ");
+  return `
+    <span class="${pillClassName}" tabindex="0">
+      <span class="info-pill-label">${escapeHtml(label)}</span>
+      <span class="info-tooltip-content">${buildTextTooltipMarkup(detail, language)}</span>
+    </span>
+  `;
+}
+
+function renderRolePill(roleId, language, className = "") {
+  return renderTooltipPill(
+    t(language, `analysis.role.${roleId}`),
+    t(language, `analysis.roleDesc.${roleId}`),
+    language,
+    className,
+  );
+}
+
 function memberPillsMarkup(members = []) {
   return members.map((member) => `
     <span class="mini-pill analysis-member-pill">${escapeHtml(member.label)}</span>
@@ -71,7 +98,7 @@ function roleCardMarkup(entry, language) {
   return `
     <article class="analysis-list-card analysis-role-card ${entry.count ? "good" : ""}">
       <div class="analysis-list-head">
-        <strong>${t(language, `analysis.role.${entry.id}`)}</strong>
+        ${renderRolePill(entry.id, language)}
         <span class="source-tag">${t(language, "analysis.roleCount", {count: entry.count})}</span>
       </div>
       ${entry.members.length
@@ -130,7 +157,7 @@ function coreCardMarkup(entry, language, tone) {
       </div>
       ${coreMetricPillsMarkup(entry, language)}
       <p class="muted analysis-core-copy">${t(language, "analysis.coreUtility", {roles: entry.roles.length || 0, immunities: entry.immunityPatches})}</p>
-      ${entry.roles.length ? `<div class="analysis-inline-pills">${entry.roles.map((role) => `<span class="mini-pill">${t(language, `analysis.role.${role}`)}</span>`).join("")}</div>` : ""}
+      ${entry.roles.length ? `<div class="analysis-inline-pills">${entry.roles.map((role) => renderRolePill(role, language, "mini-pill")).join("")}</div>` : ""}
     </article>
   `;
 }
@@ -213,7 +240,7 @@ function renderRolesPanel(analysis, language) {
     <section class="subpanel">
       <h3>${t(language, "analysis.rolesGapTitle")}</h3>
       ${analysis.roles.missing.length
-        ? `<div class="analysis-inline-pills analysis-gap-pills">${analysis.roles.missing.map((roleId) => `<span class="mini-pill analysis-alert-pill">${t(language, `analysis.role.${roleId}`)}</span>`).join("")}</div>`
+        ? `<div class="analysis-inline-pills analysis-gap-pills">${analysis.roles.missing.map((roleId) => renderRolePill(roleId, language, "mini-pill analysis-alert-pill")).join("")}</div>`
         : emptyTextMarkup(language, "analysis.noMissingRoles")}
     </section>
     <section class="subpanel">

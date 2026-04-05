@@ -105,7 +105,7 @@ function buildPartnerTypeCombos() {
 
 function summarizeDefensive(team, language) {
   return TYPE_ORDER.map((attackType) => {
-    const multipliers = team.map((config) => getResistanceProfile(config.types)[attackType] || 1);
+    const multipliers = team.map((config) => getResistanceProfile(config.types)[attackType] ?? 1);
     const average = multipliers.reduce((total, value) => total + value, 0) / Math.max(team.length, 1);
     return {
       type: attackType,
@@ -166,7 +166,7 @@ function summarizeCoverageRows(team, language) {
     const memberResults = team.map((config) => ({
       member: createMemberReference(config),
       effectiveness: getCoverageProfile(config.offensiveTypes || [])[defendType] || 0,
-      resistance: getResistanceProfile(config.types)[defendType] || 1,
+      resistance: getResistanceProfile(config.types)[defendType] ?? 1,
     }));
     const bestEffectiveness = memberResults.reduce((best, entry) => Math.max(best, entry.effectiveness), 0);
     return {
@@ -334,21 +334,21 @@ function getPairEntries(team) {
 
 function countPairPatches(pair, typeList = TYPE_ORDER) {
   return typeList.filter((type) => {
-    const multipliers = pair.map((config) => getResistanceProfile(config.types)[type] || 1);
+    const multipliers = pair.map((config) => getResistanceProfile(config.types)[type] ?? 1);
     return multipliers.some((value) => value > 1) && multipliers.some((value) => value < 1);
   }).length;
 }
 
 function countPairImmunityPatches(pair) {
   return TYPE_ORDER.filter((type) => {
-    const multipliers = pair.map((config) => getResistanceProfile(config.types)[type] || 1);
+    const multipliers = pair.map((config) => getResistanceProfile(config.types)[type] ?? 1);
     return multipliers.some((value) => value > 1) && multipliers.some((value) => value === 0);
   }).length;
 }
 
 function countSharedWeaknesses(pair) {
   return TYPE_ORDER.filter((type) => {
-    return pair.every((config) => (getResistanceProfile(config.types)[type] || 1) > 1);
+    return pair.every((config) => (getResistanceProfile(config.types)[type] ?? 1) > 1);
   }).length;
 }
 
