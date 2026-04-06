@@ -38,16 +38,38 @@
 
     <main class="app-shell">
       <aside class="panel team-sidebar">
-        <div class="section-head">
-          <h2 data-i18n="team.title">当前队伍</h2>
-          <div class="action-row">
+        <div class="sidebar-block sidebar-team-block">
+          <div class="section-head sidebar-main-head">
+            <div>
+              <p class="eyebrow sidebar-eyebrow" data-i18n="team.eyebrow">Team Workspace</p>
+              <h2 data-i18n="team.title">当前队伍</h2>
+            </div>
+            <div id="team-count-badge" class="count-badge">0 / 6</div>
+          </div>
+          <p class="muted sidebar-copy" data-i18n="team.shared">队伍在配置库、分析、推荐和速度线页面之间共享。</p>
+          <div class="action-row sidebar-actions">
             <button id="export-team-btn" type="button" class="ghost-button" data-i18n="team.export">导出队伍</button>
             <button id="clear-team-btn" type="button" class="ghost-button" data-i18n="team.clear">清空队伍</button>
           </div>
+          <div id="team-list" class="team-grid"></div>
         </div>
-        <p class="muted sidebar-copy" data-i18n="team.shared">队伍在配置库、分析、推荐和速度线页面之间共享。</p>
-        <div id="team-list" class="team-grid"></div>
-        <div class="saved-team-panel">
+
+        <details class="sidebar-block team-import-panel">
+          <summary class="team-import-summary">
+            <span data-i18n="team.importTitle">队伍代码直导</span>
+          </summary>
+          <div class="team-import-body">
+            <p class="muted" data-i18n="team.importCopy">直接粘贴 Showdown 队伍文本，系统会自动挂靠相似配置；大改动再询问是否加入配置库。</p>
+            <textarea id="team-import-input" rows="8" placeholder="Flutter Mane @ Focus Sash&#10;Ability: Protosynthesis&#10;Tera Type: Fairy&#10;EVs: 4 HP / 252 SpA / 252 Spe&#10;Timid Nature&#10;- Moonblast&#10;- Shadow Ball&#10;- Icy Wind&#10;- Protect" data-i18n-placeholder="team.importPlaceholder"></textarea>
+            <div class="action-row sidebar-actions">
+              <button id="import-team-btn" type="button" data-i18n="team.importAction">覆盖导入队伍</button>
+              <button id="clear-team-import-btn" type="button" class="ghost-button" data-i18n="team.importClear">清空输入</button>
+            </div>
+            <p id="team-import-feedback" class="muted" data-i18n="team.importEmpty">未导入队伍代码。</p>
+          </div>
+        </details>
+
+        <div class="saved-team-panel sidebar-block">
           <h3 data-i18n="team.saveTitle">保存队伍</h3>
           <div class="saved-team-form">
             <input id="saved-team-name" type="text" placeholder="输入队伍名称" data-i18n-placeholder="team.savePlaceholder">
@@ -59,12 +81,21 @@
 
       <section class="workspace">
         <section class="panel controls-panel">
-          <div class="control-grid">
-            <label>
-              <span data-i18n="controls.searchLabel">搜索配置库</span>
-              <input id="library-search" type="search" placeholder="搜索宝可梦 / 配置 / 招式" data-i18n-placeholder="controls.searchPlaceholder">
-            </label>
-          </div>
+          <section class="control-search-panel">
+            <p class="eyebrow control-eyebrow" data-i18n="controls.eyebrow">Library Workspace</p>
+            <div class="section-head section-head-tight">
+              <div>
+                <h2 data-i18n="controls.title">配置库工作区</h2>
+                <p class="muted" data-i18n="controls.copy">搜索、维护和补充你常用的配置库，队伍直导时也会优先从这里匹配相似配置。</p>
+              </div>
+            </div>
+            <div class="control-grid">
+              <label>
+                <span data-i18n="controls.searchLabel">搜索配置库</span>
+                <input id="library-search" type="search" placeholder="搜索宝可梦 / 配置 / 招式" data-i18n-placeholder="controls.searchPlaceholder">
+              </label>
+            </div>
+          </section>
           <details class="import-panel">
             <summary data-i18n="controls.importSummary">导入自定义配置库</summary>
             <p class="muted" data-i18n="controls.importHelp">

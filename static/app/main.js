@@ -11,10 +11,12 @@ import {
   restoreOpponentTeam,
   syncOpponentTeam,
 } from "./matchup-selection.js";
-import {clearPersistedState, loadPersistedState, persistState} from "./persistence.js";
+import {loadPersistedState, persistState} from "./persistence.js";
+import {applyPsChinaTranslation} from "./pschina-translation.js";
 import {recommendConfigs} from "./recommendations.js";
-import {renderAnalysis, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam} from "./render.js";
+import {renderAnalysis, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
+import {compareConfigs, createTeamEntry, findBestLibraryMatch} from "./team-config.js";
 import {formatConfigName, normalizeName} from "./utils.js";
 
 const MAX_TEAM_SIZE = 6;
@@ -43,7 +45,7 @@ const state = {
 
 const TOOLTIP_OFFSET = 12;
 let globalTooltip = null;
-let activeEditorConfigId = null;
+let activeEditorTarget = null;
 const POINT_PROMPT_MAP = {
   hp: "hp",
   atk: "atk",
@@ -108,16 +110,19 @@ function renderAll() {
   renderMatchup(state);
   renderRecommendations(state);
   renderSpeedTiers(state);
+  void applyPsChinaTranslation(state.language);
 }
 
 function setStatus(key, params = {}) {
   state.status = {key, params};
   renderStatus(t(state.language, key, params));
+  void applyPsChinaTranslation(state.language);
 }
 
 function setStatusMessage(message) {
   state.status = null;
   renderStatus(message);
+  void applyPsChinaTranslation(state.language);
 }
 
 function updateLanguageSwitch() {
@@ -136,6 +141,10 @@ function setLanguage(language, rerender = true) {
   const importInput = document.getElementById("custom-library-input");
   if (importInput && !importInput.value.trim() && !state.library.length) {
     renderImportFeedback(t(state.language, "controls.importEmpty"));
+  }
+  const teamImportInput = document.getElementById("team-import-input");
+  if (teamImportInput && !teamImportInput.value.trim()) {
+    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
   }
   if (!rerender) {
     return;
@@ -165,11 +174,37 @@ function findConfigById(configId) {
   return state.library.find((config) => config.id === configId);
 }
 
+function findTeamConfigById(configId) {
+  return state.team.find((config) => config.id === configId);
+}
+
+function buildTeamEntry(config, teamSource = "library", linkedConfigId = config.id) {
+  return createTeamEntry(config, {
+    linkedConfigId,
+    teamSource,
+  });
+}
+
+function replaceTeamConfig(configId, nextConfig, metadata = {}) {
+  let updatedConfig = null;
+  state.team = state.team.map((config) => {
+    if (config.id !== configId) {
+      return config;
+    }
+    updatedConfig = createTeamEntry(nextConfig, {
+      id: configId,
+      linkedConfigId: metadata.linkedConfigId ?? config.linkedConfigId,
+      teamSource: metadata.teamSource ?? config.teamSource ?? "team-only",
+    });
+    return updatedConfig;
+  });
+  return updatedConfig;
+}
+
 function addConfig(configId) {
   const config = findConfigById(configId);
   if (!config || state.team.length >= MAX_TEAM_SIZE) return;
-  if (state.team.some((member) => member.id === config.id)) return;
-  state.team = [...state.team, config];
+  state.team = [...state.team, buildTeamEntry(config)];
   refreshDerivedState();
   renderAll();
 }
@@ -224,13 +259,16 @@ function replaceConfig(configId, nextConfig) {
   if (!updatedConfig) {
     return null;
   }
-  state.team = state.team.map((config) => (config.id === configId ? updatedConfig : config));
-  state.savedTeams = state.savedTeams.map((team) => ({
-    ...team,
-    labels: team.configIds.map((id, index) => (
-      id === configId ? (updatedConfig.displayLabel || updatedConfig.displayName) : team.labels[index]
-    )),
-  }));
+  state.team = state.team.map((config) => {
+    if (config.linkedConfigId !== configId || config.teamSource !== "library") {
+      return config;
+    }
+    return createTeamEntry(updatedConfig, {
+      id: config.id,
+      linkedConfigId: updatedConfig.id,
+      teamSource: "library",
+    });
+  });
   return updatedConfig;
 }
 
@@ -262,27 +300,95 @@ function getEditorElements() {
 
 function closeConfigEditor() {
   const {modal, input} = getEditorElements();
-  activeEditorConfigId = null;
+  activeEditorTarget = null;
   modal.hidden = true;
   input.value = "";
 }
 
-function openConfigEditor(configId) {
-  const target = findConfigById(configId);
+function openConfigEditor(configId, kind = "library") {
+  const target = kind === "team" ? findTeamConfigById(configId) : findConfigById(configId);
   if (!target) {
     return;
   }
   const {modal, input} = getEditorElements();
-  activeEditorConfigId = configId;
+  activeEditorTarget = {configId, kind};
   input.value = exportConfigToEditableText(target);
   modal.hidden = false;
   input.focus();
   input.setSelectionRange(0, 0);
 }
 
+function parseSingleEditedConfig(text) {
+  const {configs, errors} = parseShowdownLibrary(text, state.datasets, {
+    fallbackLevel: 50,
+    language: state.language,
+    resolveConvertedPoint: promptMissingPoint,
+  });
+  if (configs.length !== 1) {
+    throw new Error(t(state.language, "error.editSingle"));
+  }
+  return {config: configs[0], errors};
+}
+
+function appendImportedConfigs(configs) {
+  const additions = ensureUniqueConfigIds(configs, new Set(state.library.map((config) => config.id)));
+  state.library = [...state.library, ...additions];
+  return additions;
+}
+
+function confirmAddConfigToLibrary(config, baseConfig, reasonKey) {
+  const name = config.displayName || config.speciesName;
+  if (!baseConfig) {
+    return window.confirm(t(state.language, reasonKey, {name}));
+  }
+  return window.confirm(t(state.language, reasonKey, {
+    name,
+    target: baseConfig.displayLabel || baseConfig.displayName,
+  }));
+}
+
+function saveLibraryConfigEdit(configId, text) {
+  const {config, errors} = parseSingleEditedConfig(text);
+  const updated = replaceConfig(configId, config);
+  if (!updated) {
+    return;
+  }
+  refreshDerivedState();
+  renderAll();
+  renderImportFeedback(errors.join(" "));
+  closeConfigEditor();
+  setStatus("status.editedConfig", {name: updated.displayName});
+}
+
+function saveTeamConfigEdit(configId, text) {
+  const current = findTeamConfigById(configId);
+  if (!current) {
+    return;
+  }
+
+  const {config, errors} = parseSingleEditedConfig(text);
+  const baseConfig = findConfigById(current.linkedConfigId);
+  const diff = baseConfig ? compareConfigs(baseConfig, config) : null;
+  const shouldAdd = diff?.classification === "major"
+    && confirmAddConfigToLibrary(config, baseConfig, "prompt.addLargeEdit");
+  const libraryConfig = shouldAdd ? appendImportedConfigs([config])[0] : null;
+  const updated = replaceTeamConfig(configId, libraryConfig || config, {
+    linkedConfigId: libraryConfig?.id || baseConfig?.id || null,
+    teamSource: libraryConfig ? "library" : (baseConfig ? "linked" : "team-only"),
+  });
+  if (!updated) {
+    return;
+  }
+  refreshDerivedState();
+  renderAll();
+  renderTeamImportFeedback(errors.join(" "));
+  closeConfigEditor();
+  setStatus("status.editedTeamConfig", {name: updated.displayName});
+}
+
 function saveConfigEdit() {
-  const configId = activeEditorConfigId;
-  if (!configId) {
+  const target = activeEditorTarget;
+  if (!target) {
     return;
   }
   const {input} = getEditorElements();
@@ -293,36 +399,18 @@ function saveConfigEdit() {
   }
 
   try {
-    const {configs, errors} = parseShowdownLibrary(text, state.datasets, {
-      fallbackLevel: 50,
-      language: state.language,
-      resolveConvertedPoint: promptMissingPoint,
-    });
-    if (configs.length !== 1) {
-      throw new Error(t(state.language, "error.editSingle"));
-    }
-    const updated = replaceConfig(configId, configs[0]);
-    if (!updated) {
+    if (target.kind === "team") {
+      saveTeamConfigEdit(target.configId, text);
       return;
     }
-    refreshDerivedState();
-    renderAll();
-    renderImportFeedback(errors.join(" "));
-    closeConfigEditor();
-    setStatus("status.editedConfig", {name: updated.displayName});
+    saveLibraryConfigEdit(target.configId, text);
   } catch (error) {
     setStatusMessage(error.message);
   }
 }
 
 function syncTeamWithLibrary() {
-  const validIds = new Set(state.library.map((config) => config.id));
-  state.team = state.team.filter((member) => validIds.has(member.id));
-  state.savedTeams = state.savedTeams.map((team) => {
-    const configIds = team.configIds.filter((id) => validIds.has(id));
-    const labels = team.labels.filter((_, index) => validIds.has(team.configIds[index]));
-    return {...team, configIds, labels};
-  });
+  state.savedTeams = state.savedTeams.map((team) => ({...team}));
 }
 
 function applyImportedLibrary(configs, errors, mode) {
@@ -360,12 +448,68 @@ function promptMissingPoint({displayName, points}) {
   }
 }
 
+function createImportedTeamEntry(importedConfig, matchedConfig, teamSource = "team-only") {
+  if (teamSource === "library" && matchedConfig) {
+    return buildTeamEntry(matchedConfig, "library", matchedConfig.id);
+  }
+  return createTeamEntry(importedConfig, {
+    linkedConfigId: matchedConfig?.id || null,
+    teamSource,
+  });
+}
+
+function resolveImportedTeamMember(importedConfig) {
+  const matched = findBestLibraryMatch(importedConfig, state.library);
+  if (!matched) {
+    const shouldAdd = confirmAddConfigToLibrary(importedConfig, null, "prompt.addMissingImport");
+    const addedConfig = shouldAdd ? appendImportedConfigs([importedConfig])[0] : null;
+    return createImportedTeamEntry(addedConfig || importedConfig, addedConfig, addedConfig ? "library" : "team-only");
+  }
+
+  if (matched.diff.classification === "exact") {
+    return createImportedTeamEntry(matched.config, matched.config, "library");
+  }
+
+  if (matched.diff.classification === "minor") {
+    return createImportedTeamEntry(importedConfig, matched.config, "linked");
+  }
+
+  const shouldAdd = confirmAddConfigToLibrary(importedConfig, matched.config, "prompt.addLargeImport");
+  const addedConfig = shouldAdd ? appendImportedConfigs([importedConfig])[0] : null;
+  return createImportedTeamEntry(addedConfig || importedConfig, addedConfig || matched.config, addedConfig ? "library" : "linked");
+}
+
+function importTeamByCode() {
+  const input = document.getElementById("team-import-input").value.trim();
+  if (!input) {
+    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
+    return;
+  }
+
+  try {
+    const {configs, errors} = parseShowdownLibrary(input, state.datasets, {
+      fallbackLevel: 50,
+      language: state.language,
+      resolveConvertedPoint: promptMissingPoint,
+    });
+    if (configs.length > MAX_TEAM_SIZE) {
+      throw new Error(t(state.language, "error.teamImportTooLarge", {count: configs.length}));
+    }
+    state.team = configs.map(resolveImportedTeamMember);
+    refreshDerivedState();
+    renderAll();
+    renderTeamImportFeedback([t(state.language, "status.importedTeam", {count: state.team.length}), ...errors].join(" "));
+    setStatus("status.importedTeam", {count: state.team.length});
+  } catch (error) {
+    renderTeamImportFeedback(error.message);
+    setStatusMessage(error.message);
+  }
+}
+
 function importCustomLibrary(mode = "replace") {
   const input = document.getElementById("custom-library-input").value.trim();
   if (!input) {
     state.library = [];
-    state.team = [];
-    clearPersistedState();
     renderImportFeedback(t(state.language, "status.libraryCleared"));
     refreshDerivedState();
     renderAll();
@@ -459,7 +603,7 @@ function saveCurrentTeam() {
   const snapshot = {
     id: `saved:${Date.now()}`,
     name,
-    configIds: state.team.map((config) => config.id),
+    configs: state.team.map((config) => ({...config})),
     labels: state.team.map((config) => config.displayLabel || config.displayName),
   };
   state.savedTeams = [snapshot, ...state.savedTeams];
@@ -489,8 +633,12 @@ function loadSavedTeam(teamId) {
   if (!target) {
     return;
   }
-  const byId = new Map(state.library.map((config) => [config.id, config]));
-  state.team = target.configIds.map((id) => byId.get(id)).filter(Boolean);
+  if (Array.isArray(target.configs)) {
+    state.team = hydrateConfigs(target.configs, state.datasets, 50);
+  } else {
+    const byId = new Map(state.library.map((config) => [config.id, config]));
+    state.team = (target.configIds || []).map((id) => byId.get(id)).filter(Boolean).map((config) => buildTeamEntry(config));
+  }
   refreshDerivedState();
   renderAll();
   setStatus("status.loadedTeam", {name: target.name});
@@ -575,7 +723,7 @@ function bindEvents() {
     }
     const editButton = event.target.closest("[data-edit-config]");
     if (editButton) {
-      openConfigEditor(editButton.dataset.editConfig);
+      openConfigEditor(editButton.dataset.editConfig, "library");
       return;
     }
     const noteButton = event.target.closest("[data-note-config]");
@@ -605,6 +753,11 @@ function bindEvents() {
   });
 
   document.getElementById("team-list").addEventListener("click", (event) => {
+    const editButton = event.target.closest("[data-edit-team]");
+    if (editButton) {
+      openConfigEditor(editButton.dataset.editTeam, "team");
+      return;
+    }
     const button = event.target.closest("[data-remove-config]");
     if (button) removeConfig(button.dataset.removeConfig);
   });
@@ -649,6 +802,11 @@ function bindEvents() {
     renderAll();
   });
   document.getElementById("export-team-btn").addEventListener("click", exportTeam);
+  document.getElementById("import-team-btn").addEventListener("click", importTeamByCode);
+  document.getElementById("clear-team-import-btn").addEventListener("click", () => {
+    document.getElementById("team-import-input").value = "";
+    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
+  });
 
   document.getElementById("import-custom-btn").addEventListener("click", () => importCustomLibrary("replace"));
   document.getElementById("append-custom-btn").addEventListener("click", () => importCustomLibrary("append"));
@@ -789,15 +947,21 @@ async function initialize() {
     state.library = ensureUniqueConfigIds(hydrateConfigs(persisted.library, state.datasets, 50));
   }
   if (persisted?.team) {
-    const libraryIds = new Set(state.library.map((config) => config.id));
-    state.team = hydrateConfigs(persisted.team, state.datasets, 50)
-      .filter((config) => libraryIds.has(config.id));
+    state.team = hydrateConfigs(persisted.team, state.datasets, 50);
   }
   if (persisted?.opponentTeam) {
     state.opponentTeam = restoreOpponentTeam(persisted.opponentTeam, state.library);
   }
   if (persisted?.savedTeams) {
-    state.savedTeams = persisted.savedTeams;
+    state.savedTeams = persisted.savedTeams.map((team) => {
+      if (Array.isArray(team.configs)) {
+        return {
+          ...team,
+          configs: hydrateConfigs(team.configs, state.datasets, 50),
+        };
+      }
+      return team;
+    });
   }
   if (persisted?.savedOpponentTeams) {
     state.savedOpponentTeams = normalizeSavedOpponentTeams(persisted.savedOpponentTeams, state.library);
@@ -811,6 +975,9 @@ async function initialize() {
   renderAll();
   if (!document.getElementById("custom-library-input").value.trim()) {
     renderImportFeedback(t(state.language, "controls.importEmpty"));
+  }
+  if (!document.getElementById("team-import-input").value.trim()) {
+    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
   }
   setActiveView(state.activeView);
   if (state.library.length) {

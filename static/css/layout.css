@@ -110,6 +110,10 @@
   min-width: 112px;
 }
 
+.section-head-tight {
+  margin-bottom: 12px;
+}
+
 .mini-action {
   min-width: 84px;
 }
@@ -195,12 +199,43 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
-  margin-bottom: 18px;
 }
 
 .team-card {
   flex-direction: column;
   min-width: 0;
+}
+
+.team-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.team-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.team-title-row {
+  align-items: flex-start;
+}
+
+.team-title-row strong {
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.team-badge-row {
+  gap: 6px;
+}
+
+.team-badge-row .info-pill,
+.team-badge-row .source-tag {
+  max-width: 100%;
 }
 
 .empty-slot {
@@ -218,6 +253,22 @@
 .sidebar-action {
   width: auto;
   align-self: flex-start;
+}
+
+.team-import-panel {
+  border-top: 1px solid rgba(217, 205, 185, 0.9);
+  border-bottom: 1px solid rgba(217, 205, 185, 0.9);
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.team-import-panel textarea {
+  min-height: 188px;
+  margin: 0 0 12px;
+}
+
+.team-origin-copy {
+  margin-top: 2px;
 }
 
 .saved-team-panel {
@@ -300,6 +351,10 @@
 
   .team-sidebar {
     position: static;
+  }
+
+  .team-card-actions {
+    width: 100%;
   }
 
   .analysis-overview,

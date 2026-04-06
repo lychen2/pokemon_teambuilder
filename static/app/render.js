@@ -112,6 +112,47 @@ function notePillMarkup(config, language) {
   });
 }
 
+function getLinkedConfig(config, library = []) {
+  return library.find((entry) => entry.id === config.linkedConfigId) || null;
+}
+
+function teamSourceTagMarkup(config, linkedConfig, language) {
+  if (config.teamSource === "library") {
+    return `<span class="source-tag">${t(language, "team.source.library")}</span>`;
+  }
+  if (config.teamSource === "linked") {
+    return `<span class="source-tag">${t(language, "team.source.linked")}</span>`;
+  }
+  if (linkedConfig) {
+    return `<span class="source-tag">${t(language, "team.source.linked")}</span>`;
+  }
+  return `<span class="source-tag">${t(language, "team.source.teamOnly")}</span>`;
+}
+
+function teamSourceCopyMarkup(config, linkedConfig, language) {
+  if (!linkedConfig) {
+    return config.teamSource === "team-only"
+      ? `<p class="muted team-origin-copy">${t(language, "team.source.teamOnlyCopy")}</p>`
+      : "";
+  }
+  if (config.teamSource === "library") {
+    return "";
+  }
+  return `<p class="muted team-origin-copy">${t(language, "team.source.linkedCopy", {name: linkedConfig.displayLabel || linkedConfig.displayName})}</p>`;
+}
+
+function teamHeaderMarkup(config, linkedConfig, language) {
+  const noteMarkup = notePillMarkup(config, language);
+  const sourceMarkup = teamSourceTagMarkup(config, linkedConfig, language);
+  const badges = [noteMarkup, sourceMarkup].filter(Boolean).join("");
+  return `
+    <div class="team-card-header">
+      <div class="entry-title team-title-row">${spriteMarkup(config)}<strong>${config.displayName}</strong></div>
+      ${badges ? `<div class="entry-tags team-badge-row">${badges}</div>` : ""}
+    </div>
+  `;
+}
+
 export function renderLibrary(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
@@ -144,21 +185,32 @@ export function renderLibrary(state) {
 
 export function renderTeam(state) {
   const language = state.language;
+  const badge = document.getElementById("team-count-badge");
+  if (badge) {
+    badge.textContent = `${state.team.length} / 6`;
+  }
   const emptySlots = Math.max(0, 6 - state.team.length);
-  const teamMarkup = state.team.map((config) => `
+  const teamMarkup = state.team.map((config) => {
+    const linkedConfig = getLinkedConfig(config, state.library);
+    return `
     <article class="team-card">
       <div class="entry-main">
-        <div class="entry-title">${spriteMarkup(config)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}</div>
+        ${teamHeaderMarkup(config, linkedConfig, language)}
         <div class="entry-meta">${typePills(config.types, language)}</div>
         <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
         <p class="entry-line">${formatChampionPoints(config.championPoints, language)}</p>
         <p class="muted">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
         <div class="entry-line entry-tags">${movesMarkup(config, language)}</div>
         <p class="muted">${t(language, "common.speed")} ${config.stats?.spe || 0}${config.teraType ? ` · ${t(language, "common.tera")} ${getTypeLabel(config.teraType, language)}` : ""}</p>
+        ${teamSourceCopyMarkup(config, linkedConfig, language)}
       </div>
-      <button type="button" class="ghost-button danger-button sidebar-action" data-remove-config="${config.id}">${t(language, "team.remove")}</button>
+      <div class="team-card-actions">
+        <button type="button" class="ghost-button mini-action" data-edit-team="${config.id}">${t(language, "team.tune")}</button>
+        <button type="button" class="ghost-button danger-button sidebar-action" data-remove-config="${config.id}">${t(language, "team.remove")}</button>
+      </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
   const placeholders = Array.from({length: emptySlots}, () => `<div class="team-card empty-slot">${t(language, "team.placeholder")}</div>`).join("");
   document.getElementById("team-list").innerHTML = teamMarkup + placeholders;
 }
@@ -170,8 +222,8 @@ export function renderSavedTeams(state) {
     ? state.savedTeams.map((team) => `
         <article class="entry-card compact saved-team-card">
           <div class="entry-main">
-            <div class="entry-title"><strong>${team.name}</strong><span class="source-tag">${team.configIds.length} / 6</span></div>
-            <p class="muted">${team.labels.join(" / ") || t(language, "common.emptyTeam")}</p>
+            <div class="entry-title"><strong>${team.name}</strong><span class="source-tag">${(team.configs || team.configIds || []).length} / 6</span></div>
+            <p class="muted">${(team.labels || []).join(" / ") || t(language, "common.emptyTeam")}</p>
           </div>
           <div class="card-actions">
             <button type="button" class="add-button" data-load-team="${team.id}">${t(language, "saved.load")}</button>
@@ -250,4 +302,8 @@ export function renderStatus(message) {
 
 export function renderImportFeedback(message) {
   document.getElementById("import-feedback").textContent = message;
+}
+
+export function renderTeamImportFeedback(message) {
+  document.getElementById("team-import-feedback").textContent = message;
 }
