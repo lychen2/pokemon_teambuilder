@@ -3,6 +3,7 @@ const AUTO_RUN_PATTERN = /\(function\(\)\s*\{[\s\S]*$/;
 const JQUERY_NO_CONFLICT_PATTERN = /var QQ = \$\.noConflict\(\);/;
 
 let translatorPromise = null;
+let translationQueue = Promise.resolve();
 
 function buildTranslator(source) {
   const normalizedSource = source
@@ -25,8 +26,27 @@ function translatePlainText(translator, originalValue) {
   return translator.t(String(originalValue || "").replaceAll("é", "e"));
 }
 
-function walkAndTranslateTextNodes(translator) {
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+function translateElementAttributes(translator, root) {
+  const elements = [
+    ...(root instanceof Element ? [root] : []),
+    ...root.querySelectorAll?.("[title], [aria-label]") || [],
+  ];
+  elements.forEach((element) => {
+    ["title", "aria-label"].forEach((attributeName) => {
+      if (!element.hasAttribute(attributeName)) {
+        return;
+      }
+      const originalValue = element.getAttribute(attributeName);
+      const translatedValue = translatePlainText(translator, originalValue);
+      if (translatedValue && translatedValue !== originalValue) {
+        element.setAttribute(attributeName, translatedValue);
+      }
+    });
+  });
+}
+
+function walkAndTranslateTextNodes(translator, root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   let currentNode = walker.nextNode();
   while (currentNode) {
     if (!shouldSkipTextNode(currentNode)) {
@@ -60,16 +80,46 @@ async function loadTranslator() {
   return translatorPromise;
 }
 
-export async function applyPsChinaTranslation(language) {
+function normalizeRoots(roots) {
+  const rootList = Array.isArray(roots) ? roots : [roots];
+  return [...new Set(rootList.filter((root) => root instanceof Element || root === document.body))];
+}
+
+async function translateRoots(language, roots) {
   if (language !== "zh") {
     return;
   }
-  const translator = await loadTranslator();
-  if (!translator?.translateNode || !document.body) {
+  const normalizedRoots = normalizeRoots(roots);
+  if (!normalizedRoots.length) {
     return;
   }
-  if (translator.translateElement) {
-    translator.translateElement(document.body);
+  const translator = await loadTranslator();
+  if (!translator?.translateNode) {
+    return;
   }
-  walkAndTranslateTextNodes(translator);
+  normalizedRoots.forEach((root) => {
+    if (translator.translateElement) {
+      translator.translateElement(root);
+    }
+    translateElementAttributes(translator, root);
+    walkAndTranslateTextNodes(translator, root);
+  });
+}
+
+export function applyPsChinaTranslation(language, roots = document.body) {
+  translationQueue = translationQueue
+    .catch(() => {})
+    .then(() => translateRoots(language, roots));
+  return translationQueue;
+}
+
+export async function translatePsChinaText(language, text) {
+  if (language !== "zh") {
+    return text;
+  }
+  const translator = await loadTranslator();
+  if (!translator) {
+    return text;
+  }
+  return translatePlainText(translator, text);
 }

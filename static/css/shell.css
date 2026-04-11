@@ -189,10 +189,7 @@ body {
 }
 
 .controls-panel {
-  display: grid;
-  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
+  display: block;
 }
 
 .control-search-panel {
@@ -220,6 +217,7 @@ body {
 
 .import-panel {
   min-width: 0;
+  width: 100%;
   padding-left: 0;
   border-left: 0;
 }

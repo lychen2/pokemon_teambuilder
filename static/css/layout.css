@@ -71,6 +71,143 @@
   max-height: 720px;
 }
 
+.library-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.species-browser-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 10px;
+}
+
+.species-browser-button {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 0;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  position: relative;
+}
+
+.species-browser-button.active {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, white);
+}
+
+.species-browser-button .sprite {
+  transform: scale(1.15);
+}
+
+.species-browser-count {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  min-width: 18px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.guided-config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.guided-config-wide {
+  grid-column: 1 / -1;
+}
+
+.guided-config-section {
+  margin-top: 18px;
+}
+
+.guided-config-panel {
+  max-width: 860px;
+}
+
+.builder-points-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.builder-point-card {
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: white;
+}
+
+.builder-point-card input {
+  margin-top: 8px;
+}
+
+.builder-point-card .muted {
+  display: block;
+  margin-top: 6px;
+}
+
+.builder-stat-card {
+  min-width: 88px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.builder-stat-value {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.builder-move-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.move-legality {
+  font-size: 12px;
+}
+
+.move-legality.legal {
+  color: var(--good);
+}
+
+.move-legality.illegal {
+  color: var(--bad);
+}
+
+.move-legality.unknown {
+  color: var(--muted);
+}
+
+.guided-config-feedback.is-error {
+  color: var(--bad);
+}
+
+.empty-library-card {
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .guided-config-grid,
+  .builder-points-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .entry-card,
 .team-card {
   position: relative;

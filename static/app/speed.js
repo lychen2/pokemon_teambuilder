@@ -20,7 +20,7 @@ function getMoveSpeedBoostStage(move = {}) {
   );
 }
 
-function canAbilityBoostSpeed(ability, stats = {}) {
+export function canAbilityBoostSpeed(ability, stats = {}) {
   if (PLUS_ONE_SPEED_ABILITIES.has(ability)) {
     return true;
   }
@@ -29,6 +29,12 @@ function canAbilityBoostSpeed(ability, stats = {}) {
   }
   const maxStat = Math.max(...NON_HP_STATS.map((stat) => Number(stats[stat] || 0)));
   return Number(stats.spe || 0) >= maxStat;
+}
+
+export function getSpeedBoostAbilityNames(abilityMap = {}, stats = {}) {
+  return Object.values(abilityMap)
+    .filter(Boolean)
+    .filter((ability) => canAbilityBoostSpeed(ability, stats));
 }
 
 export function getPlusOneSpeedData({ability, moves = [], stats = {}}) {

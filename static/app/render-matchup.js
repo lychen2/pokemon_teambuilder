@@ -74,18 +74,35 @@ function buildSpeedSummary(entry, language) {
   return `${t(language, "common.speed")} ${minSpeed}-${maxSpeed}`;
 }
 
-function quickPickCardMarkup(entry, language) {
+function getLocalizedSpeciesName(state, entry) {
+  return entry.localizedSpeciesName || state.localizedSpeciesNames?.get(entry.speciesId) || entry.speciesName;
+}
+
+function quickPickSpriteMarkup(entry, state) {
+  const language = state.language;
   const variantCount = getOpponentVariantCount(entry);
+  const selected = state.opponentTeam.some((member) => member.speciesId === entry.speciesId);
+  const titleParts = [
+    getLocalizedSpeciesName(state, entry),
+    buildSpeedSummary(entry, language),
+  ];
+  if (variantCount > 1) {
+    titleParts.push(t(language, "matchup.variantCount", {count: variantCount}));
+  }
+  if (entry.labels?.length) {
+    titleParts.push(buildConfigSummary(entry.labels));
+  }
   return `
-    <article class="entry-card compact matchup-picker-card">
-      <div class="entry-main">
-        <div class="entry-title">${spriteMarkup(entry)}<strong>${escapeHtml(entry.speciesName)}</strong><span class="source-tag">${t(language, "matchup.variantCount", {count: variantCount})}</span></div>
-        <div class="entry-meta">${typePills(entry.types, language)}</div>
-        <p class="muted">${buildConfigSummary(entry.labels)}</p>
-        <p class="muted">${buildSpeedSummary(entry, language)}</p>
-      </div>
-      <button type="button" class="ghost-button" data-add-opponent-species="${entry.speciesId}">${t(language, "matchup.addOpponent")}</button>
-    </article>
+    <button
+      type="button"
+      class="species-browser-button ${selected ? "active" : ""}"
+      data-add-opponent-species="${entry.speciesId}"
+      title="${escapeHtml(titleParts.filter(Boolean).join(" · "))}"
+      aria-pressed="${selected ? "true" : "false"}"
+    >
+      ${spriteMarkup(entry)}
+      ${variantCount > 1 ? `<span class="species-browser-count">${variantCount}</span>` : ""}
+    </button>
   `;
 }
 
@@ -180,7 +197,7 @@ function renderBuilder(state) {
     filtered: filtered.length,
   });
   document.getElementById("matchup-library-list").innerHTML = filtered.length
-    ? filtered.map((entry) => quickPickCardMarkup(entry, language)).join("")
+    ? `<div class="species-browser-grid">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
     : `<p class="empty-state">${t(language, "library.empty")}</p>`;
 }
 

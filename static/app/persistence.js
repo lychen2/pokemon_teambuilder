@@ -1,4 +1,19 @@
 const STORAGE_KEY = "poke-type:builder-state:v1";
+const PERSIST_DELAY_MS = 120;
+
+let persistHandle = null;
+
+function clearScheduledPersist() {
+  if (persistHandle === null) {
+    return;
+  }
+  if (typeof window.cancelIdleCallback === "function") {
+    window.cancelIdleCallback(persistHandle);
+  } else {
+    window.clearTimeout(persistHandle);
+  }
+  persistHandle = null;
+}
 
 export function loadPersistedState() {
   try {
@@ -18,6 +33,7 @@ export function loadPersistedState() {
 }
 
 export function persistState(state) {
+  clearScheduledPersist();
   try {
     const payload = {
       library: state.library,
@@ -34,7 +50,25 @@ export function persistState(state) {
   }
 }
 
+export function schedulePersistState(state) {
+  clearScheduledPersist();
+  const callback = () => {
+    persistHandle = null;
+    persistState(state);
+  };
+  if (typeof window.requestIdleCallback === "function") {
+    persistHandle = window.requestIdleCallback(callback, {timeout: PERSIST_DELAY_MS});
+    return;
+  }
+  persistHandle = window.setTimeout(callback, PERSIST_DELAY_MS);
+}
+
+export function flushPersistState(state) {
+  persistState(state);
+}
+
 export function clearPersistedState() {
+  clearScheduledPersist();
   try {
     window.localStorage.removeItem(STORAGE_KEY);
   } catch (error) {

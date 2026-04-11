@@ -2,8 +2,10 @@ export const DATA_PATHS = {
   pokedex: "./poke_analysis-main/stats/pokedex.json",
   formsIndex: "./poke_analysis-main/stats/forms_index.json",
   moves: "./poke_analysis-main/stats/moves.json",
+  learnsets: "./poke_analysis-main/stats/learnsets.json",
   abilities: "./poke_analysis-main/stats/abilities.json",
   items: "./poke_analysis-main/stats/items.json",
+  championsVgc: "./poke_analysis-main/stats/champions_vgc.json",
 };
 
 export const TYPE_LABELS = {

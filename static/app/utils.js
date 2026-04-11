@@ -28,6 +28,10 @@ export function normalizeName(text) {
   return String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+export function normalizeLookupText(text) {
+  return String(text || "").toLowerCase().replace(/[^\u4e00-\u9fffa-z0-9]+/g, "");
+}
+
 export function isMegaConfig(config = {}) {
   const speciesId = normalizeName(config.speciesId);
   const speciesName = String(config.speciesName || "");

@@ -1,6 +1,19 @@
 import {analyzeTeam} from "./analysis.js";
+import {buildSyntheticSpeedEntries} from "./champions-vgc.js";
 import {calculateSpeedLineTiers, calculateSpeedTiers, loadDatasets} from "./data.js";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
+import {
+  buildConfigFromBuilder,
+  buildNatureOptions,
+  buildSpeciesBrowser,
+  createBuilderState,
+  getAbilityOptions,
+  getBuilderStats,
+  getItemOptions,
+  getMoveOptions,
+  getTypeOptions,
+  validateBuilderState,
+} from "./library-builder.js";
 import {analyzeMatchup} from "./matchup-analysis.js";
 import {
   buildOpponentLibrary,
@@ -11,13 +24,13 @@ import {
   restoreOpponentTeam,
   syncOpponentTeam,
 } from "./matchup-selection.js";
-import {loadPersistedState, persistState} from "./persistence.js";
-import {applyPsChinaTranslation} from "./pschina-translation.js";
+import {flushPersistState, loadPersistedState, schedulePersistState} from "./persistence.js";
+import {applyPsChinaTranslation, translatePsChinaText} from "./pschina-translation.js";
 import {recommendConfigs} from "./recommendations.js";
 import {renderAnalysis, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
 import {compareConfigs, createTeamEntry, findBestLibraryMatch} from "./team-config.js";
-import {formatConfigName, normalizeName} from "./utils.js";
+import {formatChampionPoints, formatConfigName, getTypeLabel, normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_TEAM_SIZE = 6;
 const state = {
@@ -31,9 +44,15 @@ const state = {
   matchupSearch: "",
   library: [],
   filteredLibrary: [],
+  allSpeciesBrowser: [],
+  speciesBrowser: [],
+  selectedSpeciesId: null,
+  selectedSpecies: null,
+  selectedSpeciesHasConfigs: false,
   matchupLibrary: [],
   speedTiers: [],
   speedLineTiers: [],
+  syntheticSpeedEntries: [],
   team: [],
   opponentTeam: [],
   savedTeams: [],
@@ -41,9 +60,20 @@ const state = {
   analysis: null,
   matchup: null,
   recommendations: [],
+  guidedBuilder: null,
+  itemOptions: [],
+  itemOptionLabels: [],
+  moveOptions: [],
+  moveOptionLabels: [],
+  natureOptions: [],
+  typeOptions: [],
+  localizedSpeciesNames: new Map(),
+  localizedItemNames: new Map(),
+  localizedMoveNames: new Map(),
 };
 
 const TOOLTIP_OFFSET = 12;
+const BUILDER_STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
 let globalTooltip = null;
 let activeEditorTarget = null;
 const POINT_PROMPT_MAP = {
@@ -73,10 +103,49 @@ function ensureUniqueConfigIds(configs, existingIds = new Set()) {
   }));
 }
 
-function refreshDerivedState() {
+function translateNodes(...nodes) {
+  void applyPsChinaTranslation(state.language, nodes);
+}
+
+function scheduleStatePersist() {
+  schedulePersistState(state);
+}
+
+function refreshFilteredLibrary() {
   const searchToken = normalizeName(state.search);
+  const speciesSearch = state.library.reduce((map, config) => {
+    const haystack = normalizeName([
+      config.displayName,
+      config.displayLabel,
+      config.speciesName,
+      config.note,
+      config.item,
+      config.ability,
+      config.moveNames?.join(" "),
+    ].join(" "));
+    const current = map.get(config.speciesId) || "";
+    map.set(config.speciesId, `${current} ${haystack}`);
+    return map;
+  }, new Map());
+  state.selectedSpecies = state.allSpeciesBrowser.find((entry) => entry.speciesId === state.selectedSpeciesId) || null;
+  state.selectedSpeciesHasConfigs = state.selectedSpecies
+    ? state.library.some((config) => config.speciesId === state.selectedSpeciesId)
+    : false;
+  state.speciesBrowser = state.allSpeciesBrowser.filter((species) => (
+    !searchToken
+      || species.searchText.includes(searchToken)
+      || String(speciesSearch.get(species.speciesId) || "").includes(searchToken)
+  ));
   state.filteredLibrary = state.library.filter((config) => {
-    if (!searchToken) return true;
+    if (state.selectedSpeciesId && config.speciesId !== state.selectedSpeciesId) {
+      return false;
+    }
+    if (!state.selectedSpeciesId) {
+      return false;
+    }
+    if (!searchToken) {
+      return true;
+    }
     const haystack = normalizeName([
       config.displayName,
       config.displayLabel,
@@ -88,41 +157,111 @@ function refreshDerivedState() {
     ].join(" "));
     return haystack.includes(searchToken);
   });
+}
+
+function refreshLibraryState() {
   state.speedTiers = calculateSpeedTiers(state.library);
-  state.speedLineTiers = calculateSpeedLineTiers(state.library);
-  state.matchupLibrary = buildOpponentLibrary(state.library);
-  state.opponentTeam = syncOpponentTeam(state.opponentTeam, state.library);
-  state.savedOpponentTeams = normalizeSavedOpponentTeams(state.savedOpponentTeams, state.library);
+  state.allSpeciesBrowser = buildSpeciesBrowser(state.datasets, state.library).map((species) => {
+    const localizedSpeciesName = state.localizedSpeciesNames.get(species.speciesId) || species.speciesName;
+    return {
+      ...species,
+      localizedSpeciesName,
+      searchText: normalizeName([
+        species.searchText,
+        localizedSpeciesName,
+      ].join(" ")),
+    };
+  });
+  state.matchupLibrary = buildOpponentLibrary(state.datasets, state.library, state.language).map((entry) => {
+    const localizedSpeciesName = state.localizedSpeciesNames.get(entry.speciesId) || entry.speciesName;
+    return {
+      ...entry,
+      localizedSpeciesName,
+    };
+  });
+  if (!state.allSpeciesBrowser.some((entry) => entry.speciesId === state.selectedSpeciesId)) {
+    state.selectedSpeciesId = null;
+  }
+  state.syntheticSpeedEntries = buildSyntheticSpeedEntries(state.datasets, state.library, state.language);
+  state.speedLineTiers = calculateSpeedLineTiers([...state.syntheticSpeedEntries, ...state.library]);
+  state.opponentTeam = syncOpponentTeam(state.opponentTeam, state.datasets, state.library, state.language);
+  state.savedOpponentTeams = normalizeSavedOpponentTeams(state.savedOpponentTeams, state.datasets, state.library, state.language);
+  refreshFilteredLibrary();
+}
+
+function refreshBattleState() {
   state.analysis = analyzeTeam(state.team, state.speedTiers, state.language, state.library);
   state.matchup = analyzeMatchup(state.team, state.opponentTeam);
   if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
     state.activeCoreConfigId = state.team[0]?.id || null;
   }
   state.recommendations = recommendConfigs(state.library, state.team, state.speedTiers, state.language);
-  persistState(state);
+}
+
+function refreshDerivedState() {
+  refreshLibraryState();
+  refreshBattleState();
+}
+
+function renderLibrarySection() {
+  renderLibrary(state);
+  translateNodes(document.getElementById("library-view"));
+}
+
+function renderTeamSection() {
+  renderTeam(state);
+  renderSavedTeams(state);
+  translateNodes(
+    document.getElementById("team-list"),
+    document.getElementById("saved-team-list"),
+  );
+}
+
+function renderAnalysisSection() {
+  renderAnalysis(state);
+  translateNodes(
+    document.getElementById("analysis-overview"),
+    document.getElementById("analysis-coverage-panel"),
+    document.getElementById("analysis-roles-panel"),
+    document.getElementById("analysis-cores-panel"),
+  );
+}
+
+function renderMatchupSection() {
+  renderMatchup(state);
+  translateNodes(document.getElementById("matchup-view"));
+}
+
+function renderRecommendationsSection() {
+  renderRecommendations(state);
+  translateNodes(document.getElementById("recommend-view"));
+}
+
+function renderSpeedSection() {
+  renderSpeedTiers(state);
+  translateNodes(document.getElementById("speed-view"));
 }
 
 function renderAll() {
-  renderLibrary(state);
-  renderTeam(state);
-  renderSavedTeams(state);
-  renderAnalysis(state);
-  renderMatchup(state);
-  renderRecommendations(state);
-  renderSpeedTiers(state);
-  void applyPsChinaTranslation(state.language);
+  renderLibrarySection();
+  renderTeamSection();
+  renderAnalysisSection();
+  renderMatchupSection();
+  renderRecommendationsSection();
+  renderSpeedSection();
+  renderGuidedConfig();
 }
 
 function setStatus(key, params = {}) {
   state.status = {key, params};
   renderStatus(t(state.language, key, params));
-  void applyPsChinaTranslation(state.language);
+  translateNodes(document.getElementById("status-text"));
 }
 
 function setStatusMessage(message) {
   state.status = null;
   renderStatus(message);
-  void applyPsChinaTranslation(state.language);
+  translateNodes(document.getElementById("status-text"));
 }
 
 function updateLanguageSwitch() {
@@ -141,16 +280,20 @@ function setLanguage(language, rerender = true) {
   const importInput = document.getElementById("custom-library-input");
   if (importInput && !importInput.value.trim() && !state.library.length) {
     renderImportFeedback(t(state.language, "controls.importEmpty"));
+    translateNodes(document.getElementById("import-feedback"));
   }
   const teamImportInput = document.getElementById("team-import-input");
   if (teamImportInput && !teamImportInput.value.trim()) {
     renderTeamImportFeedback(t(state.language, "team.importEmpty"));
+    translateNodes(document.getElementById("team-import-feedback"));
   }
   if (!rerender) {
     return;
   }
+  initializeBuilderOptions();
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
 }
 
 function setActiveView(viewId) {
@@ -161,12 +304,13 @@ function setActiveView(viewId) {
   document.querySelectorAll(".view-panel").forEach((panel) => {
     panel.classList.toggle("active", panel.id === viewId);
   });
+  scheduleStatePersist();
 }
 
 function setActiveAnalysisTab(tabId, rerender = true) {
   state.activeAnalysisTab = tabId || "coverage";
   if (rerender) {
-    renderAnalysis(state);
+    renderAnalysisSection();
   }
 }
 
@@ -183,6 +327,15 @@ function buildTeamEntry(config, teamSource = "library", linkedConfigId = config.
     linkedConfigId,
     teamSource,
   });
+}
+
+function selectSpecies(speciesId) {
+  if (speciesId === state.selectedSpeciesId) {
+    return;
+  }
+  state.selectedSpeciesId = speciesId;
+  refreshFilteredLibrary();
+  renderLibrarySection();
 }
 
 function replaceTeamConfig(configId, nextConfig, metadata = {}) {
@@ -205,29 +358,39 @@ function addConfig(configId) {
   const config = findConfigById(configId);
   if (!config || state.team.length >= MAX_TEAM_SIZE) return;
   state.team = [...state.team, buildTeamEntry(config)];
-  refreshDerivedState();
-  renderAll();
+  refreshBattleState();
+  renderTeamSection();
+  renderAnalysisSection();
+  renderMatchupSection();
+  renderRecommendationsSection();
+  scheduleStatePersist();
 }
 
 function addOpponentSpecies(speciesId) {
-  const opponentEntry = findOpponentEntry(state.library, speciesId);
+  const opponentEntry = findOpponentEntry(state.datasets, state.library, speciesId, state.language);
   if (!opponentEntry || state.opponentTeam.length >= MAX_TEAM_SIZE) return;
   if (state.opponentTeam.some((member) => member.speciesId === opponentEntry.speciesId)) return;
   state.opponentTeam = [...state.opponentTeam, opponentEntry];
-  refreshDerivedState();
-  renderAll();
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+  renderMatchupSection();
+  scheduleStatePersist();
 }
 
 function removeConfig(configId) {
   state.team = state.team.filter((config) => config.id !== configId);
-  refreshDerivedState();
-  renderAll();
+  refreshBattleState();
+  renderTeamSection();
+  renderAnalysisSection();
+  renderMatchupSection();
+  renderRecommendationsSection();
+  scheduleStatePersist();
 }
 
 function removeOpponentSpecies(speciesId) {
   state.opponentTeam = state.opponentTeam.filter((config) => config.speciesId !== speciesId);
-  refreshDerivedState();
-  renderAll();
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+  renderMatchupSection();
+  scheduleStatePersist();
 }
 
 function deleteConfig(configId) {
@@ -235,6 +398,7 @@ function deleteConfig(configId) {
   syncTeamWithLibrary();
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.deletedConfig", {count: state.library.length});
 }
 
@@ -288,6 +452,7 @@ function updateConfigNote(configId) {
   replaceConfig(configId, applyConfigDisplay({...target, note: nextNote.trim()}));
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.updatedNote", {name: target.displayName});
 }
 
@@ -305,8 +470,299 @@ function closeConfigEditor() {
   input.value = "";
 }
 
+function getGuidedConfigElements() {
+  return {
+    modal: document.getElementById("guided-config-modal"),
+    title: document.getElementById("guided-config-title"),
+    subtitle: document.getElementById("guided-config-subtitle"),
+    types: document.getElementById("guided-config-types"),
+    itemInput: document.getElementById("builder-item-input"),
+    abilitySelect: document.getElementById("builder-ability-select"),
+    teraSelect: document.getElementById("builder-tera-select"),
+    natureSelect: document.getElementById("builder-nature-select"),
+    noteInput: document.getElementById("builder-note-input"),
+    pointsSummary: document.getElementById("builder-points-summary"),
+    pointsGrid: document.getElementById("builder-points-grid"),
+    statsGrid: document.getElementById("builder-stats-grid"),
+    moveSummary: document.getElementById("builder-move-summary"),
+    movesGrid: document.getElementById("builder-moves-grid"),
+    feedback: document.getElementById("guided-config-feedback"),
+    saveButton: document.getElementById("save-guided-config-btn"),
+    itemOptions: document.getElementById("builder-item-options"),
+    moveOptions: document.getElementById("builder-move-options"),
+  };
+}
+
+function closeGuidedConfig() {
+  const {
+    modal,
+    title,
+    subtitle,
+    types,
+    pointsGrid,
+    statsGrid,
+    movesGrid,
+    feedback,
+  } = getGuidedConfigElements();
+  state.guidedBuilder = null;
+  modal.hidden = true;
+  title.textContent = "";
+  subtitle.textContent = "";
+  types.innerHTML = "";
+  pointsGrid.innerHTML = "";
+  statsGrid.innerHTML = "";
+  movesGrid.innerHTML = "";
+  feedback.textContent = "";
+  feedback.classList.remove("is-error");
+}
+
+function typePillMarkup(type) {
+  return `<span class="pill type-pill type-${String(type || "").toLowerCase()}">${getTypeLabel(type, state.language)}</span>`;
+}
+
+function populateDatalist(node, options) {
+  node.innerHTML = options.map((value) => `<option value="${value}"></option>`).join("");
+}
+
+function syncSelectOptions(select, options, selectedValue, blankLabel = "") {
+  select.innerHTML = options.map((option) => {
+    if (!option) {
+      return `<option value="">${blankLabel}</option>`;
+    }
+    return `<option value="${option}">${option}</option>`;
+  }).join("");
+  select.value = selectedValue || "";
+}
+
+function getLocalizedSpeciesName(speciesId, fallbackName = "") {
+  if (state.language !== "zh") {
+    return fallbackName || speciesId;
+  }
+  return state.localizedSpeciesNames.get(speciesId) || fallbackName || speciesId;
+}
+
+function getLocalizedItemName(itemName) {
+  if (state.language !== "zh") {
+    return itemName;
+  }
+  const entry = state.datasets.itemSearchLookup?.get(normalizeLookupText(itemName))
+    || state.datasets.itemLookup.get(normalizeName(itemName));
+  if (!entry) {
+    return itemName;
+  }
+  return state.localizedItemNames.get(normalizeName(entry.name)) || entry.name;
+}
+
+function getLocalizedMoveName(moveName) {
+  if (state.language !== "zh") {
+    return moveName;
+  }
+  const entry = state.datasets.moveSearchLookup?.get(normalizeLookupText(moveName))
+    || state.datasets.moveLookup.get(normalizeName(moveName));
+  if (!entry) {
+    return moveName;
+  }
+  return state.localizedMoveNames.get(normalizeName(entry.name)) || entry.name;
+}
+
+function renderGuidedConfigForm(builder) {
+  const species = state.datasets.pokedex[builder.speciesId];
+  const {
+    title,
+    subtitle,
+    types,
+    itemInput,
+    abilitySelect,
+    teraSelect,
+    natureSelect,
+    noteInput,
+    pointsGrid,
+    movesGrid,
+  } = getGuidedConfigElements();
+  title.textContent = t(state.language, "library.openTemplate", {
+    name: getLocalizedSpeciesName(builder.speciesId, species?.name || builder.speciesId),
+  });
+  subtitle.textContent = t(state.language, "builder.copy");
+  types.innerHTML = (species?.types || []).map(typePillMarkup).join("");
+  itemInput.value = getLocalizedItemName(builder.item);
+  noteInput.value = builder.note;
+  syncSelectOptions(abilitySelect, getAbilityOptions(builder.speciesId, state.datasets), builder.ability);
+  syncSelectOptions(
+    teraSelect,
+    state.typeOptions,
+    builder.teraType,
+    `${t(state.language, "common.none")} / ${t(state.language, "common.tera")}`,
+  );
+  syncSelectOptions(natureSelect, state.natureOptions, builder.nature);
+  pointsGrid.innerHTML = BUILDER_STATS.map((stat) => `
+    <label class="builder-point-card">
+      <span>${t(state.language, `builder.stats.${stat}`)}</span>
+      <input type="number" min="0" max="32" step="1" data-builder-point="${stat}" value="${Number(builder.points[stat] || 0)}">
+      <span class="muted">0 - 32</span>
+    </label>
+  `).join("");
+  movesGrid.innerHTML = Array.from({length: 4}, (_, index) => `
+    <label class="builder-move-field">
+      <span>${t(state.language, "builder.moveSlot", {slot: index + 1})}</span>
+      <input type="search" list="builder-move-options" data-builder-move="${index}" value="${getLocalizedMoveName(builder.moves[index] || "")}">
+      <span id="builder-move-legality-${index}" class="move-legality"></span>
+    </label>
+  `).join("");
+  translateNodes(types, pointsGrid, movesGrid);
+}
+
+function getBuilderErrorMessages(errors) {
+  return errors.map((error) => {
+    if (error === "points-total") {
+      return t(state.language, "builder.pointsInvalid");
+    }
+    if (error === "item-unknown") {
+      return t(state.language, "builder.invalidItem");
+    }
+    if (error === "ability-illegal") {
+      return t(state.language, "builder.invalidAbility");
+    }
+    if (error === "moves-count") {
+      return t(state.language, "builder.movesRequired");
+    }
+    if (error === "moves-duplicate") {
+      return t(state.language, "builder.duplicateMoves");
+    }
+    if (error === "moves-illegal") {
+      return t(state.language, "builder.movesIllegal");
+    }
+    return error;
+  });
+}
+
+function getBuilderWarningMessages(warnings) {
+  return warnings.map((warning) => {
+    if (warning === "item-unknown") {
+      return t(state.language, "builder.invalidItem");
+    }
+    if (warning === "ability-illegal") {
+      return t(state.language, "builder.invalidAbility");
+    }
+    if (warning === "moves-illegal") {
+      return t(state.language, "builder.movesIllegal");
+    }
+    return warning;
+  });
+}
+
+function getMoveLegalityCopy(check) {
+  if (check.status === "legal") {
+    return {className: "legal", text: t(state.language, "builder.movesLegal")};
+  }
+  if (check.status === "illegal") {
+    return {className: "illegal", text: t(state.language, "builder.movesIllegal")};
+  }
+  if (check.status === "unknown") {
+    return {className: "unknown", text: t(state.language, "builder.movesUnknown")};
+  }
+  return {className: "", text: ""};
+}
+
+function renderGuidedConfigDerived() {
+  const builder = state.guidedBuilder;
+  if (!builder) {
+    return;
+  }
+  const {pointsSummary, statsGrid, moveSummary, feedback, saveButton} = getGuidedConfigElements();
+  const validation = validateBuilderState(builder, state.datasets);
+  const stats = getBuilderStats(builder.speciesId, validation.points, builder.nature, state.datasets);
+  pointsSummary.textContent = `${formatChampionPoints(validation.points, state.language)} · ${t(state.language, "builder.pointsSummary", {used: validation.total})}`;
+  statsGrid.innerHTML = BUILDER_STATS.map((stat) => `
+    <div class="builder-stat-card">
+      <span>${t(state.language, `builder.stats.${stat}`)}</span>
+      <strong class="builder-stat-value">${stats[stat] || 0}</strong>
+    </div>
+  `).join("");
+  const legalCount = validation.moveChecks.filter((entry) => entry.status === "legal").length;
+  const filledCount = builder.moves.filter((move) => move.trim()).length;
+  moveSummary.textContent = t(state.language, "builder.moveSummary", {
+    filled: filledCount,
+    legal: legalCount,
+  });
+  validation.moveChecks.forEach((check, index) => {
+    const node = document.getElementById(`builder-move-legality-${index}`);
+    if (!node) {
+      return;
+    }
+    const legality = getMoveLegalityCopy(check);
+    node.className = `move-legality ${legality.className}`.trim();
+    node.textContent = legality.text;
+  });
+  const errors = getBuilderErrorMessages(validation.errors);
+  const warnings = getBuilderWarningMessages(validation.warnings || []);
+  feedback.textContent = errors.length
+    ? [t(state.language, "builder.feedbackInvalid"), ...errors].join(" ")
+    : warnings.length
+      ? [t(state.language, "builder.feedbackWarning"), ...warnings].join(" ")
+      : t(state.language, "builder.feedbackReady");
+  feedback.classList.toggle("is-error", errors.length > 0);
+  saveButton.disabled = !validation.canSave;
+}
+
+function renderGuidedConfig() {
+  if (!state.guidedBuilder) {
+    return;
+  }
+  renderGuidedConfigForm(state.guidedBuilder);
+  renderGuidedConfigDerived();
+}
+
+function openGuidedConfig(speciesId) {
+  state.guidedBuilder = createBuilderState(speciesId, state.datasets);
+  const {modal} = getGuidedConfigElements();
+  renderGuidedConfig();
+  modal.hidden = false;
+}
+
+function updateGuidedBuilderField(key, value) {
+  if (!state.guidedBuilder) {
+    return;
+  }
+  state.guidedBuilder = {
+    ...state.guidedBuilder,
+    [key]: value,
+  };
+  renderGuidedConfigDerived();
+}
+
+function updateGuidedBuilderPoint(stat, value) {
+  if (!state.guidedBuilder) {
+    return;
+  }
+  const points = {
+    ...state.guidedBuilder.points,
+    [stat]: Math.min(32, Math.max(0, Math.floor(Number(value || 0)))),
+  };
+  state.guidedBuilder = {
+    ...state.guidedBuilder,
+    points,
+  };
+  renderGuidedConfigDerived();
+}
+
+function updateGuidedBuilderMove(index, value) {
+  if (!state.guidedBuilder) {
+    return;
+  }
+  const moves = state.guidedBuilder.moves.map((move, moveIndex) => (
+    moveIndex === index ? value : move
+  ));
+  state.guidedBuilder = {
+    ...state.guidedBuilder,
+    moves,
+  };
+  renderGuidedConfigDerived();
+}
+
 function openConfigEditor(configId, kind = "library") {
-  const target = kind === "team" ? findTeamConfigById(configId) : findConfigById(configId);
+  const target = kind === "team"
+    ? findTeamConfigById(configId)
+    : findConfigById(configId);
   if (!target) {
     return;
   }
@@ -336,6 +792,67 @@ function appendImportedConfigs(configs) {
   return additions;
 }
 
+async function initializeLocalizedLabels() {
+  const availableSpecies = state.datasets.availableSpecies || [];
+  const itemEntries = Object.values(state.datasets.items || {});
+  const moveEntries = Object.values(state.datasets.moves || {});
+  const localizedSpeciesPairs = await Promise.all(availableSpecies.map(async (species) => ([
+    species.speciesId,
+    await translatePsChinaText("zh", species.speciesName),
+  ])));
+  const localizedItemPairs = await Promise.all(itemEntries.map(async (item) => ([
+    item.name,
+    await translatePsChinaText("zh", item.name),
+  ])));
+  const localizedMovePairs = await Promise.all(moveEntries.map(async (move) => ([
+    move.name,
+    await translatePsChinaText("zh", move.name),
+  ])));
+  state.localizedSpeciesNames = new Map(localizedSpeciesPairs);
+  state.localizedItemNames = new Map(
+    localizedItemPairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
+  );
+  state.localizedMoveNames = new Map(
+    localizedMovePairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
+  );
+  const itemSearchLookup = new Map(state.datasets.itemLookup);
+  localizedItemPairs.forEach(([name, translatedName]) => {
+    if (!translatedName) {
+      return;
+    }
+    const entry = state.datasets.itemLookup.get(normalizeName(name));
+    if (!entry) {
+      return;
+    }
+    itemSearchLookup.set(normalizeLookupText(translatedName), entry);
+  });
+  state.datasets.itemSearchLookup = itemSearchLookup;
+  const searchLookup = new Map(state.datasets.moveLookup);
+  localizedMovePairs.forEach(([name, translatedName]) => {
+    if (!translatedName) {
+      return;
+    }
+    const entry = state.datasets.moveLookup.get(normalizeName(name));
+    if (!entry) {
+      return;
+    }
+    searchLookup.set(normalizeLookupText(translatedName), entry);
+  });
+  state.datasets.moveSearchLookup = searchLookup;
+}
+
+function initializeBuilderOptions() {
+  state.itemOptions = getItemOptions(state.datasets);
+  state.moveOptions = getMoveOptions(state.datasets);
+  state.natureOptions = buildNatureOptions();
+  state.typeOptions = getTypeOptions();
+  const {itemOptions, moveOptions} = getGuidedConfigElements();
+  state.itemOptionLabels = state.itemOptions.map((itemName) => getLocalizedItemName(itemName));
+  state.moveOptionLabels = state.moveOptions.map((moveName) => getLocalizedMoveName(moveName));
+  populateDatalist(itemOptions, state.language === "zh" ? state.itemOptionLabels : state.itemOptions);
+  populateDatalist(moveOptions, state.language === "zh" ? state.moveOptionLabels : state.moveOptions);
+}
+
 function confirmAddConfigToLibrary(config, baseConfig, reasonKey) {
   const name = config.displayName || config.speciesName;
   if (!baseConfig) {
@@ -356,8 +873,39 @@ function saveLibraryConfigEdit(configId, text) {
   refreshDerivedState();
   renderAll();
   renderImportFeedback(errors.join(" "));
+  translateNodes(document.getElementById("import-feedback"));
   closeConfigEditor();
+  scheduleStatePersist();
   setStatus("status.editedConfig", {name: updated.displayName});
+}
+
+function saveGuidedConfig() {
+  if (!state.guidedBuilder) {
+    return;
+  }
+  const validation = validateBuilderState(state.guidedBuilder, state.datasets);
+  if (!validation.canSave) {
+    renderGuidedConfigDerived();
+    return;
+  }
+  const nextConfig = buildConfigFromBuilder({
+    ...state.guidedBuilder,
+    item: state.guidedBuilder.item.trim(),
+    note: state.guidedBuilder.note.trim(),
+    points: validation.points,
+    moves: state.guidedBuilder.moves.map((move) => move.trim()),
+  }, state.datasets);
+  if (!nextConfig) {
+    setStatusMessage(t(state.language, "error.invalidBlock", {index: 1}));
+    return;
+  }
+  const addedConfig = appendImportedConfigs([nextConfig])[0];
+  state.selectedSpeciesId = addedConfig.speciesId;
+  closeGuidedConfig();
+  refreshDerivedState();
+  renderAll();
+  scheduleStatePersist();
+  setStatus("status.addedGuidedConfig", {name: addedConfig.displayName});
 }
 
 function saveTeamConfigEdit(configId, text) {
@@ -382,7 +930,9 @@ function saveTeamConfigEdit(configId, text) {
   refreshDerivedState();
   renderAll();
   renderTeamImportFeedback(errors.join(" "));
+  translateNodes(document.getElementById("team-import-feedback"));
   closeConfigEditor();
+  scheduleStatePersist();
   setStatus("status.editedTeamConfig", {name: updated.displayName});
 }
 
@@ -422,6 +972,8 @@ function applyImportedLibrary(configs, errors, mode) {
   refreshDerivedState();
   renderAll();
   renderImportFeedback([t(state.language, "status.importSuccess", {count: configs.length}), ...errors].join(" "));
+  translateNodes(document.getElementById("import-feedback"));
+  scheduleStatePersist();
   setStatus("status.libraryCount", {count: state.library.length});
 }
 
@@ -483,6 +1035,7 @@ function importTeamByCode() {
   const input = document.getElementById("team-import-input").value.trim();
   if (!input) {
     renderTeamImportFeedback(t(state.language, "team.importEmpty"));
+    translateNodes(document.getElementById("team-import-feedback"));
     return;
   }
 
@@ -499,9 +1052,12 @@ function importTeamByCode() {
     refreshDerivedState();
     renderAll();
     renderTeamImportFeedback([t(state.language, "status.importedTeam", {count: state.team.length}), ...errors].join(" "));
+    translateNodes(document.getElementById("team-import-feedback"));
+    scheduleStatePersist();
     setStatus("status.importedTeam", {count: state.team.length});
   } catch (error) {
     renderTeamImportFeedback(error.message);
+    translateNodes(document.getElementById("team-import-feedback"));
     setStatusMessage(error.message);
   }
 }
@@ -511,8 +1067,10 @@ function importCustomLibrary(mode = "replace") {
   if (!input) {
     state.library = [];
     renderImportFeedback(t(state.language, "status.libraryCleared"));
+    translateNodes(document.getElementById("import-feedback"));
     refreshDerivedState();
     renderAll();
+    scheduleStatePersist();
     setStatus("status.libraryWaiting");
     return;
   }
@@ -526,6 +1084,7 @@ function importCustomLibrary(mode = "replace") {
     applyImportedLibrary(configs, errors, mode);
   } catch (error) {
     renderImportFeedback(error.message);
+    translateNodes(document.getElementById("import-feedback"));
     setStatus("status.importCancelled");
   }
 }
@@ -547,6 +1106,7 @@ async function loadPresetLibrary(path, name, mode = "replace") {
     setStatus("status.loadedPreset", {name});
   } catch (error) {
     renderImportFeedback(error.message);
+    translateNodes(document.getElementById("import-feedback"));
     setStatusMessage(error.message);
   }
 }
@@ -610,6 +1170,7 @@ function saveCurrentTeam() {
   input.value = "";
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.savedTeam", {name});
 }
 
@@ -625,6 +1186,7 @@ function saveCurrentOpponentTeam() {
   input.value = "";
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.savedOpponentTeam", {name});
 }
 
@@ -641,6 +1203,7 @@ function loadSavedTeam(teamId) {
   }
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.loadedTeam", {name: target.name});
 }
 
@@ -649,9 +1212,10 @@ function loadSavedOpponentTeam(teamId) {
   if (!target) {
     return;
   }
-  state.opponentTeam = loadSavedOpponentSelection(target, state.library);
+  state.opponentTeam = loadSavedOpponentSelection(target, state.datasets, state.library, state.language);
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.loadedOpponentTeam", {name: target.name});
 }
 
@@ -663,6 +1227,7 @@ function deleteSavedTeam(teamId) {
   }
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.deletedSavedTeam", {count: state.savedTeams.length});
 }
 
@@ -674,6 +1239,7 @@ function deleteSavedOpponentTeam(teamId) {
   }
   refreshDerivedState();
   renderAll();
+  scheduleStatePersist();
   setStatus("status.deletedSavedOpponentTeam", {count: state.savedOpponentTeams.length});
 }
 
@@ -698,7 +1264,7 @@ function bindEvents() {
       return;
     }
     state.activeCoreConfigId = select.value || null;
-    renderAnalysis(state);
+    renderAnalysisSection();
   });
 
   document.getElementById("language-switch").addEventListener("click", (event) => {
@@ -709,13 +1275,17 @@ function bindEvents() {
     setLanguage(button.dataset.language);
   });
 
-  document.getElementById("library-search").addEventListener("input", (event) => {
-    state.search = event.target.value;
-    refreshDerivedState();
-    renderAll();
-  });
-
   document.getElementById("library-list").addEventListener("click", (event) => {
+    const speciesButton = event.target.closest("[data-pick-species]");
+    if (speciesButton) {
+      selectSpecies(speciesButton.dataset.pickSpecies);
+      return;
+    }
+    const createButton = event.target.closest("[data-create-species-config]");
+    if (createButton) {
+      openGuidedConfig(createButton.dataset.createSpeciesConfig);
+      return;
+    }
     const button = event.target.closest("[data-add-config]");
     if (button) {
       addConfig(button.dataset.addConfig);
@@ -744,7 +1314,7 @@ function bindEvents() {
 
   document.getElementById("matchup-search").addEventListener("input", (event) => {
     state.matchupSearch = event.target.value;
-    renderMatchup(state);
+    renderMatchupSection();
   });
 
   document.getElementById("matchup-library-list").addEventListener("click", (event) => {
@@ -793,19 +1363,25 @@ function bindEvents() {
 
   document.getElementById("clear-team-btn").addEventListener("click", () => {
     state.team = [];
-    refreshDerivedState();
-    renderAll();
+    refreshBattleState();
+    renderTeamSection();
+    renderAnalysisSection();
+    renderMatchupSection();
+    renderRecommendationsSection();
+    scheduleStatePersist();
   });
   document.getElementById("clear-opponent-team-btn").addEventListener("click", () => {
     state.opponentTeam = [];
-    refreshDerivedState();
-    renderAll();
+    state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+    renderMatchupSection();
+    scheduleStatePersist();
   });
   document.getElementById("export-team-btn").addEventListener("click", exportTeam);
   document.getElementById("import-team-btn").addEventListener("click", importTeamByCode);
   document.getElementById("clear-team-import-btn").addEventListener("click", () => {
     document.getElementById("team-import-input").value = "";
     renderTeamImportFeedback(t(state.language, "team.importEmpty"));
+    translateNodes(document.getElementById("team-import-feedback"));
   });
 
   document.getElementById("import-custom-btn").addEventListener("click", () => importCustomLibrary("replace"));
@@ -827,12 +1403,50 @@ function bindEvents() {
   document.getElementById("save-team-btn").addEventListener("click", saveCurrentTeam);
   document.getElementById("save-opponent-team-btn").addEventListener("click", saveCurrentOpponentTeam);
   document.getElementById("save-config-edit-btn").addEventListener("click", saveConfigEdit);
+  document.getElementById("save-guided-config-btn").addEventListener("click", saveGuidedConfig);
   document.querySelectorAll("[data-close-editor]").forEach((node) => {
     node.addEventListener("click", closeConfigEditor);
+  });
+  document.querySelectorAll("[data-close-guided-config]").forEach((node) => {
+    node.addEventListener("click", closeGuidedConfig);
+  });
+  document.getElementById("builder-item-input").addEventListener("input", (event) => {
+    updateGuidedBuilderField("item", event.target.value);
+  });
+  document.getElementById("builder-ability-select").addEventListener("change", (event) => {
+    updateGuidedBuilderField("ability", event.target.value);
+  });
+  document.getElementById("builder-tera-select").addEventListener("change", (event) => {
+    updateGuidedBuilderField("teraType", event.target.value);
+  });
+  document.getElementById("builder-nature-select").addEventListener("change", (event) => {
+    updateGuidedBuilderField("nature", event.target.value);
+  });
+  document.getElementById("builder-note-input").addEventListener("input", (event) => {
+    updateGuidedBuilderField("note", event.target.value);
+  });
+  document.getElementById("builder-points-grid").addEventListener("input", (event) => {
+    const input = event.target.closest("[data-builder-point]");
+    if (!input) {
+      return;
+    }
+    updateGuidedBuilderPoint(input.dataset.builderPoint, input.value);
+    input.value = state.guidedBuilder?.points?.[input.dataset.builderPoint] ?? "0";
+  });
+  document.getElementById("builder-moves-grid").addEventListener("input", (event) => {
+    const input = event.target.closest("[data-builder-move]");
+    if (!input) {
+      return;
+    }
+    updateGuidedBuilderMove(Number(input.dataset.builderMove), input.value);
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !document.getElementById("config-editor-modal").hidden) {
       closeConfigEditor();
+      return;
+    }
+    if (event.key === "Escape" && !document.getElementById("guided-config-modal").hidden) {
+      closeGuidedConfig();
     }
   });
   document.getElementById("clear-custom-btn").addEventListener("click", () => {
@@ -935,6 +1549,9 @@ function setupTooltipEvents() {
 
   window.addEventListener("scroll", hideTooltip, true);
   window.addEventListener("resize", hideTooltip);
+  window.addEventListener("pagehide", () => {
+    flushPersistState(state);
+  });
 }
 
 async function initialize() {
@@ -943,6 +1560,7 @@ async function initialize() {
   setLanguage(state.language, false);
   setStatus("status.initializing");
   state.datasets = await loadDatasets();
+  await initializeLocalizedLabels();
   if (persisted?.library) {
     state.library = ensureUniqueConfigIds(hydrateConfigs(persisted.library, state.datasets, 50));
   }
@@ -950,7 +1568,7 @@ async function initialize() {
     state.team = hydrateConfigs(persisted.team, state.datasets, 50);
   }
   if (persisted?.opponentTeam) {
-    state.opponentTeam = restoreOpponentTeam(persisted.opponentTeam, state.library);
+    state.opponentTeam = restoreOpponentTeam(persisted.opponentTeam, state.datasets, state.library, state.language);
   }
   if (persisted?.savedTeams) {
     state.savedTeams = persisted.savedTeams.map((team) => {
@@ -964,20 +1582,23 @@ async function initialize() {
     });
   }
   if (persisted?.savedOpponentTeams) {
-    state.savedOpponentTeams = normalizeSavedOpponentTeams(persisted.savedOpponentTeams, state.library);
+    state.savedOpponentTeams = normalizeSavedOpponentTeams(persisted.savedOpponentTeams, state.datasets, state.library, state.language);
   }
   if (persisted?.activeView) {
     state.activeView = persisted.activeView;
   }
+  initializeBuilderOptions();
   bindEvents();
   setupTooltipEvents();
   refreshDerivedState();
   renderAll();
   if (!document.getElementById("custom-library-input").value.trim()) {
     renderImportFeedback(t(state.language, "controls.importEmpty"));
+    translateNodes(document.getElementById("import-feedback"));
   }
   if (!document.getElementById("team-import-input").value.trim()) {
     renderTeamImportFeedback(t(state.language, "team.importEmpty"));
+    translateNodes(document.getElementById("team-import-feedback"));
   }
   setActiveView(state.activeView);
   if (state.library.length) {

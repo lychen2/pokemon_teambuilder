@@ -1,4 +1,5 @@
-import {normalizeName} from "./utils.js";
+import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
+import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_OPPONENT_TEAM_SIZE = 6;
 
@@ -36,7 +37,7 @@ function buildOpponentEntry(configs = []) {
   };
 }
 
-function buildOpponentMap(library = []) {
+function buildOpponentMap(datasets, library = [], language = "zh") {
   const groups = new Map();
   library.forEach((config) => {
     const speciesId = getSpeciesId(config);
@@ -47,7 +48,10 @@ function buildOpponentMap(library = []) {
     configs.push(config);
     groups.set(speciesId, configs);
   });
-  return new Map([...groups.entries()].map(([speciesId, configs]) => [speciesId, buildOpponentEntry(configs)]));
+  return new Map((datasets.availableSpecies || []).map((species) => {
+    const configs = groups.get(species.speciesId) || buildSpeciesTemplateConfigs(species, datasets, language);
+    return [species.speciesId, buildOpponentEntry(configs)];
+  }).filter(([, entry]) => Boolean(entry)));
 }
 
 function collectSpeciesIds(entries = [], library = []) {
@@ -76,19 +80,20 @@ function getSavedSpeciesIds(snapshot = {}, library = []) {
   return uniqueValues(snapshot.configIds.map((configId) => configToSpecies.get(configId) || ""));
 }
 
-export function buildOpponentLibrary(library = []) {
-  return [...buildOpponentMap(library).values()];
+export function buildOpponentLibrary(datasets, library = [], language = "zh") {
+  return [...buildOpponentMap(datasets, library, language).values()];
 }
 
 export function filterOpponentLibrary(entries = [], searchText = "") {
-  const searchToken = normalizeName(searchText);
+  const searchToken = normalizeLookupText(searchText);
   if (!searchToken) {
     return entries;
   }
 
   return entries.filter((entry) => {
-    const haystack = normalizeName([
+    const haystack = normalizeLookupText([
       entry.speciesName,
+      entry.localizedSpeciesName,
       entry.labels.join(" "),
       entry.moveNames.join(" "),
     ].join(" "));
@@ -96,24 +101,24 @@ export function filterOpponentLibrary(entries = [], searchText = "") {
   });
 }
 
-export function findOpponentEntry(library = [], speciesId = "") {
-  return buildOpponentMap(library).get(speciesId) || null;
+export function findOpponentEntry(datasets, library = [], speciesId = "", language = "zh") {
+  return buildOpponentMap(datasets, library, language).get(speciesId) || null;
 }
 
-export function syncOpponentTeam(opponentTeam = [], library = []) {
-  const opponentMap = buildOpponentMap(library);
+export function syncOpponentTeam(opponentTeam = [], datasets, library = [], language = "zh") {
+  const opponentMap = buildOpponentMap(datasets, library, language);
   return collectSpeciesIds(opponentTeam, library)
     .slice(0, MAX_OPPONENT_TEAM_SIZE)
     .map((speciesId) => opponentMap.get(speciesId))
     .filter(Boolean);
 }
 
-export function restoreOpponentTeam(opponentTeam = [], library = []) {
-  return syncOpponentTeam(opponentTeam, library);
+export function restoreOpponentTeam(opponentTeam = [], datasets, library = [], language = "zh") {
+  return syncOpponentTeam(opponentTeam, datasets, library, language);
 }
 
-export function normalizeSavedOpponentTeams(savedTeams = [], library = []) {
-  const opponentMap = buildOpponentMap(library);
+export function normalizeSavedOpponentTeams(savedTeams = [], datasets, library = [], language = "zh") {
+  const opponentMap = buildOpponentMap(datasets, library, language);
   return savedTeams.map((team) => {
     const speciesIds = getSavedSpeciesIds(team, library)
       .filter((speciesId) => opponentMap.has(speciesId))
@@ -136,8 +141,8 @@ export function createSavedOpponentSnapshot(opponentTeam = [], name = "") {
   };
 }
 
-export function loadSavedOpponentSelection(snapshot = {}, library = []) {
-  const opponentMap = buildOpponentMap(library);
+export function loadSavedOpponentSelection(snapshot = {}, datasets, library = [], language = "zh") {
+  const opponentMap = buildOpponentMap(datasets, library, language);
   return getSavedSpeciesIds(snapshot, library)
     .filter((speciesId) => opponentMap.has(speciesId))
     .slice(0, MAX_OPPONENT_TEAM_SIZE)

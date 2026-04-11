@@ -81,22 +81,7 @@
 
       <section class="workspace">
         <section class="panel controls-panel">
-          <section class="control-search-panel">
-            <p class="eyebrow control-eyebrow" data-i18n="controls.eyebrow">Library Workspace</p>
-            <div class="section-head section-head-tight">
-              <div>
-                <h2 data-i18n="controls.title">配置库工作区</h2>
-                <p class="muted" data-i18n="controls.copy">搜索、维护和补充你常用的配置库，队伍直导时也会优先从这里匹配相似配置。</p>
-              </div>
-            </div>
-            <div class="control-grid">
-              <label>
-                <span data-i18n="controls.searchLabel">搜索配置库</span>
-                <input id="library-search" type="search" placeholder="搜索宝可梦 / 配置 / 招式" data-i18n-placeholder="controls.searchPlaceholder">
-              </label>
-            </div>
-          </section>
-          <details class="import-panel">
+          <details class="import-panel" open>
             <summary data-i18n="controls.importSummary">导入自定义配置库</summary>
             <p class="muted" data-i18n="controls.importHelp">
               支持直接粘贴 Pokémon Showdown 队伍文本。可写传统 `EVs:`，系统会自动压缩为 Champions 66 点；
@@ -218,6 +203,67 @@
           <button id="save-config-edit-btn" type="button" data-i18n="editor.save">保存修改</button>
           <button type="button" class="ghost-button" data-close-editor data-i18n="editor.cancel">取消</button>
         </div>
+      </section>
+    </div>
+
+    <div id="guided-config-modal" class="modal-shell" hidden>
+      <div class="modal-backdrop" data-close-guided-config></div>
+      <section class="modal-panel guided-config-panel" aria-modal="true" role="dialog" aria-labelledby="guided-config-title">
+        <div class="section-head">
+          <div>
+            <h2 id="guided-config-title"></h2>
+            <p id="guided-config-subtitle" class="muted modal-copy"></p>
+          </div>
+          <button type="button" class="ghost-button modal-close-button" data-close-guided-config data-i18n="editor.cancel">取消</button>
+        </div>
+        <div id="guided-config-types" class="entry-meta"></div>
+        <div class="guided-config-grid">
+          <label>
+            <span data-i18n="builder.item">道具</span>
+            <input id="builder-item-input" type="text" list="builder-item-options">
+          </label>
+          <label>
+            <span data-i18n="builder.ability">特性</span>
+            <select id="builder-ability-select"></select>
+          </label>
+          <label>
+            <span data-i18n="builder.tera">太晶</span>
+            <select id="builder-tera-select"></select>
+          </label>
+          <label>
+            <span data-i18n="builder.nature">性格</span>
+            <select id="builder-nature-select"></select>
+          </label>
+          <label class="guided-config-wide">
+            <span data-i18n="builder.note">备注</span>
+            <input id="builder-note-input" type="text">
+          </label>
+        </div>
+
+        <section class="guided-config-section">
+          <div class="section-head section-head-tight">
+            <h3 data-i18n="builder.pointsTitle">加点</h3>
+            <p id="builder-points-summary" class="muted"></p>
+          </div>
+          <div id="builder-points-grid" class="builder-points-grid"></div>
+          <div id="builder-stats-grid" class="chip-list"></div>
+        </section>
+
+        <section class="guided-config-section">
+          <div class="section-head section-head-tight">
+            <h3 data-i18n="builder.movesTitle">招式</h3>
+            <p id="builder-move-summary" class="muted"></p>
+          </div>
+          <div id="builder-moves-grid" class="guided-config-grid"></div>
+        </section>
+
+        <p id="guided-config-feedback" class="muted"></p>
+        <div class="action-row modal-actions">
+          <button id="save-guided-config-btn" type="button" data-i18n="builder.save">加入配置库</button>
+          <button type="button" class="ghost-button" data-close-guided-config data-i18n="editor.cancel">取消</button>
+        </div>
+        <datalist id="builder-item-options"></datalist>
+        <datalist id="builder-move-options"></datalist>
       </section>
     </div>
 

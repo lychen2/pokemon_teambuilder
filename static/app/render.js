@@ -12,6 +12,10 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
+function getLocalizedSpeciesName(state, species) {
+  return state.localizedSpeciesNames?.get(species.speciesId) || species.localizedSpeciesName || species.speciesName;
+}
+
 function spriteMarkup(config) {
   if (!config?.spritePosition) {
     return "";
@@ -153,6 +157,72 @@ function teamHeaderMarkup(config, linkedConfig, language) {
   `;
 }
 
+function speciesBrowserMarkup(state) {
+  const language = state.language;
+  return `
+    <section class="library-subsection species-browser-section">
+      <div class="section-head section-head-tight">
+        <div>
+          <h3>${t(language, "library.browserTitle")}</h3>
+          <p class="muted">${t(language, "library.browserSummary", {count: state.speciesBrowser.length})}</p>
+        </div>
+      </div>
+      <div class="species-browser-grid">
+        ${state.speciesBrowser.map((species) => `
+          <button
+            type="button"
+            class="species-browser-button ${species.speciesId === state.selectedSpeciesId ? "active" : ""}"
+            data-pick-species="${species.speciesId}"
+            title="${escapeHtml(getLocalizedSpeciesName(state, species))}"
+          >
+            ${spriteMarkup(species)}
+            ${species.configCount ? `<span class="species-browser-count">${species.configCount}</span>` : ""}
+          </button>
+        `).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function selectedSpeciesHeader(state) {
+  if (!state.selectedSpecies) {
+    return `<p class="empty-state">${t(state.language, "library.selectSpecies")}</p>`;
+  }
+  const actionMarkup = `<button type="button" class="add-button" data-create-species-config="${state.selectedSpecies.speciesId}">${t(state.language, "library.createConfig")}</button>`;
+  return `
+    <div class="section-head section-head-tight">
+      <div>
+        <h3>${getLocalizedSpeciesName(state, state.selectedSpecies)}</h3>
+        <p class="muted">${
+          state.selectedSpeciesHasConfigs
+            ? t(state.language, "library.selectedSummary", {count: state.filteredLibrary.length})
+            : t(state.language, "library.selectedEmpty")
+        }</p>
+      </div>
+      ${actionMarkup}
+    </div>
+  `;
+}
+
+function libraryEmptyMarkup(state, language) {
+  if (!state.selectedSpecies) {
+    return "";
+  }
+  if (!state.selectedSpeciesHasConfigs) {
+    return `
+      <article class="entry-card compact empty-library-card">
+        <div class="entry-main">
+          <p class="empty-state">${t(language, "library.selectedEmpty")}</p>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="add-button" data-create-species-config="${state.selectedSpecies.speciesId}">${t(language, "library.createConfig")}</button>
+        </div>
+      </article>
+    `;
+  }
+  return `<p class="empty-state">${t(language, "library.filteredEmpty")}</p>`;
+}
+
 export function renderLibrary(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
@@ -160,7 +230,7 @@ export function renderLibrary(state) {
     total: state.library.length,
     filtered: activeLibrary.length,
   });
-  document.getElementById("library-list").innerHTML = activeLibrary.length
+  const libraryMarkup = activeLibrary.length
     ? activeLibrary.map((config) => `
         <article class="entry-card">
           <div class="entry-main">
@@ -180,7 +250,14 @@ export function renderLibrary(state) {
           </div>
         </article>
       `).join("")
-    : `<p class="empty-state">${t(language, "library.empty")}</p>`;
+    : libraryEmptyMarkup(state, language);
+  document.getElementById("library-list").innerHTML = `
+    ${speciesBrowserMarkup(state)}
+    <section class="library-subsection">
+      ${selectedSpeciesHeader(state)}
+      ${libraryMarkup}
+    </section>
+  `;
 }
 
 export function renderTeam(state) {
