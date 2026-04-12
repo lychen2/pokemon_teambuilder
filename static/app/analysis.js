@@ -1,5 +1,6 @@
 import {TYPE_CHART, TYPE_ORDER} from "./constants.js";
 import {t} from "./i18n.js";
+import {normalizeRecommendationPreferences} from "./recommendation-preferences.js";
 import {
   ATTACK_BIAS_ORDER,
   RECOMMENDATION_ROLE_IDS,
@@ -22,6 +23,8 @@ const THREAT_PREVIEW_LIMIT = 3;
 const SUPER_EFFECTIVE_THRESHOLD = 2;
 const BLIND_SPOT_THRESHOLD = 0.5;
 const SINGLE_TYPE_NEUTRAL_THRESHOLD = 1;
+const WEAKNESS_AVERAGE_THRESHOLD = 1.15;
+const MAX_SUGGESTED_COVERS = 3;
 const CORE_PREVIEW_LIMIT = 4;
 const CORE_RISK_LIMIT = 3;
 const DEFENSIVE_TYPE_PAIRS = buildDefensiveTypePairs();
@@ -103,29 +106,77 @@ function buildPartnerTypeCombos() {
   return combos;
 }
 
-function summarizeDefensive(team, language) {
+function compareLabels(left, right) {
+  return left.label.localeCompare(right.label, "zh-Hans-CN");
+}
+
+function summarizeDefensiveMatrix(team, language) {
   return TYPE_ORDER.map((attackType) => {
-    const multipliers = team.map((config) => getResistanceProfile(config.types)[attackType] ?? 1);
-    const average = multipliers.reduce((total, value) => total + value, 0) / Math.max(team.length, 1);
+    const members = team.map((config) => ({
+      member: createMemberReference(config),
+      multiplier: getResistanceProfile(config.types)[attackType] ?? 1,
+    }));
+    const average = members.reduce((sum, entry) => sum + entry.multiplier, 0) / Math.max(members.length, 1);
+    const weakCount = members.filter((entry) => entry.multiplier > 1).length;
+    const resistCount = members.filter((entry) => entry.multiplier < 1 && entry.multiplier > 0).length;
+    const immuneCount = members.filter((entry) => entry.multiplier === 0).length;
     return {
       type: attackType,
       label: getTypeLabel(attackType, language),
       average,
-      weakCount: multipliers.filter((value) => value > 1).length,
-      resistCount: multipliers.filter((value) => value < 1 && value > 0).length,
-      immuneCount: multipliers.filter((value) => value === 0).length,
+      weakCount,
+      resistCount,
+      immuneCount,
+      members,
     };
-  }).sort((left, right) => right.average - left.average);
+  }).sort((left, right) => (
+    right.average - left.average
+    || right.weakCount - left.weakCount
+    || left.resistCount - right.resistCount
+    || compareLabels(left, right)
+  ));
+}
+
+function summarizeDefensive(team, language) {
+  return summarizeDefensiveMatrix(team, language).map((entry) => ({
+    type: entry.type,
+    label: entry.label,
+    average: entry.average,
+    weakCount: entry.weakCount,
+    resistCount: entry.resistCount,
+    immuneCount: entry.immuneCount,
+  }));
+}
+
+function summarizeOffensiveMatrix(team, language) {
+  return TYPE_ORDER.map((defendType) => {
+    const members = team.map((config) => ({
+      member: createMemberReference(config),
+      effectiveness: getCoverageProfile(config.offensiveTypes || [])[defendType] || 0,
+    }));
+    const bestEffectiveness = members.reduce((best, entry) => Math.max(best, entry.effectiveness), 0);
+    return {
+      type: defendType,
+      label: getTypeLabel(defendType, language),
+      bestEffectiveness,
+      superEffectiveCount: members.filter((entry) => entry.effectiveness >= SUPER_EFFECTIVE_THRESHOLD).length,
+      neutralCount: members.filter((entry) => entry.effectiveness === SINGLE_TYPE_NEUTRAL_THRESHOLD).length,
+      noHitCount: members.filter((entry) => entry.effectiveness < SINGLE_TYPE_NEUTRAL_THRESHOLD).length,
+      members,
+    };
+  }).sort((left, right) => (
+    left.bestEffectiveness - right.bestEffectiveness
+    || left.superEffectiveCount - right.superEffectiveCount
+    || compareLabels(left, right)
+  ));
 }
 
 function summarizeOffensive(team, language) {
-  const teamMoveTypes = uniqueStrings(team.flatMap((config) => config.offensiveTypes || []));
-  const coverage = getCoverageProfile(teamMoveTypes);
-  return TYPE_ORDER.map((defendType) => ({
-    type: defendType,
-    label: getTypeLabel(defendType, language),
-    effectiveness: coverage[defendType] || 0,
-  })).sort((left, right) => right.effectiveness - left.effectiveness);
+  return summarizeOffensiveMatrix(team, language).map((entry) => ({
+    type: entry.type,
+    label: entry.label,
+    effectiveness: entry.bestEffectiveness,
+  }));
 }
 
 function summarizeOffensivePairs(team, language) {
@@ -161,37 +212,103 @@ function createMemberReference(config) {
   };
 }
 
-function summarizeCoverageRows(team, language) {
-  return TYPE_ORDER.map((defendType) => {
-    const memberResults = team.map((config) => ({
-      member: createMemberReference(config),
-      effectiveness: getCoverageProfile(config.offensiveTypes || [])[defendType] || 0,
-      resistance: getResistanceProfile(config.types)[defendType] ?? 1,
-    }));
-    const bestEffectiveness = memberResults.reduce((best, entry) => Math.max(best, entry.effectiveness), 0);
-    return {
-      type: defendType,
-      label: getTypeLabel(defendType, language),
-      bestEffectiveness,
-      sources: memberResults
-        .filter((entry) => entry.effectiveness === bestEffectiveness && entry.effectiveness >= SINGLE_TYPE_NEUTRAL_THRESHOLD)
-        .map((entry) => entry.member),
-      pressuredMembers: memberResults
-        .filter((entry) => entry.resistance > 1)
-        .map((entry) => entry.member),
-    };
-  }).sort((left, right) => (
-    left.bestEffectiveness - right.bestEffectiveness
-    || right.pressuredMembers.length - left.pressuredMembers.length
-    || left.label.localeCompare(right.label, "zh-Hans-CN")
-  ));
+function getSuggestedSpeedScore(candidate, speedContext, speedTiers = []) {
+  const medianSpeed = getMedianSpeed(speedTiers);
+  const candidateSpeed = Number(candidate.stats?.spe || 0);
+  const topSpeed = getThreatSpeed(candidate);
+  if (speedContext.mode === SPEED_MODE_TRICK_ROOM) {
+    return candidateSpeed <= medianSpeed ? 2.5 : hasMove(candidate, TRICK_ROOM_MOVE) ? 2 : 0;
+  }
+  if (speedContext.mode === SPEED_MODE_HYBRID) {
+    return topSpeed >= medianSpeed ? 1.5 : hasMove(candidate, TRICK_ROOM_MOVE) ? 1 : 0.5;
+  }
+  return topSpeed >= medianSpeed ? 2 : 0.5;
 }
 
-function summarizeCoverage(team, language) {
-  const rows = summarizeCoverageRows(team, language);
+function getFocusPatchScore(multiplier) {
+  if (multiplier === 0) return 6;
+  if (multiplier <= 0.25) return 5;
+  if (multiplier <= 0.5) return 4;
+  if (multiplier === SINGLE_TYPE_NEUTRAL_THRESHOLD) return 1;
+  return -3;
+}
+
+function buildSuggestedCoverEntry(candidate, context) {
+  const profile = getResistanceProfile(candidate.types);
+  const candidateRoles = getUtilityRoles(candidate)
+    .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId));
+  const missingRoles = candidateRoles.filter((roleId) => !context.teamRoles.has(roleId));
+  const duplicateTypes = (candidate.types || []).filter((type) => context.teamTypes.has(type)).length;
+  const focusMultiplier = profile[context.attackType] ?? 1;
+  const weaknessHelp = context.weaknessTypes.filter((type) => (profile[type] ?? 1) < 1);
+  const score = (
+    getFocusPatchScore(focusMultiplier) * (context.preferences.patchWeakness ? 1.4 : 0.8)
+    + weaknessHelp.length * 1.25
+    + missingRoles.length * (context.preferences.patchRoles ? 1.4 : 0.6)
+    + getSuggestedSpeedScore(candidate, context.speedContext, context.speedTiers) * (context.preferences.patchSpeed ? 1.2 : 0.5)
+    - duplicateTypes * (context.preferences.avoidDuplicateTypes ? 1.4 : 0.5)
+  );
   return {
-    rows,
-    strongCount: rows.filter((entry) => entry.bestEffectiveness >= SUPER_EFFECTIVE_THRESHOLD).length,
+    id: candidate.id,
+    displayName: candidate.displayName || candidate.speciesName || t(context.language, "common.unknown"),
+    note: candidate.note || "",
+    resistance: focusMultiplier,
+    coveredWeaknesses: weaknessHelp.map((type) => getTypeLabel(type, context.language)),
+    roleIds: missingRoles.slice(0, 3),
+    duplicateTypes,
+    score,
+  };
+}
+
+function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences) {
+  const currentSpecies = new Set(team.map((config) => config.speciesId));
+  const teamTypes = new Set(team.flatMap((config) => config.types || []));
+  const teamRoles = new Set(
+    team.flatMap((config) => getUtilityRoles(config))
+      .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)),
+  );
+  const weaknessTypes = weakRows.map((entry) => entry.type);
+  return Object.fromEntries(weakRows.map((row) => {
+    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes};
+    const entries = library
+      .filter((candidate) => !currentSpecies.has(candidate.speciesId))
+      .map((candidate) => buildSuggestedCoverEntry(candidate, context))
+      .sort((left, right) => (
+        right.score - left.score
+        || left.resistance - right.resistance
+        || left.duplicateTypes - right.duplicateTypes
+      ));
+    const resistEntries = entries.filter((entry) => entry.resistance < 1);
+    return [row.type, (resistEntries.length ? resistEntries : entries).slice(0, MAX_SUGGESTED_COVERS)];
+  }));
+}
+
+function summarizeCoverage(team, language, library, speedTiers, speedContext, preferences) {
+  const defensiveMatrix = summarizeDefensiveMatrix(team, language);
+  const offensiveMatrix = summarizeOffensiveMatrix(team, language);
+  const weakRows = defensiveMatrix
+    .filter((entry) => entry.average > WEAKNESS_AVERAGE_THRESHOLD)
+    .slice(0, 6);
+  const suggestedCoversByType = buildSuggestedCoversByType(
+    team,
+    weakRows,
+    library,
+    language,
+    speedTiers,
+    speedContext,
+    preferences,
+  );
+  const defensiveRows = defensiveMatrix.map((entry) => ({
+    ...entry,
+    suggestedCovers: suggestedCoversByType[entry.type] || [],
+  }));
+  return {
+    rows: offensiveMatrix,
+    defensiveMatrix: defensiveRows,
+    offensiveMatrix,
+    weakRows: defensiveRows.filter((entry) => entry.average > WEAKNESS_AVERAGE_THRESHOLD).slice(0, 6),
+    suggestedCoversByType,
+    strongCount: offensiveMatrix.filter((entry) => entry.bestEffectiveness >= SUPER_EFFECTIVE_THRESHOLD).length,
   };
 }
 
@@ -472,25 +589,27 @@ function summarizeCores(team, weaknesses = [], language = "zh") {
   };
 }
 
-export function analyzeTeam(team, speedTiers = [], language = "zh", library = []) {
+export function analyzeTeam(team, speedTiers = [], language = "zh", library = [], preferences = {}) {
   if (!team.length) {
     return null;
   }
 
+  const recommendPreferences = normalizeRecommendationPreferences(preferences);
   const defensive = summarizeDefensive(team, language);
   const offensive = summarizeOffensive(team, language);
   const offensivePairs = summarizeOffensivePairs(team, language);
   const offensiveSinglesNeutral = summarizeOffensiveSinglesNeutral(offensive);
   const structure = summarizeStructure(team, language);
   const speedContext = getSpeedContext(team, speedTiers);
-  const weaknesses = defensive.filter((entry) => entry.average > 1.15).slice(0, 6);
+  const coverage = summarizeCoverage(team, language, library, speedTiers, speedContext, recommendPreferences);
+  const weaknesses = coverage.weakRows;
   const blindSpots = (offensivePairs.length ? offensivePairs : offensiveSinglesNeutral).slice(0, 8);
   return {
     defensive,
     offensive,
     offensivePairs,
     offensiveSinglesNeutral,
-    coverage: summarizeCoverage(team, language),
+    coverage,
     roles: summarizeRoles(team, speedContext),
     cores: summarizeCores(team, weaknesses, language),
     speed: summarizeSpeed(team, speedTiers, language, speedContext, library),

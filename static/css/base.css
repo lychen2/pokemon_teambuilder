@@ -376,8 +376,7 @@ textarea {
   gap: 6px;
 }
 
-.tooltip-chip,
-.tooltip-desc-box {
+.tooltip-chip {
   border: 1px solid rgba(29, 42, 47, 0.12);
   background: rgba(247, 240, 229, 0.95);
   color: var(--ink);
@@ -392,8 +391,9 @@ textarea {
 }
 
 .tooltip-desc-box {
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
 }
 
 .source-tag {

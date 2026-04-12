@@ -94,6 +94,101 @@ function coverageCardMarkup(entry, language) {
   `;
 }
 
+function formatMultiplier(value) {
+  return Number(value).toFixed(Number.isInteger(value) ? 0 : 2).replace(/\.00$/, "");
+}
+
+function getMultiplierTone(value, type = "defense") {
+  if (type === "defense") {
+    if (value === 0) return "good";
+    if (value < 1) return "good";
+    if (value > 1) return "bad";
+    return "";
+  }
+  if (value >= 2) return "good";
+  if (value < 1) return "bad";
+  return "";
+}
+
+function matrixHeadersMarkup(members = []) {
+  return members.map((entry) => `
+    <div class="analysis-matrix-column-head" title="${escapeHtml(entry.member.label)}">
+      <span>${escapeHtml(entry.member.label)}</span>
+    </div>
+  `).join("");
+}
+
+function matrixStyle(entries = []) {
+  return `grid-template-columns: minmax(124px, 1.1fr) repeat(${entries.length}, minmax(58px, 1fr));`;
+}
+
+function suggestedCoverMarkup(entry, language) {
+  return `
+    <article class="analysis-cover-card">
+      <div class="analysis-list-head">
+        <strong>${escapeHtml(entry.displayName)}</strong>
+        <span class="mini-pill ${entry.resistance < 1 ? "analysis-good-pill" : ""}">
+          ${t(language, "analysis.coverMatrixResist", {value: formatMultiplier(entry.resistance)})}
+        </span>
+      </div>
+      <div class="analysis-inline-pills">
+        ${entry.coveredWeaknesses.length
+          ? entry.coveredWeaknesses.map((label) => `<span class="mini-pill analysis-good-pill">${escapeHtml(label)}</span>`).join("")
+          : `<span class="mini-pill">${t(language, "common.none")}</span>`}
+      </div>
+      ${entry.roleIds.length
+        ? `<div class="analysis-inline-pills">${entry.roleIds.map((roleId) => renderRolePill(roleId, language, "mini-pill")).join("")}</div>`
+        : ""}
+    </article>
+  `;
+}
+
+function defensiveMatrixRowMarkup(entry, language) {
+  return `
+    <article class="analysis-matrix-row-card ${entry.average > 1.15 ? "bad" : ""}">
+      <div class="analysis-matrix-row" style="${matrixStyle(entry.members)}">
+        <div class="analysis-matrix-label">
+          <strong>${escapeHtml(entry.label)}</strong>
+          <span>${t(language, "analysis.weakResistImmune", {weak: entry.weakCount, resist: entry.resistCount, immune: entry.immuneCount})}</span>
+        </div>
+        ${entry.members.map((cell) => `
+          <div class="analysis-matrix-cell ${getMultiplierTone(cell.multiplier, "defense")}">
+            <span class="analysis-matrix-cell-name">${escapeHtml(cell.member.label)}</span>
+            <strong>${formatMultiplier(cell.multiplier)}x</strong>
+          </div>
+        `).join("")}
+      </div>
+      ${entry.suggestedCovers?.length ? `
+        <div class="analysis-cover-suggestions">
+          <div class="analysis-label">${t(language, "analysis.coverSuggestedTitle")}</div>
+          <div class="analysis-cover-grid">
+            ${entry.suggestedCovers.map((candidate) => suggestedCoverMarkup(candidate, language)).join("")}
+          </div>
+        </div>
+      ` : ""}
+    </article>
+  `;
+}
+
+function offensiveMatrixRowMarkup(entry, language) {
+  return `
+    <article class="analysis-matrix-row-card">
+      <div class="analysis-matrix-row" style="${matrixStyle(entry.members)}">
+        <div class="analysis-matrix-label">
+          <strong>${escapeHtml(entry.label)}</strong>
+          <span>${t(language, "analysis.coverMatrixBest", {value: formatMultiplier(entry.bestEffectiveness)})}</span>
+        </div>
+        ${entry.members.map((cell) => `
+          <div class="analysis-matrix-cell ${getMultiplierTone(cell.effectiveness, "offense")}">
+            <span class="analysis-matrix-cell-name">${escapeHtml(cell.member.label)}</span>
+            <strong>${formatMultiplier(cell.effectiveness)}x</strong>
+          </div>
+        `).join("")}
+      </div>
+    </article>
+  `;
+}
+
 function roleCardMarkup(entry, language) {
   return `
     <article class="analysis-list-card analysis-role-card ${entry.count ? "good" : ""}">
@@ -163,6 +258,8 @@ function coreCardMarkup(entry, language, tone) {
 }
 
 function renderCoveragePanel(analysis, language) {
+  const defensiveHeaders = analysis.coverage.defensiveMatrix[0]?.members || [];
+  const offensiveHeaders = analysis.coverage.offensiveMatrix[0]?.members || [];
   const blindSpotMarkup = analysis.offensivePairs.length
     ? analysis.offensivePairs.slice(0, 10).map((entry) => `
       <div class="chip-card bad">
@@ -183,20 +280,24 @@ function renderCoveragePanel(analysis, language) {
     <div class="analysis-detail-grid">
       <section class="subpanel">
         <h3>${t(language, "analysis.coverageIncomingTitle")}</h3>
-        <div class="chip-list">
-          ${analysis.defensive.slice(0, 10).map((entry) => `
-            <div class="chip-card ${entry.average > 1.15 ? "bad" : entry.average < 0.9 ? "good" : ""}">
-              <strong>${entry.label}</strong>
-              <span>${t(language, "analysis.average", {value: entry.average.toFixed(2)})}</span>
-              <span>${t(language, "analysis.weakResistImmune", {weak: entry.weakCount, resist: entry.resistCount, immune: entry.immuneCount})}</span>
-            </div>
-          `).join("")}
+        <p class="muted">${t(language, "analysis.coverMatrixIncomingCopy")}</p>
+        <div class="analysis-matrix-head" style="${matrixStyle(defensiveHeaders)}">
+          <div class="analysis-matrix-corner">${t(language, "analysis.coverMatrixAxisIncoming")}</div>
+          ${matrixHeadersMarkup(defensiveHeaders)}
+        </div>
+        <div class="analysis-list-stack">
+          ${analysis.coverage.defensiveMatrix.map((entry) => defensiveMatrixRowMarkup(entry, language)).join("")}
         </div>
       </section>
       <section class="subpanel">
         <h3>${t(language, "analysis.coverageOutgoingTitle")}</h3>
+        <p class="muted">${t(language, "analysis.coverMatrixOutgoingCopy")}</p>
+        <div class="analysis-matrix-head" style="${matrixStyle(offensiveHeaders)}">
+          <div class="analysis-matrix-corner">${t(language, "analysis.coverMatrixAxisOutgoing")}</div>
+          ${matrixHeadersMarkup(offensiveHeaders)}
+        </div>
         <div class="analysis-list-stack">
-          ${analysis.coverage.rows.map((entry) => coverageCardMarkup(entry, language)).join("")}
+          ${analysis.coverage.offensiveMatrix.map((entry) => offensiveMatrixRowMarkup(entry, language)).join("")}
         </div>
       </section>
     </div>

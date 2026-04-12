@@ -47,7 +47,7 @@ body {
 }
 
 .app-shell {
-  grid-template-columns: minmax(420px, 500px) minmax(0, 1fr);
+  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
   gap: 22px;
   padding: 0 0 32px;
   align-items: start;
@@ -291,7 +291,7 @@ body {
   background: rgba(255, 255, 255, 0.72);
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1520px) {
   .hero,
   .app-shell {
     width: min(1400px, calc(100vw - 36px));

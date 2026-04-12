@@ -180,6 +180,18 @@ export function formatConfigName(name, note = "") {
   return `${baseName}（${cleanNote}）`;
 }
 
+export function compareSpeciesByDex(left = {}, right = {}) {
+  const leftNum = Number(left.dexNumber ?? left.num ?? 0);
+  const rightNum = Number(right.dexNumber ?? right.num ?? 0);
+  if (leftNum !== rightNum) {
+    return leftNum - rightNum;
+  }
+  return String(left.speciesName || left.name || "").localeCompare(
+    String(right.speciesName || right.name || ""),
+    "zh-Hans-CN",
+  );
+}
+
 export function getTypeLabel(type, language = "zh") {
   if (language === "en") {
     return type || t(language, "common.unknown");

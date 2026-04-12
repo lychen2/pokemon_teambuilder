@@ -1,7 +1,8 @@
 import {t} from "./i18n.js";
 import {renderAnalysisView} from "./render-analysis.js";
 import {renderMatchupView} from "./render-matchup.js";
-import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel} from "./utils.js";
+import {renderRecommendationsView} from "./render-recommendations.js";
+import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -71,15 +72,19 @@ function movesMarkup(config, language) {
   })).join("");
 }
 
-function renderInfoPill({label, leadingMarkup = "", tooltipMarkup}) {
+function renderInfoPill({label, leadingMarkup = "", tooltipMarkup, className = ""}) {
   const safeLabel = escapeHtml(label || "未知");
   return `
-    <span class="info-pill" tabindex="0">
+    <span class="info-pill ${className}" tabindex="0">
       ${leadingMarkup}
       <span class="info-pill-label">${safeLabel}</span>
       <span class="info-tooltip-content">${tooltipMarkup || ""}</span>
     </span>
   `;
+}
+
+function getLookupEntry(lookup, name) {
+  return lookup?.get(normalizeName(name)) || null;
 }
 
 function buildMetaMarkup(config, language) {
@@ -155,6 +160,43 @@ function teamHeaderMarkup(config, linkedConfig, language) {
       ${badges ? `<div class="entry-tags team-badge-row">${badges}</div>` : ""}
     </div>
   `;
+}
+
+function renderSpeedSourcePill(state, source, language) {
+  const datasets = state.datasets || {};
+  const move = getLookupEntry(datasets.moveLookup, source);
+  if (move) {
+    return renderInfoPill({
+      label: move.name,
+      tooltipMarkup: buildMoveTooltipMarkup(move, language),
+      className: "mini-pill speed-boost-source",
+    });
+  }
+
+  const itemInfo = getLookupEntry(datasets.itemLookup, source);
+  if (itemInfo) {
+    return renderInfoPill({
+      label: itemInfo.name || source,
+      leadingMarkup: itemSpriteMarkup(itemInfo),
+      tooltipMarkup: buildTextTooltipMarkup(itemInfo.shortDesc || itemInfo.desc || t(language, "tooltip.noItemDesc"), language),
+      className: "mini-pill speed-boost-source",
+    });
+  }
+
+  const abilityInfo = getLookupEntry(datasets.abilityLookup, source);
+  if (abilityInfo) {
+    return renderInfoPill({
+      label: abilityInfo.name || source,
+      tooltipMarkup: buildTextTooltipMarkup(abilityInfo.shortDesc || abilityInfo.desc || t(language, "tooltip.noAbilityDesc"), language),
+      className: "mini-pill speed-boost-source",
+    });
+  }
+
+  return `<span class="mini-pill speed-boost-source">${escapeHtml(source)}</span>`;
+}
+
+function renderSpeedSourcePills(state, sources = [], language) {
+  return sources.map((source) => renderSpeedSourcePill(state, source, language)).join("");
 }
 
 function speciesBrowserMarkup(state) {
@@ -320,26 +362,7 @@ export function renderMatchup(state) {
 }
 
 export function renderRecommendations(state) {
-  const language = state.language;
-  document.getElementById("recommend-list").innerHTML = state.recommendations.length
-    ? state.recommendations.map((config) => `
-        <article class="entry-card compact">
-          <div class="entry-main">
-            <div class="entry-title">${spriteMarkup(config)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}<span class="source-tag score-tag">${t(language, "recommend.score", {value: config.recommendationScore.toFixed(1)})}</span></div>
-            <div class="score-row">
-              <span>${t(language, "recommend.resistance", {value: config.breakdown.resistance.toFixed(1)})}</span>
-              <span>${t(language, "recommend.coverage", {value: config.breakdown.coverage.toFixed(1)})}</span>
-              <span>${t(language, "recommend.speed", {value: config.breakdown.speed.toFixed(1)})}</span>
-              <span>${t(language, "recommend.synergy", {value: config.breakdown.synergy.toFixed(1)})}</span>
-              <span>${t(language, "recommend.quality", {value: config.breakdown.quality.toFixed(1)})}</span>
-            </div>
-            <p class="entry-line">${config.reasons.join(" / ")}</p>
-            <p class="muted">${t(language, "recommend.help", {value: config.weaknessHelp.join(" / ")})}</p>
-          </div>
-          <button type="button" class="add-button" data-add-config="${config.id}">${t(language, "library.add")}</button>
-        </article>
-      `).join("")
-    : `<p class="empty-state">${t(language, "recommend.empty")}</p>`;
+  document.getElementById("recommend-list").innerHTML = renderRecommendationsView(state);
 }
 
 export function renderSpeedTiers(state) {
@@ -360,11 +383,11 @@ export function renderSpeedTiers(state) {
             ${entry.note ? `<span class="mini-pill speed-note-pill">${entry.note}</span>` : ""}
             ${entry.speedTierMode === "plus1" && entry.plusOneSpeed ? `
               <span class="mini-pill speed-boost-pill">${t(language, "speed.plusOne", {speed: entry.plusOneSpeed.speed})}</span>
-              ${entry.plusOneSpeed.sources.map((source) => `<span class="mini-pill speed-boost-source">${source}</span>`).join("")}
+              ${renderSpeedSourcePills(state, entry.plusOneSpeed.sources, language)}
             ` : ""}
             ${entry.speedTierMode === "scarf" && entry.choiceScarfSpeed ? `
               <span class="mini-pill speed-boost-pill">Scarf ${entry.choiceScarfSpeed.speed}</span>
-              ${entry.choiceScarfSpeed.sources.map((source) => `<span class="mini-pill speed-boost-source">${source}</span>`).join("")}
+              ${renderSpeedSourcePills(state, entry.choiceScarfSpeed.sources, language)}
             ` : ""}
           `).join("")}
         </div>

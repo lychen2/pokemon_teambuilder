@@ -187,6 +187,7 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     speciesLabel: formatConfigName(entry.name, config.note || ""),
     note: String(config.note || "").trim(),
     types: entry.types || [],
+    abilities: entry.abilities || {},
     ability: config.ability || "",
     item: config.item || "",
     teraType,

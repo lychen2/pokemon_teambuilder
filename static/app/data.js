@@ -1,5 +1,5 @@
 import {DATA_PATHS} from "./constants.js";
-import {fetchJson, normalizeName} from "./utils.js";
+import {compareSpeciesByDex, fetchJson, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
 
@@ -47,6 +47,7 @@ function buildAvailableSpecies(pokedex, formsIndex, speciesIds = []) {
       return {
         speciesId,
         speciesName: entry.name,
+        dexNumber: Number(entry.num || 0),
         baseStats: entry.baseStats || {},
         types: entry.types || [],
         abilities: entry.abilities || {},
@@ -57,7 +58,7 @@ function buildAvailableSpecies(pokedex, formsIndex, speciesIds = []) {
       };
     })
     .filter(Boolean)
-    .sort((left, right) => left.speciesName.localeCompare(right.speciesName, "zh-Hans-CN"));
+    .sort(compareSpeciesByDex);
 }
 
 export async function loadDatasets() {

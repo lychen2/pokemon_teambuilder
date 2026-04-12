@@ -2,7 +2,7 @@ import {FALLBACK_LEVEL} from "./constants.js";
 import {t} from "./i18n.js";
 import {getSpeedBoostAbilityNames} from "./speed.js";
 import {hydrateConfigs} from "./showdown.js";
-import {normalizeName} from "./utils.js";
+import {compareSpeciesByDex, normalizeName} from "./utils.js";
 
 const FASTEST_TEMPLATE_ID = "fastest";
 const SLOWEST_TEMPLATE_ID = "slowest";
@@ -93,6 +93,7 @@ function createTemplateGroup(species, datasets, language) {
   return {
     speciesId: species.speciesId,
     speciesName: species.speciesName,
+    dexNumber: Number(species.dexNumber || 0),
     spritePosition: species.spritePosition,
     types: species.types,
     searchText: normalizeName([species.speciesName, species.speciesId, ...(species.types || [])].join(" ")),
@@ -112,7 +113,7 @@ export function buildAvailableSpeciesOptions(datasets, library, language) {
     .filter((species) => !configuredSpecies.has(species.speciesId))
     .map((species) => createTemplateGroup(species, datasets, language))
     .filter(Boolean)
-    .sort((left, right) => left.speciesName.localeCompare(right.speciesName, "zh-Hans-CN"));
+    .sort(compareSpeciesByDex);
 }
 
 export function filterAvailableSpeciesOptions(options, search) {

@@ -202,16 +202,12 @@ function summarizeLeadPair(pair, opponentPairs) {
   };
 }
 
-function summarizeLeadPairs(team, opponentTeam) {
-  const myPairs = getPairEntries(team, 2);
-  const opponentPairs = getPairEntries(opponentTeam, 2);
-  return myPairs
-    .map((pair) => summarizeLeadPair(pair, opponentPairs))
-    .sort((left, right) => right.score - left.score)
-    .slice(0, PREVIEW_LIMIT);
+function hasLeadMembers(lineup, leadPair) {
+  const lineupIds = new Set(lineup.map((config) => config.id));
+  return leadPair.every((config) => lineupIds.has(config.id));
 }
 
-function scoreLineup(lineup, opponentTeam, leadPairs) {
+function scoreLineup(lineup, opponentTeam, leadScore) {
   const answerScore = opponentTeam.reduce((sum, foe) => {
     return sum + Math.max(...lineup.map((ally) => getAnswerIntoMember(ally, foe).score));
   }, 0);
@@ -219,20 +215,33 @@ function scoreLineup(lineup, opponentTeam, leadPairs) {
     return sum + Math.max(...opponentTeam.map((foe) => getPressureAgainstMember(foe, ally).score));
   }, 0);
   const roles = new Set(lineup.flatMap((config) => getUtilityRoles(config)));
-  const leadBonus = leadPairs
-    .filter((entry) => entry.members.every((member) => lineup.some((config) => config.id === member.id)))
-    .sort((left, right) => right.score - left.score)[0]?.score || 0;
   const weatherPenalty = getDuplicateRolePenalty(lineup, "weather", DUPLICATE_WEATHER_LINEUP_PENALTY);
-  return answerScore - exposure * 0.45 + roles.size * 0.75 + leadBonus * 0.5 - weatherPenalty;
+  return answerScore - exposure * 0.45 + roles.size * 0.75 + leadScore * 0.5 - weatherPenalty;
 }
 
-function summarizeRecommendedFour(team, opponentTeam, leadPairs) {
-  const size = Math.min(FOUR_SELECTION_SIZE, team.length);
-  const lineups = getPairEntries(team, size);
+function summarizeLeadLineup(pair, team, opponentTeam, leadScore) {
+  const lineupSize = Math.min(FOUR_SELECTION_SIZE, team.length);
+  const lineups = getPairEntries(team, lineupSize).filter((lineup) => hasLeadMembers(lineup, pair));
   const best = lineups
-    .map((lineup) => ({members: lineup.map(buildMemberRef), score: scoreLineup(lineup, opponentTeam, leadPairs)}))
-    .sort((left, right) => right.score - left.score)[0];
-  return best || {members: team.map(buildMemberRef), score: 0};
+    .map((lineup) => ({
+      lineupMembers: lineup.map(buildMemberRef),
+      backline: lineup.filter((member) => !pair.includes(member)).map(buildMemberRef),
+      lineupScore: scoreLineup(lineup, opponentTeam, leadScore),
+    }))
+    .sort((left, right) => right.lineupScore - left.lineupScore)[0];
+  return best || {lineupMembers: pair.map(buildMemberRef), backline: [], lineupScore: leadScore};
+}
+
+function summarizeLeadPairs(team, opponentTeam) {
+  const myPairs = getPairEntries(team, 2);
+  const opponentPairs = getPairEntries(opponentTeam, 2);
+  return myPairs
+    .map((pair) => {
+      const summary = summarizeLeadPair(pair, opponentPairs);
+      return {...summary, ...summarizeLeadLineup(pair, team, opponentTeam, summary.score)};
+    })
+    .sort((left, right) => right.score - left.score || right.lineupScore - left.lineupScore)
+    .slice(0, PREVIEW_LIMIT);
 }
 
 function summarizeThreats(team, opponentTeam) {
@@ -255,13 +264,11 @@ function summarizeAnswers(team, opponentTeam) {
   }));
 }
 
-function summarizeOverview(team, opponentTeam, speedLines, leadPairs, recommendedFour) {
+function summarizeOverview(team, opponentTeam, speedLines) {
   return {
     allyCount: team.length,
     opponentCount: opponentTeam.length,
     speedLineCount: speedLines.length,
-    bestLead: leadPairs[0] || null,
-    recommendedFour,
   };
 }
 
@@ -274,12 +281,10 @@ export function analyzeMatchup(team = [], opponentTeam = []) {
     ...getTaggedTeam(opponentTeam, "opponent"),
   ]);
   const leadPairs = summarizeLeadPairs(team, opponentTeam);
-  const recommendedFour = summarizeRecommendedFour(team, opponentTeam, leadPairs);
   return {
-    overview: summarizeOverview(team, opponentTeam, speedLines, leadPairs, recommendedFour),
+    overview: summarizeOverview(team, opponentTeam, speedLines),
     speedLines,
     leadPairs,
-    recommendedFour,
     allyThreats: summarizeThreats(team, opponentTeam),
     opponentAnswers: summarizeAnswers(team, opponentTeam),
   };

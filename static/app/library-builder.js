@@ -18,6 +18,14 @@ function createMoveSlots() {
   return Array.from({length: DEFAULT_MOVE_SLOTS}, () => "");
 }
 
+function normalizeSeedMoves(seedMoves = []) {
+  const moves = seedMoves.filter(Boolean).slice(0, DEFAULT_MOVE_SLOTS);
+  while (moves.length < DEFAULT_MOVE_SLOTS) {
+    moves.push("");
+  }
+  return moves;
+}
+
 export function buildSpeciesBrowser(datasets, library) {
   const counts = library.reduce((map, config) => {
     map.set(config.speciesId, (map.get(config.speciesId) || 0) + 1);
@@ -38,17 +46,22 @@ export function buildNatureOptions() {
   return [DEFAULT_NATURE, ...Object.keys(NATURE_EFFECTS).sort((left, right) => left.localeCompare(right))];
 }
 
-export function createBuilderState(speciesId, datasets) {
+export function getRequiredItemForSpecies(speciesId, datasets) {
+  return String(datasets.pokedex?.[speciesId]?.requiredItem || "").trim();
+}
+
+export function createBuilderState(speciesId, datasets, seedConfig = null) {
   const species = datasets.pokedex[speciesId];
+  const requiredItem = getRequiredItemForSpecies(speciesId, datasets);
   return {
     speciesId,
-    item: "",
-    ability: Object.values(species?.abilities || {}).find(Boolean) || "",
-    teraType: "",
-    nature: DEFAULT_NATURE,
-    note: "",
-    points: createEmptySpread(),
-    moves: createMoveSlots(),
+    item: requiredItem || seedConfig?.item || "",
+    ability: seedConfig?.ability || Object.values(species?.abilities || {}).find(Boolean) || "",
+    teraType: seedConfig?.teraType || "",
+    nature: seedConfig?.nature || DEFAULT_NATURE,
+    note: seedConfig?.note || "",
+    points: seedConfig?.championPoints || seedConfig?.points || createEmptySpread(),
+    moves: normalizeSeedMoves(seedConfig?.moveNames || seedConfig?.moves || createMoveSlots()),
   };
 }
 
@@ -148,7 +161,8 @@ export function validateBuilderState(builder, datasets) {
   const points = sanitizePoints(builder.points);
   const total = getChampionPointTotal(points);
   const legalAbilities = new Set(getAbilityOptions(builder.speciesId, datasets));
-  const itemName = builder.item.trim();
+  const requiredItem = getRequiredItemForSpecies(builder.speciesId, datasets);
+  const itemName = (requiredItem || builder.item).trim();
   const moveChecks = builder.moves.map((move) => getMoveLegality(move, builder.speciesId, datasets));
   const trimmedMoves = builder.moves
     .map((move) => resolveMoveEntry(move, datasets)?.name || move.trim())
@@ -186,6 +200,7 @@ export function validateBuilderState(builder, datasets) {
 }
 
 export function buildConfigFromBuilder(builder, datasets) {
+  const requiredItem = getRequiredItemForSpecies(builder.speciesId, datasets);
   const config = {
     id: `custom:${builder.speciesId}:${Date.now()}`,
     source: "custom",
@@ -193,7 +208,7 @@ export function buildConfigFromBuilder(builder, datasets) {
     speciesName: datasets.pokedex[builder.speciesId]?.name || builder.speciesId,
     displayName: datasets.pokedex[builder.speciesId]?.name || builder.speciesId,
     ability: builder.ability || "",
-    item: resolveItemEntry(builder.item, datasets)?.name || builder.item || "",
+    item: requiredItem || resolveItemEntry(builder.item, datasets)?.name || builder.item || "",
     teraType: builder.teraType || "",
     nature: builder.nature || DEFAULT_NATURE,
     note: builder.note || "",

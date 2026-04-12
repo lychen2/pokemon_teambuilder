@@ -7,6 +7,7 @@ import {
   buildNatureOptions,
   buildSpeciesBrowser,
   createBuilderState,
+  getRequiredItemForSpecies,
   getAbilityOptions,
   getBuilderStats,
   getItemOptions,
@@ -26,6 +27,12 @@ import {
 } from "./matchup-selection.js";
 import {flushPersistState, loadPersistedState, schedulePersistState} from "./persistence.js";
 import {applyPsChinaTranslation, translatePsChinaText} from "./pschina-translation.js";
+import {
+  DEFAULT_RECOMMENDATION_PREFERENCES,
+  DEFAULT_RECOMMENDATION_WEIGHTS,
+  normalizeRecommendationPreferences,
+  normalizeRecommendationWeights,
+} from "./recommendation-preferences.js";
 import {recommendConfigs} from "./recommendations.js";
 import {renderAnalysis, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
@@ -40,6 +47,10 @@ const state = {
   activeView: "library-view",
   activeAnalysisTab: "coverage",
   activeCoreConfigId: null,
+  recommendFocusType: "",
+  recommendPreferences: {...DEFAULT_RECOMMENDATION_PREFERENCES},
+  recommendWeights: {...DEFAULT_RECOMMENDATION_WEIGHTS},
+  dismissedRecommendationKeys: [],
   search: "",
   matchupSearch: "",
   library: [],
@@ -189,13 +200,46 @@ function refreshLibraryState() {
   refreshFilteredLibrary();
 }
 
+function getRecommendationPool() {
+  if (!state.datasets?.availableSpecies?.length) {
+    return state.library;
+  }
+  const availableSpeciesIds = new Set(
+    state.datasets.availableSpecies.map((species) => species.speciesId).filter(Boolean),
+  );
+  return state.library.filter((config) => availableSpeciesIds.has(config.speciesId));
+}
+
 function refreshBattleState() {
-  state.analysis = analyzeTeam(state.team, state.speedTiers, state.language, state.library);
+  const recommendationPool = getRecommendationPool();
+  state.analysis = analyzeTeam(
+    state.team,
+    state.speedTiers,
+    state.language,
+    recommendationPool,
+    state.recommendPreferences,
+  );
   state.matchup = analyzeMatchup(state.team, state.opponentTeam);
   if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
     state.activeCoreConfigId = state.team[0]?.id || null;
   }
-  state.recommendations = recommendConfigs(state.library, state.team, state.speedTiers, state.language);
+  const weaknessTypes = new Set((state.analysis?.coverage?.weakRows || []).map((entry) => entry.type));
+  if (state.recommendFocusType && !weaknessTypes.has(state.recommendFocusType)) {
+    state.recommendFocusType = "";
+  }
+  state.recommendations = recommendConfigs(
+    recommendationPool,
+    state.team,
+    state.speedTiers,
+    state.language,
+    {
+      preferences: state.recommendPreferences,
+      weights: state.recommendWeights,
+      focusType: state.recommendFocusType,
+      datasets: state.datasets,
+      dismissedKeys: state.dismissedRecommendationKeys,
+    },
+  );
 }
 
 function refreshDerivedState() {
@@ -312,6 +356,101 @@ function setActiveAnalysisTab(tabId, rerender = true) {
   if (rerender) {
     renderAnalysisSection();
   }
+}
+
+function setRecommendFocusType(type = "", rerender = true) {
+  const recommendationPool = getRecommendationPool();
+  state.recommendFocusType = type || "";
+  state.recommendations = recommendConfigs(
+    recommendationPool,
+    state.team,
+    state.speedTiers,
+    state.language,
+    {
+      preferences: state.recommendPreferences,
+      weights: state.recommendWeights,
+      focusType: state.recommendFocusType,
+      datasets: state.datasets,
+      dismissedKeys: state.dismissedRecommendationKeys,
+    },
+  );
+  if (rerender) {
+    renderRecommendationsSection();
+  }
+}
+
+function toggleRecommendPreference(preferenceId) {
+  if (!(preferenceId in state.recommendPreferences)) {
+    return;
+  }
+  state.recommendPreferences = {
+    ...state.recommendPreferences,
+    [preferenceId]: !state.recommendPreferences[preferenceId],
+  };
+  refreshBattleState();
+  renderAnalysisSection();
+  renderRecommendationsSection();
+  scheduleStatePersist();
+}
+
+function setRecommendWeight(weightId, value) {
+  if (!(weightId in state.recommendWeights)) {
+    return;
+  }
+  state.recommendWeights = {
+    ...state.recommendWeights,
+    [weightId]: Math.min(200, Math.max(0, Math.round(Number(value || 0)))),
+  };
+  refreshBattleState();
+  renderAnalysisSection();
+  renderRecommendationsSection();
+  scheduleStatePersist();
+}
+
+function setRecommendWeightPreview(weightId, value, scope = document) {
+  const preview = scope.querySelector(`[data-recommend-weight-value="${weightId}"]`);
+  if (!preview) {
+    return;
+  }
+  preview.textContent = `${Math.min(200, Math.max(0, Math.round(Number(value || 0))))}%`;
+}
+
+function handleRecommendWeightPreview(event) {
+  const input = event.target.closest("[data-recommend-weight]");
+  if (!input) {
+    return;
+  }
+  setRecommendWeightPreview(input.dataset.recommendWeight, input.value, event.currentTarget);
+}
+
+function handleRecommendWeightCommit(event) {
+  const input = event.target.closest("[data-recommend-weight]");
+  if (!input) {
+    return;
+  }
+  setRecommendWeight(input.dataset.recommendWeight, input.value);
+}
+
+function dismissRecommendation(recommendationKey) {
+  if (!recommendationKey || state.dismissedRecommendationKeys.includes(recommendationKey)) {
+    return;
+  }
+  state.dismissedRecommendationKeys = [...state.dismissedRecommendationKeys, recommendationKey];
+  refreshBattleState();
+  renderRecommendationsSection();
+  renderMatchupSection();
+  scheduleStatePersist();
+}
+
+function resetDismissedRecommendations() {
+  if (!state.dismissedRecommendationKeys.length) {
+    return;
+  }
+  state.dismissedRecommendationKeys = [];
+  refreshBattleState();
+  renderRecommendationsSection();
+  renderMatchupSection();
+  scheduleStatePersist();
 }
 
 function findConfigById(configId) {
@@ -499,6 +638,7 @@ function closeGuidedConfig() {
     title,
     subtitle,
     types,
+    itemInput,
     pointsGrid,
     statsGrid,
     movesGrid,
@@ -509,6 +649,10 @@ function closeGuidedConfig() {
   title.textContent = "";
   subtitle.textContent = "";
   types.innerHTML = "";
+  itemInput.value = "";
+  itemInput.disabled = false;
+  itemInput.readOnly = false;
+  itemInput.title = "";
   pointsGrid.innerHTML = "";
   statsGrid.innerHTML = "";
   movesGrid.innerHTML = "";
@@ -567,6 +711,7 @@ function getLocalizedMoveName(moveName) {
 
 function renderGuidedConfigForm(builder) {
   const species = state.datasets.pokedex[builder.speciesId];
+  const requiredItem = getRequiredItemForSpecies(builder.speciesId, state.datasets);
   const {
     title,
     subtitle,
@@ -584,7 +729,10 @@ function renderGuidedConfigForm(builder) {
   });
   subtitle.textContent = t(state.language, "builder.copy");
   types.innerHTML = (species?.types || []).map(typePillMarkup).join("");
-  itemInput.value = getLocalizedItemName(builder.item);
+  itemInput.value = getLocalizedItemName(requiredItem || builder.item);
+  itemInput.disabled = Boolean(requiredItem);
+  itemInput.readOnly = Boolean(requiredItem);
+  itemInput.title = requiredItem || "";
   noteInput.value = builder.note;
   syncSelectOptions(abilitySelect, getAbilityOptions(builder.speciesId, state.datasets), builder.ability);
   syncSelectOptions(
@@ -712,16 +860,41 @@ function renderGuidedConfig() {
   renderGuidedConfigDerived();
 }
 
-function openGuidedConfig(speciesId) {
-  state.guidedBuilder = createBuilderState(speciesId, state.datasets);
+function openGuidedConfig(speciesId, options = {}) {
+  state.guidedBuilder = {
+    ...createBuilderState(speciesId, state.datasets, options.seedConfig || null),
+    addToTeamOnSave: Boolean(options.addToTeamOnSave),
+  };
   const {modal} = getGuidedConfigElements();
   renderGuidedConfig();
   modal.hidden = false;
 }
 
+function openRecommendationTemplate(configId) {
+  const templateConfig = state.recommendations.find((entry) => entry.id === configId && entry.recommendationAction === "configure");
+  if (!templateConfig) {
+    return;
+  }
+  openGuidedConfig(templateConfig.speciesId, {
+    seedConfig: templateConfig,
+    addToTeamOnSave: true,
+  });
+}
+
 function updateGuidedBuilderField(key, value) {
   if (!state.guidedBuilder) {
     return;
+  }
+  if (key === "item") {
+    const requiredItem = getRequiredItemForSpecies(state.guidedBuilder.speciesId, state.datasets);
+    if (requiredItem) {
+      const {itemInput} = getGuidedConfigElements();
+      itemInput.value = getLocalizedItemName(requiredItem);
+      itemInput.disabled = true;
+      itemInput.readOnly = true;
+      itemInput.title = requiredItem;
+      return;
+    }
   }
   state.guidedBuilder = {
     ...state.guidedBuilder,
@@ -900,12 +1073,20 @@ function saveGuidedConfig() {
     return;
   }
   const addedConfig = appendImportedConfigs([nextConfig])[0];
+  if (state.guidedBuilder.addToTeamOnSave && state.team.length < MAX_TEAM_SIZE) {
+    state.team = [...state.team, buildTeamEntry(addedConfig)];
+  }
   state.selectedSpeciesId = addedConfig.speciesId;
   closeGuidedConfig();
   refreshDerivedState();
   renderAll();
   scheduleStatePersist();
-  setStatus("status.addedGuidedConfig", {name: addedConfig.displayName});
+  setStatus(
+    state.team.some((config) => config.linkedConfigId === addedConfig.id || config.id === addedConfig.id)
+      ? "status.addedGuidedConfigToTeam"
+      : "status.addedGuidedConfig",
+    {name: addedConfig.displayName},
+  );
 }
 
 function saveTeamConfigEdit(configId, text) {
@@ -1308,9 +1489,70 @@ function bindEvents() {
   });
 
   document.getElementById("recommend-list").addEventListener("click", (event) => {
+    const dismissButton = event.target.closest("[data-dismiss-recommendation]");
+    if (dismissButton) {
+      dismissRecommendation(dismissButton.dataset.dismissRecommendation);
+      return;
+    }
+    const resetButton = event.target.closest("[data-reset-dismissed-recommendations]");
+    if (resetButton) {
+      resetDismissedRecommendations();
+      return;
+    }
+    const templateButton = event.target.closest("[data-open-recommend-template]");
+    if (templateButton) {
+      openRecommendationTemplate(templateButton.dataset.openRecommendTemplate);
+      return;
+    }
+    const focusButton = event.target.closest("[data-recommend-focus-type]");
+    if (focusButton) {
+      setRecommendFocusType(focusButton.dataset.recommendFocusType);
+      return;
+    }
+    const preferenceButton = event.target.closest("[data-recommend-preference]");
+    if (preferenceButton) {
+      toggleRecommendPreference(preferenceButton.dataset.recommendPreference);
+      return;
+    }
     const button = event.target.closest("[data-add-config]");
     if (button) addConfig(button.dataset.addConfig);
   });
+  document.getElementById("recommend-list").addEventListener("input", handleRecommendWeightPreview);
+  document.getElementById("recommend-list").addEventListener("change", handleRecommendWeightCommit);
+
+  document.getElementById("matchup-analysis").addEventListener("click", (event) => {
+    const dismissButton = event.target.closest("[data-dismiss-recommendation]");
+    if (dismissButton) {
+      dismissRecommendation(dismissButton.dataset.dismissRecommendation);
+      return;
+    }
+    const resetButton = event.target.closest("[data-reset-dismissed-recommendations]");
+    if (resetButton) {
+      resetDismissedRecommendations();
+      return;
+    }
+    const templateButton = event.target.closest("[data-open-recommend-template]");
+    if (templateButton) {
+      openRecommendationTemplate(templateButton.dataset.openRecommendTemplate);
+      return;
+    }
+    const focusButton = event.target.closest("[data-recommend-focus-type]");
+    if (focusButton) {
+      setRecommendFocusType(focusButton.dataset.recommendFocusType);
+      return;
+    }
+    const preferenceButton = event.target.closest("[data-recommend-preference]");
+    if (preferenceButton) {
+      toggleRecommendPreference(preferenceButton.dataset.recommendPreference);
+      return;
+    }
+    const button = event.target.closest("[data-add-config]");
+    if (button) {
+      addConfig(button.dataset.addConfig);
+    }
+  });
+  document.getElementById("matchup-analysis").addEventListener("input", handleRecommendWeightPreview);
+  document.getElementById("matchup-analysis").addEventListener("change", handleRecommendWeightCommit);
 
   document.getElementById("matchup-search").addEventListener("input", (event) => {
     state.matchupSearch = event.target.value;
@@ -1557,6 +1799,11 @@ function setupTooltipEvents() {
 async function initialize() {
   const persisted = loadPersistedState();
   state.language = normalizeLanguage(persisted?.language || DEFAULT_LANGUAGE);
+  state.recommendPreferences = normalizeRecommendationPreferences(persisted?.recommendPreferences);
+  state.recommendWeights = normalizeRecommendationWeights(persisted?.recommendWeights);
+  state.dismissedRecommendationKeys = Array.isArray(persisted?.dismissedRecommendationKeys)
+    ? persisted.dismissedRecommendationKeys.filter(Boolean)
+    : [];
   setLanguage(state.language, false);
   setStatus("status.initializing");
   state.datasets = await loadDatasets();

@@ -1,5 +1,6 @@
 import {t} from "./i18n.js";
 import {filterOpponentLibrary, getOpponentVariantCount} from "./matchup-selection.js";
+import {renderRecommendationListOnly} from "./render-recommendations.js";
 import {getTypeLabel} from "./utils.js";
 
 const CONFIG_PREVIEW_LIMIT = 3;
@@ -29,20 +30,39 @@ function typePills(types = [], language) {
   return types.map((type) => `<span class="pill type-pill ${getTypeClassName(type)}">${getTypeLabel(type, language)}</span>`).join("");
 }
 
+function buildTextTooltipMarkup(detail, language) {
+  return `<div class="tooltip-stack"><div class="tooltip-desc-box">${escapeHtml(detail || t(language, "tooltip.noDetail"))}</div></div>`;
+}
+
+function renderTooltipPill(label, detail, language, className = "mini-pill") {
+  const pillClassName = ["info-pill", className].filter(Boolean).join(" ");
+  return `<span class="${pillClassName}" tabindex="0"><span class="info-pill-label">${escapeHtml(label)}</span><span class="info-tooltip-content">${buildTextTooltipMarkup(detail, language)}</span></span>`;
+}
+
 function memberPillsMarkup(members = []) {
   return members.map((member) => `<span class="mini-pill analysis-member-pill">${escapeHtml(member.label)}</span>`).join("");
 }
 
 function rolePillsMarkup(roles = [], language) {
-  return roles.slice(0, 5).map((roleId) => `
-    <span class="mini-pill">${escapeHtml(t(language, `analysis.role.${roleId}`))}</span>
-  `).join("");
+  return roles.slice(0, 5).map((roleId) => `<span class="mini-pill">${escapeHtml(t(language, `analysis.role.${roleId}`))}</span>`).join("");
 }
 
 function sideTagMarkup(entry, language) {
   const sideKey = entry.matchupSide === "opponent" ? "matchup.side.opponent" : "matchup.side.ally";
   const sideClass = entry.matchupSide === "opponent" ? "analysis-alert-pill" : "analysis-good-pill";
   return `<span class="mini-pill ${sideClass}">${escapeHtml(t(language, sideKey))}</span>`;
+}
+
+function getResistanceTooltip(entry, language) {
+  const value = Number(entry.resistance || 0);
+  const toneKey = value === 0
+    ? "matchup.resistanceTooltipZero"
+    : value < 1
+      ? "matchup.resistanceTooltipLow"
+      : value > 1
+        ? "matchup.resistanceTooltipHigh"
+        : "matchup.resistanceTooltipNeutral";
+  return `${t(language, "matchup.resistanceTooltipCommon")} ${t(language, toneKey)}`;
 }
 
 function threatPillMarkup(entry, language) {
@@ -52,7 +72,11 @@ function threatPillMarkup(entry, language) {
       ${entry.member.variantCount > 1 ? `<span class="mini-pill">${t(language, "matchup.variantCount", {count: entry.member.variantCount})}</span>` : ""}
       <span class="mini-pill">${t(language, "matchup.effectiveness", {value: entry.effectiveness.toFixed(1)})}</span>
       <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
-      ${"resistance" in entry ? `<span class="mini-pill">${t(language, "matchup.resistance", {value: entry.resistance.toFixed(1)})}</span>` : ""}
+      ${"resistance" in entry ? renderTooltipPill(
+        t(language, "matchup.resistance", {value: entry.resistance.toFixed(1)}),
+        getResistanceTooltip(entry, language),
+        language,
+      ) : ""}
     </span>
   `;
 }
@@ -136,14 +160,40 @@ function savedOpponentCardMarkup(entry, language) {
   `;
 }
 
+function speedModePillMarkup(entry, language) {
+  if (entry.speedTierMode === "plus1" && entry.plusOneSpeed) {
+    return renderTooltipPill(t(language, "matchup.speedBoostPlusOne"), t(language, "matchup.speedTooltipPlusOne", {sources: entry.plusOneSpeed.sources.join(" / ")}), language);
+  }
+  if (entry.speedTierMode === "scarf" && entry.choiceScarfSpeed) {
+    return renderTooltipPill(t(language, "matchup.speedBoostScarf"), t(language, "matchup.speedTooltipScarf", {sources: entry.choiceScarfSpeed.sources.join(" / ")}), language);
+  }
+  return "";
+}
+
 function leadCardMarkup(entry, language) {
+  const targetsMarkup = entry.targets.length
+    ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.targets)}</div>`
+    : `<span class="muted">${t(language, "common.none")}</span>`;
+  const backlineMarkup = entry.backline.length
+    ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.backline)}</div>`
+    : `<span class="muted">${t(language, "common.none")}</span>`;
   return `
     <article class="analysis-core-card good">
       <div class="analysis-list-head">
         <div class="analysis-core-members">${memberPillsMarkup(entry.members)}</div>
-        <span class="source-tag score-tag">${t(language, "matchup.leadScore", {value: entry.score.toFixed(1)})}</span>
+        <div class="analysis-inline-pills">
+          <span class="source-tag score-tag">${t(language, "matchup.leadScore", {value: entry.score.toFixed(1)})}</span>
+          <span class="source-tag score-tag">${t(language, "matchup.lineupScore", {value: entry.lineupScore.toFixed(1)})}</span>
+        </div>
       </div>
-      <p class="muted">${t(language, "matchup.targets")}: ${entry.targets.length ? entry.targets.map((member) => member.label).join(" / ") : t(language, "common.none")}</p>
+      <div>
+        <div class="analysis-label">${t(language, "matchup.targets")}</div>
+        ${targetsMarkup}
+      </div>
+      <div>
+        <div class="analysis-label">${t(language, "matchup.backline")}</div>
+        ${backlineMarkup}
+      </div>
       ${entry.roles.length ? `<div class="analysis-inline-pills">${rolePillsMarkup(entry.roles, language)}</div>` : ""}
     </article>
   `;
@@ -174,6 +224,7 @@ function speedLineCardMarkup(tier, language) {
               ${spriteMarkup(entry)}
               <span>${escapeHtml(entry.displayLabel || entry.displayName || entry.speciesName)}</span>
             </span>
+            ${speedModePillMarkup(entry, language)}
             ${sideTagMarkup(entry, language)}
           `).join("")}
         </div>
@@ -209,12 +260,23 @@ function renderAnalysis(state) {
     container.innerHTML = `<p class="empty-state">${t(language, "matchup.needAlly")}</p>`;
     return;
   }
+  const recommendationSection = `
+    <section class="subpanel matchup-recommend-panel">
+      <div class="section-head">
+        <div>
+          <h3>${t(language, "views.recommendTitle")}</h3>
+          <p class="muted">${t(language, "matchup.recommendCopy")}</p>
+        </div>
+      </div>
+      <div class="matchup-recommend-list">${renderRecommendationListOnly(state)}</div>
+    </section>
+  `;
   if (!state.opponentTeam.length) {
-    container.innerHTML = `<p class="empty-state">${t(language, "matchup.needOpponent")}</p>`;
+    container.innerHTML = `${recommendationSection}<p class="empty-state">${t(language, "matchup.needOpponent")}</p>`;
     return;
   }
   if (!analysis) {
-    container.innerHTML = `<p class="empty-state">${t(language, "analysis.empty")}</p>`;
+    container.innerHTML = `${recommendationSection}<p class="empty-state">${t(language, "analysis.empty")}</p>`;
     return;
   }
   container.innerHTML = `
@@ -223,21 +285,12 @@ function renderAnalysis(state) {
       <article class="metric-card"><span>${t(language, "matchup.overviewOpponent")}</span><strong>${analysis.overview.opponentCount}</strong></article>
       <article class="metric-card"><span>${t(language, "matchup.overviewSpeed")}</span><strong>${analysis.overview.speedLineCount}</strong></article>
     </div>
+    ${recommendationSection}
     <section class="subpanel">
       <h3>${t(language, "matchup.recommendedLeadTitle")}</h3>
       ${analysis.leadPairs.length
         ? `<div class="analysis-core-grid">${analysis.leadPairs.map((entry) => leadCardMarkup(entry, language)).join("")}</div>`
         : `<p class="empty-state">${t(language, "matchup.noLeadOption")}</p>`}
-    </section>
-    <section class="subpanel">
-      <h3>${t(language, "matchup.recommendedFourTitle")}</h3>
-      <article class="analysis-core-card good">
-        <div class="analysis-list-head">
-          <div class="analysis-core-members">${memberPillsMarkup(analysis.recommendedFour.members)}</div>
-          <span class="source-tag score-tag">${t(language, "matchup.lineupScore", {value: analysis.recommendedFour.score.toFixed(1)})}</span>
-        </div>
-        <p class="muted">${t(language, "matchup.recommendedFourCopy")}</p>
-      </article>
     </section>
     <section class="subpanel">
       <h3>${t(language, "matchup.speedLinesTitle")}</h3>
