@@ -31,10 +31,14 @@ body {
   margin-top: 24px;
 }
 
+.hero-actions .hero-select-field {
+  margin-left: 8px;
+}
+
 .hero-note {
   display: grid;
   gap: 10px;
-  padding: 22px 24px;
+  padding: 18px 20px;
 }
 
 #status-text {
@@ -48,7 +52,7 @@ body {
 
 .app-shell {
   grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
-  gap: 22px;
+  gap: 18px;
   padding: 0 0 32px;
   align-items: start;
 }
@@ -57,7 +61,7 @@ body {
   top: 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   max-height: calc(100vh - 48px);
   overflow: hidden;
 }
@@ -91,10 +95,10 @@ body {
   align-items: center;
   justify-content: center;
   min-width: 86px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(191, 91, 61, 0.25);
-  background: rgba(191, 91, 61, 0.08);
+  border: 1px solid rgba(47, 110, 163, 0.2);
+  background: rgba(47, 110, 163, 0.08);
   color: var(--accent);
   font-family: var(--mono-font);
   font-size: 13px;
@@ -167,7 +171,7 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .team-card .entry-main {
@@ -185,7 +189,7 @@ body {
 
 .workspace {
   min-width: 0;
-  gap: 20px;
+  gap: 16px;
 }
 
 .controls-panel {
@@ -195,10 +199,10 @@ body {
 .control-search-panel {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
   padding-right: 18px;
-  border-right: 1px solid rgba(217, 205, 185, 0.9);
+  border-right: 1px solid rgba(216, 225, 235, 0.92);
 }
 
 .controls-panel .control-grid {
@@ -246,10 +250,10 @@ body {
 }
 
 .view-tabs {
-  gap: 12px;
-  padding: 14px 18px;
-  border-bottom: 1px solid rgba(217, 205, 185, 0.9);
-  background: rgba(247, 240, 229, 0.55);
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(216, 225, 235, 0.92);
+  background: rgba(244, 247, 251, 0.72);
 }
 
 .view-tab {
@@ -258,7 +262,7 @@ body {
 
 .view-panel {
   min-height: 0;
-  padding: 20px;
+  padding: 16px;
 }
 
 .view-panel.active {
@@ -288,7 +292,7 @@ body {
 }
 
 .subpanel {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 @media (max-width: 1520px) {
@@ -330,7 +334,7 @@ body {
     padding-right: 0;
     border-right: 0;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgba(217, 205, 185, 0.9);
+    border-bottom: 1px solid rgba(216, 225, 235, 0.92);
   }
 
   .workspace-stack {
@@ -354,6 +358,11 @@ body {
 
   .hero-main {
     padding: 0;
+  }
+
+  .hero-actions .hero-select-field {
+    margin-left: 0;
+    width: 100%;
   }
 
   .team-card:not(.empty-slot) {

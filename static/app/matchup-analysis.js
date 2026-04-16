@@ -1,7 +1,7 @@
 import {calculateSpeedLineTiers} from "./data.js";
+import {buildMatchupBoard} from "./matchup-board-data.js";
 import {TYPE_CHART} from "./constants.js";
 import {getAttackBias, getUtilityRoles} from "./team-roles.js";
-
 const PREVIEW_LIMIT = 3;
 const FOUR_SELECTION_SIZE = 4;
 const DUPLICATE_WEATHER_LEAD_PENALTY = 3;
@@ -40,6 +40,12 @@ function getFastestSpeed(config) {
 }
 
 function getVariantConfigs(entry) {
+  if (entry?.selectedConfigId && Array.isArray(entry?.configs)) {
+    const selectedConfig = entry.configs.find((config) => config.id === entry.selectedConfigId);
+    if (selectedConfig) {
+      return [selectedConfig];
+    }
+  }
   return Array.isArray(entry?.configs) && entry.configs.length ? entry.configs : [entry].filter(Boolean);
 }
 
@@ -82,6 +88,8 @@ function buildMemberRef(config) {
   const variants = getVariantConfigs(config);
   return {
     id: isGroupedEntry(config) ? config.speciesId : config.id,
+    speciesId: config.speciesId || "",
+    speciesName: config.speciesName || getMemberLabel(config),
     label: getMemberLabel(config),
     note: config.note || "",
     speed: Math.max(...variants.map((entry) => Number(entry.stats?.spe || 0)), 0),
@@ -272,7 +280,7 @@ function summarizeOverview(team, opponentTeam, speedLines) {
   };
 }
 
-export function analyzeMatchup(team = [], opponentTeam = []) {
+export function analyzeMatchup(team = [], opponentTeam = [], datasets = null) {
   if (!team.length || !opponentTeam.length) {
     return null;
   }
@@ -281,11 +289,20 @@ export function analyzeMatchup(team = [], opponentTeam = []) {
     ...getTaggedTeam(opponentTeam, "opponent"),
   ]);
   const leadPairs = summarizeLeadPairs(team, opponentTeam);
+  const allyThreats = summarizeThreats(team, opponentTeam);
+  const opponentAnswers = summarizeAnswers(team, opponentTeam);
   return {
     overview: summarizeOverview(team, opponentTeam, speedLines),
     speedLines,
     leadPairs,
-    allyThreats: summarizeThreats(team, opponentTeam),
-    opponentAnswers: summarizeAnswers(team, opponentTeam),
+    allyThreats,
+    opponentAnswers,
+    board: buildMatchupBoard({
+      team,
+      opponentTeam,
+      allyThreats,
+      opponentAnswers,
+      datasets,
+    }),
   };
 }

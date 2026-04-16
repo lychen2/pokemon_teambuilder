@@ -6,6 +6,12 @@ export const DATA_PATHS = {
   abilities: "./poke_analysis-main/stats/abilities.json",
   items: "./poke_analysis-main/stats/items.json",
   championsVgc: "./poke_analysis-main/stats/champions_vgc.json",
+  pokeIconMap: "./static/poke-icons-map.json",
+};
+
+export const ICON_SCHEMES = {
+  SHOWDOWN: "showdown",
+  POKE_ICONS: "poke-icons",
 };
 
 export const TYPE_LABELS = {

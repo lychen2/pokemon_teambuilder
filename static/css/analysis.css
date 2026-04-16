@@ -1,8 +1,8 @@
 .analysis-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 0 0 18px;
+  gap: 8px;
+  margin: 0 0 14px;
 }
 
 .analysis-tab {
@@ -25,31 +25,31 @@
 .analysis-detail-panel.active {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
 .analysis-detail-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
 .analysis-list-stack,
 .analysis-role-grid,
 .analysis-core-grid {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .analysis-matrix-head,
 .analysis-matrix-row {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   align-items: stretch;
 }
 
 .analysis-matrix-head {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .analysis-matrix-column-head,
@@ -59,11 +59,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 6px;
-  border-radius: 12px;
+  min-height: 40px;
+  padding: 4px;
+  border-radius: 10px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.98);
   text-align: center;
 }
 
@@ -89,7 +89,7 @@
 
 .analysis-matrix-row-card {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .analysis-matrix-label {
@@ -97,10 +97,10 @@
   flex-direction: column;
   justify-content: center;
   gap: 4px;
-  padding: 8px 10px;
-  border-radius: 12px;
+  padding: 7px 9px;
+  border-radius: 10px;
   border: 1px solid var(--line);
-  background: rgba(247, 240, 229, 0.68);
+  background: rgba(244, 247, 251, 0.92);
   font-size: 11px;
   color: var(--muted);
 }
@@ -125,33 +125,33 @@
 
 .analysis-cover-suggestions {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .analysis-cover-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .analysis-cover-card {
   display: grid;
-  gap: 8px;
-  padding: 12px;
-  border-radius: 14px;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 12px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .recommend-controls-panel,
 .recommend-list-stack {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .recommend-card-actions {
   min-width: 92px;
-  gap: 8px;
+  gap: 6px;
 }
 
 .recommend-dismiss-button {
@@ -165,16 +165,16 @@
 .recommend-slider-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .recommend-slider-field {
   display: grid;
-  gap: 8px;
-  padding: 12px;
+  gap: 6px;
+  padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.88);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .recommend-slider-field span {
@@ -194,7 +194,15 @@
 .recommend-quality-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
+}
+
+.recommend-detail-row {
+  margin-top: 2px;
+}
+
+.recommend-detail-pill {
+  max-width: 100%;
 }
 
 .recommend-chip,
@@ -227,11 +235,11 @@
 .analysis-core-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px;
-  border-radius: 16px;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
   border: 1px solid var(--line);
-  background: white;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .analysis-list-card.good,
@@ -255,7 +263,7 @@
 .analysis-member-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .analysis-inline-pills > *,
@@ -266,7 +274,7 @@
 
 .analysis-member-pill {
   border: 1px solid var(--line);
-  background: rgba(247, 240, 229, 0.68);
+  background: rgba(244, 247, 251, 0.92);
 }
 
 .analysis-alert-pill {
@@ -299,7 +307,7 @@
 
 .analysis-core-member {
   border: 1px solid var(--line);
-  background: rgba(247, 240, 229, 0.82);
+  background: rgba(244, 247, 251, 0.96);
   color: var(--ink);
   font-weight: 600;
 }

@@ -1,5 +1,6 @@
 import {analyzeTeam} from "./analysis.js";
 import {buildSyntheticSpeedEntries} from "./champions-vgc.js";
+import {ICON_SCHEMES} from "./constants.js";
 import {calculateSpeedLineTiers, calculateSpeedTiers, loadDatasets} from "./data.js";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
 import {
@@ -16,6 +17,7 @@ import {
   validateBuilderState,
 } from "./library-builder.js";
 import {analyzeMatchup} from "./matchup-analysis.js";
+import {getSuggestedMoveNamesForSpecies} from "./matchup-board-data.js";
 import {
   buildOpponentLibrary,
   createSavedOpponentSnapshot,
@@ -45,6 +47,7 @@ const state = {
   language: DEFAULT_LANGUAGE,
   status: null,
   activeView: "library-view",
+  iconScheme: ICON_SCHEMES.SHOWDOWN,
   activeAnalysisTab: "coverage",
   activeCoreConfigId: null,
   recommendFocusType: "",
@@ -66,6 +69,7 @@ const state = {
   syntheticSpeedEntries: [],
   team: [],
   opponentTeam: [],
+  activeOpponentConfigSpeciesId: null,
   savedTeams: [],
   savedOpponentTeams: [],
   analysis: null,
@@ -95,6 +99,10 @@ const POINT_PROMPT_MAP = {
   spd: "spd",
   spe: "spe",
 };
+
+function normalizeIconScheme(iconScheme) {
+  return iconScheme === ICON_SCHEMES.POKE_ICONS ? ICON_SCHEMES.POKE_ICONS : ICON_SCHEMES.SHOWDOWN;
+}
 
 function createUniqueConfigId(baseId, usedIds) {
   let candidate = baseId;
@@ -196,6 +204,9 @@ function refreshLibraryState() {
   state.syntheticSpeedEntries = buildSyntheticSpeedEntries(state.datasets, state.library, state.language);
   state.speedLineTiers = calculateSpeedLineTiers([...state.syntheticSpeedEntries, ...state.library]);
   state.opponentTeam = syncOpponentTeam(state.opponentTeam, state.datasets, state.library, state.language);
+  if (state.activeOpponentConfigSpeciesId && !state.opponentTeam.some((entry) => entry.speciesId === state.activeOpponentConfigSpeciesId)) {
+    state.activeOpponentConfigSpeciesId = null;
+  }
   state.savedOpponentTeams = normalizeSavedOpponentTeams(state.savedOpponentTeams, state.datasets, state.library, state.language);
   refreshFilteredLibrary();
 }
@@ -219,7 +230,7 @@ function refreshBattleState() {
     recommendationPool,
     state.recommendPreferences,
   );
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
   if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
     state.activeCoreConfigId = state.team[0]?.id || null;
   }
@@ -314,10 +325,29 @@ function updateLanguageSwitch() {
   });
 }
 
+function updateIconSchemeControl() {
+  const select = document.getElementById("icon-scheme-select");
+  const note = document.getElementById("icon-scheme-note");
+  if (!select || !note) {
+    return;
+  }
+  const showdownOption = select.querySelector('option[value="showdown"]');
+  const pokeIconsOption = select.querySelector('option[value="poke-icons"]');
+  if (showdownOption) {
+    showdownOption.textContent = t(state.language, "icons.showdown");
+  }
+  if (pokeIconsOption) {
+    pokeIconsOption.textContent = t(state.language, "icons.pokeIcons");
+  }
+  select.value = state.iconScheme;
+  note.textContent = t(state.language, "icons.note");
+}
+
 function setLanguage(language, rerender = true) {
   state.language = normalizeLanguage(language);
   applyStaticTranslations(state.language);
   updateLanguageSwitch();
+  updateIconSchemeControl();
   if (state.status) {
     renderStatus(t(state.language, state.status.key, state.status.params));
   }
@@ -338,6 +368,19 @@ function setLanguage(language, rerender = true) {
   refreshDerivedState();
   renderAll();
   scheduleStatePersist();
+}
+
+function setIconScheme(iconScheme, rerender = true) {
+  const nextScheme = normalizeIconScheme(iconScheme);
+  if (nextScheme === state.iconScheme) {
+    return;
+  }
+  state.iconScheme = nextScheme;
+  updateIconSchemeControl();
+  if (rerender) {
+    renderAll();
+    scheduleStatePersist();
+  }
 }
 
 function setActiveView(viewId) {
@@ -510,7 +553,27 @@ function addOpponentSpecies(speciesId) {
   if (!opponentEntry || state.opponentTeam.length >= MAX_TEAM_SIZE) return;
   if (state.opponentTeam.some((member) => member.speciesId === opponentEntry.speciesId)) return;
   state.opponentTeam = [...state.opponentTeam, opponentEntry];
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
+  renderMatchupSection();
+  scheduleStatePersist();
+}
+
+function toggleOpponentConfigPicker(speciesId) {
+  state.activeOpponentConfigSpeciesId = state.activeOpponentConfigSpeciesId === speciesId ? null : speciesId;
+  renderMatchupSection();
+}
+
+function selectOpponentConfig(speciesId, selectedConfigId = "") {
+  state.opponentTeam = syncOpponentTeam(
+    state.opponentTeam.map((entry) => (
+      entry.speciesId === speciesId ? {...entry, selectedConfigId} : entry
+    )),
+    state.datasets,
+    state.library,
+    state.language,
+  );
+  state.activeOpponentConfigSpeciesId = null;
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
   renderMatchupSection();
   scheduleStatePersist();
 }
@@ -527,7 +590,10 @@ function removeConfig(configId) {
 
 function removeOpponentSpecies(speciesId) {
   state.opponentTeam = state.opponentTeam.filter((config) => config.speciesId !== speciesId);
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+  if (state.activeOpponentConfigSpeciesId === speciesId) {
+    state.activeOpponentConfigSpeciesId = null;
+  }
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
   renderMatchupSection();
   scheduleStatePersist();
 }
@@ -666,6 +732,20 @@ function typePillMarkup(type) {
 
 function populateDatalist(node, options) {
   node.innerHTML = options.map((value) => `<option value="${value}"></option>`).join("");
+}
+
+function buildBuilderMoveOptionValues(builder) {
+  const recommendedMoves = builder
+    ? getSuggestedMoveNamesForSpecies(builder.speciesId, state.datasets, builder.moves || [], 6)
+    : [];
+  const recommendedIds = new Set(recommendedMoves.map((moveName) => normalizeName(moveName)));
+  const moveOptions = [
+    ...recommendedMoves,
+    ...state.moveOptions.filter((moveName) => !recommendedIds.has(normalizeName(moveName))),
+  ];
+  return state.language === "zh"
+    ? moveOptions.map((moveName) => getLocalizedMoveName(moveName))
+    : moveOptions;
 }
 
 function syncSelectOptions(select, options, selectedValue, blankLabel = "") {
@@ -816,9 +896,10 @@ function renderGuidedConfigDerived() {
   if (!builder) {
     return;
   }
-  const {pointsSummary, statsGrid, moveSummary, feedback, saveButton} = getGuidedConfigElements();
+  const {pointsSummary, statsGrid, moveSummary, feedback, saveButton, moveOptions} = getGuidedConfigElements();
   const validation = validateBuilderState(builder, state.datasets);
   const stats = getBuilderStats(builder.speciesId, validation.points, builder.nature, state.datasets);
+  populateDatalist(moveOptions, buildBuilderMoveOptionValues(builder));
   pointsSummary.textContent = `${formatChampionPoints(validation.points, state.language)} · ${t(state.language, "builder.pointsSummary", {used: validation.total})}`;
   statsGrid.innerHTML = BUILDER_STATS.map((stat) => `
     <div class="builder-stat-card">
@@ -1023,7 +1104,7 @@ function initializeBuilderOptions() {
   state.itemOptionLabels = state.itemOptions.map((itemName) => getLocalizedItemName(itemName));
   state.moveOptionLabels = state.moveOptions.map((moveName) => getLocalizedMoveName(moveName));
   populateDatalist(itemOptions, state.language === "zh" ? state.itemOptionLabels : state.itemOptions);
-  populateDatalist(moveOptions, state.language === "zh" ? state.moveOptionLabels : state.moveOptions);
+  populateDatalist(moveOptions, buildBuilderMoveOptionValues(state.guidedBuilder));
 }
 
 function confirmAddConfigToLibrary(config, baseConfig, reasonKey) {
@@ -1394,6 +1475,7 @@ function loadSavedOpponentTeam(teamId) {
     return;
   }
   state.opponentTeam = loadSavedOpponentSelection(target, state.datasets, state.library, state.language);
+  state.activeOpponentConfigSpeciesId = null;
   refreshDerivedState();
   renderAll();
   scheduleStatePersist();
@@ -1454,6 +1536,10 @@ function bindEvents() {
       return;
     }
     setLanguage(button.dataset.language);
+  });
+
+  document.getElementById("icon-scheme-select").addEventListener("change", (event) => {
+    setIconScheme(event.target.value);
   });
 
   document.getElementById("library-list").addEventListener("click", (event) => {
@@ -1521,6 +1607,19 @@ function bindEvents() {
   document.getElementById("recommend-list").addEventListener("change", handleRecommendWeightCommit);
 
   document.getElementById("matchup-analysis").addEventListener("click", (event) => {
+    const toggleButton = event.target.closest("[data-toggle-opponent-config-picker]");
+    if (toggleButton) {
+      toggleOpponentConfigPicker(toggleButton.dataset.toggleOpponentConfigPicker);
+      return;
+    }
+    const selectButton = event.target.closest("[data-select-opponent-config]");
+    if (selectButton) {
+      selectOpponentConfig(
+        selectButton.dataset.selectOpponentConfig,
+        selectButton.dataset.opponentConfigId || "",
+      );
+      return;
+    }
     const dismissButton = event.target.closest("[data-dismiss-recommendation]");
     if (dismissButton) {
       dismissRecommendation(dismissButton.dataset.dismissRecommendation);
@@ -1575,6 +1674,19 @@ function bindEvents() {
   });
 
   document.getElementById("opponent-team-list").addEventListener("click", (event) => {
+    const toggleButton = event.target.closest("[data-toggle-opponent-config-picker]");
+    if (toggleButton) {
+      toggleOpponentConfigPicker(toggleButton.dataset.toggleOpponentConfigPicker);
+      return;
+    }
+    const selectButton = event.target.closest("[data-select-opponent-config]");
+    if (selectButton) {
+      selectOpponentConfig(
+        selectButton.dataset.selectOpponentConfig,
+        selectButton.dataset.opponentConfigId || "",
+      );
+      return;
+    }
     const button = event.target.closest("[data-remove-opponent-species]");
     if (button) removeOpponentSpecies(button.dataset.removeOpponentSpecies);
   });
@@ -1614,7 +1726,8 @@ function bindEvents() {
   });
   document.getElementById("clear-opponent-team-btn").addEventListener("click", () => {
     state.opponentTeam = [];
-    state.matchup = analyzeMatchup(state.team, state.opponentTeam);
+    state.activeOpponentConfigSpeciesId = null;
+    state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
     renderMatchupSection();
     scheduleStatePersist();
   });
@@ -1799,6 +1912,7 @@ function setupTooltipEvents() {
 async function initialize() {
   const persisted = loadPersistedState();
   state.language = normalizeLanguage(persisted?.language || DEFAULT_LANGUAGE);
+  state.iconScheme = normalizeIconScheme(persisted?.iconScheme);
   state.recommendPreferences = normalizeRecommendationPreferences(persisted?.recommendPreferences);
   state.recommendWeights = normalizeRecommendationWeights(persisted?.recommendWeights);
   state.dismissedRecommendationKeys = Array.isArray(persisted?.dismissedRecommendationKeys)

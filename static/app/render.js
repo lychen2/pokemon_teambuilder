@@ -2,6 +2,7 @@ import {t} from "./i18n.js";
 import {renderAnalysisView} from "./render-analysis.js";
 import {renderMatchupView} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
+import {spriteMarkup} from "./sprites.js";
 import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
@@ -15,14 +16,6 @@ function escapeHtml(text) {
 
 function getLocalizedSpeciesName(state, species) {
   return state.localizedSpeciesNames?.get(species.speciesId) || species.localizedSpeciesName || species.speciesName;
-}
-
-function spriteMarkup(config) {
-  if (!config?.spritePosition) {
-    return "";
-  }
-  const {x, y} = config.spritePosition;
-  return `<span class="sprite" style="background-position: ${-x}px ${-y}px"></span>`;
 }
 
 function itemSpriteMarkup(itemInfo) {
@@ -150,13 +143,13 @@ function teamSourceCopyMarkup(config, linkedConfig, language) {
   return `<p class="muted team-origin-copy">${t(language, "team.source.linkedCopy", {name: linkedConfig.displayLabel || linkedConfig.displayName})}</p>`;
 }
 
-function teamHeaderMarkup(config, linkedConfig, language) {
+function teamHeaderMarkup(config, linkedConfig, language, state) {
   const noteMarkup = notePillMarkup(config, language);
   const sourceMarkup = teamSourceTagMarkup(config, linkedConfig, language);
   const badges = [noteMarkup, sourceMarkup].filter(Boolean).join("");
   return `
     <div class="team-card-header">
-      <div class="entry-title team-title-row">${spriteMarkup(config)}<strong>${config.displayName}</strong></div>
+      <div class="entry-title team-title-row">${spriteMarkup(config, state)}<strong>${config.displayName}</strong></div>
       ${badges ? `<div class="entry-tags team-badge-row">${badges}</div>` : ""}
     </div>
   `;
@@ -217,7 +210,7 @@ function speciesBrowserMarkup(state) {
             data-pick-species="${species.speciesId}"
             title="${escapeHtml(getLocalizedSpeciesName(state, species))}"
           >
-            ${spriteMarkup(species)}
+            ${spriteMarkup(species, state)}
             ${species.configCount ? `<span class="species-browser-count">${species.configCount}</span>` : ""}
           </button>
         `).join("")}
@@ -276,7 +269,7 @@ export function renderLibrary(state) {
     ? activeLibrary.map((config) => `
         <article class="entry-card">
           <div class="entry-main">
-            <div class="entry-title">${spriteMarkup(config)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
+            <div class="entry-title">${spriteMarkup(config, state)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
             <div class="entry-meta">${typePills(config.types, language)}</div>
             <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
             <p class="entry-line">${formatChampionPoints(config.championPoints, language)}</p>
@@ -314,7 +307,7 @@ export function renderTeam(state) {
     return `
     <article class="team-card">
       <div class="entry-main">
-        ${teamHeaderMarkup(config, linkedConfig, language)}
+        ${teamHeaderMarkup(config, linkedConfig, language, state)}
         <div class="entry-meta">${typePills(config.types, language)}</div>
         <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
         <p class="entry-line">${formatChampionPoints(config.championPoints, language)}</p>
@@ -377,7 +370,7 @@ export function renderSpeedTiers(state) {
         <div class="entry-line entry-tags">
           ${tier.entries.map((entry) => `
             <span class="speed-entry">
-              ${spriteMarkup(entry)}
+              ${spriteMarkup(entry, state)}
               <span>${entry.speciesName || entry.displayName}</span>
             </span>
             ${entry.note ? `<span class="mini-pill speed-note-pill">${entry.note}</span>` : ""}

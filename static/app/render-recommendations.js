@@ -1,5 +1,6 @@
 import {t} from "./i18n.js";
 import {RECOMMENDATION_PREFERENCE_ITEMS, RECOMMENDATION_WEIGHT_ITEMS} from "./recommendation-preferences.js";
+import {spriteMarkup} from "./sprites.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -10,16 +11,25 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
-function spriteMarkup(config) {
-  if (!config?.spritePosition) {
-    return "";
-  }
-  const {x, y} = config.spritePosition;
-  return `<span class="sprite" style="background-position: ${-x}px ${-y}px"></span>`;
-}
-
 function noteMarkup(config) {
   return config.note ? `<span class="mini-pill">${escapeHtml(config.note)}</span>` : "";
+}
+
+function buildTextTooltipMarkup(lines = []) {
+  return `
+    <div class="tooltip-stack">
+      ${lines.map((line) => `<div class="tooltip-desc-box">${escapeHtml(line)}</div>`).join("")}
+    </div>
+  `;
+}
+
+function renderInfoPill(label, tooltipMarkup) {
+  return `
+    <span class="info-pill recommend-detail-pill" tabindex="0">
+      <span class="info-pill-label">${escapeHtml(label)}</span>
+      <span class="info-tooltip-content">${tooltipMarkup}</span>
+    </span>
+  `;
 }
 
 function renderQualityPills(config, language) {
@@ -42,6 +52,20 @@ function renderQualityPills(config, language) {
       <span class="mini-pill">${escapeHtml(t(language, "recommend.qualityMoves", {value: quality.parts.moves.toFixed(1)}))}</span>
     </div>
   `;
+}
+
+function renderRecommendationDetailPills(config, language) {
+  const detailLines = [
+    `${t(language, "recommend.reasonLabel")}: ${config.reasons.join(" / ")}`,
+    `${t(language, "recommend.helpLabel")}: ${config.weaknessHelp.join(" / ")}`,
+  ];
+  if (config.penalties?.length) {
+    detailLines.push(`${t(language, "recommend.penaltyLabel")}: ${config.penalties.join(" / ")}`);
+  }
+  return renderInfoPill(
+    t(language, "recommend.details"),
+    buildTextTooltipMarkup(detailLines),
+  );
 }
 
 function renderFocusChip(type, label, isActive) {
@@ -129,7 +153,8 @@ export function renderRecommendationControls(state) {
   `;
 }
 
-function renderRecommendationCard(config, language) {
+function renderRecommendationCard(config, state) {
+  const language = state.language;
   const isTemplate = config.recommendationAction === "configure";
   const actionMarkup = isTemplate
     ? `<button type="button" class="add-button" data-open-recommend-template="${config.id}">${t(language, "recommend.templateAction")}</button>`
@@ -138,7 +163,7 @@ function renderRecommendationCard(config, language) {
     <article class="entry-card compact recommend-card">
       <div class="entry-main">
         <div class="entry-title">
-          ${spriteMarkup(config)}
+          ${spriteMarkup(config, state)}
           <strong>${escapeHtml(config.displayName)}</strong>
           ${noteMarkup(config)}
           ${isTemplate ? `<span class="source-tag">${t(language, "recommend.templateTag")}</span>` : ""}
@@ -152,9 +177,9 @@ function renderRecommendationCard(config, language) {
           <span>${t(language, "recommend.quality", {value: config.breakdown.quality.toFixed(1)})}</span>
         </div>
         ${renderQualityPills(config, language)}
-        <p class="entry-line">${config.reasons.join(" / ")}</p>
-        ${config.penalties?.length ? `<p class="muted recommend-penalty-copy">${t(language, "recommend.penaltyLabel")}: ${escapeHtml(config.penalties.join(" / "))}</p>` : ""}
-        <p class="muted">${t(language, "recommend.help", {value: config.weaknessHelp.join(" / ")})}</p>
+        <div class="entry-tags recommend-detail-row">
+          ${renderRecommendationDetailPills(config, language)}
+        </div>
       </div>
       <div class="card-actions recommend-card-actions">
         ${actionMarkup}
@@ -176,7 +201,7 @@ export function renderRecommendationCards(state) {
     return `<p class="empty-state">${t(language, state.team.length >= 6 ? "recommend.teamFull" : "recommend.empty")}</p>`;
   }
   return state.recommendations.length
-    ? state.recommendations.map((config) => renderRecommendationCard(config, language)).join("")
+    ? state.recommendations.map((config) => renderRecommendationCard(config, state)).join("")
     : `<p class="empty-state">${t(language, "recommend.empty")}</p>`;
 }
 

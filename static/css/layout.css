@@ -57,7 +57,7 @@
 .stack-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   max-height: 920px;
   overflow: auto;
   padding-right: 4px;
@@ -74,13 +74,13 @@
 .library-subsection {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .species-browser-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .species-browser-button {
@@ -88,8 +88,8 @@
   place-items: center;
   aspect-ratio: 1;
   padding: 0;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
   position: relative;
 }
 
@@ -119,7 +119,7 @@
 .guided-config-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .guided-config-wide {
@@ -137,14 +137,14 @@
 .builder-points-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .builder-point-card {
-  padding: 12px;
-  border-radius: 16px;
+  padding: 10px;
+  border-radius: 14px;
   border: 1px solid var(--line);
-  background: white;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .builder-point-card input {
@@ -158,10 +158,10 @@
 
 .builder-stat-card {
   min-width: 88px;
-  padding: 10px 12px;
-  border-radius: 14px;
+  padding: 9px 10px;
+  border-radius: 12px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .builder-stat-value {
@@ -213,10 +213,10 @@
   position: relative;
   display: flex;
   justify-content: space-between;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 20px;
-  background: white;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.98);
   border: 1px solid var(--line);
   overflow: visible;
 }
@@ -229,26 +229,26 @@
 }
 
 .entry-card.compact {
-  padding: 14px;
+  padding: 10px;
 }
 
 .entry-main {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .card-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   align-items: stretch;
-  min-width: 112px;
+  min-width: 96px;
 }
 
 .section-head-tight {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .mini-action {
@@ -261,11 +261,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .entry-title strong {
-  font-size: 17px;
+  font-size: 15px;
   min-width: 0;
 }
 
@@ -287,7 +287,7 @@
 .entry-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .speed-entry {
@@ -323,8 +323,8 @@
 }
 
 .speed-boost-pill {
-  background: rgba(191, 91, 61, 0.12);
-  border: 1px solid rgba(191, 91, 61, 0.24);
+  background: rgba(47, 110, 163, 0.08);
+  border: 1px solid rgba(47, 110, 163, 0.18);
   color: var(--accent);
 }
 
@@ -335,7 +335,7 @@
 .team-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .team-card {
@@ -380,7 +380,7 @@
   place-items: center;
   display: grid;
   color: var(--muted);
-  background: rgba(247, 240, 229, 0.7);
+  background: rgba(244, 247, 251, 0.92);
 }
 
 .sidebar-copy {
@@ -393,8 +393,8 @@
 }
 
 .team-import-panel {
-  border-top: 1px solid rgba(217, 205, 185, 0.9);
-  border-bottom: 1px solid rgba(217, 205, 185, 0.9);
+  border-top: 1px solid rgba(216, 225, 235, 0.92);
+  border-bottom: 1px solid rgba(216, 225, 235, 0.92);
   padding-top: 16px;
   padding-bottom: 16px;
 }

@@ -66,7 +66,8 @@ export async function loadDatasets() {
     return datasetCache.value;
   }
 
-  const [pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc] = await Promise.all([
+  const [pokeIconMap, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc] = await Promise.all([
+    fetchJson(DATA_PATHS.pokeIconMap),
     fetchJson(DATA_PATHS.pokedex),
     fetchJson(DATA_PATHS.formsIndex),
     fetchJson(DATA_PATHS.moves),
@@ -89,6 +90,7 @@ export async function loadDatasets() {
     abilities: mergedAbilities,
     items: mergedItems,
     championsVgc,
+    pokeIconMap,
     availableSpecies: buildAvailableSpecies(mergedPokedex, formsIndex, championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || []),
     speciesIndex: buildSpeciesIndex(mergedPokedex),
     moveLookup: buildMoveLookup(mergedMoves),

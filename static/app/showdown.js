@@ -54,28 +54,47 @@ function buildMoveSet(moveNames, moveLookup) {
         name,
         type: "",
         category: "Status",
+        accuracy: 0,
+        basePower: 0,
         shortDesc: "",
+        flags: {},
         boosts: null,
         self: null,
         selfBoost: null,
         secondary: null,
+        recoil: null,
+        mindBlownRecoil: false,
       };
     }
     return {
       name: detail.name,
       type: detail.type,
       category: detail.category || "Status",
+      accuracy: detail.accuracy ?? 0,
+      basePower: Number(detail.basePower || 0),
       shortDesc: detail.shortDesc || "",
+      flags: detail.flags || {},
       boosts: detail.boosts || null,
       self: detail.self || null,
       selfBoost: detail.selfBoost || null,
       secondary: detail.secondary || null,
+      recoil: detail.recoil || null,
+      mindBlownRecoil: Boolean(detail.mindBlownRecoil),
     };
   });
 }
 
 function getLookupEntry(lookup, name) {
   return lookup.get(normalizeName(name)) || null;
+}
+
+function sanitizeOptionalText(value) {
+  const text = String(value || "").trim();
+  const lowered = text.toLowerCase();
+  if (!text || lowered === "undefined" || lowered === "undifine" || lowered === "null") {
+    return "";
+  }
+  return text;
 }
 
 function isMegaEntry(entry) {
@@ -157,6 +176,9 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
   const {speciesId, entry} = species;
   const moveNames = buildPersistedMoveNames(config);
   const championPoints = resolveChampionPoints(config, resolveConvertedPoint, language);
+  const note = sanitizeOptionalText(config.note);
+  const ability = sanitizeOptionalText(config.ability);
+  const item = sanitizeOptionalText(config.item);
   const evs = getChampionPointTotal(config.evs || {})
     ? {...createEmptySpread(), ...(config.evs || {})}
     : createEvsFromPoints(championPoints);
@@ -169,12 +191,12 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     nature,
   );
   const plusOneSpeed = getPlusOneSpeedData({
-    ability: config.ability || "",
+    ability,
     moves,
     stats,
   });
   const choiceScarfSpeed = getChoiceScarfSpeedData({
-    item: config.item || "",
+    item,
     stats,
   });
 
@@ -183,13 +205,13 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     speciesId,
     speciesName: entry.name,
     displayName: config.displayName || entry.name,
-    displayLabel: formatConfigName(config.displayName || entry.name, config.note || ""),
-    speciesLabel: formatConfigName(entry.name, config.note || ""),
-    note: String(config.note || "").trim(),
+    displayLabel: formatConfigName(config.displayName || entry.name, note),
+    speciesLabel: formatConfigName(entry.name, note),
+    note,
     types: entry.types || [],
     abilities: entry.abilities || {},
-    ability: config.ability || "",
-    item: config.item || "",
+    ability,
+    item,
     teraType,
     nature,
     level: Number(config.level) || fallbackLevel || FALLBACK_LEVEL,
@@ -199,8 +221,8 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     baseStats: entry.baseStats,
     spritePosition: getSpritePosition(spriteIndex),
     moves,
-    abilityInfo: getLookupEntry(context.abilityLookup, config.ability),
-    itemInfo: getLookupEntry(context.itemLookup, config.item),
+    abilityInfo: getLookupEntry(context.abilityLookup, ability),
+    itemInfo: getLookupEntry(context.itemLookup, item),
     natureInfo: getNatureSummary(nature),
     offensiveTypes: [...new Set(moves.filter((move) => move.category !== "Status").map((move) => move.type))],
     stats,

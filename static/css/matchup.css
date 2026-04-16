@@ -35,6 +35,54 @@
   gap: 6px;
 }
 
+.matchup-config-box {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.matchup-config-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.matchup-config-toggle {
+  width: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 8px;
+}
+
+.matchup-config-summary {
+  min-width: 0;
+}
+
+.matchup-config-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.matchup-config-option {
+  border: 1px solid rgba(138, 122, 106, 0.28);
+  background: rgba(244, 247, 251, 0.96);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.matchup-config-option.active,
+.matchup-config-toggle.active {
+  border-color: rgba(47, 92, 77, 0.42);
+  background: rgba(214, 233, 224, 0.92);
+}
+
 .matchup-overview {
   margin-bottom: 18px;
 }
@@ -60,6 +108,374 @@
   min-width: 0;
 }
 
+.matchup-board-panel,
+.matchup-board-layout,
+.matchup-board-column,
+.matchup-board-card-list,
+.matchup-board-entry,
+.matchup-board-speed-panel,
+.matchup-board-speed-list,
+.matchup-board-speed-row,
+.matchup-board-speed-side,
+.matchup-board-table-wrap,
+.matchup-board-move-list,
+.matchup-board-summary {
+  min-width: 0;
+}
+
+.matchup-board-panel {
+  overflow: hidden;
+}
+
+.matchup-board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 220px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.matchup-board-column,
+.matchup-board-speed-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.matchup-board-column-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.matchup-board-card-list,
+.matchup-board-speed-list {
+  display: grid;
+  gap: 8px;
+}
+
+.matchup-board-entry {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.matchup-board-entry-ally {
+  grid-template-columns: 58px minmax(0, 1fr);
+}
+
+.matchup-board-entry-opponent {
+  grid-template-columns: minmax(0, 1fr) 58px;
+}
+
+.matchup-board-side-rail,
+.matchup-board-side-main {
+  min-width: 0;
+}
+
+.matchup-board-side-rail {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 6px;
+  padding: 4px 2px;
+}
+
+.matchup-board-side-sprite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(138, 122, 106, 0.16);
+  background: rgba(244, 247, 251, 0.96);
+}
+
+.matchup-board-side-name {
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: center;
+  word-break: break-word;
+}
+
+.matchup-board-side-types {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.matchup-board-side-types .pill {
+  padding: 3px 7px;
+  font-size: 10px;
+}
+
+.matchup-board-side-main {
+  display: grid;
+  gap: 6px;
+}
+
+.matchup-board-side-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.matchup-board-side-head-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.matchup-board-side-head-copy strong {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.matchup-board-side-head-copy .muted {
+  font-size: 11px;
+}
+
+.matchup-board-side-meta-spacer {
+  min-width: 0;
+}
+
+.matchup-board-table-wrap {
+  overflow-x: auto;
+  border-top: 1px solid rgba(138, 122, 106, 0.12);
+  border-bottom: 1px solid rgba(138, 122, 106, 0.12);
+  padding: 6px 0;
+}
+
+.matchup-board-move-head,
+.matchup-board-move-row {
+  display: grid;
+  grid-template-columns: minmax(92px, 118px) minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.matchup-board-move-head {
+  margin-bottom: 4px;
+}
+
+.matchup-board-move-corner {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.matchup-board-targets,
+.matchup-board-move-hits {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(24px, 1fr));
+  gap: 4px;
+  min-width: 176px;
+}
+
+.matchup-board-target,
+.matchup-board-hit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid rgba(138, 122, 106, 0.16);
+  background: rgba(244, 247, 251, 0.92);
+}
+
+.matchup-board-hit {
+  font-family: var(--mono-font);
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.matchup-board-move-list {
+  display: grid;
+  gap: 4px;
+}
+
+.matchup-board-move-row {
+  padding-top: 2px;
+}
+
+.matchup-board-move-row + .matchup-board-move-row {
+  border-top: 1px solid rgba(138, 122, 106, 0.08);
+}
+
+.matchup-board-move-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.matchup-board-move-name strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.matchup-board-move-type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  font-size: 10px;
+  color: white;
+}
+
+.matchup-board-speed-copy {
+  margin: -2px 0 0;
+  font-size: 12px;
+}
+
+.matchup-board-speed-panel {
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(244, 247, 251, 0.92);
+}
+
+.matchup-board-speed-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.matchup-board-speed-row.single {
+  grid-template-columns: 1fr;
+}
+
+.matchup-board-speed-side {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+  padding: 6px 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(138, 122, 106, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.matchup-board-speed-side-opponent {
+  grid-template-columns: minmax(0, 1fr) 26px;
+}
+
+.matchup-board-speed-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matchup-board-speed-side-opponent .matchup-board-speed-avatar {
+  order: 2;
+}
+
+.matchup-board-speed-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+.matchup-board-speed-side-ally .matchup-board-speed-stats {
+  justify-content: flex-start;
+}
+
+.matchup-board-speed-side-opponent .matchup-board-speed-stats {
+  justify-content: flex-end;
+}
+
+.matchup-board-speed-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 2px 4px;
+  border-radius: 999px;
+  font-family: var(--mono-font);
+  font-size: 11px;
+  color: #2f6ea3;
+  background: rgba(213, 230, 243, 0.92);
+}
+
+.matchup-board-speed-side-opponent .matchup-board-speed-number {
+  color: #b15952;
+  background: rgba(245, 224, 221, 0.95);
+}
+
+.matchup-board-speed-number-top {
+  font-weight: 700;
+}
+
+.matchup-board-summary {
+  display: grid;
+  gap: 4px;
+}
+
+.matchup-board-summary .analysis-label {
+  font-size: 11px;
+}
+
+.matchup-board-summary .entry-tags {
+  display: grid;
+  gap: 4px;
+}
+
+.matchup-board-summary-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.matchup-board-summary-name {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.matchup-board-summary-pill {
+  max-width: 100%;
+  justify-content: flex-start;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-family: var(--mono-font);
+}
+
+.matchup-board-config-box {
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  justify-items: end;
+}
+
+.matchup-board-config-head {
+  width: auto;
+  justify-content: flex-end;
+}
+
+@media (max-width: 1180px) {
+  .matchup-board-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .matchup-board-speed-panel {
+    grid-column: 1 / -1;
+  }
+
+  .matchup-board-speed-list {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
   .matchup-picker-panel {
     max-height: none;
@@ -72,5 +488,33 @@
 
   .matchup-picker-card {
     grid-template-columns: 1fr;
+  }
+
+  .matchup-board-layout,
+  .matchup-board-speed-list {
+    grid-template-columns: 1fr;
+  }
+
+  .matchup-board-speed-row {
+    grid-template-columns: 1fr;
+  }
+
+  .matchup-board-entry-ally,
+  .matchup-board-entry-opponent {
+    grid-template-columns: 1fr;
+  }
+
+  .matchup-board-entry-opponent .matchup-board-side-rail {
+    order: -1;
+  }
+
+  .matchup-board-move-head,
+  .matchup-board-move-row {
+    grid-template-columns: 1fr;
+  }
+
+  .matchup-board-targets,
+  .matchup-board-move-hits {
+    min-width: 260px;
   }
 }

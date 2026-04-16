@@ -1,6 +1,8 @@
 import {t} from "./i18n.js";
 import {filterOpponentLibrary, getOpponentVariantCount} from "./matchup-selection.js";
+import {renderMatchupBoard} from "./render-matchup-board.js";
 import {renderRecommendationListOnly} from "./render-recommendations.js";
+import {spriteMarkup} from "./sprites.js";
 import {getTypeLabel} from "./utils.js";
 
 const CONFIG_PREVIEW_LIMIT = 3;
@@ -12,14 +14,6 @@ function escapeHtml(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
-}
-
-function spriteMarkup(config) {
-  if (!config?.spritePosition) {
-    return "";
-  }
-  const {x, y} = config.spritePosition;
-  return `<span class="sprite" style="background-position: ${-x}px ${-y}px"></span>`;
 }
 
 function getTypeClassName(type) {
@@ -51,34 +45,6 @@ function sideTagMarkup(entry, language) {
   const sideKey = entry.matchupSide === "opponent" ? "matchup.side.opponent" : "matchup.side.ally";
   const sideClass = entry.matchupSide === "opponent" ? "analysis-alert-pill" : "analysis-good-pill";
   return `<span class="mini-pill ${sideClass}">${escapeHtml(t(language, sideKey))}</span>`;
-}
-
-function getResistanceTooltip(entry, language) {
-  const value = Number(entry.resistance || 0);
-  const toneKey = value === 0
-    ? "matchup.resistanceTooltipZero"
-    : value < 1
-      ? "matchup.resistanceTooltipLow"
-      : value > 1
-        ? "matchup.resistanceTooltipHigh"
-        : "matchup.resistanceTooltipNeutral";
-  return `${t(language, "matchup.resistanceTooltipCommon")} ${t(language, toneKey)}`;
-}
-
-function threatPillMarkup(entry, language) {
-  return `
-    <span class="speed-analysis-ref">
-      <span class="mini-pill speed-analysis-name">${escapeHtml(entry.member.label)}</span>
-      ${entry.member.variantCount > 1 ? `<span class="mini-pill">${t(language, "matchup.variantCount", {count: entry.member.variantCount})}</span>` : ""}
-      <span class="mini-pill">${t(language, "matchup.effectiveness", {value: entry.effectiveness.toFixed(1)})}</span>
-      <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
-      ${"resistance" in entry ? renderTooltipPill(
-        t(language, "matchup.resistance", {value: entry.resistance.toFixed(1)}),
-        getResistanceTooltip(entry, language),
-        language,
-      ) : ""}
-    </span>
-  `;
 }
 
 function buildConfigSummary(labels = []) {
@@ -124,21 +90,75 @@ function quickPickSpriteMarkup(entry, state) {
       title="${escapeHtml(titleParts.filter(Boolean).join(" · "))}"
       aria-pressed="${selected ? "true" : "false"}"
     >
-      ${spriteMarkup(entry)}
+      ${spriteMarkup(entry, state)}
       ${variantCount > 1 ? `<span class="species-browser-count">${variantCount}</span>` : ""}
     </button>
   `;
 }
 
-function opponentCardMarkup(entry, language) {
+function configOptionMarkup(entry, config, language, isSelected) {
+  const label = config?.displayLabel || config?.displayName || config?.speciesName || t(language, "common.unknown");
+  return `
+    <button
+      type="button"
+      class="matchup-config-option ${isSelected ? "active" : ""}"
+      data-select-opponent-config="${entry.speciesId}"
+      data-opponent-config-id="${escapeHtml(config?.id || "")}"
+      aria-pressed="${isSelected ? "true" : "false"}"
+    >${escapeHtml(label)}</button>
+  `;
+}
+
+function configPickerMarkup(entry, state, variantCount, language) {
+  if (variantCount <= 1) {
+    return "";
+  }
+  const pickerOpen = state.activeOpponentConfigSpeciesId === entry.speciesId;
+  const currentLabel = entry.selectedConfigLabel || t(language, "matchup.allConfigs");
+  const summaryLabel = entry.selectedConfigId
+    ? t(language, "matchup.currentConfigLocked", {name: currentLabel})
+    : t(language, "matchup.currentConfigAll");
+  const optionsMarkup = !pickerOpen
+    ? ""
+    : `
+      <div class="matchup-config-picker" role="group" aria-label="${escapeHtml(t(language, "matchup.selectConfig"))}">
+        <button
+          type="button"
+          class="matchup-config-option ${entry.selectedConfigId ? "" : "active"}"
+          data-select-opponent-config="${entry.speciesId}"
+          data-opponent-config-id=""
+          aria-pressed="${entry.selectedConfigId ? "false" : "true"}"
+        >${t(language, "matchup.allConfigs")}</button>
+        ${entry.configs.map((config) => configOptionMarkup(entry, config, language, config.id === entry.selectedConfigId)).join("")}
+      </div>
+    `;
+  return `
+    <div class="matchup-config-box">
+      <div class="matchup-config-head">
+        <button
+          type="button"
+          class="ghost-button mini-action matchup-config-toggle ${pickerOpen ? "active" : ""}"
+          data-toggle-opponent-config-picker="${entry.speciesId}"
+          aria-expanded="${pickerOpen ? "true" : "false"}"
+        >${t(language, "matchup.variantCount", {count: variantCount})}</button>
+        <span class="muted matchup-config-summary">${escapeHtml(summaryLabel)}</span>
+      </div>
+      ${optionsMarkup}
+    </div>
+  `;
+}
+
+function opponentCardMarkup(entry, state) {
+  const language = state.language;
   const variantCount = getOpponentVariantCount(entry);
   return `
     <article class="team-card">
       <div class="entry-main">
-        <div class="entry-title">${spriteMarkup(entry)}<strong>${escapeHtml(entry.speciesName)}</strong><span class="source-tag">${t(language, "matchup.variantCount", {count: variantCount})}</span></div>
+        <div class="entry-title">${spriteMarkup(entry, state)}<strong>${escapeHtml(entry.speciesName)}</strong></div>
         <div class="entry-meta">${typePills(entry.types, language)}</div>
         <p class="muted">${buildConfigSummary(entry.labels)}</p>
         <p class="muted">${buildSpeedSummary(entry, language)}</p>
+        ${configPickerMarkup(entry, state, variantCount, language)}
       </div>
       <button type="button" class="ghost-button danger-button sidebar-action" data-remove-opponent-species="${entry.speciesId}">${t(language, "team.remove")}</button>
     </article>
@@ -199,21 +219,7 @@ function leadCardMarkup(entry, language) {
   `;
 }
 
-function threatCardMarkup(title, entries, language) {
-  return `
-    <article class="analysis-list-card">
-      <div class="analysis-list-head">
-        <strong>${escapeHtml(title)}</strong>
-        <span class="source-tag">${entries.length}</span>
-      </div>
-      <div class="entry-line entry-tags">
-        ${entries.length ? entries.map((entry) => threatPillMarkup(entry, language)).join("") : `<span class="muted">${t(language, "common.none")}</span>`}
-      </div>
-    </article>
-  `;
-}
-
-function speedLineCardMarkup(tier, language) {
+function speedLineCardMarkup(tier, language, state) {
   return `
     <article class="entry-card compact">
       <div class="entry-main">
@@ -221,7 +227,7 @@ function speedLineCardMarkup(tier, language) {
         <div class="entry-line entry-tags">
           ${tier.entries.map((entry) => `
             <span class="speed-entry">
-              ${spriteMarkup(entry)}
+              ${spriteMarkup(entry, state)}
               <span>${escapeHtml(entry.displayLabel || entry.displayName || entry.speciesName)}</span>
             </span>
             ${speedModePillMarkup(entry, language)}
@@ -237,7 +243,7 @@ function renderBuilder(state) {
   const language = state.language;
   const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch);
   document.getElementById("opponent-team-list").innerHTML = state.opponentTeam.length
-    ? state.opponentTeam.map((entry) => opponentCardMarkup(entry, language)).join("")
+    ? state.opponentTeam.map((entry) => opponentCardMarkup(entry, state)).join("")
     : `<div class="team-card empty-slot">${t(language, "matchup.opponentPlaceholder")}</div>`;
   document.getElementById("saved-opponent-list").innerHTML = state.savedOpponentTeams.length
     ? state.savedOpponentTeams.map((entry) => savedOpponentCardMarkup(entry, language)).join("")
@@ -294,18 +300,9 @@ function renderAnalysis(state) {
     </section>
     <section class="subpanel">
       <h3>${t(language, "matchup.speedLinesTitle")}</h3>
-      <div class="stack-list compact-list">${analysis.speedLines.map((tier) => speedLineCardMarkup(tier, language)).join("")}</div>
+      <div class="stack-list compact-list">${analysis.speedLines.map((tier) => speedLineCardMarkup(tier, language, state)).join("")}</div>
     </section>
-    <div class="analysis-detail-grid">
-      <section class="subpanel">
-        <h3>${t(language, "matchup.fearsTitle")}</h3>
-        <div class="analysis-list-stack">${analysis.allyThreats.map((entry) => threatCardMarkup(entry.member.label, entry.threats, language)).join("")}</div>
-      </section>
-      <section class="subpanel">
-        <h3>${t(language, "matchup.answersTitle")}</h3>
-        <div class="analysis-list-stack">${analysis.opponentAnswers.map((entry) => threatCardMarkup(entry.member.label, entry.answers, language)).join("")}</div>
-      </section>
-    </div>
+    ${renderMatchupBoard(analysis.board, state)}
   `;
 }
 

@@ -3,9 +3,10 @@ import {SCORE_WEIGHTS, TYPE_ORDER} from "./constants.js";
 import {analyzeTeam, getCoverageProfile, getResistanceProfile} from "./analysis.js";
 import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
 import {t} from "./i18n.js";
+import {getSuggestedMoveNamesForSpecies} from "./matchup-board-data.js";
 import {normalizeRecommendationPreferences} from "./recommendation-preferences.js";
 import {RECOMMENDATION_ROLE_IDS, getAttackBias, getUtilityRoles, hasMove} from "./team-roles.js";
-import {clamp, getTypeLabel, isMegaConfig} from "./utils.js";
+import {clamp, getTypeLabel, isMegaConfig, normalizeName} from "./utils.js";
 
 const SUPPORT_MOVES_PER_MEMBER_TARGET = 1.5;
 const THREAT_COVER_SCORE = 3;
@@ -38,6 +39,11 @@ const QUALITY_ABILITY_CAP = 0.45;
 const QUALITY_ROLE_CAP = 0.8;
 const QUALITY_MOVE_CAP = 0.6;
 const QUALITY_KEYS = Object.freeze(["hp", "atk", "def", "spa", "spd", "spe"]);
+const SUPPLEMENTAL_STAB_WEIGHT = 0.45;
+const SUPPLEMENTAL_NON_STAB_WEIGHT = 0.12;
+const SUPPLEMENTAL_COVERAGE_BONUS = 1.1;
+const SUPPLEMENTAL_NEUTRAL_BONUS = 0.3;
+const SUPPLEMENTAL_COVERAGE_CAP = 1.8;
 
 function countCoveredEntries(speedTiers, predicate) {
   return speedTiers.filter(predicate).reduce((sum, tier) => sum + tier.totalCount, 0);
@@ -93,16 +99,80 @@ function scoreResistance(candidate, analysis, preferences, focusType = "") {
   return clamp(total + focusBonus, 0, SCORE_WEIGHTS.resistance);
 }
 
-function scoreCoverage(candidate, analysis) {
+function getConfiguredAttackMoves(candidate) {
+  return (candidate.moves || []).filter((move) => move.category !== "Status" && Number(move.basePower || 0) > 0);
+}
+
+function getSupplementalSlotFactor(candidate) {
+  const totalMoves = Math.max(candidate.moveNames?.length || 0, candidate.moves?.length || 0);
+  const attackCount = getConfiguredAttackMoves(candidate).length;
+  const emptySlots = Math.max(0, 4 - totalMoves);
+  const supportSlots = Math.max(0, totalMoves - attackCount);
+  return clamp(0.12 + emptySlots * 0.22 + supportSlots * 0.1, 0.12, 0.55);
+}
+
+function buildSupplementalCoverage(candidate, datasets) {
+  if (!datasets?.moveLookup || !candidate?.speciesId) {
+    return null;
+  }
+  const selectedMoveNames = candidate.moveNames || (candidate.moves || []).map((move) => move.name).filter(Boolean);
+  const suggestedMoveNames = getSuggestedMoveNamesForSpecies(candidate.speciesId, datasets, selectedMoveNames, 6);
+  if (!suggestedMoveNames.length) {
+    return null;
+  }
+  const slotFactor = getSupplementalSlotFactor(candidate);
+  const coverage = Object.fromEntries(TYPE_ORDER.map((type) => [type, {multiplier: 0, weight: 0}]));
+  suggestedMoveNames.forEach((moveName) => {
+    const move = datasets.moveLookup.get(normalizeName(moveName));
+    if (!move?.type) {
+      return;
+    }
+    const isStab = (candidate.types || []).includes(move.type);
+    const moveWeight = slotFactor * (isStab ? SUPPLEMENTAL_STAB_WEIGHT : SUPPLEMENTAL_NON_STAB_WEIGHT);
+    const moveCoverage = getCoverageProfile([move.type]);
+    TYPE_ORDER.forEach((defendType) => {
+      const multiplier = moveCoverage[defendType] || 0;
+      const current = coverage[defendType];
+      if (
+        multiplier * moveWeight > current.multiplier * current.weight
+        || (
+          multiplier * moveWeight === current.multiplier * current.weight
+          && multiplier > current.multiplier
+        )
+      ) {
+        coverage[defendType] = {multiplier, weight: moveWeight};
+      }
+    });
+  });
+  return coverage;
+}
+
+function scoreCoverage(candidate, analysis, datasets) {
   const current = Object.fromEntries(analysis.offensive.map((entry) => [entry.type, entry.effectiveness]));
   const next = getCoverageProfile(candidate.offensiveTypes || []);
-  const total = TYPE_ORDER.reduce((score, type) => {
+  const supplemental = buildSupplementalCoverage(candidate, datasets);
+  const directScore = TYPE_ORDER.reduce((score, type) => {
     if ((next[type] || 0) <= (current[type] || 0)) return score;
     if ((current[type] || 0) <= 1 && (next[type] || 0) >= 2) return score + 2;
     if ((current[type] || 0) < 4 && (next[type] || 0) === 4) return score + 1.5;
     return score + 1;
   }, 0);
-  return clamp(total, 0, SCORE_WEIGHTS.coverage);
+  const supplementalScore = supplemental
+    ? TYPE_ORDER.reduce((score, type) => {
+      const suggested = supplemental[type];
+      if (!suggested || suggested.multiplier <= Math.max(current[type] || 0, next[type] || 0)) {
+        return score;
+      }
+      if ((current[type] || 0) <= 1 && suggested.multiplier >= 2) {
+        return score + suggested.weight * SUPPLEMENTAL_COVERAGE_BONUS;
+      }
+      if ((current[type] || 0) < 1 && suggested.multiplier >= 1) {
+        return score + suggested.weight * SUPPLEMENTAL_NEUTRAL_BONUS;
+      }
+      return score;
+    }, 0)
+    : 0;
+  return clamp(directScore + Math.min(supplementalScore, SUPPLEMENTAL_COVERAGE_CAP), 0, SCORE_WEIGHTS.coverage);
 }
 
 function scoreStandardSpeed(candidate, speedTiers) {
@@ -297,7 +367,7 @@ function buildPenalties(candidate, team, analysis, language, focusType = "") {
   return penalties.slice(0, 2);
 }
 
-function buildRecommendationEntry(candidate, team, analysis, speedTiers, language, preferences, weights, focusType = "") {
+function buildRecommendationEntry(candidate, team, analysis, speedTiers, language, preferences, weights, datasets, focusType = "") {
   const coverSummary = getCoverSummary(candidate, analysis);
   const qualityBreakdown = buildQualityBreakdown(candidate);
   const breakdown = {
@@ -307,7 +377,7 @@ function buildRecommendationEntry(candidate, team, analysis, speedTiers, languag
       0,
       SCORE_WEIGHTS.resistance,
     ),
-    coverage: scoreCoverage(candidate, analysis),
+    coverage: scoreCoverage(candidate, analysis, datasets),
     speed: scoreSpeed(candidate, speedTiers, analysis, preferences, weights),
     synergy: scoreSynergy(team, candidate, analysis, preferences, weights),
     quality: qualityBreakdown.total,
@@ -345,7 +415,7 @@ function buildTemplateRecommendations(library, team, datasets, analysis, speedTi
         return null;
       }
       const bestTemplate = templates
-        .map((template) => buildRecommendationEntry(template, team, analysis, speedTiers, language, preferences, weights, focusType))
+        .map((template) => buildRecommendationEntry(template, team, analysis, speedTiers, language, preferences, weights, datasets, focusType))
         .sort((left, right) => right.recommendationScore - left.recommendationScore)[0];
       if (!bestTemplate) {
         return null;
@@ -375,7 +445,7 @@ export function recommendConfigs(library, team, speedTiers, language = "zh", opt
     .filter((candidate) => !currentSpecies.has(candidate.speciesId))
     .filter((candidate) => !(megaCount >= MAX_TEAM_MEGAS && isMegaConfig(candidate)))
     .map((candidate) => ({
-      ...buildRecommendationEntry(candidate, team, analysis, speedTiers, language, recommendPreferences, recommendWeights, focusType),
+      ...buildRecommendationEntry(candidate, team, analysis, speedTiers, language, recommendPreferences, recommendWeights, options.datasets, focusType),
       recommendationSource: "library",
       recommendationAction: "add",
     }));

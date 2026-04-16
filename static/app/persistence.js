@@ -38,8 +38,12 @@ export function persistState(state) {
     const payload = {
       library: state.library,
       team: state.team,
-      opponentTeam: state.opponentTeam.map((entry) => ({speciesId: entry.speciesId})),
+      opponentTeam: state.opponentTeam.map((entry) => ({
+        speciesId: entry.speciesId,
+        selectedConfigId: entry.selectedConfigId || "",
+      })),
       activeView: state.activeView,
+      iconScheme: state.iconScheme,
       recommendPreferences: state.recommendPreferences,
       recommendWeights: state.recommendWeights,
       dismissedRecommendationKeys: state.dismissedRecommendationKeys,
