@@ -83,12 +83,13 @@ export const NATURE_EFFECTS = {
 };
 
 export const SCORE_WEIGHTS = {
-  resistance: 12,
-  coverage: 12,
-  speed: 6,
-  synergy: 6,
+  resistance: 10,
+  coverage: 8,
+  focus: 4,
+  speed: 4,
+  synergy: 5,
   teammates: 4,
-  quality: 4,
+  quality: 3,
 };
 
 export const CHAMPION_TOTAL_POINTS = 66;

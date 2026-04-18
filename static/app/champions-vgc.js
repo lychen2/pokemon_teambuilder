@@ -2,6 +2,7 @@ import {FALLBACK_LEVEL} from "./constants.js";
 import {t} from "./i18n.js";
 import {getSpeedBoostAbilityNames} from "./speed.js";
 import {hydrateConfigs} from "./showdown.js";
+import {getUsageReferenceMoveEntries} from "./usage.js";
 import {compareSpeciesByDex, normalizeName} from "./utils.js";
 
 const FASTEST_TEMPLATE_ID = "fastest";
@@ -42,7 +43,15 @@ function getNature(baseStats = {}, templateId) {
   return isPhysical ? "Brave" : "Quiet";
 }
 
-function createTemplateSeed(species, language, templateId) {
+function getTemplateMoveNames(speciesId, datasets) {
+  return getUsageReferenceMoveEntries(speciesId, datasets, {
+    minShare: 0.1,
+    topLimit: 6,
+    finalLimit: 4,
+  }).map((entry) => entry.name);
+}
+
+function createTemplateSeed(species, datasets, language, templateId) {
   return {
     id: `template:${species.speciesId}:${templateId}`,
     source: "template",
@@ -56,7 +65,7 @@ function createTemplateSeed(species, language, templateId) {
     note: t(language, templateId === FASTEST_TEMPLATE_ID ? "library.templateFastest" : "library.templateSlowest"),
     level: FALLBACK_LEVEL,
     championPoints: buildChampionPoints(species.baseStats, templateId),
-    moveNames: [],
+    moveNames: getTemplateMoveNames(species.speciesId, datasets),
     teammates: {},
     usage: 0,
   };
@@ -85,8 +94,8 @@ function createAbilityBoostTemplate(fastestTemplate, species, language) {
 }
 
 function createTemplateGroup(species, datasets, language) {
-  const fastest = hydrateTemplate(createTemplateSeed(species, language, FASTEST_TEMPLATE_ID), datasets);
-  const slowest = hydrateTemplate(createTemplateSeed(species, language, SLOWEST_TEMPLATE_ID), datasets);
+  const fastest = hydrateTemplate(createTemplateSeed(species, datasets, language, FASTEST_TEMPLATE_ID), datasets);
+  const slowest = hydrateTemplate(createTemplateSeed(species, datasets, language, SLOWEST_TEMPLATE_ID), datasets);
   if (!fastest || !slowest) {
     return null;
   }

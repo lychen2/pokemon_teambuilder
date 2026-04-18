@@ -160,6 +160,31 @@ function speedSummaryMarkup(config, language) {
   return parts.join(" · ");
 }
 
+function teamProgressBadgeMarkup(teamSize, language) {
+  const dots = Array.from({length: 6}, (_, index) => `
+    <span class="count-badge-dot ${index < teamSize ? "filled" : ""}"></span>
+  `).join("");
+  return `
+    <span class="count-badge-dots" aria-hidden="true">${dots}</span>
+    <span class="count-badge-value">${teamSize} / 6</span>
+    <span class="sr-only">${t(language, "team.progressLabel", {count: teamSize})}</span>
+  `;
+}
+
+function teamEmptyMarkup(language) {
+  return `
+    <article class="entry-card compact team-empty-card">
+      <div class="entry-main">
+        <div class="entry-title"><strong>${t(language, "team.emptyTitle")}</strong></div>
+        <p class="muted">${t(language, "team.emptyCopy")}</p>
+      </div>
+      <div class="card-actions">
+        <button type="button" class="add-button" data-open-team-import="true">${t(language, "team.openImport")}</button>
+      </div>
+    </article>
+  `;
+}
+
 function teamHeaderMarkup(config, linkedConfig, language, state) {
   const noteMarkup = notePillMarkup(config, language);
   const sourceMarkup = teamSourceTagMarkup(config, linkedConfig, language);
@@ -316,9 +341,14 @@ export function renderTeam(state) {
   const language = state.language;
   const badge = document.getElementById("team-count-badge");
   if (badge) {
-    badge.textContent = `${state.team.length} / 6`;
+    badge.innerHTML = teamProgressBadgeMarkup(state.team.length, language);
+    badge.setAttribute("aria-label", t(language, "team.progressLabel", {count: state.team.length}));
   }
   const emptySlots = Math.max(0, 6 - state.team.length);
+  const savedTeamCount = document.getElementById("saved-team-count");
+  if (savedTeamCount) {
+    savedTeamCount.textContent = String(state.savedTeams.length);
+  }
   const teamMarkup = state.team.map((config) => {
     const linkedConfig = getLinkedConfig(config, state.library);
     return `
@@ -341,14 +371,27 @@ export function renderTeam(state) {
   `;
   }).join("");
   const placeholders = Array.from({length: emptySlots}, () => `<div class="team-card empty-slot">${t(language, "team.placeholder")}</div>`).join("");
-  document.getElementById("team-list").innerHTML = teamMarkup + placeholders;
+  document.getElementById("team-list").innerHTML = state.team.length
+    ? teamMarkup + placeholders
+    : teamEmptyMarkup(language);
 }
 
 export function renderSavedTeams(state) {
   const language = state.language;
   const list = document.getElementById("saved-team-list");
-  list.innerHTML = state.savedTeams.length
-    ? state.savedTeams.map((team) => `
+  const savedTeamCount = document.getElementById("saved-team-count");
+  if (savedTeamCount) {
+    savedTeamCount.textContent = String(state.savedTeams.length);
+  }
+  const query = normalizeName(state.savedTeamSearch || "");
+  const filteredTeams = state.savedTeams.filter((team) => {
+    if (!query) {
+      return true;
+    }
+    return normalizeName([team.name, ...(team.labels || [])].join(" ")).includes(query);
+  });
+  list.innerHTML = filteredTeams.length
+    ? filteredTeams.map((team) => `
         <article class="entry-card compact saved-team-card">
           <div class="entry-main">
             <div class="entry-title"><strong>${team.name}</strong><span class="source-tag">${(team.configs || team.configIds || []).length} / 6</span></div>
@@ -360,7 +403,7 @@ export function renderSavedTeams(state) {
           </div>
         </article>
       `).join("")
-    : `<p class="empty-state">${t(language, "saved.empty")}</p>`;
+    : `<p class="empty-state">${t(language, state.savedTeams.length ? "saved.filteredEmpty" : "saved.empty")}</p>`;
 }
 
 export function renderAnalysis(state) {

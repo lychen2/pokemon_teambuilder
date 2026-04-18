@@ -159,6 +159,9 @@ export function renderRecommendationControls(state) {
 function renderRecommendationCard(config, state) {
   const language = state.language;
   const isTemplate = config.recommendationAction === "configure";
+  const focusScoreMarkup = state.recommendFocusType
+    ? `<span>${t(language, "recommend.focus", {value: config.breakdown.focus.toFixed(1)})}</span>`
+    : "";
   const actionMarkup = isTemplate
     ? `<button type="button" class="add-button" data-open-recommend-template="${config.id}">${t(language, "recommend.templateAction")}</button>`
     : `<button type="button" class="add-button" data-add-config="${config.id}">${t(language, "library.add")}</button>`;
@@ -175,6 +178,7 @@ function renderRecommendationCard(config, state) {
         <div class="score-row">
           <span>${t(language, "recommend.resistance", {value: config.breakdown.resistance.toFixed(1)})}</span>
           <span>${t(language, "recommend.coverage", {value: config.breakdown.coverage.toFixed(1)})}</span>
+          ${focusScoreMarkup}
           <span>${t(language, "recommend.speed", {value: config.breakdown.speed.toFixed(1)})}</span>
           <span>${t(language, "recommend.synergy", {value: config.breakdown.synergy.toFixed(1)})}</span>
           <span>${t(language, "recommend.teammates", {value: config.breakdown.teammates.toFixed(1)})}</span>

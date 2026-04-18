@@ -16,7 +16,7 @@
 .matchup-picker-panel {
   display: flex;
   flex-direction: column;
-  max-height: min(720px, calc(100vh - 260px));
+  max-height: min(720px, calc(100dvh - 260px));
 }
 
 .matchup-picker-list {
@@ -462,7 +462,7 @@
   justify-content: flex-end;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .matchup-board-layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -476,7 +476,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .matchup-picker-panel {
     max-height: none;
   }

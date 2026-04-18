@@ -29,8 +29,8 @@
           <label class="hero-select-field">
             <span id="icon-scheme-label" class="hero-label" data-i18n="icons.label">图标方案</span>
             <select id="icon-scheme-select" aria-labelledby="icon-scheme-label">
-              <option value="showdown"></option>
-              <option value="poke-icons"></option>
+              <option value="showdown">Showdown 雪碧图</option>
+              <option value="poke-icons">Poke Icons</option>
             </select>
           </label>
           <p id="icon-scheme-note" class="hero-select-note muted"></p>
@@ -46,44 +46,80 @@
 
     <main class="app-shell">
       <aside class="panel team-sidebar">
-        <div class="sidebar-block sidebar-team-block">
+        <div class="team-sidebar-header">
           <div class="section-head sidebar-main-head">
             <div>
-              <p class="eyebrow sidebar-eyebrow" data-i18n="team.eyebrow">Team Workspace</p>
               <h2 data-i18n="team.title">当前队伍</h2>
+              <p class="muted sidebar-copy" data-i18n="team.shared">队伍在配置库、分析、推荐和速度线页面之间共享。</p>
             </div>
-            <div id="team-count-badge" class="count-badge">0 / 6</div>
+            <div id="team-count-badge" class="count-badge" aria-live="polite">0 / 6</div>
           </div>
-          <p class="muted sidebar-copy" data-i18n="team.shared">队伍在配置库、分析、推荐和速度线页面之间共享。</p>
           <div class="action-row sidebar-actions">
             <button id="export-team-btn" type="button" class="ghost-button" data-i18n="team.export">导出队伍</button>
-            <button id="clear-team-btn" type="button" class="ghost-button" data-i18n="team.clear">清空队伍</button>
+            <button id="sidebar-save-team-btn" type="button" class="add-button sidebar-primary-action" data-i18n="team.saveShortcut">保存为…</button>
+            <button id="clear-team-btn" type="button" class="ghost-button danger-button" data-i18n="team.clear">清空队伍</button>
           </div>
-          <div id="team-list" class="team-grid"></div>
         </div>
 
-        <details class="sidebar-block team-import-panel">
-          <summary class="team-import-summary">
-            <span data-i18n="team.importTitle">队伍代码直导</span>
-          </summary>
-          <div class="team-import-body">
-            <p class="muted" data-i18n="team.importCopy">直接粘贴 Showdown 队伍文本，系统会自动挂靠相似配置；大改动再询问是否加入配置库。</p>
-            <textarea id="team-import-input" rows="8" placeholder="Flutter Mane @ Focus Sash&#10;Ability: Protosynthesis&#10;Tera Type: Fairy&#10;EVs: 4 HP / 252 SpA / 252 Spe&#10;Timid Nature&#10;- Moonblast&#10;- Shadow Ball&#10;- Icy Wind&#10;- Protect" data-i18n-placeholder="team.importPlaceholder"></textarea>
-            <div class="action-row sidebar-actions">
-              <button id="import-team-btn" type="button" data-i18n="team.importAction">覆盖导入队伍</button>
-              <button id="clear-team-import-btn" type="button" class="ghost-button" data-i18n="team.importClear">清空输入</button>
-            </div>
-            <p id="team-import-feedback" class="muted" data-i18n="team.importEmpty">未导入队伍代码。</p>
-          </div>
-        </details>
+        <div class="team-sidebar-tabs" role="tablist" aria-label="队伍侧栏">
+          <button
+            id="team-sidebar-tab-team"
+            type="button"
+            class="team-sidebar-tab active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="team-sidebar-panel-team"
+            data-team-sidebar-tab="team"
+          ><span data-i18n="team.membersTab">队伍成员</span></button>
+          <button
+            id="team-sidebar-tab-saved"
+            type="button"
+            class="team-sidebar-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="team-sidebar-panel-saved"
+            data-team-sidebar-tab="saved"
+          ><span data-i18n="team.savedTab">存档</span> <span id="saved-team-count" class="team-sidebar-tab-count">0</span></button>
+          <button
+            id="team-sidebar-tab-import"
+            type="button"
+            class="team-sidebar-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="team-sidebar-panel-import"
+            data-team-sidebar-tab="import"
+          ><span data-i18n="team.importTab">导入</span></button>
+        </div>
 
-        <div class="saved-team-panel sidebar-block">
-          <h3 data-i18n="team.saveTitle">保存队伍</h3>
-          <div class="saved-team-form">
-            <input id="saved-team-name" type="text" placeholder="输入队伍名称" data-i18n-placeholder="team.savePlaceholder">
-            <button id="save-team-btn" type="button" class="ghost-button" data-i18n="team.saveCurrent">保存当前队伍</button>
-          </div>
-          <div id="saved-team-list" class="stack-list compact-list"></div>
+        <div class="team-sidebar-body">
+          <section id="team-sidebar-panel-team" class="team-sidebar-panel active" role="tabpanel" aria-labelledby="team-sidebar-tab-team">
+            <div id="team-list" class="team-grid"></div>
+          </section>
+
+          <section id="team-sidebar-panel-saved" class="team-sidebar-panel" role="tabpanel" aria-labelledby="team-sidebar-tab-saved" hidden>
+            <div class="saved-team-panel sidebar-block">
+              <div class="saved-team-form">
+                <input id="saved-team-name" type="text" placeholder="输入队伍名称" data-i18n-placeholder="team.savePlaceholder">
+                <button id="save-team-btn" type="button" class="add-button" data-i18n="team.saveCurrent">保存当前队伍</button>
+              </div>
+              <input id="saved-team-search" type="search" placeholder="搜索已保存队伍" data-i18n-placeholder="team.searchSavedPlaceholder">
+              <div id="saved-team-list" class="stack-list compact-list"></div>
+            </div>
+          </section>
+
+          <section id="team-sidebar-panel-import" class="team-sidebar-panel" role="tabpanel" aria-labelledby="team-sidebar-tab-import" hidden>
+            <div class="team-import-panel sidebar-block">
+              <div class="team-import-body">
+                <p class="muted" data-i18n="team.importCopy">直接粘贴 Showdown 队伍文本，系统会自动挂靠相似配置；大改动再询问是否加入配置库。</p>
+                <textarea id="team-import-input" rows="6" placeholder="Flutter Mane @ Focus Sash&#10;Ability: Protosynthesis&#10;Tera Type: Fairy&#10;EVs: 4 HP / 252 SpA / 252 Spe&#10;Timid Nature&#10;- Moonblast&#10;- Shadow Ball&#10;- Icy Wind&#10;- Protect" data-i18n-placeholder="team.importPlaceholder"></textarea>
+                <div class="action-row sidebar-actions">
+                  <button id="import-team-btn" type="button" class="add-button" data-i18n="team.importAction">覆盖导入队伍</button>
+                  <button id="clear-team-import-btn" type="button" class="ghost-button" data-i18n="team.importClear">清空输入</button>
+                </div>
+                <p id="team-import-feedback" class="muted" data-i18n="team.importEmpty">未导入队伍代码。</p>
+              </div>
+            </div>
+          </section>
         </div>
       </aside>
 

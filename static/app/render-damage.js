@@ -237,12 +237,57 @@ function getSummaryName(entry) {
   return entry?.config?.speciesName || entry?.config?.displayName || entry?.label || "";
 }
 
-function speedVerdictMarkup(summary, attacker, defender, language) {
+function getLocalizedSpeciesName(state, entry) {
+  const speciesId = entry?.config?.speciesId || "";
+  const fallbackName = getSummaryName(entry);
+  if (state.language !== "zh") {
+    return fallbackName;
+  }
+  return state.localizedSpeciesNames?.get(speciesId) || fallbackName;
+}
+
+function getLocalizedMoveName(state, moveName = "") {
+  if (state.language !== "zh") {
+    return moveName;
+  }
+  return state.localizedMoveNames?.get(String(moveName || "").trim().toLowerCase()) || moveName;
+}
+
+function replaceDamageTextTokens(state, text, tokens = []) {
+  let value = String(text || "");
+  if (state.language !== "zh" || !value) {
+    return value;
+  }
+  tokens
+    .filter((entry) => entry?.source && entry?.target && entry.source !== entry.target)
+    .sort((left, right) => right.source.length - left.source.length)
+    .forEach(({source, target}) => {
+      value = value.split(source).join(target);
+    });
+  return value;
+}
+
+function localizeDamageDescriptionText(state, text, attacker, defender, moveNames = []) {
+  const tokens = [
+    {source: attacker?.config?.speciesName || "", target: getLocalizedSpeciesName(state, attacker)},
+    {source: defender?.config?.speciesName || "", target: getLocalizedSpeciesName(state, defender)},
+    ...moveNames.map((moveName) => ({
+      source: moveName,
+      target: getLocalizedMoveName(state, moveName),
+    })),
+  ];
+  return translateDamageDescription(
+    state.language,
+    replaceDamageTextTokens(state, text, tokens),
+  );
+}
+
+function speedVerdictMarkup(state, summary, attacker, defender, language) {
   if (!summary || !attacker || !defender) {
     return "";
   }
-  const leftName = getSummaryName(attacker);
-  const rightName = getSummaryName(defender);
+  const leftName = getLocalizedSpeciesName(state, attacker);
+  const rightName = getLocalizedSpeciesName(state, defender);
   const leftSpeed = Number(summary.attackerSpeed || 0);
   const rightSpeed = Number(summary.defenderSpeed || 0);
   let verdict = "";
@@ -255,8 +300,8 @@ function speedVerdictMarkup(summary, attacker, defender, language) {
   }
   return `
     <div class="damage-speed-row">
-      <span class="mini-pill">${escapeHtml(`${leftName} Spe ${leftSpeed}`)}</span>
-      <span class="mini-pill">${escapeHtml(`${rightName} Spe ${rightSpeed}`)}</span>
+      <span class="mini-pill">${escapeHtml(`${leftName} ${t(language, "common.speed")} ${leftSpeed}`)}</span>
+      <span class="mini-pill">${escapeHtml(`${rightName} ${t(language, "common.speed")} ${rightSpeed}`)}</span>
       <strong>${escapeHtml(verdict)}</strong>
     </div>
   `;
@@ -377,7 +422,7 @@ function moveSummaryMarkup(slotMoveNames = [], summaryMoves = [], language, tone
         const isOpen = Boolean(picker && picker.side === side && picker.index === slotIndex);
         const hasMove = Boolean(slotMoveName);
         const title = hasMove ? (summaryMove?.moveName || slotMoveName) : t(language, "damage.moveSlotEmpty");
-        const bodyDamage = hasMove ? (summaryMove?.damageText || t(language, "damage.noDamageText")) : "";
+        const bodyDamage = hasMove ? translateDamageDescription(language, summaryMove?.damageText || t(language, "damage.noDamageText")) : "";
         const bodyKo = hasMove ? translateDamageKoText(language, summaryMove?.koText || "") : "";
         const cardClasses = ["entry-card", "compact", "damage-move-card"];
         if (tone) cardClasses.push(tone);
@@ -453,7 +498,7 @@ export function renderDamageView(state) {
   const primaryEntry = primarySide === "attacker" ? selectedAttacker : selectedDefender;
   const secondaryEntry = secondarySide === "attacker" ? selectedAttacker : selectedDefender;
   const pairTitle = selectedAttacker && selectedDefender
-    ? `${getSummaryName(selectedAttacker)} ↔ ${getSummaryName(selectedDefender)}`
+    ? `${getLocalizedSpeciesName(state, selectedAttacker)} ↔ ${getLocalizedSpeciesName(state, selectedDefender)}`
     : t(language, "damage.summaryEmpty");
   document.getElementById("damage-controls").innerHTML = `
     <div class="analysis-detail-grid damage-control-grid">
@@ -488,7 +533,7 @@ export function renderDamageView(state) {
       ${state.damage.loading ? `<span class="source-tag">${t(language, "damage.loading")}</span>` : ""}
     </div>
     ${state.damage.error ? `<p class="empty-state">${escapeHtml(state.damage.error)}</p>` : ""}
-    ${speedVerdictMarkup(summary, selectedAttacker, selectedDefender, language)}
+    ${speedVerdictMarkup(state, summary, selectedAttacker, selectedDefender, language)}
     ${selectedAttacker && selectedDefender ? `
       <section class="damage-adjust-panel">
         <div class="damage-adjust-grid">
@@ -497,7 +542,21 @@ export function renderDamageView(state) {
         </div>
       </section>
     ` : ""}
-    ${headlineMarkup(headline, language)}
+    ${headlineMarkup(
+      localizeDamageDescriptionText(
+        state,
+        headline,
+        selectedAttacker,
+        selectedDefender,
+        [
+          ...(displayMoveNames.attacker || []),
+          ...(displayMoveNames.defender || []),
+          ...((summary?.leftMoves || []).map((entry) => entry?.moveName).filter(Boolean)),
+          ...((summary?.rightMoves || []).map((entry) => entry?.moveName).filter(Boolean)),
+        ],
+      ),
+      language,
+    )}
     ${selectedAttacker && selectedDefender ? `
       <div class="damage-summary-columns">
         <section><div class="analysis-label">${primaryTitle}</div>${moveSummaryMarkup(primarySlots, primaryMoves || [], language, "active", primarySide, picker)}</section>

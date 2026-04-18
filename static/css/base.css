@@ -2,16 +2,29 @@
   --bg: #eef3f8;
   --panel: #ffffff;
   --panel-alt: #f4f7fb;
-  --line: #d8e1eb;
+  --line: #c9d4e0;
+  --line-soft: #e5ecf3;
   --ink: #16202b;
-  --muted: #697887;
+  --muted: #5a6b7c;
+  --muted-2: #8593a3;
   --accent: #2f6ea3;
   --accent-soft: #d7e5f4;
   --good: #2f7d61;
   --bad: #c05b52;
-  --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
-  --title-font: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
-  --body-font: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+  --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 18px 42px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 24px 56px rgba(15, 23, 42, 0.12);
+  --shadow: var(--shadow-md);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --space-input-y: 10px;
+  --space-input-x: 12px;
+  --space-chip-y: 6px;
+  --space-chip-x: 10px;
+  --title-font: Inter, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --body-font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   --mono-font: "SFMono-Regular", "Cascadia Code", "Fira Code", monospace;
 }
 
@@ -41,17 +54,24 @@ select,
 input,
 textarea {
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.98);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
   color: var(--ink);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
 }
 
 button {
   cursor: pointer;
 }
 
-button:hover {
-  transform: translateY(-1px);
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 h1,
@@ -84,19 +104,20 @@ p {
 
 .hero h1 {
   font-size: clamp(34px, 4vw, 54px);
-  line-height: 1;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
 
 .hero-copy,
 .muted {
   color: var(--muted);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .hero-copy {
   max-width: 72ch;
-  margin-top: 12px;
-  line-height: 1.7;
+  margin-top: 10px;
+  line-height: 1.6;
 }
 
 .hero-actions {
@@ -125,8 +146,8 @@ p {
 
 .hero-select-field select {
   min-width: 0;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.96);
+  padding: var(--space-input-y) var(--space-input-x);
+  background: var(--panel);
 }
 
 .hero-select-note {
@@ -140,16 +161,16 @@ p {
   gap: 8px;
   padding: 6px;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
+  border-radius: var(--radius-pill);
+  background: var(--panel);
 }
 
 .lang-button {
   width: auto;
   min-width: 88px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--muted);
 }
@@ -161,10 +182,10 @@ p {
 
 .hero-note,
 .panel {
-  border: 1px solid rgba(216, 225, 235, 0.92);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-md);
 }
 
 .hero-note {
@@ -173,7 +194,7 @@ p {
 }
 
 .panel {
-  padding: 16px;
+  padding: 18px;
 }
 
 .section-head {
@@ -208,7 +229,7 @@ input,
 textarea,
 button {
   width: 100%;
-  padding: 10px 12px;
+  padding: var(--space-input-y) var(--space-input-x);
 }
 
 textarea {
@@ -219,7 +240,14 @@ textarea {
 }
 
 .ghost-button {
-  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(22, 32, 43, 0.2);
+  background: transparent;
+}
+
+.ghost-button:hover,
+.ghost-button:focus-visible {
+  border-color: rgba(47, 110, 163, 0.3);
+  background: rgba(47, 110, 163, 0.06);
 }
 
 .danger-button {
@@ -236,19 +264,25 @@ textarea {
   color: white;
 }
 
+.add-button:hover,
+.add-button:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(47, 110, 163, 0.18);
+}
+
 .pill,
 .mini-pill,
 .source-tag,
 .info-pill {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
-  border: 1px solid rgba(216, 225, 235, 0.92);
-  background: rgba(255, 255, 255, 0.96);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--panel);
 }
 
 .pill {
-  padding: 5px 9px;
+  padding: var(--space-chip-y) var(--space-chip-x);
 }
 
 .type-pill,
@@ -258,82 +292,82 @@ textarea {
 }
 
 .type-normal {
-  background: #919aa2;
+  background: #a8a77a;
 }
 
 .type-fire {
-  background: #e68a3f;
+  background: #ee8130;
 }
 
 .type-water {
-  background: #5b9be6;
+  background: #6390f0;
 }
 
 .type-electric {
-  background: #e6bd3f;
+  background: #f7d02c;
 }
 
 .type-grass {
-  background: #5da85d;
+  background: #7ac74c;
 }
 
 .type-ice {
-  background: #69bfd2;
+  background: #96d9d6;
 }
 
 .type-fighting {
-  background: #c55f4c;
+  background: #c22e28;
 }
 
 .type-poison {
-  background: #9b69d2;
+  background: #a33ea1;
 }
 
 .type-ground {
-  background: #b99253;
+  background: #e2bf65;
 }
 
 .type-flying {
-  background: #7f9ee8;
+  background: #a98ff3;
 }
 
 .type-psychic {
-  background: #e76f92;
+  background: #f95587;
 }
 
 .type-bug {
-  background: #96b03f;
+  background: #a6b91a;
 }
 
 .type-rock {
-  background: #aa9c5a;
+  background: #b6a136;
 }
 
 .type-ghost {
-  background: #6f78c4;
+  background: #735797;
 }
 
 .type-dragon {
-  background: #5f74da;
+  background: #6f35fc;
 }
 
 .type-dark {
-  background: #6d5b50;
+  background: #705746;
 }
 
 .type-steel {
-  background: #6f8ea2;
+  background: #b7b7ce;
 }
 
 .type-fairy {
-  background: #df86c0;
+  background: #d685ad;
 }
 
 .mini-pill {
   padding: 4px 8px;
   font-size: 11px;
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .speed-analysis-name {
@@ -363,7 +397,7 @@ textarea {
 
 .info-pill-label {
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .info-tooltip,
@@ -377,10 +411,10 @@ textarea {
   min-width: 200px;
   max-width: 320px;
   padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(216, 225, 235, 0.95);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
   backdrop-filter: blur(8px);
   color: var(--ink);
   font-size: 12px;
@@ -402,8 +436,8 @@ textarea {
 }
 
 .tooltip-chip {
-  border: 1px solid rgba(216, 225, 235, 0.95);
-  background: rgba(244, 247, 251, 0.98);
+  border: 1px solid var(--line);
+  background: var(--panel-alt);
   color: var(--ink);
 }
 
@@ -423,7 +457,7 @@ textarea {
 
 .source-tag {
   padding: 4px 8px;
-  color: var(--muted);
+  color: var(--muted-2);
   font-size: 11px;
 }
 
@@ -441,6 +475,7 @@ textarea {
   background-image: url("../pokemonicons-sheet.png");
   background-repeat: no-repeat;
   flex-shrink: 0;
+  image-rendering: pixelated;
 }
 
 .sprite-image {
@@ -498,12 +533,13 @@ textarea {
   z-index: 1;
   width: min(760px, calc(100vw - 32px));
   max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
   overflow: auto;
   padding: 18px;
-  border: 1px solid rgba(216, 225, 235, 0.95);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
 }
 
 .modal-copy {
@@ -516,6 +552,13 @@ textarea {
 
 .modal-actions {
   justify-content: flex-end;
+}
+
+@supports not (backdrop-filter: blur(4px)) {
+  .modal-backdrop,
+  .global-tooltip {
+    backdrop-filter: none;
+  }
 }
 
 .chip-list {

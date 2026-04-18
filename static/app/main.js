@@ -180,6 +180,8 @@ const state = {
   opponentTeam: [],
   activeOpponentConfigSpeciesId: null,
   savedTeams: [],
+  savedTeamSearch: "",
+  activeTeamSidebarTab: "team",
   savedOpponentTeams: [],
   damageAttackers: [],
   damageDefenders: [],
@@ -979,12 +981,49 @@ function renderLibrarySection() {
 }
 
 function renderTeamSection() {
+  syncTeamSidebarState();
   renderTeam(state);
   renderSavedTeams(state);
+  syncTeamSidebarUi();
   translateNodes(
+    document.querySelector(".team-sidebar"),
     document.getElementById("team-list"),
     document.getElementById("saved-team-list"),
   );
+}
+
+function syncTeamSidebarState() {
+  if (!state.team.length) {
+    state.activeTeamSidebarTab = "import";
+    return;
+  }
+  if (!["team", "saved", "import"].includes(state.activeTeamSidebarTab)) {
+    state.activeTeamSidebarTab = "team";
+  }
+}
+
+function syncTeamSidebarUi() {
+  const tabs = Array.from(document.querySelectorAll("[data-team-sidebar-tab]"));
+  const panels = Array.from(document.querySelectorAll(".team-sidebar-panel"));
+  tabs.forEach((tab) => {
+    const isActive = tab.dataset.teamSidebarTab === state.activeTeamSidebarTab;
+    tab.classList.toggle("active", isActive);
+    tab.setAttribute("aria-selected", isActive ? "true" : "false");
+    tab.tabIndex = isActive ? 0 : -1;
+  });
+  panels.forEach((panel) => {
+    const isActive = panel.id === `team-sidebar-panel-${state.activeTeamSidebarTab}`;
+    panel.classList.toggle("active", isActive);
+    panel.hidden = !isActive;
+  });
+}
+
+function setActiveTeamSidebarTab(tabId) {
+  if (!["team", "saved", "import"].includes(tabId)) {
+    return;
+  }
+  state.activeTeamSidebarTab = tabId;
+  syncTeamSidebarUi();
 }
 
 function renderAnalysisSection() {
@@ -3303,6 +3342,30 @@ function bindEvents() {
     }
   });
 
+  document.querySelector(".team-sidebar-tabs").addEventListener("click", (event) => {
+    const tab = event.target.closest("[data-team-sidebar-tab]");
+    if (!tab) {
+      return;
+    }
+    setActiveTeamSidebarTab(tab.dataset.teamSidebarTab);
+  });
+
+  document.querySelector(".team-sidebar-tabs").addEventListener("keydown", (event) => {
+    const current = event.target.closest("[data-team-sidebar-tab]");
+    if (!current || !["ArrowLeft", "ArrowRight"].includes(event.key)) {
+      return;
+    }
+    event.preventDefault();
+    const tabs = Array.from(document.querySelectorAll("[data-team-sidebar-tab]"));
+    const currentIndex = tabs.indexOf(current);
+    const nextIndex = event.key === "ArrowRight"
+      ? (currentIndex + 1) % tabs.length
+      : (currentIndex - 1 + tabs.length) % tabs.length;
+    const nextTab = tabs[nextIndex];
+    setActiveTeamSidebarTab(nextTab.dataset.teamSidebarTab);
+    nextTab.focus();
+  });
+
   document.getElementById("saved-opponent-list").addEventListener("click", (event) => {
     const loadButton = event.target.closest("[data-load-opponent-team]");
     if (loadButton) {
@@ -3316,6 +3379,9 @@ function bindEvents() {
   });
 
   document.getElementById("clear-team-btn").addEventListener("click", () => {
+    if (!window.confirm(t(state.language, "team.clearConfirm"))) {
+      return;
+    }
     state.team = [];
     refreshBattleState();
     renderTeamSection();
@@ -3335,11 +3401,28 @@ function bindEvents() {
     scheduleStatePersist();
   });
   document.getElementById("export-team-btn").addEventListener("click", exportTeam);
+  document.getElementById("sidebar-save-team-btn").addEventListener("click", () => {
+    setActiveTeamSidebarTab("saved");
+    document.getElementById("saved-team-name").focus();
+  });
   document.getElementById("import-team-btn").addEventListener("click", importTeamByCode);
   document.getElementById("clear-team-import-btn").addEventListener("click", () => {
     document.getElementById("team-import-input").value = "";
     renderTeamImportFeedback(t(state.language, "team.importEmpty"));
     translateNodes(document.getElementById("team-import-feedback"));
+  });
+  document.getElementById("saved-team-search").addEventListener("input", (event) => {
+    state.savedTeamSearch = event.target.value;
+    renderSavedTeams(state);
+    translateNodes(document.getElementById("saved-team-list"));
+  });
+  document.getElementById("team-list").addEventListener("click", (event) => {
+    const openImportButton = event.target.closest("[data-open-team-import]");
+    if (!openImportButton) {
+      return;
+    }
+    setActiveTeamSidebarTab("import");
+    document.getElementById("team-import-input").focus();
   });
 
   document.getElementById("import-custom-btn").addEventListener("click", () => importCustomLibrary("replace"));

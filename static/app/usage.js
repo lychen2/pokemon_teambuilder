@@ -142,6 +142,44 @@ export function getUsageMoveEntries(speciesId, datasets, options = {}) {
   return limit > 0 ? moveEntries.slice(0, limit) : moveEntries;
 }
 
+function estimateMoveSampleCount(moveEntries = []) {
+  if (!moveEntries.length) {
+    return 0;
+  }
+  const totalCount = moveEntries.reduce((sum, entry) => sum + Number(entry.count || 0), 0);
+  const peakCount = Math.max(...moveEntries.map((entry) => Number(entry.count || 0)), 0);
+  return Math.max(peakCount, totalCount / 4, 1);
+}
+
+export function getUsageReferenceMoveEntries(speciesId, datasets, options = {}) {
+  const minShare = Math.max(0, Number(options.minShare ?? 0.1));
+  const topLimit = Math.max(0, Number(options.topLimit ?? 6));
+  const finalLimit = Math.max(0, Number(options.finalLimit ?? (topLimit || 6)));
+  const moveEntries = getUsageMoveEntries(speciesId, datasets, {
+    kind: options.kind || "all",
+    excludeNames: options.excludeNames || [],
+  });
+  if (!moveEntries.length) {
+    return [];
+  }
+  const estimatedSampleCount = estimateMoveSampleCount(moveEntries);
+  const thresholdEntries = moveEntries.filter((entry) => (Number(entry.count || 0) / estimatedSampleCount) >= minShare);
+  const fallbackEntries = moveEntries.slice(0, topLimit);
+  const orderedEntries = [];
+  const seen = new Set();
+  const addEntry = (entry) => {
+    const moveId = normalizeName(entry?.name);
+    if (!moveId || seen.has(moveId)) {
+      return;
+    }
+    seen.add(moveId);
+    orderedEntries.push(entry);
+  };
+  thresholdEntries.forEach(addEntry);
+  fallbackEntries.forEach(addEntry);
+  return finalLimit > 0 ? orderedEntries.slice(0, finalLimit) : orderedEntries;
+}
+
 export function getUsageItemEntries(speciesId, datasets, options = {}) {
   const speciesName = datasets?.pokedex?.[speciesId]?.name || speciesId;
   const profile = getUsageProfile(datasets, speciesId, speciesName);

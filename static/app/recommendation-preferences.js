@@ -1,5 +1,6 @@
 export const RECOMMENDATION_PREFERENCE_ITEMS = Object.freeze([
   {id: "patchWeakness", labelKey: "recommend.pref.patchWeakness"},
+  {id: "patchCoverage", labelKey: "recommend.pref.patchCoverage"},
   {id: "patchRoles", labelKey: "recommend.pref.patchRoles"},
   {id: "patchSpeed", labelKey: "recommend.pref.patchSpeed"},
   {id: "avoidDuplicateTypes", labelKey: "recommend.pref.avoidDuplicateTypes"},
@@ -12,6 +13,7 @@ export const RECOMMENDATION_WEIGHT_ITEMS = Object.freeze([
 
 export const DEFAULT_RECOMMENDATION_PREFERENCES = Object.freeze({
   patchWeakness: true,
+  patchCoverage: true,
   patchRoles: true,
   patchSpeed: true,
   avoidDuplicateTypes: true,
@@ -19,6 +21,7 @@ export const DEFAULT_RECOMMENDATION_PREFERENCES = Object.freeze({
 
 export const DEFAULT_RECOMMENDATION_WEIGHTS = Object.freeze({
   patchWeakness: 100,
+  patchCoverage: 100,
   patchRoles: 100,
   patchSpeed: 100,
   avoidDuplicateTypes: 100,

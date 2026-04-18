@@ -508,6 +508,9 @@
 
 .mini-action {
   min-width: 84px;
+  padding: 9px 12px;
+  font-size: 14px;
+  line-height: 1.25;
 }
 
 .entry-title,
@@ -621,6 +624,30 @@
   line-height: 1.2;
 }
 
+.team-card .entry-meta,
+.team-card .entry-line,
+.team-card .info-pill,
+.team-card .source-tag,
+.team-card .mini-action {
+  font-size: 14px;
+}
+
+.team-card .pill,
+.team-card .info-pill,
+.team-card .source-tag {
+  line-height: 1.25;
+}
+
+.team-card .entry-meta .pill,
+.team-card .entry-line .info-pill,
+.team-card .team-badge-row .source-tag {
+  padding: 7px 10px;
+}
+
+.team-card .info-pill-label {
+  font-size: 14px;
+}
+
 .team-badge-row {
   gap: 5px;
 }
@@ -633,7 +660,7 @@
 .team-points-line {
   line-height: 1.45;
   font-family: var(--mono-font);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .team-move-row {
@@ -646,7 +673,7 @@
 
 .team-ev-line,
 .team-speed-line {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .empty-slot {
@@ -949,11 +976,6 @@
 
 .sidebar-copy {
   margin-bottom: 16px;
-}
-
-.sidebar-action {
-  width: auto;
-  align-self: flex-start;
 }
 
 .team-import-panel {

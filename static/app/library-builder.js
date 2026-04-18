@@ -1,5 +1,6 @@
 import {FALLBACK_LEVEL, NATURE_EFFECTS, TYPE_ORDER} from "./constants.js";
 import {hydrateConfigs} from "./showdown.js";
+import {getUsageReferenceMoveEntries} from "./usage.js";
 import {
   applyNatureToChampionStats,
   calculateChampionStats,
@@ -19,11 +20,22 @@ function createMoveSlots() {
 }
 
 function normalizeSeedMoves(seedMoves = []) {
-  const moves = seedMoves.filter(Boolean).slice(0, DEFAULT_MOVE_SLOTS);
+  const moves = seedMoves
+    .map((entry) => (typeof entry === "string" ? entry : entry?.name || ""))
+    .filter(Boolean)
+    .slice(0, DEFAULT_MOVE_SLOTS);
   while (moves.length < DEFAULT_MOVE_SLOTS) {
     moves.push("");
   }
   return moves;
+}
+
+function getDefaultMoveNames(speciesId, datasets) {
+  return getUsageReferenceMoveEntries(speciesId, datasets, {
+    minShare: 0.1,
+    topLimit: 6,
+    finalLimit: DEFAULT_MOVE_SLOTS,
+  }).map((entry) => entry.name);
 }
 
 export function buildSpeciesBrowser(datasets, library) {
@@ -53,6 +65,7 @@ export function getRequiredItemForSpecies(speciesId, datasets) {
 export function createBuilderState(speciesId, datasets, seedConfig = null) {
   const species = datasets.pokedex[speciesId];
   const requiredItem = getRequiredItemForSpecies(speciesId, datasets);
+  const seedMoves = seedConfig?.moveNames || seedConfig?.moves || getDefaultMoveNames(speciesId, datasets);
   return {
     speciesId,
     item: requiredItem || seedConfig?.item || "",
@@ -61,7 +74,7 @@ export function createBuilderState(speciesId, datasets, seedConfig = null) {
     nature: seedConfig?.nature || DEFAULT_NATURE,
     note: seedConfig?.note || "",
     points: seedConfig?.championPoints || seedConfig?.points || createEmptySpread(),
-    moves: normalizeSeedMoves(seedConfig?.moveNames || seedConfig?.moves || createMoveSlots()),
+    moves: normalizeSeedMoves(seedMoves),
   };
 }
 
@@ -96,24 +109,25 @@ function resolveItemEntry(itemName, datasets) {
 
 function getStandardLearnsetMap(speciesId, datasets) {
   const direct = datasets.learnsets?.[speciesId]?.learnset;
-  if (direct) {
-    return direct;
-  }
   const species = datasets.pokedex[speciesId];
   const baseSpeciesId = normalizeName(species?.baseSpecies || "");
-  return datasets.learnsets?.[baseSpeciesId]?.learnset || null;
+  const baseLearnset = datasets.learnsets?.[baseSpeciesId]?.learnset || null;
+  if (direct && baseLearnset) {
+    return {...baseLearnset, ...direct};
+  }
+  return direct || baseLearnset || null;
 }
 
 function getLearnsetMap(speciesId, datasets) {
   const direct = datasets.championsVgc?.learnsets?.[speciesId];
-  if (direct) {
-    return direct;
-  }
   const species = datasets.pokedex[speciesId];
   const baseSpeciesId = normalizeName(species?.baseSpecies || "");
   const championsLearnset = datasets.championsVgc?.learnsets?.[baseSpeciesId] || null;
-  if (championsLearnset) {
-    return championsLearnset;
+  if (direct && championsLearnset) {
+    return {...championsLearnset, ...direct};
+  }
+  if (direct || championsLearnset) {
+    return direct || championsLearnset;
   }
   return getStandardLearnsetMap(speciesId, datasets) || null;
 }
