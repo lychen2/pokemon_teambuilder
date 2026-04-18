@@ -6,6 +6,7 @@ import {t} from "./i18n.js";
 import {getSuggestedMoveNamesForSpecies} from "./matchup-board-data.js";
 import {normalizeRecommendationPreferences} from "./recommendation-preferences.js";
 import {RECOMMENDATION_ROLE_IDS, getAttackBias, getUtilityRoles, hasMove} from "./team-roles.js";
+import {getUsageForSpecies, getUsageTeammateShare} from "./usage.js";
 import {clamp, getTypeLabel, isMegaConfig, normalizeName} from "./utils.js";
 
 const SUPPORT_MOVES_PER_MEMBER_TARGET = 1.5;
@@ -44,6 +45,10 @@ const SUPPLEMENTAL_NON_STAB_WEIGHT = 0.12;
 const SUPPLEMENTAL_COVERAGE_BONUS = 1.1;
 const SUPPLEMENTAL_NEUTRAL_BONUS = 0.3;
 const SUPPLEMENTAL_COVERAGE_CAP = 1.8;
+const TEAMMATE_MATCH_LIMIT = 2;
+const TEAMMATE_MIN_SHARE = 0.08;
+const TEAMMATE_BASELINE_BUFFER = 0.03;
+const TEAMMATE_EXPONENT = 2.4;
 
 function countCoveredEntries(speedTiers, predicate) {
   return speedTiers.filter(predicate).reduce((sum, tier) => sum + tier.totalCount, 0);
@@ -212,7 +217,14 @@ function scoreSpeed(candidate, speedTiers, analysis, preferences, weights) {
     return clamp((trickRoomScore + (isTrickRoomSetter ? TRICK_ROOM_SETTER_BONUS : 0)) * (preferences.patchSpeed ? 1.25 : 0.8) * weight, 0, SCORE_WEIGHTS.speed);
   }
   if (analysis.speedContext.mode === "hybrid") {
-    return clamp((((standardScore + trickRoomScore) / 2) + (isTrickRoomSetter ? HYBRID_TRICK_ROOM_BONUS : 0)) * (preferences.patchSpeed ? 1.25 : 0.8) * weight, 0, SCORE_WEIGHTS.speed);
+    const teamSize = Math.max(1, Number(analysis.speedContext.teamSize || 0));
+    const trickRoomWeight = clamp(Number(analysis.speedContext.slowCount || 0) / teamSize, 0.2, 0.4);
+    const hybridScore = (
+      standardScore * (1 - trickRoomWeight)
+      + trickRoomScore * trickRoomWeight
+      + (isTrickRoomSetter ? HYBRID_TRICK_ROOM_BONUS * trickRoomWeight : 0)
+    );
+    return clamp(hybridScore * (preferences.patchSpeed ? 1.25 : 0.8) * weight, 0, SCORE_WEIGHTS.speed);
   }
   return clamp(standardScore * (preferences.patchSpeed ? 1.25 : 0.8) * weight, 0, SCORE_WEIGHTS.speed);
 }
@@ -252,6 +264,41 @@ function scoreSynergy(team, candidate, analysis, preferences, weights) {
   return clamp(total, 0, SCORE_WEIGHTS.synergy);
 }
 
+function buildTeammateUsageSummary(team, candidate, datasets) {
+  if (!datasets?.usageLookup?.size || !team.length || !candidate?.speciesId) {
+    return {score: 0, matches: []};
+  }
+  const candidateUsage = getUsageForSpecies(
+    datasets,
+    candidate.speciesId,
+    datasets?.pokedex?.[candidate.speciesId]?.name || candidate.speciesId,
+  );
+  const pairings = team.map((member) => {
+    const share = getUsageTeammateShare(datasets, member.speciesId, candidate.speciesId);
+    const threshold = Math.max(TEAMMATE_MIN_SHARE, candidateUsage + TEAMMATE_BASELINE_BUFFER);
+    const normalized = share <= threshold
+      ? 0
+      : (share - threshold) / Math.max(1 - threshold, 1e-6);
+    return {
+      member,
+      share,
+      threshold,
+      affinity: normalized > 0 ? normalized ** TEAMMATE_EXPONENT : 0,
+    };
+  });
+  const matches = pairings
+    .filter((entry) => entry.affinity > 0)
+    .sort((left, right) => right.affinity - left.affinity);
+  if (!matches.length) {
+    return {score: 0, matches: []};
+  }
+  const averageAffinity = pairings.reduce((sum, entry) => sum + entry.affinity, 0) / pairings.length;
+  return {
+    score: clamp(averageAffinity * SCORE_WEIGHTS.teammates, 0, SCORE_WEIGHTS.teammates),
+    matches: matches.slice(0, TEAMMATE_MATCH_LIMIT),
+  };
+}
+
 function getStatsTotal(stats = {}) {
   return QUALITY_KEYS.reduce((sum, stat) => sum + Number(stats[stat] || 0), 0);
 }
@@ -261,7 +308,7 @@ function getPrimaryOffenseValue(stats = {}) {
 }
 
 function getExtremeSpeedValue(speedValue) {
-  return Math.max(speedValue, Math.max(0, QUALITY_SPEED_EXTREME_ANCHOR - speedValue));
+  return Math.max(0, speedValue);
 }
 
 function scaleQualityPart(value, reference, cap) {
@@ -345,6 +392,11 @@ function buildReasons(candidate, breakdown, language, analysis, focusType = "") 
     );
   }
   if (breakdown.synergy >= 2) reasons.push(t(language, "recommend.reason.synergy"));
+  if (breakdown.teammates >= 1 && candidate.teammateMatches?.length) {
+    reasons.push(t(language, "recommend.reason.teammates", {
+      value: candidate.teammateMatches.map((entry) => entry.member.displayName || entry.member.speciesName).join(" / "),
+    }));
+  }
   if (breakdown.quality >= 2) reasons.push(t(language, "recommend.reason.quality"));
   return reasons.length ? reasons : [t(language, "recommend.reason.balance")];
 }
@@ -370,6 +422,7 @@ function buildPenalties(candidate, team, analysis, language, focusType = "") {
 function buildRecommendationEntry(candidate, team, analysis, speedTiers, language, preferences, weights, datasets, focusType = "") {
   const coverSummary = getCoverSummary(candidate, analysis);
   const qualityBreakdown = buildQualityBreakdown(candidate);
+  const usageTeammates = buildTeammateUsageSummary(team, candidate, datasets);
   const breakdown = {
     resistance: clamp(
       scoreResistance(candidate, analysis, preferences, focusType)
@@ -380,6 +433,11 @@ function buildRecommendationEntry(candidate, team, analysis, speedTiers, languag
     coverage: scoreCoverage(candidate, analysis, datasets),
     speed: scoreSpeed(candidate, speedTiers, analysis, preferences, weights),
     synergy: scoreSynergy(team, candidate, analysis, preferences, weights),
+    teammates: clamp(
+      usageTeammates.score * (Math.max(0, Number(weights.usageTeammates || 0)) / 100),
+      0,
+      SCORE_WEIGHTS.teammates,
+    ),
     quality: qualityBreakdown.total,
   };
   const score = Object.values(breakdown).reduce((sum, value) => sum + value, 0);
@@ -389,6 +447,7 @@ function buildRecommendationEntry(candidate, team, analysis, speedTiers, languag
     recommendationScore: score,
     coveredThreats: coverSummary.coveredThreats,
     breakdown,
+    teammateMatches: usageTeammates.matches,
     qualityBreakdown,
     reasons: buildReasons(candidate, breakdown, language, analysis, focusType),
     penalties: buildPenalties(candidate, team, analysis, language, focusType),

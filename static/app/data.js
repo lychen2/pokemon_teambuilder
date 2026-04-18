@@ -1,4 +1,5 @@
 import {DATA_PATHS} from "./constants.js";
+import {buildGlobalItemUsageCounts, buildGlobalMoveUsageCounts, buildUsageLookup} from "./usage.js";
 import {compareSpeciesByDex, fetchJson, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
@@ -66,7 +67,7 @@ export async function loadDatasets() {
     return datasetCache.value;
   }
 
-  const [pokeIconMap, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc] = await Promise.all([
+  const [pokeIconMap, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc, usage] = await Promise.all([
     fetchJson(DATA_PATHS.pokeIconMap),
     fetchJson(DATA_PATHS.pokedex),
     fetchJson(DATA_PATHS.formsIndex),
@@ -75,12 +76,16 @@ export async function loadDatasets() {
     fetchJson(DATA_PATHS.abilities),
     fetchJson(DATA_PATHS.items),
     fetchJson(DATA_PATHS.championsVgc),
+    fetchJson(DATA_PATHS.usage),
   ]);
 
   const mergedPokedex = mergeDexEntries(pokedex, championsVgc.overrideSpeciesData);
   const mergedMoves = mergeDexEntries(moves, championsVgc.overrideMoveData);
   const mergedAbilities = mergeDexEntries(abilities, championsVgc.overrideAbilityData);
   const mergedItems = mergeDexEntries(items, championsVgc.overrideItemData);
+  const moveLookup = buildMoveLookup(mergedMoves);
+  const abilityLookup = buildNamedLookup(mergedAbilities);
+  const itemLookup = buildNamedLookup(mergedItems);
 
   datasetCache.value = {
     pokedex: mergedPokedex,
@@ -90,13 +95,17 @@ export async function loadDatasets() {
     abilities: mergedAbilities,
     items: mergedItems,
     championsVgc,
+    usage,
+    usageLookup: buildUsageLookup(usage),
+    globalMoveUsageCounts: buildGlobalMoveUsageCounts(usage, moveLookup),
+    globalItemUsageCounts: buildGlobalItemUsageCounts(usage, itemLookup),
     pokeIconMap,
     availableSpecies: buildAvailableSpecies(mergedPokedex, formsIndex, championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || []),
     speciesIndex: buildSpeciesIndex(mergedPokedex),
-    moveLookup: buildMoveLookup(mergedMoves),
-    moveSearchLookup: buildMoveLookup(mergedMoves),
-    abilityLookup: buildNamedLookup(mergedAbilities),
-    itemLookup: buildNamedLookup(mergedItems),
+    moveLookup,
+    moveSearchLookup: moveLookup,
+    abilityLookup,
+    itemLookup,
   };
   return datasetCache.value;
 }

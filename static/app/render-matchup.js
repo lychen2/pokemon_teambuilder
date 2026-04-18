@@ -160,7 +160,10 @@ function opponentCardMarkup(entry, state) {
         <p class="muted">${buildSpeedSummary(entry, language)}</p>
         ${configPickerMarkup(entry, state, variantCount, language)}
       </div>
-      <button type="button" class="ghost-button danger-button sidebar-action" data-remove-opponent-species="${entry.speciesId}">${t(language, "team.remove")}</button>
+      <div class="team-card-actions">
+        <button type="button" class="ghost-button mini-action" data-open-damage-defender="${entry.speciesId}">${t(language, "team.damage")}</button>
+        <button type="button" class="ghost-button danger-button mini-action" data-remove-opponent-species="${entry.speciesId}">${t(language, "team.remove")}</button>
+      </div>
     </article>
   `;
 }

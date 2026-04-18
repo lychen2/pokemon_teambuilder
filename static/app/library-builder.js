@@ -118,6 +118,10 @@ function getLearnsetMap(speciesId, datasets) {
   return getStandardLearnsetMap(speciesId, datasets) || null;
 }
 
+export function getLegalMoveIds(speciesId, datasets) {
+  return new Set(Object.keys(getLearnsetMap(speciesId, datasets) || {}));
+}
+
 export function getMoveLegality(moveName, speciesId, datasets) {
   if (!moveName.trim()) {
     return {status: "empty", move: null};

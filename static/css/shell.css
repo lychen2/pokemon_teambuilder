@@ -52,7 +52,7 @@ body {
 
 .app-shell {
   grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
-  gap: 18px;
+  gap: 16px;
   padding: 0 0 32px;
   align-items: start;
 }
@@ -80,7 +80,7 @@ body {
 
 .sidebar-main-head {
   align-items: flex-start;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .sidebar-eyebrow,
@@ -106,16 +106,16 @@ body {
 }
 
 .sidebar-copy {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .sidebar-actions {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .team-grid {
   flex: 1 1 auto;
-  min-height: 320px;
+  min-height: 280px;
   overflow: auto;
   padding: 0 6px 12px 0;
   overscroll-behavior: contain;
@@ -169,13 +169,13 @@ body {
 
 .team-card:not(.empty-slot) {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  gap: 10px;
+  gap: 8px;
 }
 
 .team-card .entry-main {
-  gap: 6px;
+  gap: 4px;
 }
 
 .sidebar-action {
@@ -184,12 +184,12 @@ body {
 }
 
 .empty-slot {
-  min-height: 128px;
+  min-height: 112px;
 }
 
 .workspace {
   min-width: 0;
-  gap: 16px;
+  gap: 14px;
 }
 
 .controls-panel {
@@ -250,8 +250,8 @@ body {
 }
 
 .view-tabs {
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 10px 12px;
   border-bottom: 1px solid rgba(216, 225, 235, 0.92);
   background: rgba(244, 247, 251, 0.72);
 }
@@ -262,7 +262,7 @@ body {
 
 .view-panel {
   min-height: 0;
-  padding: 16px;
+  padding: 14px;
 }
 
 .view-panel.active {
@@ -326,6 +326,10 @@ body {
     max-height: none;
   }
 
+  .team-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .controls-panel {
     grid-template-columns: 1fr;
   }
@@ -369,19 +373,23 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
   .sidebar-action {
     width: 100%;
   }
 
   .workspace {
-    gap: 16px;
+    gap: 14px;
   }
 
   .view-tabs {
-    padding: 12px;
+    padding: 10px;
   }
 
   .view-panel {
-    padding: 16px;
+    padding: 14px;
   }
 }

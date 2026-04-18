@@ -18,6 +18,7 @@ CORE_JSON_FILES = {
     "formats.json",
     "champions_vgc.json",
 }
+STATIC_USAGE_PATH = STATIC_DIR / "usage.json"
 TEXT_SOURCES = (
     ("https://play.pokemonshowdown.com/data/items.js", STATS_DIR / "items.json", "items"),
     ("https://play.pokemonshowdown.com/data/abilities.js", STATS_DIR / "abilities.json", "abilities"),
@@ -33,6 +34,13 @@ FORMATS_SOURCE = "https://play.pokemonshowdown.com/data/formats.js"
 TEAMBUILDER_SOURCE = "https://play.pokemonshowdown.com/data/teambuilder-tables.js"
 LEARNSETS_SOURCE = "https://play.pokemonshowdown.com/data/learnsets.js"
 CHAMPIONS_VGC_NAME_PATTERN = re.compile(r"^\[Gen \d+ Champions\] VGC\b")
+SMOGON_STATS_ROOT = "https://www.smogon.com/stats"
+RECENT_STATS_MONTHS = 6
+CHAMPIONS_USAGE_FILENAME_PATTERN = re.compile(
+    r"^(gen\d+[a-z0-9]*champions[a-z0-9]*vgc[a-z0-9]*(?:bo3)?)-(?P<rating>\d+)\.json$",
+    re.IGNORECASE,
+)
+PREFERRED_USAGE_RATINGS = ("1500", "1630", "1760", "0")
 
 
 def ensure_directories():
@@ -56,8 +64,92 @@ def fetch_text(url):
     return response.text
 
 
+def iter_recent_complete_months(count):
+    now = datetime.now(timezone.utc)
+    year = now.year
+    month = now.month - 1
+    if month == 0:
+        year -= 1
+        month = 12
+    for _ in range(count):
+        yield f"{year:04d}-{month:02d}"
+        month -= 1
+        if month == 0:
+            year -= 1
+            month = 12
+
+
+def extract_usage_filenames(index_html):
+    matches = re.findall(r"(gen[^\s\"'>]+\.json)", index_html, flags=re.IGNORECASE)
+    return sorted(set(matches))
+
+
+def usage_file_sort_key(filename):
+    match = CHAMPIONS_USAGE_FILENAME_PATTERN.match(filename)
+    if not match:
+        return (1, len(PREFERRED_USAGE_RATINGS), filename)
+    rating = match.group("rating")
+    bo3_penalty = 1 if "bo3" in filename.lower() else 0
+    rating_rank = PREFERRED_USAGE_RATINGS.index(rating) if rating in PREFERRED_USAGE_RATINGS else len(PREFERRED_USAGE_RATINGS)
+    return (bo3_penalty, rating_rank, filename)
+
+
+def find_recent_champions_usage_url():
+    for month in iter_recent_complete_months(RECENT_STATS_MONTHS):
+        index_url = f"{SMOGON_STATS_ROOT}/{month}/chaos/"
+        try:
+            index_html = fetch_text(index_url)
+        except requests.RequestException as error:
+            print(f"Skipping {index_url}: {error}")
+            continue
+        candidates = [
+            filename for filename in extract_usage_filenames(index_html)
+            if CHAMPIONS_USAGE_FILENAME_PATTERN.match(filename)
+        ]
+        if not candidates:
+            continue
+        selected = sorted(candidates, key=usage_file_sort_key)[0]
+        return month, f"{index_url}{selected}"
+    return None
+
+
 def json5_to_json(text):
     return re.sub(r'([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)(\s*:)', r'\1"\2"\3', text)
+
+
+def load_json5_object(path):
+    return json.loads(json5_to_json(path.read_text(encoding="utf-8")))
+
+
+def format_name_list(names):
+    cleaned_names = [str(name).strip() for name in names if str(name).strip()]
+    if not cleaned_names:
+        return ""
+    if len(cleaned_names) == 1:
+        return cleaned_names[0]
+    if len(cleaned_names) == 2:
+        return f"{cleaned_names[0]} or {cleaned_names[1]}"
+    return f"{', '.join(cleaned_names[:-1])}, or {cleaned_names[-1]}"
+
+
+def enrich_champions_item_overrides(base_items, override_items):
+    enriched = {}
+    for item_id, patch in override_items.items():
+        merged = {**base_items.get(item_id, {}), **patch}
+        next_patch = dict(patch)
+        if merged.get("desc") or merged.get("shortDesc") or not merged.get("megaStone"):
+            enriched[item_id] = next_patch
+            continue
+        users = merged.get("itemUser") or list((merged.get("megaStone") or {}).keys())
+        user_label = format_name_list(users)
+        if not user_label:
+            enriched[item_id] = next_patch
+            continue
+        description = f"If held by {user_label}, this item allows it to Mega Evolve in battle."
+        next_patch["desc"] = description
+        next_patch["shortDesc"] = description
+        enriched[item_id] = next_patch
+    return enriched
 
 
 def parse_exported_array(source, export_name):
@@ -207,6 +299,7 @@ def write_champions_vgc_data():
     print("Updating Champions VGC metadata.")
     formats = write_formats_data()
     teambuilder = parse_teambuilder_table(fetch_text(TEAMBUILDER_SOURCE))
+    base_items = load_json5_object(STATS_DIR / "items.json")
     champions = teambuilder.get("champions")
     if not isinstance(champions, dict):
         raise ValueError("Champions table not found in teambuilder data")
@@ -233,9 +326,29 @@ def write_champions_vgc_data():
         "overrideSpeciesData": champions.get("overrideSpeciesData", {}),
         "overrideMoveData": champions.get("overrideMoveData", {}),
         "overrideAbilityData": champions.get("overrideAbilityData", {}),
-        "overrideItemData": champions.get("overrideItemData", {}),
+        "overrideItemData": enrich_champions_item_overrides(base_items, champions.get("overrideItemData", {})),
     }
     (STATS_DIR / "champions_vgc.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def update_usage_data():
+    print("Checking Smogon Champions VGC usage.")
+    recent_usage = find_recent_champions_usage_url()
+    if not recent_usage:
+        if not STATIC_USAGE_PATH.exists():
+            raise FileNotFoundError(
+                "No recent Smogon Champions VGC usage file was found and static/usage.json does not exist."
+            )
+        print("No recent Smogon Champions VGC usage file found. Keeping existing static/usage.json.")
+        return
+
+    month, usage_url = recent_usage
+    print(f"Downloading Champions VGC usage from {month}: {usage_url}")
+    payload = json.loads(fetch_text(usage_url))
+    STATIC_USAGE_PATH.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
@@ -252,6 +365,7 @@ def main():
     extract_forms_index()
     write_learnsets_data()
     write_champions_vgc_data()
+    update_usage_data()
 
     for source in BINARY_SOURCES:
         write_binary_source(*source)

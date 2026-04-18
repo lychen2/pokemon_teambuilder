@@ -47,13 +47,17 @@ export function getSpeedContext(team = [], speedTiers = []) {
   const setterCount = team.filter((config) => hasMove(config, TRICK_ROOM_MOVE)).length;
   const slowCount = team.filter((config) => (config.stats?.spe || 0) <= medianSpeed).length;
   const fastCount = team.length - slowCount;
-  if (setterCount && slowCount >= fastCount) {
-    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount};
+  const tailwindCount = team.filter((config) => {
+    const roles = getUtilityRoles(config);
+    return roles.includes("tailwind") || roles.includes("speedcontrol");
+  }).length;
+  if (setterCount && slowCount >= Math.max(2, fastCount) && tailwindCount === 0) {
+    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount, slowCount, fastCount, tailwindCount, teamSize: team.length};
   }
-  if (setterCount) {
-    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount};
+  if (setterCount && slowCount >= 2 && fastCount >= 2) {
+    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount, slowCount, fastCount, tailwindCount, teamSize: team.length};
   }
-  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount};
+  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount, slowCount, fastCount, tailwindCount, teamSize: team.length};
 }
 
 export function getResistanceProfile(types = []) {
@@ -206,9 +210,12 @@ function summarizeOffensiveSinglesNeutral(offensive = []) {
 function createMemberReference(config) {
   return {
     id: config.id,
+    speciesId: config.speciesId || "",
+    speciesName: config.speciesName || config.displayName || t("zh", "common.unknown"),
     label: config.displayName || config.speciesName || t("zh", "common.unknown"),
     note: "",
     speed: config.stats?.spe || 0,
+    spritePosition: config.spritePosition || null,
   };
 }
 
@@ -220,7 +227,10 @@ function getSuggestedSpeedScore(candidate, speedContext, speedTiers = []) {
     return candidateSpeed <= medianSpeed ? 2.5 : hasMove(candidate, TRICK_ROOM_MOVE) ? 2 : 0;
   }
   if (speedContext.mode === SPEED_MODE_HYBRID) {
-    return topSpeed >= medianSpeed ? 1.5 : hasMove(candidate, TRICK_ROOM_MOVE) ? 1 : 0.5;
+    if (topSpeed >= medianSpeed) {
+      return 1.6;
+    }
+    return hasMove(candidate, TRICK_ROOM_MOVE) && candidateSpeed <= medianSpeed ? 0.9 : 0.35;
   }
   return topSpeed >= medianSpeed ? 2 : 0.5;
 }

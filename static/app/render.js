@@ -1,5 +1,6 @@
 import {t} from "./i18n.js";
 import {renderAnalysisView} from "./render-analysis.js";
+import {renderDamageView} from "./render-damage.js";
 import {renderMatchupView} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
 import {spriteMarkup} from "./sprites.js";
@@ -43,25 +44,33 @@ function buildTextTooltipMarkup(detail, language) {
   `;
 }
 
-function buildMoveTooltipMarkup(move, language) {
+function resolveMoveShortDesc(move, moveLookup) {
+  if (move?.shortDesc) return move.shortDesc;
+  if (move?.desc) return move.desc;
+  const entry = moveLookup?.get(normalizeName(move?.name || ""));
+  return entry?.shortDesc || entry?.desc || "";
+}
+
+function buildMoveTooltipMarkup(move, language, moveLookup) {
   const typeLabel = move.type ? getTypeLabel(move.type, language) : t(language, "common.unknown");
   const categoryLabel = getMoveCategoryLabel(move.category, language);
   const typeClass = move.type ? getTypeClassName(move.type) : "";
+  const description = resolveMoveShortDesc(move, moveLookup);
   return `
     <div class="tooltip-stack">
       <div class="tooltip-meta-row">
         <span class="tooltip-chip type-chip ${typeClass}">${escapeHtml(t(language, "tooltip.type"))}: ${escapeHtml(typeLabel)}</span>
         <span class="tooltip-chip">${escapeHtml(t(language, "tooltip.category"))}: ${escapeHtml(categoryLabel)}</span>
       </div>
-      <div class="tooltip-desc-box">${escapeHtml(move.shortDesc || t(language, "tooltip.noMoveDesc"))}</div>
+      <div class="tooltip-desc-box">${escapeHtml(description || t(language, "tooltip.noMoveDesc"))}</div>
     </div>
   `;
 }
 
-function movesMarkup(config, language) {
+function movesMarkup(config, language, moveLookup) {
   return (config.moves || []).map((move) => renderInfoPill({
     label: move.name,
-    tooltipMarkup: buildMoveTooltipMarkup(move, language),
+    tooltipMarkup: buildMoveTooltipMarkup(move, language, moveLookup),
   })).join("");
 }
 
@@ -141,6 +150,14 @@ function teamSourceCopyMarkup(config, linkedConfig, language) {
     return "";
   }
   return `<p class="muted team-origin-copy">${t(language, "team.source.linkedCopy", {name: linkedConfig.displayLabel || linkedConfig.displayName})}</p>`;
+}
+
+function speedSummaryMarkup(config, language) {
+  const parts = [`${t(language, "common.speed")} ${config.stats?.spe || 0}`];
+  if (config.teraType) {
+    parts.push(`${t(language, "common.tera")} ${getTypeLabel(config.teraType, language)}`);
+  }
+  return parts.join(" · ");
 }
 
 function teamHeaderMarkup(config, linkedConfig, language, state) {
@@ -266,25 +283,25 @@ export function renderLibrary(state) {
     filtered: activeLibrary.length,
   });
   const libraryMarkup = activeLibrary.length
-    ? activeLibrary.map((config) => `
-        <article class="entry-card">
+    ? `<div class="library-config-grid">${activeLibrary.map((config) => `
+        <article class="entry-card library-config-card">
           <div class="entry-main">
             <div class="entry-title">${spriteMarkup(config, state)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
             <div class="entry-meta">${typePills(config.types, language)}</div>
             <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
-            <p class="entry-line">${formatChampionPoints(config.championPoints, language)}</p>
-            <p class="muted">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
-            <div class="entry-line entry-tags">${movesMarkup(config, language)}</div>
-            <p class="muted">${formatStatLine(config.stats)}</p>
+            <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
+            <div class="entry-line entry-tags team-move-row">${movesMarkup(config, language, state.datasets?.moveLookup)}</div>
+            <p class="muted team-ev-line">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
+            <p class="muted team-speed-line">${formatStatLine(config.stats)}</p>
           </div>
-          <div class="card-actions">
+          <div class="card-actions library-card-actions">
             <button type="button" class="add-button" data-add-config="${config.id}">${t(language, "library.add")}</button>
             <button type="button" class="ghost-button mini-action" data-edit-config="${config.id}">${t(language, "library.edit")}</button>
             <button type="button" class="ghost-button mini-action" data-note-config="${config.id}">${t(language, "library.note")}</button>
             <button type="button" class="ghost-button danger-button mini-action" data-delete-config="${config.id}">${t(language, "library.delete")}</button>
           </div>
         </article>
-      `).join("")
+      `).join("")}</div>`
     : libraryEmptyMarkup(state, language);
   document.getElementById("library-list").innerHTML = `
     ${speciesBrowserMarkup(state)}
@@ -310,15 +327,15 @@ export function renderTeam(state) {
         ${teamHeaderMarkup(config, linkedConfig, language, state)}
         <div class="entry-meta">${typePills(config.types, language)}</div>
         <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
-        <p class="entry-line">${formatChampionPoints(config.championPoints, language)}</p>
-        <p class="muted">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
-        <div class="entry-line entry-tags">${movesMarkup(config, language)}</div>
-        <p class="muted">${t(language, "common.speed")} ${config.stats?.spe || 0}${config.teraType ? ` · ${t(language, "common.tera")} ${getTypeLabel(config.teraType, language)}` : ""}</p>
-        ${teamSourceCopyMarkup(config, linkedConfig, language)}
+        <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
+        <div class="entry-line entry-tags team-move-row">${movesMarkup(config, language, state.datasets?.moveLookup)}</div>
+        <p class="muted team-ev-line">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
+        <p class="muted team-speed-line">${speedSummaryMarkup(config, language)}</p>
       </div>
       <div class="team-card-actions">
         <button type="button" class="ghost-button mini-action" data-edit-team="${config.id}">${t(language, "team.tune")}</button>
-        <button type="button" class="ghost-button danger-button sidebar-action" data-remove-config="${config.id}">${t(language, "team.remove")}</button>
+        <button type="button" class="ghost-button mini-action" data-open-damage-attacker="${config.id}">${t(language, "team.damage")}</button>
+        <button type="button" class="ghost-button danger-button mini-action" data-remove-config="${config.id}">${t(language, "team.remove")}</button>
       </div>
     </article>
   `;
@@ -356,6 +373,10 @@ export function renderMatchup(state) {
 
 export function renderRecommendations(state) {
   document.getElementById("recommend-list").innerHTML = renderRecommendationsView(state);
+}
+
+export function renderDamage(state) {
+  renderDamageView(state);
 }
 
 export function renderSpeedTiers(state) {

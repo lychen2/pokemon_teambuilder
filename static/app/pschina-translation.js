@@ -1,8 +1,10 @@
 const PSCHINA_SCRIPT_PATH = new URL("../../PSChina%20Server%20Translation%20SV-1.7.2.user.js", import.meta.url).href;
 const AUTO_RUN_PATTERN = /\(function\(\)\s*\{[\s\S]*$/;
 const JQUERY_NO_CONFLICT_PATTERN = /var QQ = \$\.noConflict\(\);/;
+const CUSTOM_MEGA_STONE_DESC_PATTERN = /^If held by (.+), this item allows it to Mega Evolve in battle\.$/;
 
 let translatorPromise = null;
+let cachedTranslator = null;
 let translationQueue = Promise.resolve();
 
 function buildTranslator(source) {
@@ -10,7 +12,7 @@ function buildTranslator(source) {
     .replaceAll("NodeFilter.SHOW_Element", "NodeFilter.SHOW_ELEMENT")
     .replace(JQUERY_NO_CONFLICT_PATTERN, "var QQ = null;")
     .replace(AUTO_RUN_PATTERN, "");
-  const factory = new Function(`${normalizedSource}\nreturn {translateElement, translateNode, t};`);
+  const factory = new Function(`${normalizedSource}\nreturn {translateElement, translateNode, t, translations};`);
   return factory();
 }
 
@@ -19,7 +21,42 @@ function shouldSkipTextNode(node) {
   return parentTag === "SCRIPT" || parentTag === "STYLE" || parentTag === "TEXTAREA";
 }
 
+function translateNameList(translator, value) {
+  return String(value || "")
+    .split(/(\s*,\s*|\s+or\s+)/)
+    .map((part) => {
+      if (!part.trim()) {
+        return part;
+      }
+      if (/^\s*,\s*$/.test(part)) {
+        return "、";
+      }
+      if (/^\s+or\s+$/.test(part)) {
+        return "或";
+      }
+      if (!translator?.t) {
+        return part;
+      }
+      return translator.t(part.replaceAll("é", "e"));
+    })
+    .join("");
+}
+
+function translateCustomText(translator, originalValue) {
+  const normalizedValue = String(originalValue || "");
+  const megaStoneMatch = normalizedValue.match(CUSTOM_MEGA_STONE_DESC_PATTERN);
+  if (megaStoneMatch) {
+    const translatedNameList = translateNameList(translator, megaStoneMatch[1]);
+    return `${translatedNameList}携带时可在战斗中进行超级进化。`;
+  }
+  return normalizedValue;
+}
+
 function translatePlainText(translator, originalValue) {
+  const customTranslation = translateCustomText(translator, originalValue);
+  if (customTranslation !== String(originalValue || "")) {
+    return customTranslation;
+  }
   if (!translator.t) {
     return originalValue;
   }

@@ -59,6 +59,9 @@ function renderRecommendationDetailPills(config, language) {
     `${t(language, "recommend.reasonLabel")}: ${config.reasons.join(" / ")}`,
     `${t(language, "recommend.helpLabel")}: ${config.weaknessHelp.join(" / ")}`,
   ];
+  if (config.teammateMatches?.length) {
+    detailLines.push(`${t(language, "recommend.teammateLabel")}: ${config.teammateMatches.map((entry) => entry.member.displayName || entry.member.speciesName).join(" / ")}`);
+  }
   if (config.penalties?.length) {
     detailLines.push(`${t(language, "recommend.penaltyLabel")}: ${config.penalties.join(" / ")}`);
   }
@@ -174,6 +177,7 @@ function renderRecommendationCard(config, state) {
           <span>${t(language, "recommend.coverage", {value: config.breakdown.coverage.toFixed(1)})}</span>
           <span>${t(language, "recommend.speed", {value: config.breakdown.speed.toFixed(1)})}</span>
           <span>${t(language, "recommend.synergy", {value: config.breakdown.synergy.toFixed(1)})}</span>
+          <span>${t(language, "recommend.teammates", {value: config.breakdown.teammates.toFixed(1)})}</span>
           <span>${t(language, "recommend.quality", {value: config.breakdown.quality.toFixed(1)})}</span>
         </div>
         ${renderQualityPills(config, language)}

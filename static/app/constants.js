@@ -7,6 +7,7 @@ export const DATA_PATHS = {
   items: "./poke_analysis-main/stats/items.json",
   championsVgc: "./poke_analysis-main/stats/champions_vgc.json",
   pokeIconMap: "./static/poke-icons-map.json",
+  usage: "./static/usage.json",
 };
 
 export const ICON_SCHEMES = {
@@ -86,6 +87,7 @@ export const SCORE_WEIGHTS = {
   coverage: 12,
   speed: 6,
   synergy: 6,
+  teammates: 4,
   quality: 4,
 };
 

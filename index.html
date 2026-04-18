@@ -105,7 +105,7 @@
               <button id="clear-custom-btn" type="button" class="ghost-button" data-i18n="controls.clearLibrary">清空配置库</button>
             </div>
             <input id="library-file-input" type="file" accept=".txt,.team,.pokelib,text/plain" hidden>
-            <p id="import-feedback" class="muted">未导入任何自定义配置。</p>
+            <p id="import-feedback" class="muted" data-i18n="controls.importEmpty">未导入任何自定义配置。</p>
           </details>
         </section>
 
@@ -115,6 +115,7 @@
             <button type="button" class="view-tab" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
             <button type="button" class="view-tab" data-view="matchup-view" data-i18n="tabs.matchup">对局分析</button>
             <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
+            <button type="button" class="view-tab" data-view="damage-view" data-i18n="tabs.damage">伤害工作台</button>
             <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
           </nav>
 
@@ -187,6 +188,24 @@
             <div id="recommend-list" class="stack-list compact-list view-list"></div>
           </section>
 
+          <section id="damage-view" class="view-panel">
+            <div class="section-head">
+              <h2 data-i18n="views.damageTitle">伤害工作台</h2>
+              <p class="muted" data-i18n="views.damageCopy">使用内置 Champions 伤害引擎直接做对位计算，不再依赖外部前端页面。</p>
+            </div>
+            <div class="damage-layout">
+              <section class="subpanel">
+                <div id="damage-controls"></div>
+              </section>
+              <section class="subpanel">
+                <div id="damage-field"></div>
+              </section>
+              <section class="subpanel">
+                <div id="damage-summary"></div>
+              </section>
+            </div>
+          </section>
+
           <section id="speed-view" class="view-panel">
             <div class="section-head">
               <h2 data-i18n="views.speedLineTitle">常见速度线</h2>
@@ -228,7 +247,8 @@
         <div class="guided-config-grid">
           <label>
             <span data-i18n="builder.item">道具</span>
-            <input id="builder-item-input" type="text" list="builder-item-options">
+            <input id="builder-item-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false">
+            <div id="builder-item-picker" class="builder-autocomplete-panel" hidden></div>
           </label>
           <label>
             <span data-i18n="builder.ability">特性</span>
@@ -270,8 +290,6 @@
           <button id="save-guided-config-btn" type="button" data-i18n="builder.save">加入配置库</button>
           <button type="button" class="ghost-button" data-close-guided-config data-i18n="editor.cancel">取消</button>
         </div>
-        <datalist id="builder-item-options"></datalist>
-        <datalist id="builder-move-options"></datalist>
       </section>
     </div>
 

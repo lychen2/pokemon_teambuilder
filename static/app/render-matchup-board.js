@@ -15,6 +15,16 @@ function getTypeClassName(type) {
   return `type-${String(type || "").toLowerCase()}`;
 }
 
+function getDisplaySpeciesName(state, speciesId, fallbackName = "", fallbackLabel = "") {
+  if (!speciesId) {
+    return fallbackLabel || fallbackName;
+  }
+  if (state.language === "zh") {
+    return state.localizedSpeciesNames?.get(speciesId) || fallbackName || fallbackLabel;
+  }
+  return fallbackName || fallbackLabel;
+}
+
 function typePills(types = [], language) {
   return types.map((type) => (
     `<span class="pill type-pill ${getTypeClassName(type)}">${getTypeLabel(type, language)}</span>`
@@ -22,15 +32,11 @@ function typePills(types = [], language) {
 }
 
 function getLocalizedEntryName(entry, state) {
-  return entry.speciesId
-    ? state.localizedSpeciesNames?.get(entry.speciesId) || entry.speciesName || entry.label
-    : entry.label;
+  return getDisplaySpeciesName(state, entry.speciesId, entry.speciesName, entry.label);
 }
 
 function getLocalizedCardName(card, state) {
-  return card.speciesId
-    ? state.localizedSpeciesNames?.get(card.speciesId) || card.speciesName || card.label
-    : card.label;
+  return getDisplaySpeciesName(state, card.speciesId, card.speciesName, card.label);
 }
 
 function renderSummaryEntries(entries = [], language, includeResistance = false, state) {
@@ -54,7 +60,7 @@ function renderSummaryEntries(entries = [], language, includeResistance = false,
 
 function renderMoveTargets(targets = [], state) {
   return targets.map((target) => `
-    <span class="matchup-board-target" title="${escapeHtml(target.speciesName || target.label)}">
+    <span class="matchup-board-target" title="${escapeHtml(getDisplaySpeciesName(state, target.speciesId, target.speciesName, target.label))}">
       ${spriteMarkup(target, state)}
     </span>
   `).join("");
@@ -146,6 +152,16 @@ function renderBoardEntry(card, state, language, summaryKey, includeResistance =
       : "";
   const configControlMarkup = allowConfigPicker ? renderBoardConfigControl(card, state, language) : "";
   const headSideMarkup = configControlMarkup || (metaLine ? `<span class="source-tag">${metaLine}</span>` : `<span class="matchup-board-side-meta-spacer"></span>`);
+  const supportMarkup = side === "opponent" && card.supportMoves?.length
+    ? `
+      <div class="matchup-board-summary">
+        <span class="analysis-label">${t(language, "matchup.boardSupportMoves")}</span>
+        <div class="entry-tags">
+          ${card.supportMoves.map((moveName) => `<span class="mini-pill">${escapeHtml(moveName)}</span>`).join("")}
+        </div>
+      </div>
+    `
+    : "";
   const bodyMarkup = `
     <div class="matchup-board-side-main">
       <div class="matchup-board-side-head">
@@ -167,6 +183,7 @@ function renderBoardEntry(card, state, language, summaryKey, includeResistance =
           ${renderSummaryEntries(card.summaryEntries, language, includeResistance, state)}
         </div>
       </div>
+      ${supportMarkup}
     </div>
   `;
   if (side === "opponent") {
@@ -206,8 +223,9 @@ function renderSpeedStats(entry, language) {
 
 function renderSpeedEntry(entry, state, language, side = "ally") {
   const sideClass = `matchup-board-speed-side matchup-board-speed-side-${side}`;
+  const title = getDisplaySpeciesName(state, entry.speciesId, entry.speciesName, entry.label);
   return `
-    <div class="${sideClass}" title="${escapeHtml(entry.label)}">
+    <div class="${sideClass}" title="${escapeHtml(title)}">
       <div class="matchup-board-speed-avatar">${spriteMarkup(entry, state)}</div>
       <div class="matchup-board-speed-stats matchup-board-speed-stats-${side}">
         ${renderSpeedStats(entry, language)}

@@ -1,5 +1,6 @@
 import {TYPE_CHART} from "./constants.js";
 import {getAttackBias} from "./team-roles.js";
+import {getUsageMoveEntries} from "./usage.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MOVE_LIMIT = 4;
@@ -193,6 +194,28 @@ function getLegalMoves(entry, datasets) {
   if (!learnset) return [];
   return dedupeMoves(Object.keys(learnset).map((moveId) => datasets.moves?.[moveId]).filter(isDisplayableMove));
 }
+
+function getUsageAttackMoves(entry, datasets) {
+  const speciesId = getStableSpeciesId(entry);
+  if (!speciesId) {
+    return [];
+  }
+  return getUsageMoveEntries(speciesId, datasets, {kind: "attacking", limit: 8}).map((entry) => entry.move);
+}
+
+function getCommonSupportMoveNames(entry, datasets, selectedMoves = [], limit = 3) {
+  const speciesId = getStableSpeciesId(entry);
+  if (!speciesId) {
+    return [];
+  }
+  return getUsageMoveEntries(speciesId, datasets, {
+    kind: "support",
+    limit: 6,
+    excludeNames: selectedMoves.map((move) => move.name),
+  })
+    .map((entry) => entry.name)
+    .slice(0, limit);
+}
 function scoreMove(move, targets = []) {
   const metrics = getMoveMetrics(move, targets);
   return {
@@ -310,10 +333,17 @@ function addRequiredStabMoves(targetList, rankedLegalMoves, memberTypes, selecte
 function supplementMoves(selected, entry, targets = [], memberTypes = [], datasets) {
   const preferredCategory = getPreferredCategory(entry);
   const rankedLegalMoves = rankMoves(getLegalMoves(entry, datasets), targets, memberTypes, preferredCategory);
+  const rankedUsageMoves = rankMoves(getUsageAttackMoves(entry, datasets), targets, memberTypes, preferredCategory);
   const nextMoves = [];
   const selectedMoveIds = getSelectedMoveIds(nextMoves);
   selected.forEach((move) => addMoveIfPresent(nextMoves, move, selectedMoveIds));
-  addRequiredStabMoves(nextMoves, rankedLegalMoves, memberTypes, selectedMoveIds);
+  addRequiredStabMoves(nextMoves, [...rankedUsageMoves, ...rankedLegalMoves], memberTypes, selectedMoveIds);
+  rankedUsageMoves.forEach((move) => {
+    const moveId = normalizeName(move.name);
+    if (nextMoves.length >= MOVE_LIMIT || selectedMoveIds.has(moveId)) return;
+    if (!move.isStab && countTypeMoves(nextMoves, move.type, false) >= 1) return;
+    addMoveIfPresent(nextMoves, move, selectedMoveIds);
+  });
   if (!nextMoves.some((move) => memberTypes.includes(move.type))) {
     addMoveIfPresent(nextMoves, getBestStabMove(rankedLegalMoves.filter((move) => !selectedMoveIds.has(normalizeName(move.name))), memberTypes), selectedMoveIds);
   }
@@ -387,6 +417,7 @@ function getSpeedSnapshot(entry) {
     id: getStableSpeciesId(entry) || entry.id,
     label: getMemberLabel(entry),
     speciesId: getStableSpeciesId(entry),
+    speciesName: entry.speciesName || getMemberLabel(entry),
     spritePosition: entry.spritePosition,
     baseMin: getMinValue(baseSpeeds),
     baseMax: getMaxValue(baseSpeeds),
@@ -418,6 +449,7 @@ function createCard(entry, targets = [], summaries = [], includeResistance = fal
         ? supplementMoves(seedMoves, entry, targets, memberTypes, datasets)
         : seedMoves.slice(0, MOVE_LIMIT);
     })();
+  const supportMoves = getCommonSupportMoveNames(entry, datasets, selectedMoves);
   return {
     id: getStableSpeciesId(entry) || entry.id,
     speciesId: getStableSpeciesId(entry),
@@ -436,6 +468,7 @@ function createCard(entry, targets = [], summaries = [], includeResistance = fal
         label: config.displayLabel || config.displayName || config.speciesName || "Unknown",
       }))
       : [],
+    supportMoves,
     moveRows: padMoveRows(selectedMoves, targets),
     targets,
     summaryEntries: createSummaryEntries(summaries, includeResistance),
@@ -453,15 +486,17 @@ export function getSuggestedMoveNamesForSpecies(speciesId, datasets, selectedMov
   const memberTypes = entry.types || [];
   const preferredCategory = getPreferredCategory(entry);
   const rankedLegalMoves = rankMoves(getLegalMoves(entry, datasets), [], memberTypes, preferredCategory);
+  const rankedUsageMoves = rankMoves(getUsageAttackMoves(entry, datasets), [], memberTypes, preferredCategory);
   const selectedMoves = getSeedMoves(entry, [], memberTypes);
   const selectedMoveIds = new Set(selectedMoveNames.map((moveName) => normalizeName(moveName)).filter(Boolean));
   const seeded = [];
   const seededIds = getSelectedMoveIds(seeded);
+  const suggestionIds = new Set();
   selectedMoves.forEach((move) => addMoveIfPresent(seeded, move, seededIds));
   const suggestions = [];
-  rankedLegalMoves.forEach((move) => {
+  [...rankedUsageMoves, ...rankedLegalMoves].forEach((move) => {
     const moveId = normalizeName(move.name);
-    if (suggestions.length >= limit || selectedMoveIds.has(moveId) || seededIds.has(moveId)) {
+    if (suggestions.length >= limit || selectedMoveIds.has(moveId) || seededIds.has(moveId) || suggestionIds.has(moveId)) {
       return;
     }
     if (!move.isStab && countTypeMoves([...seeded, ...suggestions], move.type, false) >= 1) {
@@ -471,8 +506,26 @@ export function getSuggestedMoveNamesForSpecies(speciesId, datasets, selectedMov
       return;
     }
     suggestions.push(move);
+    suggestionIds.add(moveId);
   });
   return suggestions.map((move) => move.name);
+}
+
+export function resolveDamageMoveNamesForConfig(config, allyTargets = [], datasets) {
+  if (!config?.speciesId || !datasets) return [];
+  const existingNames = Array.isArray(config.moveNames) && config.moveNames.length
+    ? config.moveNames
+    : (config.moves || []).map((move) => move?.name).filter(Boolean);
+  const entry = buildEntryFromSpecies(config.speciesId, datasets, existingNames);
+  if (!entry) return existingNames.slice(0, MOVE_LIMIT);
+  const memberTypes = entry.types || [];
+  const seedMoves = getSeedMoves(entry, allyTargets, memberTypes);
+  const filled = seedMoves.length >= MOVE_LIMIT
+    ? seedMoves.slice(0, MOVE_LIMIT)
+    : supplementMoves(seedMoves, entry, allyTargets, memberTypes, datasets);
+  const resolvedNames = filled.map((move) => move?.name).filter(Boolean);
+  if (resolvedNames.length) return resolvedNames;
+  return existingNames.slice(0, MOVE_LIMIT);
 }
 
 export function buildMatchupBoard({team = [], opponentTeam = [], allyThreats = [], opponentAnswers = [], datasets}) {

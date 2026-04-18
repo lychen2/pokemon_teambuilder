@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-11T15:15:52.186316+00:00",
+  "generatedAt": "2026-04-17T05:05:57.741234+00:00",
   "format": {
     "name": "[Gen 9 Champions] VGC 2026 Reg M-A",
     "mod": "champions",
@@ -117,7 +117,6 @@
     "gardevoirmega",
     "garganacl",
     "gengar",
-    "gengarmega",
     "glaceon",
     "glalie",
     "glaliemega",
@@ -294,8 +293,8 @@
   ],
   "selectionWindow": {
     "sliceStartTier": "OU",
-    "sliceStartIndex": 83,
-    "sliceEndIndex": 362
+    "sliceStartIndex": 85,
+    "sliceEndIndex": 363
   },
   "learnsets": {
     "venusaur": {
@@ -13321,765 +13320,6 @@
       "syrupbomb": "9a",
       "uproar": "9a",
       "yawn": "9a"
-    },
-    "arceusbug": {},
-    "arceusdark": {},
-    "arceusdragon": {},
-    "arceuselectric": {},
-    "arceusfairy": {},
-    "arceusfighting": {},
-    "arceusfire": {},
-    "arceusflying": {},
-    "arceusghost": {},
-    "arceusgrass": {},
-    "arceusground": {},
-    "arceusice": {},
-    "arceuspoison": {},
-    "arceuspsychic": {},
-    "arceusrock": {},
-    "arceussteel": {},
-    "arceuswater": {},
-    "basculinwhitestriped": {
-      "agility": "9a",
-      "aquajet": "9a",
-      "bite": "9a",
-      "blizzard": "9a",
-      "chillingwater": "9a",
-      "crunch": "9a",
-      "doubleedge": "9a",
-      "endeavor": "9a",
-      "endure": "9a",
-      "facade": "9a",
-      "flail": "9a",
-      "flipturn": "9a",
-      "headbutt": "9a",
-      "headsmash": "9a",
-      "hydropump": "9a",
-      "icebeam": "9a",
-      "icefang": "9a",
-      "icywind": "9a",
-      "lastrespects": "9a",
-      "liquidation": "9a",
-      "muddywater": "9a",
-      "mudshot": "9a",
-      "protect": "9a",
-      "psychicfangs": "9a",
-      "raindance": "9a",
-      "rest": "9a",
-      "scaleshot": "9a",
-      "scaryface": "9a",
-      "sleeptalk": "9a",
-      "snowscape": "9a",
-      "soak": "9a",
-      "substitute": "9a",
-      "surf": "9a",
-      "swift": "9a",
-      "tackle": "9a",
-      "tailwhip": "9a",
-      "takedown": "9a",
-      "terablast": "9a",
-      "thrash": "9a",
-      "uproar": "9a",
-      "waterfall": "9a",
-      "watergun": "9a",
-      "waterpulse": "9a",
-      "wavecrash": "9a",
-      "whirlpool": "9a",
-      "zenheadbutt": "9a"
-    },
-    "keldeoresolute": {},
-    "vivillonfancy": {
-      "acrobatics": "9a",
-      "aerialace": "9a",
-      "aircutter": "9a",
-      "airslash": "9a",
-      "aromatherapy": "9a",
-      "attract": "9a",
-      "bugbite": "9a",
-      "bugbuzz": "9a",
-      "calmmind": "9a",
-      "confide": "9a",
-      "confuseray": "9a",
-      "defog": "9a",
-      "doubleteam": "9a",
-      "drainingkiss": "9a",
-      "dreameater": "9a",
-      "electroweb": "9a",
-      "endeavor": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "facade": "9a",
-      "flash": "9a",
-      "frustration": "9a",
-      "gigadrain": "9a",
-      "gigaimpact": "9a",
-      "gust": "9a",
-      "hiddenpower": "9a",
-      "holdhands": "9a",
-      "hurricane": "9a",
-      "hyperbeam": "9a",
-      "infestation": "9a",
-      "irondefense": "9a",
-      "laserfocus": "9a",
-      "lightscreen": "9a",
-      "poisonpowder": "9a",
-      "pollenpuff": "9a",
-      "pounce": "9a",
-      "powder": "9a",
-      "protect": "9a",
-      "psybeam": "9a",
-      "psychic": "9a",
-      "psychup": "9a",
-      "quiverdance": "9a",
-      "raindance": "9a",
-      "rest": "9a",
-      "return": "9a",
-      "roost": "9a",
-      "round": "9a",
-      "safeguard": "9a",
-      "secretpower": "9a",
-      "signalbeam": "9a",
-      "sleeppowder": "9a",
-      "sleeptalk": "9a",
-      "snore": "9a",
-      "solarbeam": "9a",
-      "strugglebug": "9a",
-      "stunspore": "9a",
-      "substitute": "9a",
-      "sunnyday": "9a",
-      "supersonic": "9a",
-      "swagger": "9a",
-      "swift": "9a",
-      "tailwind": "9a",
-      "terablast": "9a",
-      "thief": "9a",
-      "toxic": "9a",
-      "uturn": "9a"
-    },
-    "vivillonpokeball": {
-      "acrobatics": "9a",
-      "aerialace": "9a",
-      "aircutter": "9a",
-      "airslash": "9a",
-      "aromatherapy": "9a",
-      "attract": "9a",
-      "bugbite": "9a",
-      "bugbuzz": "9a",
-      "calmmind": "9a",
-      "confide": "9a",
-      "confuseray": "9a",
-      "defog": "9a",
-      "doubleteam": "9a",
-      "drainingkiss": "9a",
-      "dreameater": "9a",
-      "electroweb": "9a",
-      "endeavor": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "facade": "9a",
-      "flash": "9a",
-      "frustration": "9a",
-      "gigadrain": "9a",
-      "gigaimpact": "9a",
-      "gust": "9a",
-      "hiddenpower": "9a",
-      "hurricane": "9a",
-      "hyperbeam": "9a",
-      "infestation": "9a",
-      "irondefense": "9a",
-      "laserfocus": "9a",
-      "lightscreen": "9a",
-      "poisonpowder": "9a",
-      "pollenpuff": "9a",
-      "pounce": "9a",
-      "powder": "9a",
-      "protect": "9a",
-      "psybeam": "9a",
-      "psychic": "9a",
-      "psychup": "9a",
-      "quiverdance": "9a",
-      "raindance": "9a",
-      "rest": "9a",
-      "return": "9a",
-      "roost": "9a",
-      "round": "9a",
-      "safeguard": "9a",
-      "secretpower": "9a",
-      "signalbeam": "9a",
-      "sleeppowder": "9a",
-      "sleeptalk": "9a",
-      "snore": "9a",
-      "solarbeam": "9a",
-      "strugglebug": "9a",
-      "stunspore": "9a",
-      "substitute": "9a",
-      "sunnyday": "9a",
-      "supersonic": "9a",
-      "swagger": "9a",
-      "swift": "9a",
-      "tailwind": "9a",
-      "terablast": "9a",
-      "thief": "9a",
-      "toxic": "9a",
-      "uturn": "9a"
-    },
-    "gourgeistsuper": {
-      "allyswitch": "9a",
-      "astonish": "9a",
-      "attract": "9a",
-      "brutalswing": "9a",
-      "bulletseed": "9a",
-      "chargebeam": "9a",
-      "confide": "9a",
-      "confuseray": "9a",
-      "darkpulse": "9a",
-      "doubleteam": "9a",
-      "dreameater": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "explosion": "9a",
-      "facade": "9a",
-      "fireblast": "9a",
-      "flamecharge": "9a",
-      "flamethrower": "9a",
-      "flash": "9a",
-      "focusblast": "9a",
-      "foulplay": "9a",
-      "frustration": "9a",
-      "gigadrain": "9a",
-      "gigaimpact": "9a",
-      "grassknot": "9a",
-      "grassyglide": "9a",
-      "gyroball": "9a",
-      "hex": "9a",
-      "hiddenpower": "9a",
-      "hyperbeam": "9a",
-      "imprison": "9a",
-      "incinerate": "9a",
-      "leechseed": "9a",
-      "lightscreen": "9a",
-      "magiccoat": "9a",
-      "moonblast": "9a",
-      "mysticalfire": "9a",
-      "nastyplot": "9a",
-      "naturepower": "9a",
-      "painsplit": "9a",
-      "phantomforce": "9a",
-      "poltergeist": "9a",
-      "powerwhip": "9a",
-      "protect": "9a",
-      "psychic": "9a",
-      "razorleaf": "9a",
-      "rest": "9a",
-      "return": "9a",
-      "rockslide": "9a",
-      "rocksmash": "9a",
-      "roleplay": "9a",
-      "round": "9a",
-      "safeguard": "9a",
-      "scaryface": "9a",
-      "secretpower": "9a",
-      "seedbomb": "9a",
-      "shadowball": "9a",
-      "shadowsneak": "9a",
-      "skillswap": "9a",
-      "skittersmack": "9a",
-      "sleeptalk": "9a",
-      "sludgebomb": "9a",
-      "snore": "9a",
-      "solarbeam": "9a",
-      "spite": "9a",
-      "substitute": "9a",
-      "sunnyday": "9a",
-      "swagger": "9a",
-      "synthesis": "9a",
-      "telekinesis": "9a",
-      "thief": "9a",
-      "toxic": "9a",
-      "trick": "9a",
-      "trickortreat": "9a",
-      "trickroom": "9a",
-      "willowisp": "9a",
-      "worryseed": "9a"
-    },
-    "magearnaoriginal": {
-      "agility": "9a",
-      "aurasphere": "9a",
-      "aurorabeam": "9a",
-      "batonpass": "9a",
-      "bodyslam": "9a",
-      "brickbreak": "9a",
-      "calmmind": "9a",
-      "chargebeam": "9a",
-      "confuseray": "9a",
-      "craftyshield": "9a",
-      "dazzlinggleam": "9a",
-      "defensecurl": "9a",
-      "disarmingvoice": "9a",
-      "drainingkiss": "9a",
-      "eerieimpulse": "9a",
-      "electroball": "9a",
-      "electroweb": "9a",
-      "encore": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "facade": "9a",
-      "falseswipe": "9a",
-      "flashcannon": "9a",
-      "fleurcannon": "9a",
-      "focusblast": "9a",
-      "gearup": "9a",
-      "gigaimpact": "9a",
-      "grassknot": "9a",
-      "gravity": "9a",
-      "guardswap": "9a",
-      "gyroball": "9a",
-      "heavyslam": "9a",
-      "helpinghand": "9a",
-      "hyperbeam": "9a",
-      "icebeam": "9a",
-      "icespinner": "9a",
-      "imprison": "9a",
-      "irondefense": "9a",
-      "ironhead": "9a",
-      "lightscreen": "9a",
-      "lockon": "9a",
-      "magneticflux": "9a",
-      "metalsound": "9a",
-      "mindreader": "9a",
-      "mistyexplosion": "9a",
-      "mistyterrain": "9a",
-      "painsplit": "9a",
-      "playrough": "9a",
-      "powerswap": "9a",
-      "protect": "9a",
-      "psybeam": "9a",
-      "psychic": "9a",
-      "psyshock": "9a",
-      "reflect": "9a",
-      "rest": "9a",
-      "rollout": "9a",
-      "round": "9a",
-      "selfdestruct": "9a",
-      "shadowball": "9a",
-      "shiftgear": "9a",
-      "skillswap": "9a",
-      "sleeptalk": "9a",
-      "snore": "9a",
-      "snowscape": "9a",
-      "solarbeam": "9a",
-      "speedswap": "9a",
-      "spikes": "9a",
-      "steelbeam": "9a",
-      "steelroller": "9a",
-      "storedpower": "9a",
-      "substitute": "9a",
-      "sunnyday": "9a",
-      "swift": "9a",
-      "takedown": "9a",
-      "terablast": "9a",
-      "thunderbolt": "9a",
-      "thunderwave": "9a",
-      "triattack": "9a",
-      "trick": "9a",
-      "trickroom": "9a",
-      "voltswitch": "9a",
-      "zapcannon": "9a",
-      "zenheadbutt": "9a"
-    },
-    "toxtricitylowkey": {
-      "acid": "9a",
-      "acidspray": "9a",
-      "attract": "9a",
-      "belch": "9a",
-      "boomburst": "9a",
-      "brickbreak": "9a",
-      "charge": "9a",
-      "chargebeam": "9a",
-      "charm": "9a",
-      "discharge": "9a",
-      "drainpunch": "9a",
-      "eerieimpulse": "9a",
-      "electricterrain": "9a",
-      "electroball": "9a",
-      "electroweb": "9a",
-      "encore": "9a",
-      "endeavor": "9a",
-      "endure": "9a",
-      "facade": "9a",
-      "firepunch": "9a",
-      "flail": "9a",
-      "fling": "9a",
-      "gigaimpact": "9a",
-      "growl": "9a",
-      "gunkshot": "9a",
-      "helpinghand": "9a",
-      "hex": "9a",
-      "hyperbeam": "9a",
-      "hypervoice": "9a",
-      "leer": "9a",
-      "magneticflux": "9a",
-      "megakick": "9a",
-      "megapunch": "9a",
-      "metalsound": "9a",
-      "metronome": "9a",
-      "nobleroar": "9a",
-      "nuzzle": "9a",
-      "overdrive": "9a",
-      "payback": "9a",
-      "poisonjab": "9a",
-      "poisontail": "9a",
-      "protect": "9a",
-      "psychicnoise": "9a",
-      "raindance": "9a",
-      "rest": "9a",
-      "risingvoltage": "9a",
-      "round": "9a",
-      "scaryface": "9a",
-      "screech": "9a",
-      "shockwave": "9a",
-      "sleeptalk": "9a",
-      "sludgebomb": "9a",
-      "sludgewave": "9a",
-      "snarl": "9a",
-      "snore": "9a",
-      "spark": "9a",
-      "storedpower": "9a",
-      "substitute": "9a",
-      "sunnyday": "9a",
-      "swagger": "9a",
-      "swift": "9a",
-      "takedown": "9a",
-      "taunt": "9a",
-      "tearfullook": "9a",
-      "terablast": "9a",
-      "thief": "9a",
-      "throatchop": "9a",
-      "thunder": "9a",
-      "thunderbolt": "9a",
-      "thunderfang": "9a",
-      "thunderpunch": "9a",
-      "thundershock": "9a",
-      "thunderwave": "9a",
-      "toxic": "9a",
-      "toxicspikes": "9a",
-      "trailblaze": "9a",
-      "uproar": "9a",
-      "venomdrench": "9a",
-      "venoshock": "9a",
-      "voltswitch": "9a",
-      "wildcharge": "9a"
-    },
-    "sinisteaantique": {
-      "allyswitch": "9a",
-      "aromatherapy": "9a",
-      "aromaticmist": "9a",
-      "astonish": "9a",
-      "batonpass": "9a",
-      "calmmind": "9a",
-      "celebrate": "9a",
-      "confuseray": "9a",
-      "curse": "9a",
-      "darkpulse": "9a",
-      "endure": "9a",
-      "facade": "9a",
-      "foulplay": "9a",
-      "gigadrain": "9a",
-      "hex": "9a",
-      "imprison": "9a",
-      "magicalleaf": "9a",
-      "megadrain": "9a",
-      "memento": "9a",
-      "metronome": "9a",
-      "nastyplot": "9a",
-      "nightshade": "9a",
-      "payback": "9a",
-      "phantomforce": "9a",
-      "poltergeist": "9a",
-      "protect": "9a",
-      "psybeam": "9a",
-      "psychic": "9a",
-      "psyshock": "9a",
-      "rest": "9a",
-      "round": "9a",
-      "shadowball": "9a",
-      "shellsmash": "9a",
-      "skillswap": "9a",
-      "sleeptalk": "9a",
-      "snore": "9a",
-      "spite": "9a",
-      "storedpower": "9a",
-      "substitute": "9a",
-      "suckerpunch": "9a",
-      "sweetscent": "9a",
-      "terablast": "9a",
-      "trick": "9a",
-      "trickroom": "9a",
-      "willowisp": "9a",
-      "withdraw": "9a",
-      "wonderroom": "9a"
-    },
-    "polteageistantique": {
-      "allyswitch": "9a",
-      "aromatherapy": "9a",
-      "aromaticmist": "9a",
-      "astonish": "9a",
-      "batonpass": "9a",
-      "calmmind": "9a",
-      "confuseray": "9a",
-      "curse": "9a",
-      "darkpulse": "9a",
-      "endure": "9a",
-      "facade": "9a",
-      "foulplay": "9a",
-      "gigadrain": "9a",
-      "gigaimpact": "9a",
-      "hex": "9a",
-      "hyperbeam": "9a",
-      "imprison": "9a",
-      "lightscreen": "9a",
-      "magicalleaf": "9a",
-      "megadrain": "9a",
-      "memento": "9a",
-      "metronome": "9a",
-      "nastyplot": "9a",
-      "nightshade": "9a",
-      "painsplit": "9a",
-      "payback": "9a",
-      "phantomforce": "9a",
-      "poltergeist": "9a",
-      "protect": "9a",
-      "psybeam": "9a",
-      "psychic": "9a",
-      "psyshock": "9a",
-      "reflect": "9a",
-      "rest": "9a",
-      "round": "9a",
-      "selfdestruct": "9a",
-      "shadowball": "9a",
-      "shellsmash": "9a",
-      "skillswap": "9a",
-      "sleeptalk": "9a",
-      "snore": "9a",
-      "spite": "9a",
-      "storedpower": "9a",
-      "strengthsap": "9a",
-      "substitute": "9a",
-      "suckerpunch": "9a",
-      "sweetscent": "9a",
-      "teatime": "9a",
-      "terablast": "9a",
-      "trick": "9a",
-      "trickroom": "9a",
-      "willowisp": "9a",
-      "withdraw": "9a",
-      "wonderroom": "9a"
-    },
-    "zarudedada": {
-      "acrobatics": "9a",
-      "aerialace": "9a",
-      "assurance": "9a",
-      "bind": "9a",
-      "bite": "9a",
-      "bodyslam": "9a",
-      "brickbreak": "9a",
-      "brutalswing": "9a",
-      "bulkup": "9a",
-      "bulletseed": "9a",
-      "closecombat": "9a",
-      "crunch": "9a",
-      "darkestlariat": "9a",
-      "darkpulse": "9a",
-      "dig": "9a",
-      "doubleedge": "9a",
-      "drainpunch": "9a",
-      "encore": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "facade": "9a",
-      "fling": "9a",
-      "focuspunch": "9a",
-      "furyswipes": "9a",
-      "gigadrain": "9a",
-      "gigaimpact": "9a",
-      "grassknot": "9a",
-      "grassyglide": "9a",
-      "grassyterrain": "9a",
-      "growth": "9a",
-      "hammerarm": "9a",
-      "helpinghand": "9a",
-      "hyperbeam": "9a",
-      "hypervoice": "9a",
-      "irontail": "9a",
-      "junglehealing": "9a",
-      "knockoff": "9a",
-      "lashout": "9a",
-      "leafstorm": "9a",
-      "leer": "9a",
-      "lowkick": "9a",
-      "lowsweep": "9a",
-      "magicalleaf": "9a",
-      "megakick": "9a",
-      "megapunch": "9a",
-      "mudshot": "9a",
-      "nastyplot": "9a",
-      "payback": "9a",
-      "petalblizzard": "9a",
-      "powerwhip": "9a",
-      "protect": "9a",
-      "rest": "9a",
-      "revenge": "9a",
-      "roar": "9a",
-      "rockslide": "9a",
-      "rocktomb": "9a",
-      "round": "9a",
-      "scaryface": "9a",
-      "scratch": "9a",
-      "seedbomb": "9a",
-      "sleeptalk": "9a",
-      "snarl": "9a",
-      "snore": "9a",
-      "solarbeam": "9a",
-      "solarblade": "9a",
-      "stompingtantrum": "9a",
-      "substitute": "9a",
-      "sunnyday": "9a",
-      "superpower": "9a",
-      "swagger": "9a",
-      "swift": "9a",
-      "swordsdance": "9a",
-      "synthesis": "9a",
-      "takedown": "9a",
-      "taunt": "9a",
-      "terablast": "9a",
-      "thief": "9a",
-      "thrash": "9a",
-      "throatchop": "9a",
-      "trailblaze": "9a",
-      "uturn": "9a",
-      "vinewhip": "9a"
-    },
-    "tatsugiristretchy": {
-      "batonpass": "9a",
-      "celebrate": "9a",
-      "chillingwater": "9a",
-      "counter": "9a",
-      "dracometeor": "9a",
-      "dragoncheer": "9a",
-      "dragondance": "9a",
-      "dragonpulse": "9a",
-      "endure": "9a",
-      "facade": "9a",
-      "gigaimpact": "9a",
-      "harden": "9a",
-      "helpinghand": "9a",
-      "hydropump": "9a",
-      "hyperbeam": "9a",
-      "icywind": "9a",
-      "lunge": "9a",
-      "memento": "9a",
-      "mirrorcoat": "9a",
-      "muddywater": "9a",
-      "nastyplot": "9a",
-      "outrage": "9a",
-      "protect": "9a",
-      "raindance": "9a",
-      "rapidspin": "9a",
-      "rest": "9a",
-      "sleeptalk": "9a",
-      "soak": "9a",
-      "splash": "9a",
-      "substitute": "9a",
-      "surf": "9a",
-      "takedown": "9a",
-      "taunt": "9a",
-      "terablast": "9a",
-      "watergun": "9a",
-      "waterpulse": "9a",
-      "whirlpool": "9a"
-    },
-    "poltchageistartisan": {
-      "absorb": "9a",
-      "astonish": "9a",
-      "calmmind": "9a",
-      "curse": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "foulplay": "9a",
-      "gigadrain": "9a",
-      "grassyterrain": "9a",
-      "hex": "9a",
-      "imprison": "9a",
-      "irondefense": "9a",
-      "leafstorm": "9a",
-      "lifedew": "9a",
-      "magicalleaf": "9a",
-      "megadrain": "9a",
-      "memento": "9a",
-      "nastyplot": "9a",
-      "nightshade": "9a",
-      "painsplit": "9a",
-      "phantomforce": "9a",
-      "poltergeist": "9a",
-      "protect": "9a",
-      "psychup": "9a",
-      "ragepowder": "9a",
-      "reflect": "9a",
-      "rest": "9a",
-      "scald": "9a",
-      "shadowball": "9a",
-      "sleeptalk": "9a",
-      "solarbeam": "9a",
-      "spite": "9a",
-      "stunspore": "9a",
-      "substitute": "9a",
-      "terablast": "9a",
-      "trickroom": "9a",
-      "uproar": "9a",
-      "withdraw": "9a"
-    },
-    "sinistchamasterpiece": {
-      "absorb": "9a",
-      "astonish": "9a",
-      "calmmind": "9a",
-      "curse": "9a",
-      "endure": "9a",
-      "energyball": "9a",
-      "foulplay": "9a",
-      "gigadrain": "9a",
-      "grassyterrain": "9a",
-      "hex": "9a",
-      "hyperbeam": "9a",
-      "imprison": "9a",
-      "irondefense": "9a",
-      "leafstorm": "9a",
-      "lifedew": "9a",
-      "magicalleaf": "9a",
-      "matchagotcha": "9a",
-      "megadrain": "9a",
-      "memento": "9a",
-      "nastyplot": "9a",
-      "nightshade": "9a",
-      "painsplit": "9a",
-      "phantomforce": "9a",
-      "poltergeist": "9a",
-      "protect": "9a",
-      "psychup": "9a",
-      "ragepowder": "9a",
-      "reflect": "9a",
-      "rest": "9a",
-      "scald": "9a",
-      "shadowball": "9a",
-      "sleeptalk": "9a",
-      "solarbeam": "9a",
-      "spite": "9a",
-      "strengthsap": "9a",
-      "stunspore": "9a",
-      "substitute": "9a",
-      "terablast": "9a",
-      "trickroom": "9a",
-      "uproar": "9a",
-      "withdraw": "9a"
     }
   },
   "overrideSpeciesData": {
@@ -15259,6 +14499,57 @@
     "arceus": {
       "isNonstandard": "Past"
     },
+    "arceusbug": {
+      "isNonstandard": "Past"
+    },
+    "arceusdark": {
+      "isNonstandard": "Past"
+    },
+    "arceusdragon": {
+      "isNonstandard": "Past"
+    },
+    "arceuselectric": {
+      "isNonstandard": "Past"
+    },
+    "arceusfairy": {
+      "isNonstandard": "Past"
+    },
+    "arceusfighting": {
+      "isNonstandard": "Past"
+    },
+    "arceusfire": {
+      "isNonstandard": "Past"
+    },
+    "arceusflying": {
+      "isNonstandard": "Past"
+    },
+    "arceusghost": {
+      "isNonstandard": "Past"
+    },
+    "arceusgrass": {
+      "isNonstandard": "Past"
+    },
+    "arceusground": {
+      "isNonstandard": "Past"
+    },
+    "arceusice": {
+      "isNonstandard": "Past"
+    },
+    "arceuspoison": {
+      "isNonstandard": "Past"
+    },
+    "arceuspsychic": {
+      "isNonstandard": "Past"
+    },
+    "arceusrock": {
+      "isNonstandard": "Past"
+    },
+    "arceussteel": {
+      "isNonstandard": "Past"
+    },
+    "arceuswater": {
+      "isNonstandard": "Past"
+    },
     "snivy": {
       "isNonstandard": "Past"
     },
@@ -15341,6 +14632,12 @@
       "isNonstandard": "Past"
     },
     "basculin": {
+      "isNonstandard": "Past"
+    },
+    "basculinbluestriped": {
+      "isNonstandard": "Past"
+    },
+    "basculinwhitestriped": {
       "isNonstandard": "Past"
     },
     "sandile": {
@@ -15554,6 +14851,9 @@
       "isNonstandard": "Past"
     },
     "keldeo": {
+      "isNonstandard": "Past"
+    },
+    "keldeoresolute": {
       "isNonstandard": "Past"
     },
     "meloetta": {
@@ -15889,6 +15189,9 @@
     "magearna": {
       "isNonstandard": "Past"
     },
+    "magearnaoriginal": {
+      "isNonstandard": "Past"
+    },
     "grookey": {
       "isNonstandard": "Past"
     },
@@ -15964,7 +15267,13 @@
     "toxtricity": {
       "isNonstandard": "Past"
     },
+    "toxtricitylowkey": {
+      "isNonstandard": "Past"
+    },
     "sinistea": {
+      "isNonstandard": "Past"
+    },
+    "sinisteaantique": {
       "isNonstandard": "Past"
     },
     "hatenna": {
@@ -16058,6 +15367,9 @@
       "isNonstandard": "Past"
     },
     "zarude": {
+      "isNonstandard": "Past"
+    },
+    "zarudedada": {
       "isNonstandard": "Past"
     },
     "regieleki": {
@@ -16163,6 +15475,15 @@
       "isNonstandard": "Past"
     },
     "squawkabilly": {
+      "isNonstandard": "Past"
+    },
+    "squawkabillyblue": {
+      "isNonstandard": "Past"
+    },
+    "squawkabillyyellow": {
+      "isNonstandard": "Past"
+    },
+    "squawkabillywhite": {
       "isNonstandard": "Past"
     },
     "nacli": {
@@ -16282,6 +15603,12 @@
     "tatsugiri": {
       "isNonstandard": "Past"
     },
+    "tatsugiridroopy": {
+      "isNonstandard": "Past"
+    },
+    "tatsugiristretchy": {
+      "isNonstandard": "Past"
+    },
     "annihilape": {
       "isNonstandard": "Past"
     },
@@ -16289,6 +15616,9 @@
       "isNonstandard": "Past"
     },
     "dudunsparce": {
+      "isNonstandard": "Past"
+    },
+    "dudunsparcethreesegment": {
       "isNonstandard": "Past"
     },
     "greattusk": {
@@ -16381,6 +15711,9 @@
     "poltchageist": {
       "isNonstandard": "Past"
     },
+    "poltchageistartisan": {
+      "isNonstandard": "Past"
+    },
     "okidogi": {
       "isNonstandard": "Past"
     },
@@ -16467,6 +15800,10 @@
     "beakblast": {
       "basePower": 120,
       "pp": 5
+    },
+    "belch": {
+      "desc": "Fails unless the user has eaten a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
+      "shortDesc": "Fails unless the user has eaten a Berry."
     },
     "behemothbash": {
       "isNonstandard": "Past"
@@ -16705,6 +16042,10 @@
     },
     "forcepalm": {
       "isNonstandard": "Past"
+    },
+    "freezedry": {
+      "desc": "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+      "shortDesc": "Super effective on Water."
     },
     "freezeshock": {
       "isNonstandard": "Past"
@@ -17432,13 +16773,25 @@
     }
   },
   "overrideAbilityData": {
+    "dragonize": {
+      "isNonstandard": null
+    },
     "healer": {
       "desc": "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
       "shortDesc": "50% chance this Pokemon's ally has its status cured at the end of each turn."
     },
+    "megasol": {
+      "isNonstandard": null
+    },
+    "piercingdrill": {
+      "isNonstandard": null
+    },
     "shedskin": {
       "desc": "This Pokemon has a 30% chance to have its non-volatile status condition cured at the end of each turn.",
       "shortDesc": "This Pokemon has a 30% chance to have its status cured at the end of each turn."
+    },
+    "spicyspray": {
+      "isNonstandard": null
     },
     "unseenfist": {
       "desc": "",
@@ -17480,6 +16833,9 @@
       "isNonstandard": "Past"
     },
     "alakazite": {
+      "isNonstandard": null
+    },
+    "altarianite": {
       "isNonstandard": null
     },
     "ampharosite": {
@@ -17552,7 +16908,9 @@
       "isNonstandard": null
     },
     "chimechite": {
-      "isNonstandard": null
+      "isNonstandard": null,
+      "desc": "If held by Chimecho, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Chimecho, this item allows it to Mega Evolve in battle."
     },
     "chippedpot": {
       "isNonstandard": "Past"
@@ -17579,7 +16937,9 @@
       "isNonstandard": "Past"
     },
     "crabominite": {
-      "isNonstandard": null
+      "isNonstandard": null,
+      "desc": "If held by Crabominable, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Crabominable, this item allows it to Mega Evolve in battle."
     },
     "crackedpot": {
       "isNonstandard": "Past"
@@ -17591,7 +16951,9 @@
       "isNonstandard": "Past"
     },
     "darkranite": {
-      "isNonstandard": "Past"
+      "isNonstandard": "Past",
+      "desc": "If held by Darkrai, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Darkrai, this item allows it to Mega Evolve in battle."
     },
     "dawnstone": {
       "isNonstandard": "Past"
@@ -17648,6 +17010,9 @@
       "isNonstandard": "Past"
     },
     "electirizer": {
+      "isNonstandard": "Past"
+    },
+    "electricseed": {
       "isNonstandard": "Past"
     },
     "emboarite": {
@@ -17729,16 +17094,22 @@
       "isNonstandard": null
     },
     "glimmoranite": {
-      "isNonstandard": null
+      "isNonstandard": null,
+      "desc": "If held by Glimmora, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Glimmora, this item allows it to Mega Evolve in battle."
     },
     "goldbottlecap": {
       "isNonstandard": "Past"
     },
     "golisopite": {
-      "isNonstandard": "Past"
+      "isNonstandard": "Past",
+      "desc": "If held by Golisopod, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Golisopod, this item allows it to Mega Evolve in battle."
     },
     "golurkite": {
-      "isNonstandard": null
+      "isNonstandard": null,
+      "desc": "If held by Golurk, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Golurk, this item allows it to Mega Evolve in battle."
     },
     "grassyseed": {
       "isNonstandard": "Past"
@@ -17774,7 +17145,9 @@
       "isNonstandard": "Past"
     },
     "heatranite": {
-      "isNonstandard": "Past"
+      "isNonstandard": "Past",
+      "desc": "If held by Heatran, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Heatran, this item allows it to Mega Evolve in battle."
     },
     "heatrock": {
       "isNonstandard": "Past"
@@ -17909,7 +17282,9 @@
       "isNonstandard": null
     },
     "meowsticite": {
-      "isNonstandard": null
+      "isNonstandard": null,
+      "desc": "If held by Meowstic or Meowstic-F, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Meowstic or Meowstic-F, this item allows it to Mega Evolve in battle."
     },
     "metalalloy": {
       "isNonstandard": "Past"
@@ -17942,6 +17317,9 @@
       "isNonstandard": "Past"
     },
     "netball": {
+      "isNonstandard": "Past"
+    },
+    "normalgem": {
       "isNonstandard": "Past"
     },
     "ovalstone": {
@@ -18071,7 +17449,9 @@
       "isNonstandard": null
     },
     "scovillainite": {
-      "isNonstandard": null
+      "isNonstandard": null,
+      "desc": "If held by Scovillain, this item allows it to Mega Evolve in battle.",
+      "shortDesc": "If held by Scovillain, this item allows it to Mega Evolve in battle."
     },
     "sharpedonite": {
       "isNonstandard": null

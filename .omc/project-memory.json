@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776511506710,
+  "projectRoot": "/home/zonazcy/Projects/poke-type",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "static"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "NCP-VGC-Damage-Calculator": {
+      "path": "NCP-VGC-Damage-Calculator",
+      "purpose": null,
+      "fileCount": 13,
+      "lastAccessed": 1776511506706,
+      "keyFiles": [
+        "LICENSE",
+        "README.md",
+        "debug.log",
+        "digicalc.html",
+        "index.html"
+      ]
+    },
+    "Poke Icons": {
+      "path": "Poke Icons",
+      "purpose": null,
+      "fileCount": 1467,
+      "lastAccessed": 1776511506708,
+      "keyFiles": [
+        "ui_PokeIcon_01_0003_00_0 #598899.png",
+        "ui_PokeIcon_01_0003_00_0.png",
+        "ui_PokeIcon_01_0003_00_0_S.png",
+        "ui_PokeIcon_01_0003_01_0.png",
+        "ui_PokeIcon_01_0003_01_0_S.png"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 2,
+      "lastAccessed": 1776511506709,
+      "keyFiles": [
+        "VGC队伍checklist.md",
+        "future-todo-reference.md"
+      ]
+    },
+    "poke_analysis-main": {
+      "path": "poke_analysis-main",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776511506709,
+      "keyFiles": [
+        "update_all_data.py"
+      ]
+    },
+    "static": {
+      "path": "static",
+      "purpose": "Static files",
+      "fileCount": 4,
+      "lastAccessed": 1776511506709,
+      "keyFiles": [
+        "itemicons-sheet.png",
+        "poke-icons-map.json",
+        "pokemonicons-sheet.png",
+        "usage.json"
+      ]
+    },
+    "tools": {
+      "path": "tools",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776511506709,
+      "keyFiles": [
+        "build-poke-icons-map.mjs"
+      ]
+    },
+    "static/app": {
+      "path": "static/app",
+      "purpose": "Application code",
+      "fileCount": 30,
+      "lastAccessed": 1776511506710,
+      "keyFiles": [
+        "ability-scores.js",
+        "analysis.js",
+        "builder-autocomplete.js"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

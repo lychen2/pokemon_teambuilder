@@ -5,7 +5,10 @@ export const RECOMMENDATION_PREFERENCE_ITEMS = Object.freeze([
   {id: "avoidDuplicateTypes", labelKey: "recommend.pref.avoidDuplicateTypes"},
 ]);
 
-export const RECOMMENDATION_WEIGHT_ITEMS = RECOMMENDATION_PREFERENCE_ITEMS;
+export const RECOMMENDATION_WEIGHT_ITEMS = Object.freeze([
+  ...RECOMMENDATION_PREFERENCE_ITEMS,
+  {id: "usageTeammates", labelKey: "recommend.weight.usageTeammates"},
+]);
 
 export const DEFAULT_RECOMMENDATION_PREFERENCES = Object.freeze({
   patchWeakness: true,
@@ -19,6 +22,7 @@ export const DEFAULT_RECOMMENDATION_WEIGHTS = Object.freeze({
   patchRoles: 100,
   patchSpeed: 100,
   avoidDuplicateTypes: 100,
+  usageTeammates: 100,
 });
 
 export function normalizeRecommendationPreferences(value = {}) {

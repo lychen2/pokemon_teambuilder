@@ -1,4 +1,5 @@
 import {t} from "./i18n.js";
+import {spriteMarkup} from "./sprites.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -36,9 +37,18 @@ function renderRolePill(roleId, language, className = "") {
   );
 }
 
-function memberPillsMarkup(members = []) {
+function memberPillMarkup(member, state) {
+  return `
+    <span class="mini-pill analysis-member-pill">
+      ${spriteMarkup(member, state)}
+      <span>${escapeHtml(member.label)}</span>
+    </span>
+  `;
+}
+
+function memberPillsMarkup(members = [], state) {
   return members.map((member) => `
-    <span class="mini-pill analysis-member-pill">${escapeHtml(member.label)}</span>
+    ${memberPillMarkup(member, state)}
   `).join("");
 }
 
@@ -46,13 +56,16 @@ function emptyTextMarkup(language, key) {
   return `<p class="muted">${t(language, key)}</p>`;
 }
 
-function speedDetailPillMarkup(entry) {
+function speedDetailPillMarkup(entry, state) {
   if (!entry) {
     return "";
   }
   return `
     <span class="speed-analysis-ref">
-      <span class="mini-pill speed-analysis-name">${escapeHtml(entry.label)}</span>
+      <span class="mini-pill speed-analysis-name">
+        ${spriteMarkup(entry, state)}
+        <span>${escapeHtml(entry.label)}</span>
+      </span>
       ${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}
       <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
       ${entry.effectiveness ? `<span class="mini-pill speed-analysis-threat">${escapeHtml(entry.effectiveness.toFixed(1))}x</span>` : ""}
@@ -69,7 +82,7 @@ function speedAnalysisRowMarkup(label, contentMarkup) {
   `;
 }
 
-function coverageCardMarkup(entry, language) {
+function coverageCardMarkup(entry, language, state) {
   const tone = entry.bestEffectiveness >= 2 ? "good" : entry.bestEffectiveness < 1 ? "bad" : "";
   return `
     <article class="analysis-list-card ${tone}">
@@ -84,11 +97,11 @@ function coverageCardMarkup(entry, language) {
       </div>
       <div>
         <div class="analysis-label">${t(language, "analysis.coveredBy")}</div>
-        ${entry.sources.length ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.sources)}</div>` : emptyTextMarkup(language, "common.none")}
+        ${entry.sources.length ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.sources, state)}</div>` : emptyTextMarkup(language, "common.none")}
       </div>
       <div>
         <div class="analysis-label">${t(language, "analysis.pressuredBy")}</div>
-        ${entry.pressuredMembers.length ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.pressuredMembers)}</div>` : emptyTextMarkup(language, "analysis.noPressure")}
+        ${entry.pressuredMembers.length ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.pressuredMembers, state)}</div>` : emptyTextMarkup(language, "analysis.noPressure")}
       </div>
     </article>
   `;
@@ -189,7 +202,7 @@ function offensiveMatrixRowMarkup(entry, language) {
   `;
 }
 
-function roleCardMarkup(entry, language) {
+function roleCardMarkup(entry, language, state) {
   return `
     <article class="analysis-list-card analysis-role-card ${entry.count ? "good" : ""}">
       <div class="analysis-list-head">
@@ -197,32 +210,32 @@ function roleCardMarkup(entry, language) {
         <span class="source-tag">${t(language, "analysis.roleCount", {count: entry.count})}</span>
       </div>
       ${entry.members.length
-        ? `<div class="analysis-role-members">${memberPillsMarkup(entry.members)}</div>`
+        ? `<div class="analysis-role-members">${memberPillsMarkup(entry.members, state)}</div>`
         : emptyTextMarkup(language, "common.none")}
     </article>
   `;
 }
 
-function speedCardMarkup(entry, language) {
+function speedCardMarkup(entry, language, state) {
   return `
     <article class="entry-card compact">
       <div class="entry-main">
         <div class="entry-title"><strong>${escapeHtml(entry.label)}</strong>${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}<span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
         ${speedAnalysisRowMarkup(
           t(language, "analysis.aheadOfLabel"),
-          entry.aheadOf.length ? entry.aheadOf.map(speedDetailPillMarkup).join("") : `<span class="muted">${t(language, "analysis.noMajorTier")}</span>`,
+          entry.aheadOf.length ? entry.aheadOf.map((item) => speedDetailPillMarkup(item, state)).join("") : `<span class="muted">${t(language, "analysis.noMajorTier")}</span>`,
         )}
         ${speedAnalysisRowMarkup(
           t(language, "analysis.nextThreatLabel"),
-          entry.nextThreat ? speedDetailPillMarkup(entry.nextThreat) : `<span class="muted">${t(language, "analysis.fastest")}</span>`,
+          entry.nextThreat ? speedDetailPillMarkup(entry.nextThreat, state) : `<span class="muted">${t(language, "analysis.fastest")}</span>`,
         )}
         ${entry.trickRoomAheadOf.length ? speedAnalysisRowMarkup(
           t(language, "analysis.trickRoomAheadLabel"),
-          entry.trickRoomAheadOf.map(speedDetailPillMarkup).join(""),
+          entry.trickRoomAheadOf.map((item) => speedDetailPillMarkup(item, state)).join(""),
         ) : ""}
         ${entry.pressureThreats.length ? speedAnalysisRowMarkup(
           t(language, "analysis.pressureThreats"),
-          entry.pressureThreats.map(speedDetailPillMarkup).join(""),
+          entry.pressureThreats.map((item) => speedDetailPillMarkup(item, state)).join(""),
         ) : ""}
       </div>
     </article>
@@ -241,12 +254,17 @@ function coreMetricPillsMarkup(entry, language) {
   `;
 }
 
-function coreCardMarkup(entry, language, tone) {
+function coreCardMarkup(entry, language, tone, state) {
   return `
     <article class="analysis-core-card ${tone}">
       <div class="analysis-list-head">
         <div class="analysis-core-members">
-          ${entry.members.map((member) => `<span class="mini-pill analysis-core-member">${escapeHtml(member.label)}</span>`).join("")}
+          ${entry.members.map((member) => `
+            <span class="mini-pill analysis-core-member">
+              ${spriteMarkup(member, state)}
+              <span>${escapeHtml(member.label)}</span>
+            </span>
+          `).join("")}
         </div>
         <span class="source-tag score-tag">${t(language, "analysis.coreScore", {value: entry.score.toFixed(1)})}</span>
       </div>
@@ -257,7 +275,7 @@ function coreCardMarkup(entry, language, tone) {
   `;
 }
 
-function renderCoveragePanel(analysis, language) {
+function renderCoveragePanel(analysis, language, state) {
   const defensiveHeaders = analysis.coverage.defensiveMatrix[0]?.members || [];
   const offensiveHeaders = analysis.coverage.offensiveMatrix[0]?.members || [];
   const blindSpotMarkup = analysis.offensivePairs.length
@@ -308,19 +326,19 @@ function renderCoveragePanel(analysis, language) {
   `;
 }
 
-function renderRolesPanel(analysis, language) {
+function renderRolesPanel(analysis, language, state) {
   return `
     <div class="analysis-detail-grid">
       <section class="subpanel">
         <h3>${t(language, "analysis.rolesTacticalTitle")}</h3>
         <div class="analysis-role-grid">
-          ${analysis.roles.tactical.map((entry) => roleCardMarkup(entry, language)).join("")}
+          ${analysis.roles.tactical.map((entry) => roleCardMarkup(entry, language, state)).join("")}
         </div>
       </section>
       <section class="subpanel">
         <h3>${t(language, "analysis.rolesSupportTitle")}</h3>
         <div class="analysis-role-grid">
-          ${analysis.roles.support.map((entry) => roleCardMarkup(entry, language)).join("")}
+          ${analysis.roles.support.map((entry) => roleCardMarkup(entry, language, state)).join("")}
         </div>
       </section>
     </div>
@@ -328,13 +346,13 @@ function renderRolesPanel(analysis, language) {
       <section class="subpanel">
         <h3>${t(language, "analysis.rolesStructureTitle")}</h3>
         <div class="analysis-role-grid">
-          ${analysis.roles.structure.map((entry) => roleCardMarkup(entry, language)).join("")}
+          ${analysis.roles.structure.map((entry) => roleCardMarkup(entry, language, state)).join("")}
         </div>
       </section>
       <section class="subpanel">
         <h3>${t(language, "analysis.rolesBiasTitle")}</h3>
         <div class="analysis-role-grid">
-          ${analysis.roles.attackBiases.map((entry) => roleCardMarkup(entry, language)).join("")}
+          ${analysis.roles.attackBiases.map((entry) => roleCardMarkup(entry, language, state)).join("")}
         </div>
       </section>
     </div>
@@ -347,7 +365,7 @@ function renderRolesPanel(analysis, language) {
     <section class="subpanel">
       <h3>${t(language, "views.speedTitle")}</h3>
       <div class="stack-list compact-list">
-        ${analysis.speed.map((entry) => speedCardMarkup(entry, language)).join("")}
+        ${analysis.speed.map((entry) => speedCardMarkup(entry, language, state)).join("")}
       </div>
     </section>
   `;
@@ -371,7 +389,7 @@ function coreSuggestionMarkup(entry, language) {
   `;
 }
 
-function renderCoresPanel(analysis, language, focusId) {
+function renderCoresPanel(analysis, language, focusId, state) {
   const focusEntry = analysis.cores.suggestionsById[focusId];
   return `
     <div class="analysis-detail-grid">
@@ -394,7 +412,7 @@ function renderCoresPanel(analysis, language, focusId) {
                     <strong>${escapeHtml(entry.label)}</strong>
                     <span class="source-tag">${t(language, "analysis.coreAlreadyCovered")}</span>
                   </div>
-                  <div class="analysis-member-pills">${memberPillsMarkup(entry.members)}</div>
+                  <div class="analysis-member-pills">${memberPillsMarkup(entry.members, state)}</div>
                 </article>
               `).join("")}</div>`
               : `<p class="muted">${t(language, "analysis.coreNoTeamCover")}</p>`}
@@ -410,13 +428,13 @@ function renderCoresPanel(analysis, language, focusId) {
         <h3>${t(language, "analysis.coreBestTitle")}</h3>
         <div class="analysis-core-grid">
           ${analysis.cores.bestPairs.length
-            ? analysis.cores.bestPairs.map((entry) => coreCardMarkup(entry, language, "good")).join("")
+            ? analysis.cores.bestPairs.map((entry) => coreCardMarkup(entry, language, "good", state)).join("")
             : `<p class="empty-state">${t(language, "analysis.coreNeedMoreMembers")}</p>`}
         </div>
         <h3>${t(language, "analysis.coreRiskTitle")}</h3>
         <div class="analysis-core-grid">
           ${analysis.cores.riskyPairs.length
-            ? analysis.cores.riskyPairs.map((entry) => coreCardMarkup(entry, language, "bad")).join("")
+            ? analysis.cores.riskyPairs.map((entry) => coreCardMarkup(entry, language, "bad", state)).join("")
             : `<p class="empty-state">${t(language, "analysis.coreNoRisk")}</p>`}
         </div>
       </section>
@@ -457,7 +475,7 @@ export function renderAnalysisView(state) {
   `;
 
   const coreFocusId = state.activeCoreConfigId || analysis.cores.memberOptions[0]?.id || "";
-  document.getElementById("analysis-coverage-panel").innerHTML = renderCoveragePanel(analysis, language);
-  document.getElementById("analysis-roles-panel").innerHTML = renderRolesPanel(analysis, language);
-  document.getElementById("analysis-cores-panel").innerHTML = renderCoresPanel(analysis, language, coreFocusId);
+  document.getElementById("analysis-coverage-panel").innerHTML = renderCoveragePanel(analysis, language, state);
+  document.getElementById("analysis-roles-panel").innerHTML = renderRolesPanel(analysis, language, state);
+  document.getElementById("analysis-cores-panel").innerHTML = renderCoresPanel(analysis, language, coreFocusId, state);
 }

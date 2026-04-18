@@ -50,6 +50,20 @@ export function persistState(state) {
       savedTeams: state.savedTeams,
       savedOpponentTeams: state.savedOpponentTeams,
       language: state.language,
+      damage: {
+        attackerId: state.damage.attackerId,
+        defenderId: state.damage.defenderId,
+        focusSide: state.damage.focusSide,
+        overridePairKey: state.damage.overridePairKey,
+        overrides: state.damage.overrides,
+        field: state.damage.field,
+        statuses: state.damage.statuses,
+        healthPercent: state.damage.healthPercent,
+        boosts: state.damage.boosts,
+        meta: state.damage.meta,
+        teraTypes: state.damage.teraTypes,
+        moveSelections: state.damage.moveSelections,
+      },
     };
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch (error) {
