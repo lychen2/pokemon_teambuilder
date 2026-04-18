@@ -4,7 +4,7 @@ import {renderDamageView} from "./render-damage.js";
 import {renderMatchupView} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
 import {spriteMarkup} from "./sprites.js";
-import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
+import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getLocalizedNatureName, getMoveCategoryLabel, getNatureMultiplier, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -422,35 +422,166 @@ export function renderDamage(state) {
   renderDamageView(state);
 }
 
+function isStandardFastestSpread(entry) {
+  const pts = entry?.championPoints || {};
+  const hp = Number(pts.hp || 0);
+  const atk = Number(pts.atk || 0);
+  const def = Number(pts.def || 0);
+  const spa = Number(pts.spa || 0);
+  const spd = Number(pts.spd || 0);
+  const spe = Number(pts.spe || 0);
+  if (spe !== 32 || hp !== 2 || def !== 0 || spd !== 0) return false;
+  return (atk === 32 && spa === 0) || (atk === 0 && spa === 32);
+}
+
+function getSpeedEntryCategory(entry) {
+  const id = String(entry?.id || "");
+  const mode = entry?.speedTierMode;
+  if (mode === "plus1" || mode === "scarf" || mode === "double") {
+    return "boost";
+  }
+  if (id.endsWith(":ability")) {
+    return "boost";
+  }
+  if (id.endsWith(":fastest")) return "fastest";
+  if (id.endsWith(":slowest")) return "slowest";
+  if (id.endsWith(":output")) return "output";
+
+  const nature = entry?.nature;
+  const spe = Number(entry?.championPoints?.spe || 0);
+  const multiplier = nature ? getNatureMultiplier(nature, "spe") : 1;
+
+  if (spe === 32 && multiplier > 1) {
+    return isStandardFastestSpread(entry) ? "fastest" : "tuned";
+  }
+  if (spe === 0 && multiplier < 1) {
+    return "slowest";
+  }
+  if (spe === 32) {
+    return "output";
+  }
+  return "custom";
+}
+
+function buildSpeedPillDomId(entry) {
+  const rawId = String(entry?.id || entry?.speciesId || "unknown");
+  const mode = entry?.speedTierMode || "base";
+  return `speed-pill-${rawId}-${mode}`.replace(/[^A-Za-z0-9:_-]/g, "_");
+}
+
+function speedModeLabel(mode, language) {
+  if (mode === "plus1") return t(language, "speed.modePlusOne");
+  if (mode === "double") return t(language, "speed.modeDouble");
+  if (mode === "scarf") return t(language, "speed.modeScarf");
+  return t(language, "speed.modeBase");
+}
+
+function buildSameSpeciesVariantsMarkup(entry, variantIndex, language) {
+  const variants = variantIndex.get(entry.speciesId) || [];
+  const currentPillId = buildSpeedPillDomId(entry);
+  const others = variants.filter((v) => v.pillDomId !== currentPillId);
+  if (!others.length) {
+    return "";
+  }
+  const chips = others.map((variant) => {
+    const mode = speedModeLabel(variant.mode, language);
+    return `<button type="button" class="speed-variant-chip" data-scroll-to="${escapeHtml(variant.pillDomId)}">${variant.speed} · ${escapeHtml(mode)}</button>`;
+  }).join("");
+  const heading = `<div class="tooltip-subheading">${escapeHtml(t(language, "speed.otherVariants"))}</div>`;
+  return `<div class="tooltip-variants">${heading}<div class="speed-variant-row">${chips}</div></div>`;
+}
+
+function buildSpeedEntryTooltip(entry, language, variantIndex) {
+  const lines = [];
+  const name = entry.speciesName || entry.displayName;
+  if (name) {
+    lines.push(name);
+  }
+  if (entry.note) {
+    lines.push(entry.note);
+  }
+  if (entry.nature) {
+    const localizedName = getLocalizedNatureName(entry.nature, language);
+    const summary = getNatureSummary(entry.nature, language);
+    const display = localizedName && localizedName !== entry.nature ? `${localizedName} (${entry.nature})` : entry.nature;
+    lines.push(`${display} · ${summary}`);
+  }
+  if (entry.championPoints && Object.keys(entry.championPoints).length) {
+    lines.push(formatChampionPoints(entry.championPoints, language));
+  }
+  const variantsMarkup = variantIndex ? buildSameSpeciesVariantsMarkup(entry, variantIndex, language) : "";
+  if (!lines.length && !variantsMarkup) {
+    return "";
+  }
+  const statLines = lines.map((line) => `<div class="tooltip-desc-box">${escapeHtml(line)}</div>`).join("");
+  return `<div class="tooltip-stack">${statLines}${variantsMarkup}</div>`;
+}
+
+function renderSpeedTierEntryPills(entry, state, language, variantIndex) {
+  const tooltipMarkup = buildSpeedEntryTooltip(entry, language, variantIndex);
+  const label = escapeHtml(entry.speciesName || entry.displayName || "");
+  const category = getSpeedEntryCategory(entry);
+  const pillDomId = buildSpeedPillDomId(entry);
+  const parts = [];
+  parts.push(`
+    <span id="${pillDomId}" class="info-pill speed-entry-pill speed-entry-${category}" tabindex="0" aria-label="${label}">
+      ${spriteMarkup(entry, state)}
+      ${tooltipMarkup ? `<span class="info-tooltip-content">${tooltipMarkup}</span>` : ""}
+    </span>
+  `);
+  if (entry.speedTierMode === "plus1" && entry.plusOneSpeed) {
+    parts.push(`<span class="mini-pill speed-boost-pill">${t(language, "speed.plusOne", {speed: entry.plusOneSpeed.speed})}</span>`);
+    parts.push(renderSpeedSourcePills(state, entry.plusOneSpeed.sources, language));
+  }
+  if (entry.speedTierMode === "double" && entry.doubleSpeed) {
+    parts.push(`<span class="mini-pill speed-boost-pill">×2 ${entry.doubleSpeed.speed}</span>`);
+    parts.push(renderSpeedSourcePills(state, entry.doubleSpeed.sources, language));
+  }
+  if (entry.speedTierMode === "scarf" && entry.choiceScarfSpeed) {
+    parts.push(`<span class="mini-pill speed-boost-pill">Scarf ${entry.choiceScarfSpeed.speed}</span>`);
+    parts.push(renderSpeedSourcePills(state, entry.choiceScarfSpeed.sources, language));
+  }
+  return parts.filter(Boolean).join("");
+}
+
+function buildSpeedVariantIndex(tiers) {
+  const map = new Map();
+  tiers.forEach((tier) => {
+    tier.entries.forEach((entry) => {
+      if (!entry.speciesId) return;
+      const key = entry.speciesId;
+      const list = map.get(key) || [];
+      list.push({
+        speed: tier.speed,
+        mode: entry.speedTierMode,
+        pillDomId: buildSpeedPillDomId(entry),
+      });
+      map.set(key, list);
+    });
+  });
+  map.forEach((list) => list.sort((left, right) => right.speed - left.speed));
+  return map;
+}
+
 export function renderSpeedTiers(state) {
   const language = state.language;
   document.getElementById("speed-summary").textContent = t(language, "speed.summary", {
     count: state.speedLineTiers.length,
   });
-  document.getElementById("speed-tiers").innerHTML = state.speedLineTiers.map((tier) => `
-    <article class="entry-card compact">
-      <div class="entry-main">
-        <div class="entry-title"><strong>Spe ${tier.speed}</strong><span class="source-tag">${t(language, "common.countLine", {count: tier.totalCount})}</span></div>
-        <div class="entry-line entry-tags">
-          ${tier.entries.map((entry) => `
-            <span class="speed-entry">
-              ${spriteMarkup(entry, state)}
-              <span>${entry.speciesName || entry.displayName}</span>
-            </span>
-            ${entry.note ? `<span class="mini-pill speed-note-pill">${entry.note}</span>` : ""}
-            ${entry.speedTierMode === "plus1" && entry.plusOneSpeed ? `
-              <span class="mini-pill speed-boost-pill">${t(language, "speed.plusOne", {speed: entry.plusOneSpeed.speed})}</span>
-              ${renderSpeedSourcePills(state, entry.plusOneSpeed.sources, language)}
-            ` : ""}
-            ${entry.speedTierMode === "scarf" && entry.choiceScarfSpeed ? `
-              <span class="mini-pill speed-boost-pill">Scarf ${entry.choiceScarfSpeed.speed}</span>
-              ${renderSpeedSourcePills(state, entry.choiceScarfSpeed.sources, language)}
-            ` : ""}
-          `).join("")}
-        </div>
+  const variantIndex = buildSpeedVariantIndex(state.speedLineTiers);
+  const rows = state.speedLineTiers.map((tier, tierIndex) => {
+    const side = tierIndex % 2 === 0 ? "side-left" : "side-right";
+    const entriesMarkup = tier.entries.map((entry) => renderSpeedTierEntryPills(entry, state, language, variantIndex)).join("");
+    const countPill = `<span class="speed-tier-count">${t(language, "common.countLine", {count: tier.totalCount})}</span>`;
+    return `
+      <div class="speed-tier-row ${side}">
+        <div class="speed-tier-entries">${entriesMarkup}${countPill}</div>
+        <span class="speed-tier-value">${tier.speed}</span>
+        <span class="speed-tier-dot" aria-hidden="true"></span>
       </div>
-    </article>
-  `).join("");
+    `;
+  }).join("");
+  document.getElementById("speed-tiers").innerHTML = `<div class="speed-timeline">${rows}</div>`;
 }
 
 export function renderStatus(message) {

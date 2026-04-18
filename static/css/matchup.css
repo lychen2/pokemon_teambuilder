@@ -108,6 +108,46 @@
   min-width: 0;
 }
 
+.matchup-lead-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.matchup-lead-card {
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.matchup-lead-card .analysis-list-head {
+  justify-content: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.matchup-lead-card .analysis-core-members {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.matchup-lead-card .analysis-inline-pills {
+  flex: 0 0 auto;
+}
+
+.matchup-lead-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+}
+
+.matchup-lead-slot .analysis-label {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 640px) {
+  .matchup-lead-body {
+    grid-template-columns: 1fr;
+  }
+}
+
 .matchup-board-panel,
 .matchup-board-layout,
 .matchup-board-column,

@@ -590,6 +590,208 @@
   background: rgba(29, 42, 47, 0.06);
 }
 
+.speed-timeline {
+  position: relative;
+  padding: 18px 0;
+  width: 100%;
+}
+
+.speed-timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(47, 110, 163, 0), rgba(47, 110, 163, 0.35) 12%, rgba(47, 110, 163, 0.35) 88%, rgba(47, 110, 163, 0));
+  transform: translateX(-50%);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.speed-tier-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  min-height: 48px;
+}
+
+.speed-tier-row.side-left {
+  justify-content: flex-end;
+  padding-right: calc(50% - 6px);
+}
+
+.speed-tier-row.side-right {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  padding-left: calc(50% - 6px);
+}
+
+.speed-tier-entries {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.speed-tier-row.side-left .speed-tier-entries {
+  justify-content: flex-end;
+}
+
+.speed-tier-row.side-right .speed-tier-entries {
+  justify-content: flex-start;
+}
+
+.speed-tier-value {
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.speed-tier-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(47, 110, 163, 0.15);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.speed-tier-count {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+.speed-entry-pill {
+  padding: 3px;
+  gap: 0;
+  border-radius: 14px;
+  transition: border-color 0.12s ease;
+}
+
+.speed-entry-pill .sprite {
+  transform: scale(0.9);
+  transform-origin: center;
+  margin: 0;
+}
+
+.speed-entry-fastest {
+  background: rgba(108, 196, 122, 0.22);
+  border-color: rgba(108, 196, 122, 0.55);
+}
+
+.speed-entry-boost {
+  background: rgba(62, 168, 92, 0.32);
+  border-color: rgba(46, 140, 72, 0.7);
+}
+
+.speed-entry-slowest {
+  background: rgba(216, 94, 94, 0.22);
+  border-color: rgba(216, 94, 94, 0.55);
+}
+
+.speed-entry-output {
+  background: rgba(235, 190, 74, 0.24);
+  border-color: rgba(210, 160, 50, 0.55);
+}
+
+.speed-entry-tuned {
+  background: rgba(110, 178, 223, 0.22);
+  border-color: rgba(80, 148, 200, 0.55);
+}
+
+.speed-entry-custom {
+  background: rgba(120, 120, 120, 0.14);
+  border-color: rgba(120, 120, 120, 0.35);
+}
+
+.tooltip-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(47, 110, 163, 0.2);
+}
+
+.tooltip-subheading {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.speed-variant-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.speed-variant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(47, 110, 163, 0.3);
+  background: rgba(47, 110, 163, 0.08);
+  color: var(--accent);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.speed-variant-chip:hover {
+  background: rgba(47, 110, 163, 0.18);
+}
+
+.speed-entry-flash {
+  animation: speed-entry-flash 1.4s ease;
+}
+
+@keyframes speed-entry-flash {
+  0% { box-shadow: 0 0 0 0 rgba(47, 110, 163, 0.55); }
+  30% { box-shadow: 0 0 0 10px rgba(47, 110, 163, 0.3); }
+  100% { box-shadow: 0 0 0 0 rgba(47, 110, 163, 0); }
+}
+
+@media (max-width: 720px) {
+  .speed-timeline::before {
+    left: 14px;
+  }
+
+  .speed-tier-row,
+  .speed-tier-row.side-left,
+  .speed-tier-row.side-right {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 22px;
+    padding-right: 0;
+  }
+
+  .speed-tier-row .speed-tier-dot {
+    position: absolute;
+    left: 14px;
+    transform: translateX(-50%);
+  }
+
+  .speed-tier-row.side-left .speed-tier-entries,
+  .speed-tier-row.side-right .speed-tier-entries {
+    justify-content: flex-start;
+  }
+}
+
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

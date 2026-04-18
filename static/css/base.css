@@ -423,6 +423,10 @@ textarea {
   pointer-events: none;
 }
 
+.global-tooltip.interactive {
+  pointer-events: auto;
+}
+
 .tooltip-stack {
   display: flex;
   flex-direction: column;

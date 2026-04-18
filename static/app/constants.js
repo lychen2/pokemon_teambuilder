@@ -82,6 +82,34 @@ export const NATURE_EFFECTS = {
   Timid: {plus: "spe", minus: "atk"},
 };
 
+export const NATURE_TRANSLATIONS = Object.freeze({
+  Adamant: "固执",
+  Bashful: "害羞",
+  Bold: "大胆",
+  Brave: "勇敢",
+  Calm: "沉着",
+  Careful: "慎重",
+  Docile: "坦率",
+  Gentle: "温和",
+  Hardy: "勤奋",
+  Hasty: "急躁",
+  Impish: "淘气",
+  Jolly: "爽朗",
+  Lax: "乐天",
+  Lonely: "怕寂寞",
+  Mild: "慢吞吞",
+  Modest: "内敛",
+  Naive: "天真",
+  Naughty: "顽皮",
+  Quiet: "冷静",
+  Quirky: "浮躁",
+  Rash: "马虎",
+  Relaxed: "悠闲",
+  Sassy: "自大",
+  Serious: "认真",
+  Timid: "胆小",
+});
+
 export const SCORE_WEIGHTS = {
   resistance: 10,
   coverage: 8,

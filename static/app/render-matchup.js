@@ -33,8 +33,14 @@ function renderTooltipPill(label, detail, language, className = "mini-pill") {
   return `<span class="${pillClassName}" tabindex="0"><span class="info-pill-label">${escapeHtml(label)}</span><span class="info-tooltip-content">${buildTextTooltipMarkup(detail, language)}</span></span>`;
 }
 
-function memberPillsMarkup(members = []) {
-  return members.map((member) => `<span class="mini-pill analysis-member-pill">${escapeHtml(member.label)}</span>`).join("");
+function memberPillsMarkup(members = [], state) {
+  return members.map((member) => {
+    const localized = member.speciesId
+      ? state?.localizedSpeciesNames?.get(member.speciesId)
+      : null;
+    const label = localized || member.label || member.speciesName || "";
+    return `<span class="mini-pill analysis-member-pill">${escapeHtml(label)}</span>`;
+  }).join("");
 }
 
 function rolePillsMarkup(roles = [], language) {
@@ -70,15 +76,11 @@ function getLocalizedSpeciesName(state, entry) {
 
 function quickPickSpriteMarkup(entry, state) {
   const language = state.language;
-  const variantCount = getOpponentVariantCount(entry);
   const selected = state.opponentTeam.some((member) => member.speciesId === entry.speciesId);
   const titleParts = [
     getLocalizedSpeciesName(state, entry),
     buildSpeedSummary(entry, language),
   ];
-  if (variantCount > 1) {
-    titleParts.push(t(language, "matchup.variantCount", {count: variantCount}));
-  }
   if (entry.labels?.length) {
     titleParts.push(buildConfigSummary(entry.labels));
   }
@@ -91,7 +93,6 @@ function quickPickSpriteMarkup(entry, state) {
       aria-pressed="${selected ? "true" : "false"}"
     >
       ${spriteMarkup(entry, state)}
-      ${variantCount > 1 ? `<span class="species-browser-count">${variantCount}</span>` : ""}
     </button>
   `;
 }
@@ -154,7 +155,7 @@ function opponentCardMarkup(entry, state) {
   return `
     <article class="team-card">
       <div class="entry-main">
-        <div class="entry-title">${spriteMarkup(entry, state)}<strong>${escapeHtml(entry.speciesName)}</strong></div>
+        <div class="entry-title">${spriteMarkup(entry, state)}<strong>${escapeHtml(getLocalizedSpeciesName(state, entry))}</strong></div>
         <div class="entry-meta">${typePills(entry.types, language)}</div>
         <p class="muted">${buildConfigSummary(entry.labels)}</p>
         <p class="muted">${buildSpeedSummary(entry, language)}</p>
@@ -193,29 +194,31 @@ function speedModePillMarkup(entry, language) {
   return "";
 }
 
-function leadCardMarkup(entry, language) {
+function leadCardMarkup(entry, language, state) {
   const targetsMarkup = entry.targets.length
-    ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.targets)}</div>`
+    ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.targets, state)}</div>`
     : `<span class="muted">${t(language, "common.none")}</span>`;
   const backlineMarkup = entry.backline.length
-    ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.backline)}</div>`
+    ? `<div class="analysis-member-pills">${memberPillsMarkup(entry.backline, state)}</div>`
     : `<span class="muted">${t(language, "common.none")}</span>`;
   return `
-    <article class="analysis-core-card good">
+    <article class="analysis-core-card good matchup-lead-card">
       <div class="analysis-list-head">
-        <div class="analysis-core-members">${memberPillsMarkup(entry.members)}</div>
+        <div class="analysis-core-members">${memberPillsMarkup(entry.members, state)}</div>
         <div class="analysis-inline-pills">
           <span class="source-tag score-tag">${t(language, "matchup.leadScore", {value: entry.score.toFixed(1)})}</span>
           <span class="source-tag score-tag">${t(language, "matchup.lineupScore", {value: entry.lineupScore.toFixed(1)})}</span>
         </div>
       </div>
-      <div>
-        <div class="analysis-label">${t(language, "matchup.targets")}</div>
-        ${targetsMarkup}
-      </div>
-      <div>
-        <div class="analysis-label">${t(language, "matchup.backline")}</div>
-        ${backlineMarkup}
+      <div class="matchup-lead-body">
+        <div class="matchup-lead-slot">
+          <div class="analysis-label">${t(language, "matchup.targets")}</div>
+          ${targetsMarkup}
+        </div>
+        <div class="matchup-lead-slot">
+          <div class="analysis-label">${t(language, "matchup.backline")}</div>
+          ${backlineMarkup}
+        </div>
       </div>
       ${entry.roles.length ? `<div class="analysis-inline-pills">${rolePillsMarkup(entry.roles, language)}</div>` : ""}
     </article>
@@ -231,7 +234,7 @@ function speedLineCardMarkup(tier, language, state) {
           ${tier.entries.map((entry) => `
             <span class="speed-entry">
               ${spriteMarkup(entry, state)}
-              <span>${escapeHtml(entry.displayLabel || entry.displayName || entry.speciesName)}</span>
+              <span>${escapeHtml(getLocalizedSpeciesName(state, entry))}</span>
             </span>
             ${speedModePillMarkup(entry, language)}
             ${sideTagMarkup(entry, language)}
@@ -298,7 +301,7 @@ function renderAnalysis(state) {
     <section class="subpanel">
       <h3>${t(language, "matchup.recommendedLeadTitle")}</h3>
       ${analysis.leadPairs.length
-        ? `<div class="analysis-core-grid">${analysis.leadPairs.map((entry) => leadCardMarkup(entry, language)).join("")}</div>`
+        ? `<div class="analysis-core-grid matchup-lead-grid">${analysis.leadPairs.map((entry) => leadCardMarkup(entry, language, state)).join("")}</div>`
         : `<p class="empty-state">${t(language, "matchup.noLeadOption")}</p>`}
     </section>
     <section class="subpanel">

@@ -311,10 +311,11 @@ function adjustCardMarkup(side, entry, state, language) {
   if (!entry) {
     return "";
   }
+  const title = getLocalizedSpeciesName(state, entry);
   if (side === "attacker") {
     return `
       <div class="damage-adjust-card">
-        <div class="damage-adjust-card-title">${escapeHtml(getSummaryName(entry))}</div>
+        <div class="damage-adjust-card-title">${escapeHtml(title)}</div>
         ${metaControlMarkup("attacker", state.damage.meta.attacker, language)}
         ${teraTypeMarkup("attacker", state.damage.teraTypes?.attacker || entry.config?.teraType || entry.config?.types?.[0] || "", language)}
         ${boostGridMarkup("attacker", state.damage.boosts.attacker, language)}
@@ -327,7 +328,7 @@ function adjustCardMarkup(side, entry, state, language) {
   }
   return `
     <div class="damage-adjust-card">
-      <div class="damage-adjust-card-title">${escapeHtml(getSummaryName(entry))}</div>
+      <div class="damage-adjust-card-title">${escapeHtml(title)}</div>
       ${metaControlMarkup("defender", state.damage.meta.defender, language)}
       ${teraTypeMarkup("defender", state.damage.teraTypes?.defender || entry.config?.teraType || entry.config?.types?.[0] || "", language)}
       ${boostGridMarkup("defender", state.damage.boosts.defender, language)}

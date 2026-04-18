@@ -9,6 +9,15 @@ const CONDITIONAL_PLUS_ONE_SPEED_ABILITIES = new Set([
   "Quark Drive",
 ]);
 
+const DOUBLE_SPEED_ABILITIES = new Set([
+  "Swift Swim",
+  "Chlorophyll",
+  "Sand Rush",
+  "Slush Rush",
+  "Surge Surfer",
+  "Unburden",
+]);
+
 const NON_HP_STATS = ["atk", "def", "spa", "spd", "spe"];
 
 function getMoveSpeedBoostStage(move = {}) {
@@ -24,11 +33,18 @@ export function canAbilityBoostSpeed(ability, stats = {}) {
   if (PLUS_ONE_SPEED_ABILITIES.has(ability)) {
     return true;
   }
+  if (DOUBLE_SPEED_ABILITIES.has(ability)) {
+    return true;
+  }
   if (!CONDITIONAL_PLUS_ONE_SPEED_ABILITIES.has(ability)) {
     return false;
   }
   const maxStat = Math.max(...NON_HP_STATS.map((stat) => Number(stats[stat] || 0)));
   return Number(stats.spe || 0) >= maxStat;
+}
+
+export function isDoubleSpeedAbility(ability) {
+  return DOUBLE_SPEED_ABILITIES.has(ability);
 }
 
 export function getSpeedBoostAbilityNames(abilityMap = {}, stats = {}) {
@@ -43,7 +59,7 @@ export function getPlusOneSpeedData({ability, moves = [], stats = {}}) {
     .map((move) => move.name);
   const sources = [...new Set(moveSources)];
 
-  if (ability && canAbilityBoostSpeed(ability, stats)) {
+  if (ability && canAbilityBoostSpeed(ability, stats) && !isDoubleSpeedAbility(ability)) {
     sources.push(ability);
   }
   if (!sources.length) {
@@ -53,6 +69,16 @@ export function getPlusOneSpeedData({ability, moves = [], stats = {}}) {
   return {
     speed: Math.floor(Number(stats.spe || 0) * 1.5),
     sources: [...new Set(sources)],
+  };
+}
+
+export function getDoubleSpeedData({ability, stats = {}}) {
+  if (!ability || !isDoubleSpeedAbility(ability)) {
+    return null;
+  }
+  return {
+    speed: Number(stats.spe || 0) * 2,
+    sources: [ability],
   };
 }
 

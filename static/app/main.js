@@ -1,7 +1,7 @@
 import {analyzeTeam} from "./analysis.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
 import {buildSyntheticSpeedEntries} from "./champions-vgc.js";
-import {ICON_SCHEMES} from "./constants.js";
+import {ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
 import {calculateSpeedLineTiers, calculateSpeedTiers, loadDatasets} from "./data.js";
 import {createDamageWorkspace} from "./damage-workspace.js";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
@@ -246,33 +246,6 @@ const TYPE_CHIP_COLORS = Object.freeze({
   Dark: "#5f5a5a",
   Steel: "#6f98a8",
   Fairy: "#de7fb5",
-});
-const NATURE_TRANSLATIONS = Object.freeze({
-  Adamant: "固执",
-  Bashful: "害羞",
-  Bold: "大胆",
-  Brave: "勇敢",
-  Calm: "沉着",
-  Careful: "慎重",
-  Docile: "坦率",
-  Gentle: "温和",
-  Hardy: "勤奋",
-  Hasty: "急躁",
-  Impish: "淘气",
-  Jolly: "爽朗",
-  Lax: "乐天",
-  Lonely: "怕寂寞",
-  Mild: "慢吞吞",
-  Modest: "内敛",
-  Naive: "天真",
-  Naughty: "顽皮",
-  Quiet: "冷静",
-  Quirky: "浮躁",
-  Rash: "马虎",
-  Relaxed: "悠闲",
-  Sassy: "自大",
-  Serious: "认真",
-  Timid: "胆小",
 });
 let globalTooltip = null;
 let activeEditorTarget = null;
@@ -662,10 +635,17 @@ function refreshBattleState() {
   syncDamageSelectionState();
 }
 
+function buildDamageOptionLabel(config) {
+  const fallback = config?.displayName || config?.speciesName || t(state.language, "common.unknown");
+  const base = getLocalizedSpeciesName(config?.speciesId || "", fallback);
+  const note = (config?.note || "").trim();
+  return note ? `${base} · ${note}` : base;
+}
+
 function buildDamageAttackerOptions() {
   return state.team.map((config) => ({
     id: config.id,
-    label: config.displayLabel || config.displayName || config.speciesName || t(state.language, "common.unknown"),
+    label: buildDamageOptionLabel(config),
     config,
   }));
 }
@@ -684,7 +664,7 @@ function getOpponentVariantConfigs(entry) {
 function buildDamageDefenderOptions() {
   return state.opponentTeam.flatMap((entry) => getOpponentVariantConfigs(entry).map((config) => ({
     id: config.id,
-    label: config.displayLabel || config.displayName || config.speciesName || t(state.language, "common.unknown"),
+    label: buildDamageOptionLabel(config),
     config,
   })));
 }
@@ -3585,6 +3565,7 @@ function showTooltip(target) {
   }
   const tooltip = getTooltipElement();
   tooltip.innerHTML = content.innerHTML;
+  tooltip.classList.toggle("interactive", !!tooltip.querySelector("[data-scroll-to]"));
   tooltip.hidden = false;
   positionTooltip(target);
 }
@@ -3596,12 +3577,49 @@ function hideTooltip() {
   globalTooltip.hidden = true;
 }
 
+let tooltipHideTimer = 0;
+
+function cancelTooltipHide() {
+  if (tooltipHideTimer) {
+    clearTimeout(tooltipHideTimer);
+    tooltipHideTimer = 0;
+  }
+}
+
+function scheduleTooltipHide() {
+  cancelTooltipHide();
+  tooltipHideTimer = setTimeout(() => {
+    hideTooltip();
+    tooltipHideTimer = 0;
+  }, 160);
+}
+
+function scrollToSpeedPill(pillId) {
+  const target = document.getElementById(pillId);
+  if (!target) return;
+  hideTooltip();
+  target.scrollIntoView({behavior: "smooth", block: "center"});
+  target.classList.add("speed-entry-flash");
+  setTimeout(() => target.classList.remove("speed-entry-flash"), 1500);
+}
+
 function setupTooltipEvents() {
+  const tooltip = getTooltipElement();
+  tooltip.addEventListener("mouseenter", cancelTooltipHide);
+  tooltip.addEventListener("mouseleave", scheduleTooltipHide);
+  tooltip.addEventListener("click", (event) => {
+    const jumper = event.target.closest("[data-scroll-to]");
+    if (!jumper) return;
+    event.preventDefault();
+    scrollToSpeedPill(jumper.getAttribute("data-scroll-to"));
+  });
+
   document.addEventListener("mouseover", (event) => {
     const pill = event.target.closest(".info-pill");
     if (!pill) {
       return;
     }
+    cancelTooltipHide();
     showTooltip(pill);
   });
 
@@ -3613,12 +3631,16 @@ function setupTooltipEvents() {
     if (event.relatedTarget && pill.contains(event.relatedTarget)) {
       return;
     }
-    hideTooltip();
+    if (event.relatedTarget && globalTooltip?.contains(event.relatedTarget)) {
+      return;
+    }
+    scheduleTooltipHide();
   });
 
   document.addEventListener("focusin", (event) => {
     const pill = event.target.closest(".info-pill");
     if (pill) {
+      cancelTooltipHide();
       showTooltip(pill);
     }
   });
@@ -3631,11 +3653,20 @@ function setupTooltipEvents() {
     if (event.relatedTarget && pill.contains(event.relatedTarget)) {
       return;
     }
-    hideTooltip();
+    if (event.relatedTarget && globalTooltip?.contains(event.relatedTarget)) {
+      return;
+    }
+    scheduleTooltipHide();
   });
 
-  window.addEventListener("scroll", hideTooltip, true);
-  window.addEventListener("resize", hideTooltip);
+  window.addEventListener("scroll", () => {
+    cancelTooltipHide();
+    hideTooltip();
+  }, true);
+  window.addEventListener("resize", () => {
+    cancelTooltipHide();
+    hideTooltip();
+  });
   window.addEventListener("pagehide", () => {
     flushPersistState(state);
   });

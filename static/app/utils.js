@@ -3,6 +3,7 @@ import {
   CHAMPION_TOTAL_POINTS,
   DEFAULT_CHAMPION_POINTS,
   NATURE_EFFECTS,
+  NATURE_TRANSLATIONS,
   TYPE_LABELS,
 } from "./constants.js";
 import {t} from "./i18n.js";
@@ -83,6 +84,13 @@ export function getNatureSummary(nature, language = "zh") {
     plus: statLabels[effect.plus],
     minus: statLabels[effect.minus],
   });
+}
+
+export function getLocalizedNatureName(nature, language = "zh") {
+  if (!nature || language !== "zh") {
+    return nature || "";
+  }
+  return NATURE_TRANSLATIONS[nature] || nature;
 }
 
 export function createEmptySpread() {

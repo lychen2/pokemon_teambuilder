@@ -1,6 +1,6 @@
 import {FALLBACK_LEVEL} from "./constants.js";
 import {t} from "./i18n.js";
-import {getChoiceScarfSpeedData, getPlusOneSpeedData} from "./speed.js";
+import {getChoiceScarfSpeedData, getDoubleSpeedData, getPlusOneSpeedData} from "./speed.js";
 import {
   applyNatureToChampionStats,
   calculateChampionStats,
@@ -199,6 +199,10 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     item,
     stats,
   });
+  const doubleSpeed = getDoubleSpeedData({
+    ability,
+    stats,
+  });
 
   return {
     ...config,
@@ -228,6 +232,7 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     stats,
     choiceScarfSpeed,
     plusOneSpeed,
+    doubleSpeed,
     spreadLabel: formatChampionPoints(championPoints),
     originalSpreadLabel: formatSpread(nature, evs),
   };

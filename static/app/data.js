@@ -163,6 +163,14 @@ export function calculateSpeedLineTiers(library) {
         speedTierMode: "plus1",
       });
     }
+    if (entry.doubleSpeed) {
+      entries.push({
+        ...entry,
+        speed: entry.doubleSpeed.speed,
+        _importIndex: index,
+        speedTierMode: "double",
+      });
+    }
     if (entry.choiceScarfSpeed) {
       entries.push({
         ...entry,

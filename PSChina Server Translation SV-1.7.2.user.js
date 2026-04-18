@@ -4261,6 +4261,8 @@ var translations = {
     "Greninja-Mega": "甲贺忍蛙-超级进化",
     "Pyroar-Mega": "火炎狮-超级进化",
     "Floette-Mega": "花叶蒂-蓝花-超级进化",
+    "Meowstic-M-Mega": "超能妙喵-雄性的样子-超级进化",
+    "Meowstic-F-Mega": "超能妙喵-雌性的样子-超级进化",
     "Malamar-Mega": "乌贼王-超级进化",
     "Barbaracle-Mega": "龟足巨铠-超级进化",
     "Dragalge-Mega": "毒藻龙-超级进化",

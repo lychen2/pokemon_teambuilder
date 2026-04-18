@@ -1,13 +1,21 @@
 import {FALLBACK_LEVEL} from "./constants.js";
 import {t} from "./i18n.js";
-import {getSpeedBoostAbilityNames} from "./speed.js";
+import {getSpeedBoostAbilityNames, isDoubleSpeedAbility} from "./speed.js";
 import {hydrateConfigs} from "./showdown.js";
 import {getUsageReferenceMoveEntries} from "./usage.js";
 import {compareSpeciesByDex, normalizeName} from "./utils.js";
 
 const FASTEST_TEMPLATE_ID = "fastest";
 const SLOWEST_TEMPLATE_ID = "slowest";
+const OUTPUT_TEMPLATE_ID = "output";
 const SPEED_ABILITY_TEMPLATE_ID = "ability";
+const OUTPUT_TEMPLATE_MIN_BASE_SPEED = 30;
+
+const TEMPLATE_NOTE_KEYS = {
+  [FASTEST_TEMPLATE_ID]: "library.templateFastest",
+  [SLOWEST_TEMPLATE_ID]: "library.templateSlowest",
+  [OUTPUT_TEMPLATE_ID]: "library.templateOutput",
+};
 
 function getPrimaryAttackStat(baseStats = {}) {
   return Number(baseStats.atk || 0) > Number(baseStats.spa || 0) ? "atk" : "spa";
@@ -15,23 +23,23 @@ function getPrimaryAttackStat(baseStats = {}) {
 
 function buildChampionPoints(baseStats = {}, templateId) {
   const attackStat = getPrimaryAttackStat(baseStats);
-  if (templateId === FASTEST_TEMPLATE_ID) {
+  if (templateId === SLOWEST_TEMPLATE_ID) {
     return {
-      hp: 2,
+      hp: 32,
       atk: attackStat === "atk" ? 32 : 0,
-      def: 0,
+      def: attackStat === "atk" ? 2 : 0,
       spa: attackStat === "spa" ? 32 : 0,
-      spd: 0,
-      spe: 32,
+      spd: attackStat === "spa" ? 2 : 0,
+      spe: 0,
     };
   }
   return {
-    hp: 32,
+    hp: 2,
     atk: attackStat === "atk" ? 32 : 0,
-    def: attackStat === "atk" ? 2 : 0,
+    def: 0,
     spa: attackStat === "spa" ? 32 : 0,
-    spd: attackStat === "spa" ? 2 : 0,
-    spe: 0,
+    spd: 0,
+    spe: 32,
   };
 }
 
@@ -39,6 +47,9 @@ function getNature(baseStats = {}, templateId) {
   const isPhysical = getPrimaryAttackStat(baseStats) === "atk";
   if (templateId === FASTEST_TEMPLATE_ID) {
     return isPhysical ? "Jolly" : "Timid";
+  }
+  if (templateId === OUTPUT_TEMPLATE_ID) {
+    return isPhysical ? "Adamant" : "Modest";
   }
   return isPhysical ? "Brave" : "Quiet";
 }
@@ -62,7 +73,7 @@ function createTemplateSeed(species, datasets, language, templateId) {
     item: "",
     teraType: "",
     nature: getNature(species.baseStats, templateId),
-    note: t(language, templateId === FASTEST_TEMPLATE_ID ? "library.templateFastest" : "library.templateSlowest"),
+    note: t(language, TEMPLATE_NOTE_KEYS[templateId] || "library.templateFastest"),
     level: FALLBACK_LEVEL,
     championPoints: buildChampionPoints(species.baseStats, templateId),
     moveNames: getTemplateMoveNames(species.speciesId, datasets),
@@ -75,29 +86,49 @@ function hydrateTemplate(seed, datasets) {
   return hydrateConfigs([seed], datasets, FALLBACK_LEVEL)[0] || null;
 }
 
+function stripBoostFields(template) {
+  if (!template) return template;
+  const clone = {...template};
+  delete clone.plusOneSpeed;
+  delete clone.choiceScarfSpeed;
+  delete clone.doubleSpeed;
+  return clone;
+}
+
 function createAbilityBoostTemplate(fastestTemplate, species, language) {
   const abilities = getSpeedBoostAbilityNames(species.abilities, fastestTemplate.stats);
   if (!abilities.length) {
     return null;
   }
+  const doubleAbilities = abilities.filter((ability) => isDoubleSpeedAbility(ability));
+  const useDouble = doubleAbilities.length > 0;
+  const chosenAbilities = useDouble ? doubleAbilities : abilities;
+  const baseSpe = Number(fastestTemplate.stats?.spe || 0);
+  const boostedSpeed = useDouble ? baseSpe * 2 : Math.floor(baseSpe * 1.5);
+  const boostData = {speed: boostedSpeed, sources: chosenAbilities};
+  const payload = useDouble ? {doubleSpeed: boostData} : {plusOneSpeed: boostData};
   return {
     ...fastestTemplate,
     id: `template:${species.speciesId}:${SPEED_ABILITY_TEMPLATE_ID}`,
     note: t(language, "speed.syntheticAbility"),
-    ability: abilities[0],
+    ability: chosenAbilities[0],
     excludeBaseSpeedTier: true,
-    plusOneSpeed: {
-      speed: Math.floor(Number(fastestTemplate.stats?.spe || 0) * 1.5),
-      sources: abilities,
-    },
+    ...payload,
   };
 }
 
 function createTemplateGroup(species, datasets, language) {
   const fastest = hydrateTemplate(createTemplateSeed(species, datasets, language, FASTEST_TEMPLATE_ID), datasets);
-  const slowest = hydrateTemplate(createTemplateSeed(species, datasets, language, SLOWEST_TEMPLATE_ID), datasets);
+  const slowest = stripBoostFields(hydrateTemplate(createTemplateSeed(species, datasets, language, SLOWEST_TEMPLATE_ID), datasets));
   if (!fastest || !slowest) {
     return null;
+  }
+  const templates = [fastest, slowest];
+  if (Number(species.baseStats?.spe || 0) >= OUTPUT_TEMPLATE_MIN_BASE_SPEED) {
+    const output = hydrateTemplate(createTemplateSeed(species, datasets, language, OUTPUT_TEMPLATE_ID), datasets);
+    if (output) {
+      templates.push(output);
+    }
   }
   return {
     speciesId: species.speciesId,
@@ -106,7 +137,7 @@ function createTemplateGroup(species, datasets, language) {
     spritePosition: species.spritePosition,
     types: species.types,
     searchText: normalizeName([species.speciesName, species.speciesId, ...(species.types || [])].join(" ")),
-    templates: [fastest, slowest],
+    templates,
     speedAbilityTemplate: createAbilityBoostTemplate(fastest, species, language),
   };
 }
