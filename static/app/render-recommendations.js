@@ -162,6 +162,9 @@ function renderRecommendationCard(config, state) {
   const focusScoreMarkup = state.recommendFocusType
     ? `<span>${t(language, "recommend.focus", {value: config.breakdown.focus.toFixed(1)})}</span>`
     : "";
+  const focusFallbackMarkup = config.recommendationFocusFallback
+    ? `<span class="source-tag">${t(language, "recommend.focusFallback")}</span>`
+    : "";
   const actionMarkup = isTemplate
     ? `<button type="button" class="add-button" data-open-recommend-template="${config.id}">${t(language, "recommend.templateAction")}</button>`
     : `<button type="button" class="add-button" data-add-config="${config.id}">${t(language, "library.add")}</button>`;
@@ -173,6 +176,7 @@ function renderRecommendationCard(config, state) {
           <strong>${escapeHtml(config.displayName)}</strong>
           ${noteMarkup(config)}
           ${isTemplate ? `<span class="source-tag">${t(language, "recommend.templateTag")}</span>` : ""}
+          ${focusFallbackMarkup}
           <span class="source-tag score-tag">${t(language, "recommend.score", {value: config.recommendationScore.toFixed(1)})}</span>
         </div>
         <div class="score-row">

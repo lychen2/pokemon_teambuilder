@@ -66,7 +66,47 @@ function renderMoveTargets(targets = [], state) {
   `).join("");
 }
 
-function renderMoveRow(row, language) {
+function getHitClassName(value, side = "ally") {
+  if (value == null) {
+    return "unknown";
+  }
+  if (side === "ally") {
+    if (value === 0) {
+      return "ally-zero";
+    }
+    if (value <= 0.25) {
+      return "ally-quarter";
+    }
+    if (value < 1) {
+      return "ally-half";
+    }
+    if (value === 1) {
+      return "ally-neutral";
+    }
+    if (value < 4) {
+      return "ally-super";
+    }
+    return "ally-strong";
+  }
+  if (value === 0) {
+    return "opponent-zero";
+  }
+  if (value <= 0.25) {
+    return "opponent-quarter";
+  }
+  if (value < 1) {
+    return "opponent-half";
+  }
+  if (value === 1) {
+    return "opponent-neutral";
+  }
+  if (value < 4) {
+    return "opponent-super";
+  }
+  return "opponent-strong";
+}
+
+function renderMoveRow(row, language, side = "ally") {
   const typeClass = row.type ? getTypeClassName(row.type) : "type-unknown";
   const typeLabel = row.type ? getTypeLabel(row.type, language) : "";
   return `
@@ -76,7 +116,11 @@ function renderMoveRow(row, language) {
         <strong>${escapeHtml(row.name)}</strong>
       </div>
       <div class="matchup-board-move-hits">
-        ${row.multipliers.map((target) => `<span class="matchup-board-hit">${escapeHtml(target.displayValue)}${target.displayValue === "--" ? "" : "x"}</span>`).join("")}
+        ${row.multipliers.map((target) => `
+          <span class="matchup-board-hit matchup-board-hit-${getHitClassName(target.value, side)}">
+            ${escapeHtml(target.displayValue)}${target.displayValue === "--" ? "" : "x"}
+          </span>
+        `).join("")}
       </div>
     </div>
   `;
@@ -174,7 +218,7 @@ function renderBoardEntry(card, state, language, summaryKey, includeResistance =
           <div class="matchup-board-targets">${renderMoveTargets(card.targets, state)}</div>
         </div>
         <div class="matchup-board-move-list">
-          ${card.moveRows.map((row) => renderMoveRow({...row, name: row.isMissing ? t(language, "matchup.boardMoveMissing") : row.name}, language)).join("")}
+          ${card.moveRows.map((row) => renderMoveRow({...row, name: row.isMissing ? t(language, "matchup.boardMoveMissing") : row.name}, language, side)).join("")}
         </div>
       </div>
       <div class="matchup-board-summary">
@@ -206,18 +250,84 @@ function formatSpeedRange(min, max) {
   return min === max ? String(max) : `${min}-${max}`;
 }
 
-function hasBoostedSpeedRange(entry) {
-  return entry.baseMin !== entry.topMin || entry.baseMax !== entry.topMax;
+function renderSpeedStats(entry, language) {
+  return (entry.variants || []).map((variant) => {
+    const label = t(language, `matchup.boardSpeedMode.${variant.mode}`);
+    const range = escapeHtml(formatSpeedRange(variant.min, variant.max));
+    return `
+      <span class="matchup-board-speed-number matchup-board-speed-number-${variant.mode}">
+        <span class="matchup-board-speed-mode">${escapeHtml(label)}</span>
+        <strong>${range}</strong>
+      </span>
+    `;
+  }).join("");
 }
 
-function renderSpeedStats(entry, language) {
-  const baseRange = escapeHtml(formatSpeedRange(entry.baseMin, entry.baseMax));
-  if (!hasBoostedSpeedRange(entry)) {
-    return `<span class="matchup-board-speed-number">${baseRange}</span>`;
+function getMatrixCellClass(delta, maxAbsDelta) {
+  const normalized = Math.min(1, Math.abs(delta) / Math.max(maxAbsDelta || 1, 1));
+  if (normalized < 0.12) {
+    return "neutral";
   }
+  return delta >= 0 ? "positive" : "negative";
+}
+
+function getMatrixCellStrength(delta, maxAbsDelta) {
+  return Math.min(1, Math.abs(delta) / Math.max(maxAbsDelta || 1, 1)).toFixed(3);
+}
+
+function renderBoardMatrix(matrix, state, language) {
+  if (!matrix?.rows?.length || !matrix.allyHeaders?.length) {
+    return "";
+  }
+  const headerCells = matrix.allyHeaders.map((entry) => `
+    <div class="matchup-board-matrix-header matchup-board-matrix-header-ally" title="${escapeHtml(getDisplaySpeciesName(state, entry.speciesId, entry.speciesName, entry.label))}">
+      ${spriteMarkup(entry, state)}
+    </div>
+  `).join("");
+  const rowsMarkup = matrix.rows.map((row) => {
+    const rowHeader = `
+      <div class="matchup-board-matrix-header matchup-board-matrix-header-opponent" title="${escapeHtml(getDisplaySpeciesName(state, row.opponent.speciesId, row.opponent.speciesName, row.opponent.label))}">
+        ${spriteMarkup(row.opponent, state)}
+      </div>
+    `;
+    const cells = row.cells.map((cell) => {
+      const cellClass = getMatrixCellClass(cell.delta, matrix.maxAbsDelta);
+      const strength = getMatrixCellStrength(cell.delta, matrix.maxAbsDelta);
+      const title = t(language, "matchup.boardMatrixCellTitle", {
+        ally: getDisplaySpeciesName(state, cell.allySpeciesId, cell.allyName, cell.allyId),
+        opponent: getDisplaySpeciesName(state, cell.opponentSpeciesId, cell.opponentName, cell.opponentId),
+        delta: cell.delta.toFixed(1),
+        allyScore: cell.allyScore.toFixed(1),
+        opponentScore: cell.opponentScore.toFixed(1),
+      });
+      return `
+        <div
+          class="matchup-board-matrix-cell ${cellClass}"
+          style="--matchup-cell-strength:${strength}"
+          title="${escapeHtml(title)}"
+        >
+          ${escapeHtml(cell.delta.toFixed(1))}
+        </div>
+      `;
+    }).join("");
+    return `<div class="matchup-board-matrix-row">${rowHeader}${cells}</div>`;
+  }).join("");
   return `
-    <span class="matchup-board-speed-number">${baseRange}</span>
-    <span class="matchup-board-speed-number matchup-board-speed-number-top">${escapeHtml(formatSpeedRange(entry.topMin, entry.topMax))}</span>
+    <section class="matchup-board-matrix-panel">
+      <div class="section-head section-head-tight">
+        <div>
+          <h4>${t(language, "matchup.boardMatrixTitle")}</h4>
+          <p class="muted">${t(language, "matchup.boardMatrixCopy")}</p>
+        </div>
+      </div>
+      <div class="matchup-board-matrix">
+        <div class="matchup-board-matrix-row matchup-board-matrix-top">
+          <div class="matchup-board-matrix-corner"></div>
+          ${headerCells}
+        </div>
+        ${rowsMarkup}
+      </div>
+    </section>
   `;
 }
 
@@ -268,6 +378,7 @@ export function renderMatchupBoard(board, state) {
           <p class="muted">${t(language, "matchup.boardCopy")}</p>
         </div>
       </div>
+      ${renderBoardMatrix(board.matrix, state, language)}
       <div class="matchup-board-layout">
         <div class="matchup-board-column">
           <div class="matchup-board-column-head"><strong>${t(language, "matchup.boardAlly")}</strong></div>

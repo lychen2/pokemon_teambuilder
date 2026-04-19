@@ -209,7 +209,27 @@ function calcStat(base, points, nature, statKey) {
   return Math.floor(total * modifier);
 }
 
-function buildMove(moveName) {
+function resolveMoveHits(defaults, ability, item) {
+  const range = defaults?.hitRange;
+  if (typeof range === "number") {
+    return range;
+  }
+  if (Array.isArray(range) && range.length === 2) {
+    const [min, max] = range;
+    if (min === 2 && max === 5) {
+      if (ability === "Skill Link") return 5;
+      if (item === "Loaded Dice") return 4;
+      return 3;
+    }
+    if (max === 6) {
+      return 1;
+    }
+    return max;
+  }
+  return 1;
+}
+
+function buildMove(moveName, ability, item) {
   const defaults = moves[moveName] || moves["(No Move)"] || {bp: 0, type: "Normal", category: "Status"};
   return {
     ...defaults,
@@ -219,7 +239,7 @@ function buildMove(moveName) {
     category: defaults.category || "Status",
     isCrit: false,
     isZ: false,
-    hits: Array.isArray(defaults.hitRange) ? defaults.hitRange[0] : 1,
+    hits: resolveMoveHits(defaults, ability, item),
     isDouble: 0,
     combinePledge: 0,
     timesAffected: 0,
@@ -282,7 +302,7 @@ function buildPokemon(input) {
     item: input.item || "",
     status: input.status || "Healthy",
     toxicCounter: 0,
-    moves: moveNames.slice(0, 4).map(buildMove),
+    moves: moveNames.slice(0, 4).map((name) => buildMove(name, input.ability || entry.ab || "", input.item || "")),
     glaiveRushMod: false,
     weight: entry.w || 0,
     canEvolve: Boolean(entry.canEvolve),

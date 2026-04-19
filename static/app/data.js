@@ -1,14 +1,26 @@
 import {DATA_PATHS} from "./constants.js";
+import {getSpeedVariants} from "./battle-semantics.js";
 import {buildGlobalItemUsageCounts, buildGlobalMoveUsageCounts, buildUsageLookup} from "./usage.js";
-import {compareSpeciesByDex, fetchJson, normalizeName} from "./utils.js";
+import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
+
+function registerSpeciesAlias(index, alias, speciesId) {
+  const normalizedName = normalizeName(alias);
+  const normalizedLookup = normalizeLookupText(alias);
+  if (normalizedName) {
+    index.set(normalizedName, speciesId);
+  }
+  if (normalizedLookup) {
+    index.set(normalizedLookup, speciesId);
+  }
+}
 
 function buildSpeciesIndex(pokedex) {
   const index = new Map();
   for (const [speciesId, entry] of Object.entries(pokedex)) {
     const aliases = [speciesId, entry.name, entry.name.replace(/-/g, ""), entry.name.replace(/\s+/g, "")];
-    aliases.forEach((alias) => index.set(normalizeName(alias), speciesId));
+    aliases.forEach((alias) => registerSpeciesAlias(index, alias, speciesId));
   }
   return index;
 }
@@ -114,6 +126,20 @@ function sortTierEntries(entries) {
   return entries.sort((left, right) => left._importIndex - right._importIndex);
 }
 
+function dedupeTierEntries(entries) {
+  const seen = new Set();
+  const unique = [];
+  entries.forEach((entry) => {
+    const key = `${entry.matchupSide || "ally"}|${entry.speciesId || entry.speciesName || entry.displayName || ""}|${entry.speedTierMode || "base"}`;
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    unique.push(entry);
+  });
+  return unique;
+}
+
 function buildSpeedTierMap(entries = []) {
   const tiers = new Map();
   entries.forEach((entry) => {
@@ -126,11 +152,15 @@ function buildSpeedTierMap(entries = []) {
 
   return [...tiers.entries()]
     .sort((left, right) => Number(right[0]) - Number(left[0]))
-    .map(([speed, entries]) => ({
-      speed: Number(speed),
-      totalCount: entries.length,
-      entries: sortTierEntries(entries),
-    }));
+    .map(([speed, entries]) => {
+      const sorted = sortTierEntries(entries);
+      const deduped = dedupeTierEntries(sorted);
+      return {
+        speed: Number(speed),
+        totalCount: deduped.length,
+        entries: deduped,
+      };
+    });
 }
 
 export function calculateSpeedTiers(library) {
@@ -144,41 +174,45 @@ export function calculateSpeedTiers(library) {
   );
 }
 
-export function calculateSpeedLineTiers(library) {
+function getEntrySide(entry = {}, defaultSide = "ally") {
+  return entry.matchupSide === "opponent" ? "opponent" : defaultSide;
+}
+
+function buildResolvedSpeedEntries(library = [], options = {}) {
+  const fieldState = options.fieldState || null;
+  const includeVariants = options.includeVariants !== false;
+  const defaultSide = options.defaultSide || "ally";
   const entries = [];
   library.forEach((entry, index) => {
-    if (!entry.excludeBaseSpeedTier) {
+    const side = getEntrySide(entry, defaultSide);
+    const variants = fieldState
+      ? getSpeedVariants(entry, side, fieldState)
+      : [{mode: "base", speed: Number(entry.stats?.spe || 0), sources: []}];
+    const selected = includeVariants ? variants : variants.filter((variant) => variant.mode === "base");
+    selected.forEach((variant) => {
+      if (!variant.speed) return;
       entries.push({
         ...entry,
-        speed: entry.stats?.spe || 0,
+        speed: Number(variant.speed || 0),
         _importIndex: index,
-        speedTierMode: "base",
+        speedTierMode: variant.mode,
       });
+    });
+  });
+  return entries;
+}
+
+export function calculateSpeedLineTiers(library, options = {}) {
+  const entries = [];
+  buildResolvedSpeedEntries(library, {...options, includeVariants: true}).forEach((entry) => {
+    if (entry.excludeBaseSpeedTier && entry.speedTierMode === "base") {
+      return;
     }
-    if (entry.plusOneSpeed) {
-      entries.push({
-        ...entry,
-        speed: entry.plusOneSpeed.speed,
-        _importIndex: index,
-        speedTierMode: "plus1",
-      });
-    }
-    if (entry.doubleSpeed) {
-      entries.push({
-        ...entry,
-        speed: entry.doubleSpeed.speed,
-        _importIndex: index,
-        speedTierMode: "double",
-      });
-    }
-    if (entry.choiceScarfSpeed) {
-      entries.push({
-        ...entry,
-        speed: entry.choiceScarfSpeed.speed,
-        _importIndex: index,
-        speedTierMode: "scarf",
-      });
-    }
+    entries.push(entry);
   });
   return buildSpeedTierMap(entries);
+}
+
+export function calculateConfiguredSpeedTiers(library, options = {}) {
+  return buildSpeedTierMap(buildResolvedSpeedEntries(library, {...options, includeVariants: false}));
 }

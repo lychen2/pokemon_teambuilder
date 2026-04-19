@@ -29,10 +29,11 @@ function pokeIconMarkup(url, label) {
 }
 
 function getPokeIconUrl(config, datasets) {
-  if (!config?.speciesId) {
+  const speciesId = config?.spriteSpeciesId || config?.speciesId || "";
+  if (!speciesId) {
     return "";
   }
-  return datasets?.pokeIconMap?.[config.speciesId] || "";
+  return datasets?.pokeIconMap?.[speciesId] || "";
 }
 
 export function spriteMarkup(config, state) {

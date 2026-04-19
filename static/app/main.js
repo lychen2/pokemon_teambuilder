@@ -2,7 +2,7 @@ import {analyzeTeam} from "./analysis.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
 import {buildSyntheticSpeedEntries} from "./champions-vgc.js";
 import {ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
-import {calculateSpeedLineTiers, calculateSpeedTiers, loadDatasets} from "./data.js";
+import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, loadDatasets} from "./data.js";
 import {createDamageWorkspace} from "./damage-workspace.js";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
 import {
@@ -30,7 +30,16 @@ import {
   restoreOpponentTeam,
   syncOpponentTeam,
 } from "./matchup-selection.js";
-import {flushPersistState, loadPersistedState, schedulePersistState} from "./persistence.js";
+import {buildCounterOpponentSelections} from "./opponent-team-generator.js";
+import {
+  estimatePersistSize,
+  exportFullState,
+  flushPersistState,
+  importFullState,
+  loadPersistedState,
+  PERSIST_SIZE_WARNING_BYTES,
+  schedulePersistState,
+} from "./persistence.js";
 import {applyPsChinaTranslation, translatePsChinaText} from "./pschina-translation.js";
 import {
   DEFAULT_RECOMMENDATION_PREFERENCES,
@@ -40,12 +49,21 @@ import {
 } from "./recommendation-preferences.js";
 import {recommendConfigs} from "./recommendations.js";
 import {renderAnalysis, renderDamage, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
+import {invalidateRenderCache} from "./render-cache.js";
+import {installKeybindings, openShortcutsHelp} from "./keybindings.js";
+import {buildDefaultCommands, createCommandPalette} from "./command-palette.js";
+import {focusCommandPaletteInput, installCommandPalette, renderCommandPalette} from "./render-command-palette.js";
+import {createHistoryStore, initializeHistory, recordHistory, redoHistory, snapshotHistoryState, undoHistory} from "./history.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
+import {getHeldItemAdjustedSpeed} from "./speed.js";
 import {compareConfigs, createTeamEntry, findBestLibraryMatch} from "./team-config.js";
+import {toast} from "./toast.js";
 import {getUsageItemEntries, getUsageMoveEntries} from "./usage.js";
-import {formatChampionPoints, formatConfigName, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, normalizeLookupText, normalizeName} from "./utils.js";
+import {formatChampionPoints, formatConfigName, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, isTypingTarget, normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_TEAM_SIZE = 6;
+const DEFAULT_CONFIG_LEVEL = 50;
+const IMPORT_FEEDBACK_ERROR = "error";
 const DEFAULT_DAMAGE_SIDE = {
   reflect: false,
   lightScreen: false,
@@ -120,6 +138,13 @@ const DEFAULT_DAMAGE_TERA_TYPES = {
   attacker: "",
   defender: "",
 };
+const DEFAULT_BATTLE_FIELD = {
+  allyTailwind: false,
+  opponentTailwind: false,
+  trickRoom: false,
+  allyFlags: {},
+  opponentFlags: {},
+};
 
 const state = {
   datasets: null,
@@ -139,10 +164,15 @@ const state = {
     lastPairKey: "",
     overridePairKey: "",
     overrides: {
+      attackerHp: 0,
       attackerAtk: 0,
+      attackerDef: 0,
       attackerSpa: 0,
+      attackerSpd: 0,
       defenderHp: 0,
+      defenderAtk: 0,
       defenderDef: 0,
+      defenderSpa: 0,
       defenderSpd: 0,
     },
     field: {
@@ -165,6 +195,7 @@ const state = {
   dismissedRecommendationKeys: [],
   search: "",
   matchupSearch: "",
+  battleField: {...DEFAULT_BATTLE_FIELD, allyFlags: {}, opponentFlags: {}},
   library: [],
   filteredLibrary: [],
   allSpeciesBrowser: [],
@@ -206,6 +237,9 @@ const state = {
   localizedDetailTexts: new Map(),
   localizedDetailPromises: new Map(),
 };
+const stateHistory = createHistoryStore();
+let persistLimitWarningShown = false;
+let draggedTeamConfigId = "";
 
 const TOOLTIP_OFFSET = 12;
 const BUILDER_STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
@@ -295,60 +329,62 @@ function normalizeDamageField(field = {}) {
   };
 }
 
-function normalizeDamageStatuses(statuses = {}) {
-  return {
-    ...DEFAULT_DAMAGE_STATUSES,
-    ...statuses,
-  };
-}
-
-function normalizeDamageHealth(healthPercent = {}) {
-  return {
-    attacker: Math.max(0, Math.min(100, Number(healthPercent.attacker ?? DEFAULT_DAMAGE_HEALTH.attacker))),
-    defender: Math.max(0, Math.min(100, Number(healthPercent.defender ?? DEFAULT_DAMAGE_HEALTH.defender))),
-  };
-}
-
-function normalizeDamageBoosts(boosts = {}) {
-  return {
-    attacker: {
-      ...DEFAULT_DAMAGE_BOOST_SET,
-      ...(boosts.attacker || {}),
-    },
-    defender: {
-      ...DEFAULT_DAMAGE_BOOST_SET,
-      ...(boosts.defender || {}),
-    },
-  };
-}
-
-function normalizeDamageMeta(meta = {}) {
-  return {
-    attacker: {
-      ...DEFAULT_DAMAGE_META_SET,
-      ...(meta.attacker || {}),
-    },
-    defender: {
-      ...DEFAULT_DAMAGE_META_SET,
-      ...(meta.defender || {}),
-    },
-  };
-}
-
-function normalizeDamageTeraTypes(teraTypes = {}) {
-  return {
-    attacker: String(teraTypes.attacker || ""),
-    defender: String(teraTypes.defender || ""),
-  };
-}
-
 function buildDamageOverrides(attacker, defender) {
   return {
+    attackerHp: Number(attacker?.championPoints?.hp || 0),
     attackerAtk: Number(attacker?.championPoints?.atk || 0),
+    attackerDef: Number(attacker?.championPoints?.def || 0),
     attackerSpa: Number(attacker?.championPoints?.spa || 0),
+    attackerSpd: Number(attacker?.championPoints?.spd || 0),
     defenderHp: Number(defender?.championPoints?.hp || 0),
+    defenderAtk: Number(defender?.championPoints?.atk || 0),
     defenderDef: Number(defender?.championPoints?.def || 0),
+    defenderSpa: Number(defender?.championPoints?.spa || 0),
     defenderSpd: Number(defender?.championPoints?.spd || 0),
+  };
+}
+
+function getDamageConfigResetSignature(config) {
+  if (!config) {
+    return "";
+  }
+  return JSON.stringify({
+    id: config.id || "",
+    speciesId: config.speciesId || "",
+    nature: config.nature || "",
+    ability: config.ability || "",
+    item: config.item || "",
+    teraType: config.teraType || "",
+    championPoints: config.championPoints || {},
+    moveNames: config.moveNames || [],
+  });
+}
+
+function buildDamagePairStateKey(attackerConfig, defenderConfig) {
+  if (!attackerConfig || !defenderConfig) {
+    return "";
+  }
+  return `${getDamageConfigResetSignature(attackerConfig)}::${getDamageConfigResetSignature(defenderConfig)}`;
+}
+
+function resetDamagePairState(attackerConfig, defenderConfig) {
+  state.damage.overridePairKey = buildDamagePairStateKey(attackerConfig, defenderConfig);
+  state.damage.overrides = buildDamageOverrides(attackerConfig, defenderConfig);
+  state.damage.statuses = {...DEFAULT_DAMAGE_STATUSES};
+  state.damage.healthPercent = {...DEFAULT_DAMAGE_HEALTH};
+  state.damage.boosts = {
+    ...DEFAULT_DAMAGE_BOOSTS,
+    attacker: {...DEFAULT_DAMAGE_BOOST_SET},
+    defender: {...DEFAULT_DAMAGE_BOOST_SET},
+  };
+  state.damage.meta = {
+    ...DEFAULT_DAMAGE_META,
+    attacker: {...DEFAULT_DAMAGE_META_SET},
+    defender: {...DEFAULT_DAMAGE_META_SET},
+  };
+  state.damage.teraTypes = {
+    attacker: attackerConfig?.teraType || attackerConfig?.types?.[0] || "",
+    defender: defenderConfig?.teraType || defenderConfig?.types?.[0] || "",
   };
 }
 
@@ -357,15 +393,11 @@ function applyDamageOverrides(config, overrides, role, status, currentHpPercent)
     return null;
   }
   const championPoints = {...(config.championPoints || {})};
-  if (role === "attacker") {
-    championPoints.atk = Number(overrides.attackerAtk || 0);
-    championPoints.spa = Number(overrides.attackerSpa || 0);
-  }
-  if (role === "defender") {
-    championPoints.hp = Number(overrides.defenderHp || 0);
-    championPoints.def = Number(overrides.defenderDef || 0);
-    championPoints.spd = Number(overrides.defenderSpd || 0);
-  }
+  championPoints.hp = Number(overrides[`${role}Hp`] || 0);
+  championPoints.atk = Number(overrides[`${role}Atk`] || 0);
+  championPoints.def = Number(overrides[`${role}Def`] || 0);
+  championPoints.spa = Number(overrides[`${role}Spa`] || 0);
+  championPoints.spd = Number(overrides[`${role}Spd`] || 0);
   return {
     ...config,
     championPoints,
@@ -446,25 +478,19 @@ function applyDamageFieldChange(pathText, control) {
   state.damage.field = setNestedValue(state.damage.field, path, coerceDamageFieldValue(control, path));
 }
 
-function syncDamageOverrideState() {
+function syncDamagePairState() {
   const attackerEntry = state.damageAttackers.find((entry) => entry.id === state.damage.attackerId);
   const defenderEntry = state.damageDefenders.find((entry) => entry.id === state.damage.defenderId);
   if (!attackerEntry || !defenderEntry) {
-    state.damage.overridePairKey = "";
-    state.damage.overrides = buildDamageOverrides(null, null);
-    state.damage.teraTypes = {...DEFAULT_DAMAGE_TERA_TYPES};
-    return;
+    resetDamagePairState(null, null);
+    return true;
   }
-  const nextPairKey = `${attackerEntry.id}:${defenderEntry.id}`;
+  const nextPairKey = buildDamagePairStateKey(attackerEntry.config, defenderEntry.config);
   if (state.damage.overridePairKey === nextPairKey) {
-    return;
+    return false;
   }
-  state.damage.overridePairKey = nextPairKey;
-  state.damage.overrides = buildDamageOverrides(attackerEntry.config, defenderEntry.config);
-  state.damage.teraTypes = {
-    attacker: attackerEntry.config?.teraType || attackerEntry.config?.types?.[0] || "",
-    defender: defenderEntry.config?.teraType || defenderEntry.config?.types?.[0] || "",
-  };
+  resetDamagePairState(attackerEntry.config, defenderEntry.config);
+  return true;
 }
 
 function scheduleDamageSync() {
@@ -507,8 +533,76 @@ function translateNodes(...nodes) {
   void applyPsChinaTranslation(state.language, nodes);
 }
 
+function renderLibraryImportFeedback(payload) {
+  renderImportFeedback(payload, state.language);
+  translateNodes(
+    document.getElementById("import-feedback"),
+    document.getElementById("import-feedback-details"),
+  );
+}
+
+function renderCurrentTeamImportFeedback(payload) {
+  renderTeamImportFeedback(payload, state.language);
+  translateNodes(
+    document.getElementById("team-import-feedback"),
+    document.getElementById("team-import-feedback-details"),
+  );
+}
+
+function buildImportFeedbackPayload(configs = [], feedback = []) {
+  const errors = feedback.filter((item) => item.level === IMPORT_FEEDBACK_ERROR).length;
+  const warnings = Math.max(0, feedback.length - errors);
+  return {
+    summary: t(state.language, "import.feedback.summary", {
+      count: configs.length,
+      warnings,
+      errors,
+    }),
+    items: feedback,
+  };
+}
+
+function handlePersistError(error) {
+  const message = error?.message || t(state.language, "common.unknown");
+  setStatus("status.persistFailed", {message});
+  toast(t(state.language, "toast.persistFailed"), {type: "error"});
+}
+
+function getFullStateImportErrorMessage(error) {
+  if (error?.code === "UNSUPPORTED_SCHEMA_VERSION") {
+    return t(state.language, "error.unsupportedStateSchema", {
+      version: error.schemaVersion ?? "?",
+    });
+  }
+  if (error?.code === "INVALID_JSON" || error?.code === "INVALID_STATE") {
+    return t(state.language, "error.invalidFullState");
+  }
+  return error?.message || t(state.language, "common.unknown");
+}
+
+function warnPersistSizeIfNeeded() {
+  const size = estimatePersistSize(state);
+  if (size > PERSIST_SIZE_WARNING_BYTES) {
+    if (!persistLimitWarningShown) {
+      persistLimitWarningShown = true;
+      setStatus("status.persistNearLimit");
+      toast(t(state.language, "status.persistNearLimit"), {type: "warning"});
+    }
+    return;
+  }
+  persistLimitWarningShown = false;
+}
+
 function scheduleStatePersist() {
-  schedulePersistState(state);
+  recordHistory(stateHistory, snapshotHistoryState(state));
+  warnPersistSizeIfNeeded();
+  schedulePersistState(state, {onError: handlePersistError});
+}
+
+function flushStatePersist() {
+  recordHistory(stateHistory, snapshotHistoryState(state));
+  warnPersistSizeIfNeeded();
+  flushPersistState(state, {onError: handlePersistError});
 }
 
 function refreshFilteredLibrary() {
@@ -560,7 +654,6 @@ function refreshFilteredLibrary() {
 }
 
 function refreshLibraryState() {
-  state.speedTiers = calculateSpeedTiers(state.library);
   state.allSpeciesBrowser = buildSpeciesBrowser(state.datasets, state.library).map((species) => {
     const localizedSpeciesName = state.localizedSpeciesNames.get(species.speciesId) || species.speciesName;
     return {
@@ -583,13 +676,34 @@ function refreshLibraryState() {
     state.selectedSpeciesId = null;
   }
   state.syntheticSpeedEntries = buildSyntheticSpeedEntries(state.datasets, state.library, state.language);
-  state.speedLineTiers = calculateSpeedLineTiers([...state.syntheticSpeedEntries, ...state.library]);
   state.opponentTeam = syncOpponentTeam(state.opponentTeam, state.datasets, state.library, state.language);
   if (state.activeOpponentConfigSpeciesId && !state.opponentTeam.some((entry) => entry.speciesId === state.activeOpponentConfigSpeciesId)) {
     state.activeOpponentConfigSpeciesId = null;
   }
   state.savedOpponentTeams = normalizeSavedOpponentTeams(state.savedOpponentTeams, state.datasets, state.library, state.language);
   refreshFilteredLibrary();
+}
+
+function sanitizeBattleFlags() {
+  const allyKeys = new Set(state.team.map((config) => String(config.id || "")));
+  const opponentKeys = new Set(state.opponentTeam.map((entry) => String(entry.speciesId || "")));
+  state.battleField.allyFlags = Object.fromEntries(
+    Object.entries(state.battleField.allyFlags || {}).filter(([key]) => allyKeys.has(key)),
+  );
+  state.battleField.opponentFlags = Object.fromEntries(
+    Object.entries(state.battleField.opponentFlags || {}).filter(([key]) => opponentKeys.has(key)),
+  );
+}
+
+function refreshSpeedState() {
+  state.speedTiers = calculateConfiguredSpeedTiers(state.library, {
+    fieldState: state.battleField,
+    defaultSide: "ally",
+  });
+  state.speedLineTiers = calculateSpeedLineTiers([...state.syntheticSpeedEntries, ...state.library], {
+    fieldState: state.battleField,
+    defaultSide: "ally",
+  });
 }
 
 function getRecommendationPool() {
@@ -604,14 +718,19 @@ function getRecommendationPool() {
 
 function refreshBattleState() {
   const recommendationPool = getRecommendationPool();
+  sanitizeBattleFlags();
+  refreshSpeedState();
   state.analysis = analyzeTeam(
     state.team,
     state.speedTiers,
     state.language,
     recommendationPool,
     state.recommendPreferences,
+    {fieldState: state.battleField},
   );
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {
+    fieldState: state.battleField,
+  });
   if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
     state.activeCoreConfigId = state.team[0]?.id || null;
   }
@@ -630,6 +749,7 @@ function refreshBattleState() {
       focusType: state.recommendFocusType,
       datasets: state.datasets,
       dismissedKeys: state.dismissedRecommendationKeys,
+      fieldState: state.battleField,
     },
   );
   syncDamageSelectionState();
@@ -725,15 +845,48 @@ function syncDamageSelectionState() {
     state.damage.result = null;
     state.damage.error = "";
     state.damage.lastPairKey = "";
-    state.damage.overridePairKey = "";
+    resetDamagePairState(null, null);
     return;
   }
-  syncDamageOverrideState();
-  const currentPairKey = `${state.damage.attackerId}:${state.damage.defenderId}`;
-  if (state.damage.lastPairKey && state.damage.lastPairKey !== currentPairKey) {
+  const pairStateChanged = syncDamagePairState();
+  if (pairStateChanged) {
     state.damage.result = null;
     state.damage.error = "";
+    state.damage.lastPairKey = "";
   }
+}
+
+function getDamageWorkspaceSnapshot(config) {
+  if (!config) {
+    return null;
+  }
+  return {
+    id: config.id || "",
+    speciesId: config.speciesId || "",
+    nature: config.nature || "",
+    ability: config.ability || "",
+    item: config.item || "",
+    teraType: config.teraType || "",
+    status: config.status || "",
+    currentHpPercent: Number(config.currentHpPercent || 0),
+    championPoints: config.championPoints || {},
+    boosts: config.boosts || {},
+    dynamax: Boolean(config.dynamax),
+    terastal: Boolean(config.terastal),
+    abilityActive: Boolean(config.abilityActive),
+    moveNames: config.moveNames || [],
+  };
+}
+
+function buildDamageWorkspaceKey(attacker, defender, field) {
+  if (!attacker || !defender) {
+    return "";
+  }
+  return JSON.stringify({
+    attacker: getDamageWorkspaceSnapshot(attacker),
+    defender: getDamageWorkspaceSnapshot(defender),
+    field,
+  });
 }
 
 function getResolvedDamageMoveNamesForSide(side) {
@@ -898,7 +1051,7 @@ async function syncDamageWorkspace(force = false) {
     renderDamageSection();
     return;
   }
-  const nextPairKey = `${attacker.id}:${defender.id}`;
+  const nextPairKey = buildDamageWorkspaceKey(attacker, defender, state.damage.field);
   if (!force && state.damage.result && state.damage.error === "" && state.damage.lastPairKey === nextPairKey) {
     return;
   }
@@ -919,6 +1072,9 @@ async function syncDamageWorkspace(force = false) {
     if (requestId !== damageSyncRequestId) {
       return;
     }
+    if (result === null) {
+      return;
+    }
     state.damage.result = result;
     state.damage.lastPairKey = nextPairKey;
     state.damage.loading = false;
@@ -932,6 +1088,7 @@ async function syncDamageWorkspace(force = false) {
     state.damage.result = null;
     state.damage.error = error instanceof Error ? error.message : String(error);
     renderDamageSection();
+    toast(t(state.language, "toast.damageSyncFailed"), {type: "error"});
   }
 }
 
@@ -1098,6 +1255,7 @@ function resetLocalizedLabels() {
   state.localizedAbilityNames = new Map();
   state.localizedNatureNames = new Map();
   if (state.datasets) {
+    state.datasets.abilitySearchLookup = state.datasets.abilityLookup;
     state.datasets.itemSearchLookup = state.datasets.itemLookup;
     state.datasets.moveSearchLookup = state.datasets.moveLookup;
   }
@@ -1157,19 +1315,18 @@ function setLanguage(language, rerender = true) {
   }
   const importInput = document.getElementById("custom-library-input");
   if (importInput && !importInput.value.trim() && !state.library.length) {
-    renderImportFeedback(t(state.language, "controls.importEmpty"));
-    translateNodes(document.getElementById("import-feedback"));
+    renderLibraryImportFeedback(t(state.language, "controls.importEmpty"));
   }
   const teamImportInput = document.getElementById("team-import-input");
   if (teamImportInput && !teamImportInput.value.trim()) {
-    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
-    translateNodes(document.getElementById("team-import-feedback"));
+    renderCurrentTeamImportFeedback(t(state.language, "team.importEmpty"));
   }
   if (!rerender) {
     return;
   }
   initializeBuilderOptions();
   refreshDerivedState();
+  invalidateRenderCache();
   renderAll();
   void syncLocalizedLabelsInBackground();
   scheduleStatePersist();
@@ -1183,6 +1340,7 @@ function setIconScheme(iconScheme, rerender = true) {
   state.iconScheme = nextScheme;
   updateIconSchemeControl();
   if (rerender) {
+    invalidateRenderCache();
     renderAll();
     scheduleStatePersist();
   }
@@ -1209,6 +1367,19 @@ function setActiveAnalysisTab(tabId, rerender = true) {
   }
 }
 
+function renderBattleViews(options = {}) {
+  if (options.renderTeam) {
+    renderTeamSection();
+  }
+  renderAnalysisSection();
+  renderMatchupSection();
+  renderRecommendationsSection();
+  renderSpeedSection();
+  if (options.renderDamage) {
+    renderDamageSection();
+  }
+}
+
 function setRecommendFocusType(type = "", rerender = true) {
   const recommendationPool = getRecommendationPool();
   state.recommendFocusType = type || "";
@@ -1223,6 +1394,7 @@ function setRecommendFocusType(type = "", rerender = true) {
       focusType: state.recommendFocusType,
       datasets: state.datasets,
       dismissedKeys: state.dismissedRecommendationKeys,
+      fieldState: state.battleField,
     },
   );
   if (rerender) {
@@ -1319,6 +1491,149 @@ function buildTeamEntry(config, teamSource = "library", linkedConfigId = config.
   });
 }
 
+function hydrateSavedTeams(savedTeams = []) {
+  return savedTeams.map((team) => {
+    if (!Array.isArray(team.configs)) {
+      return team;
+    }
+    return {
+      ...team,
+      configs: hydrateConfigs(team.configs, state.datasets, 50),
+    };
+  });
+}
+
+function applyPersistedPayload(persisted) {
+  state.language = normalizeLanguage(persisted?.language || DEFAULT_LANGUAGE);
+  state.iconScheme = normalizeIconScheme(persisted?.iconScheme);
+  state.recommendPreferences = normalizeRecommendationPreferences(persisted?.recommendPreferences);
+  state.recommendWeights = normalizeRecommendationWeights(persisted?.recommendWeights);
+  state.dismissedRecommendationKeys = Array.isArray(persisted?.dismissedRecommendationKeys)
+    ? persisted.dismissedRecommendationKeys.filter(Boolean)
+    : [];
+  state.activeView = persisted?.activeView || "library-view";
+  if (!persisted?.damage) {
+    state.damage.attackerId = "";
+    state.damage.defenderId = "";
+    state.damage.focusSide = "attacker";
+    state.damage.field = normalizeDamageField();
+  } else {
+    state.damage.attackerId = persisted.damage.attackerId || "";
+    state.damage.defenderId = persisted.damage.defenderId || "";
+    state.damage.focusSide = persisted.damage.focusSide === "defender" ? "defender" : "attacker";
+    state.damage.field = normalizeDamageField(persisted.damage.field);
+  }
+  if (!state.datasets) {
+    return;
+  }
+  state.library = persisted?.library ? ensureUniqueConfigIds(hydrateConfigs(persisted.library, state.datasets, 50)) : [];
+  state.team = persisted?.team ? hydrateConfigs(persisted.team, state.datasets, 50) : [];
+  state.opponentTeam = persisted?.opponentTeam
+    ? restoreOpponentTeam(persisted.opponentTeam, state.datasets, state.library, state.language)
+    : [];
+  state.savedTeams = persisted?.savedTeams ? hydrateSavedTeams(persisted.savedTeams) : [];
+  state.savedOpponentTeams = persisted?.savedOpponentTeams
+    ? normalizeSavedOpponentTeams(persisted.savedOpponentTeams, state.datasets, state.library, state.language)
+    : [];
+  state.activeOpponentConfigSpeciesId = null;
+}
+
+function restoreStateSnapshot(snapshot) {
+  state.library = snapshot?.library || [];
+  state.team = snapshot?.team || [];
+  state.opponentTeam = snapshot?.opponentTeam || [];
+  state.savedTeams = snapshot?.savedTeams || [];
+  state.savedOpponentTeams = snapshot?.savedOpponentTeams || [];
+  state.activeOpponentConfigSpeciesId = null;
+  refreshDerivedState();
+  renderAll();
+}
+
+function moveTeamMember(configId, offset) {
+  const currentIndex = state.team.findIndex((config) => config.id === configId);
+  const nextIndex = currentIndex + offset;
+  if (currentIndex < 0 || nextIndex < 0 || nextIndex >= state.team.length) {
+    return;
+  }
+  const nextTeam = [...state.team];
+  const [moved] = nextTeam.splice(currentIndex, 1);
+  nextTeam.splice(nextIndex, 0, moved);
+  state.team = nextTeam;
+  refreshBattleState();
+  renderTeamSection();
+  renderAnalysisSection();
+  renderMatchupSection();
+  renderRecommendationsSection();
+  renderDamageSection();
+  scheduleStatePersist();
+}
+
+function reorderTeamMembers(sourceId, targetId) {
+  if (!sourceId || !targetId || sourceId === targetId) {
+    return;
+  }
+  const sourceIndex = state.team.findIndex((config) => config.id === sourceId);
+  const targetIndex = state.team.findIndex((config) => config.id === targetId);
+  if (sourceIndex < 0 || targetIndex < 0) {
+    return;
+  }
+  const nextTeam = [...state.team];
+  const [moved] = nextTeam.splice(sourceIndex, 1);
+  nextTeam.splice(targetIndex, 0, moved);
+  state.team = nextTeam;
+  refreshBattleState();
+  renderTeamSection();
+  renderAnalysisSection();
+  renderMatchupSection();
+  renderRecommendationsSection();
+  renderDamageSection();
+  scheduleStatePersist();
+}
+
+function downloadBlob(blob, filename) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+}
+
+function undoStateChange() {
+  const snapshot = undoHistory(stateHistory);
+  if (!snapshot) {
+    setStatus("status.nothingToUndo");
+    return;
+  }
+  restoreStateSnapshot(snapshot);
+  scheduleStatePersist();
+  setStatus("status.undo");
+}
+
+function redoStateChange() {
+  const snapshot = redoHistory(stateHistory);
+  if (!snapshot) {
+    setStatus("status.nothingToRedo");
+    return;
+  }
+  restoreStateSnapshot(snapshot);
+  scheduleStatePersist();
+  setStatus("status.redo");
+}
+
+function setTeamDropTarget(targetId = "") {
+  document.querySelectorAll("[data-team-config-id]").forEach((node) => {
+    node.classList.toggle("team-card-drop-target", node.getAttribute("data-team-config-id") === targetId);
+  });
+}
+
+function clearTeamDragState() {
+  draggedTeamConfigId = "";
+  setTeamDropTarget("");
+}
+
 function selectSpecies(speciesId) {
   if (speciesId === state.selectedSpeciesId) {
     return;
@@ -1362,11 +1677,44 @@ function addOpponentSpecies(speciesId) {
   if (!opponentEntry || state.opponentTeam.length >= MAX_TEAM_SIZE) return;
   if (state.opponentTeam.some((member) => member.speciesId === opponentEntry.speciesId)) return;
   state.opponentTeam = [...state.opponentTeam, opponentEntry];
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {fieldState: state.battleField});
   syncDamageSelectionState();
   renderMatchupSection();
   renderDamageSection();
   scheduleStatePersist();
+}
+
+function toggleOpponentPin(speciesId) {
+  state.opponentTeam = state.opponentTeam.map((entry) => {
+    return entry.speciesId === speciesId ? {...entry, pinned: !entry.pinned} : entry;
+  });
+  renderMatchupSection();
+  scheduleStatePersist();
+}
+
+function autoGenerateOpponentTeam() {
+  if (!state.team.length) {
+    setStatusMessage(t(state.language, "matchup.needAlly"));
+    return;
+  }
+  const lockedSelections = state.opponentTeam
+    .filter((entry) => entry.pinned)
+    .map((entry) => ({
+      speciesId: entry.speciesId,
+      selectedConfigId: entry.selectedConfigId || "",
+      pinned: true,
+    }));
+  const selections = buildCounterOpponentSelections(state.team, state.matchupLibrary, state.datasets, {lockedSelections});
+  if (!selections.length) {
+    setStatus("status.generatedOpponentTeamEmpty");
+    return;
+  }
+  state.opponentTeam = syncOpponentTeam(selections, state.datasets, state.library, state.language);
+  state.activeOpponentConfigSpeciesId = null;
+  refreshDerivedState();
+  renderAll();
+  scheduleStatePersist();
+  setStatus("status.generatedOpponentTeam", {count: state.opponentTeam.length});
 }
 
 function toggleOpponentConfigPicker(speciesId) {
@@ -1384,7 +1732,7 @@ function selectOpponentConfig(speciesId, selectedConfigId = "") {
     state.language,
   );
   state.activeOpponentConfigSpeciesId = null;
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {fieldState: state.battleField});
   syncDamageSelectionState();
   renderMatchupSection();
   renderDamageSection();
@@ -1407,7 +1755,7 @@ function removeOpponentSpecies(speciesId) {
   if (state.activeOpponentConfigSpeciesId === speciesId) {
     state.activeOpponentConfigSpeciesId = null;
   }
-  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
+  state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {fieldState: state.battleField});
   syncDamageSelectionState();
   renderMatchupSection();
   renderDamageSection();
@@ -1484,11 +1832,28 @@ function getEditorElements() {
   };
 }
 
+function openTextConfigEditor(target, text) {
+  const {modal, input} = getEditorElements();
+  activeEditorTarget = target;
+  input.value = text;
+  modal.hidden = false;
+  input.focus();
+  input.setSelectionRange(0, 0);
+}
+
 function closeConfigEditor() {
   const {modal, input} = getEditorElements();
   activeEditorTarget = null;
   modal.hidden = true;
   input.value = "";
+}
+
+function getGuidedEditTarget(builder = state.guidedBuilder) {
+  return builder?.editTarget || null;
+}
+
+function isEditingGuidedBuilder(builder = state.guidedBuilder) {
+  return Boolean(getGuidedEditTarget(builder));
 }
 
 function getGuidedConfigElements() {
@@ -1509,6 +1874,7 @@ function getGuidedConfigElements() {
     moveSummary: document.getElementById("builder-move-summary"),
     movesGrid: document.getElementById("builder-moves-grid"),
     feedback: document.getElementById("guided-config-feedback"),
+    switchButton: document.getElementById("switch-config-editor-mode-btn"),
     saveButton: document.getElementById("save-guided-config-btn"),
   };
 }
@@ -1526,6 +1892,7 @@ function closeGuidedConfig() {
     feedback,
   } = getGuidedConfigElements();
   closeBuilderAutocomplete();
+  activeEditorTarget = null;
   state.guidedBuilder = null;
   modal.hidden = true;
   title.textContent = "";
@@ -1674,6 +2041,7 @@ function findSpeedBenchmarks(speed, benchmarks) {
 
 function getPointsNeededForSpeedBenchmark(builder, points, targetSpeed) {
   const currentPoints = Number(points.spe || 0);
+  const item = getRequiredItemForSpecies(builder.speciesId, state.datasets) || builder.item;
   for (let extra = 1; currentPoints + extra <= MAX_SPEED_POINTS; extra += 1) {
     const nextStats = getBuilderStats(
       builder.speciesId,
@@ -1681,7 +2049,7 @@ function getPointsNeededForSpeedBenchmark(builder, points, targetSpeed) {
       builder.nature,
       state.datasets,
     );
-    if (Number(nextStats.spe || 0) > targetSpeed) {
+    if (getHeldItemAdjustedSpeed({item, stats: nextStats}) > targetSpeed) {
       return extra;
     }
   }
@@ -1689,7 +2057,8 @@ function getPointsNeededForSpeedBenchmark(builder, points, targetSpeed) {
 }
 
 function getBuilderSpeedBenchmarkSummary(builder, points, stats) {
-  const currentSpeed = Number(stats.spe || 0);
+  const item = getRequiredItemForSpecies(builder.speciesId, state.datasets) || builder.item;
+  const currentSpeed = getHeldItemAdjustedSpeed({item, stats});
   const mode = getBuilderSpeedBenchmarkMode(currentSpeed);
   const benchmarkPool = mode === SPEED_BENCHMARK_SLOWEST
     ? state.builderSpeedBenchmarks.slowest
@@ -2237,17 +2606,23 @@ function renderGuidedConfigForm(builder) {
     noteInput,
     pointsGrid,
     movesGrid,
+    switchButton,
+    saveButton,
   } = getGuidedConfigElements();
-  title.textContent = t(state.language, "library.openTemplate", {
-    name: getLocalizedSpeciesName(builder.speciesId, species?.name || builder.speciesId),
-  });
-  subtitle.textContent = t(state.language, "builder.copy");
+  const localizedName = getLocalizedSpeciesName(builder.speciesId, species?.name || builder.speciesId);
+  const editing = isEditingGuidedBuilder(builder);
+  title.textContent = editing
+    ? t(state.language, "builder.editTitle", {name: localizedName})
+    : t(state.language, "library.openTemplate", {name: localizedName});
+  subtitle.textContent = t(state.language, editing ? "builder.editCopy" : "builder.copy");
   types.innerHTML = (species?.types || []).map(typePillMarkup).join("");
   itemInput.value = getLocalizedItemName(requiredItem || builder.item);
   itemInput.disabled = Boolean(requiredItem);
   itemInput.readOnly = Boolean(requiredItem);
   itemInput.title = requiredItem || "";
   noteInput.value = builder.note;
+  switchButton.hidden = !editing;
+  saveButton.textContent = t(state.language, editing ? "builder.saveEdit" : "builder.save");
   const abilityOptions = getAbilityOptions(builder.speciesId, state.datasets);
   syncSelectOptions(
     abilitySelect,
@@ -2379,11 +2754,12 @@ function renderGuidedConfigDerived() {
   });
   const errors = getBuilderErrorMessages(validation.errors);
   const warnings = getBuilderWarningMessages(validation.warnings || []);
+  const readyKey = isEditingGuidedBuilder(builder) ? "builder.feedbackReadyEdit" : "builder.feedbackReady";
   feedback.textContent = errors.length
     ? [t(state.language, "builder.feedbackInvalid"), ...errors].join(" ")
     : warnings.length
       ? [t(state.language, "builder.feedbackWarning"), ...warnings].join(" ")
-      : t(state.language, "builder.feedbackReady");
+      : t(state.language, readyKey);
   feedback.classList.toggle("is-error", errors.length > 0);
   saveButton.disabled = !validation.canSave;
   syncBuilderAutocomplete();
@@ -2401,10 +2777,25 @@ function openGuidedConfig(speciesId, options = {}) {
   state.guidedBuilder = {
     ...createBuilderState(speciesId, state.datasets, options.seedConfig || null),
     addToTeamOnSave: Boolean(options.addToTeamOnSave),
+    editTarget: options.editTarget || null,
   };
+  activeEditorTarget = null;
   const {modal} = getGuidedConfigElements();
   renderGuidedConfig();
   modal.hidden = false;
+}
+
+function openGuidedConfigEditor(configId, kind = "library") {
+  const target = kind === "team"
+    ? findTeamConfigById(configId)
+    : findConfigById(configId);
+  if (!target) {
+    return;
+  }
+  openGuidedConfig(target.speciesId, {
+    seedConfig: target,
+    editTarget: {configId, kind},
+  });
 }
 
 function openRecommendationTemplate(configId) {
@@ -2470,22 +2861,91 @@ function updateGuidedBuilderMove(index, value) {
 }
 
 function openConfigEditor(configId, kind = "library") {
-  const target = kind === "team"
-    ? findTeamConfigById(configId)
-    : findConfigById(configId);
+  openGuidedConfigEditor(configId, kind);
+}
+
+function resolveBuilderItemName(itemName = "") {
+  const trimmed = String(itemName || "").trim();
+  if (!trimmed) {
+    return "";
+  }
+  return state.datasets?.itemSearchLookup?.get(normalizeLookupText(trimmed))?.name
+    || state.datasets?.itemLookup?.get(normalizeName(trimmed))?.name
+    || trimmed;
+}
+
+function resolveBuilderMoveName(moveName = "") {
+  const trimmed = String(moveName || "").trim();
+  if (!trimmed) {
+    return "";
+  }
+  return state.datasets?.moveSearchLookup?.get(normalizeLookupText(trimmed))?.name
+    || state.datasets?.moveLookup?.get(normalizeName(trimmed))?.name
+    || trimmed;
+}
+
+function getEditTargetConfig(target) {
+  if (!target) {
+    return null;
+  }
+  return target.kind === "team"
+    ? findTeamConfigById(target.configId)
+    : findConfigById(target.configId);
+}
+
+function buildEditableConfigFromBuilder(builder) {
+  const validation = validateBuilderState(builder, state.datasets);
+  const currentConfig = getEditTargetConfig(getGuidedEditTarget(builder));
+  const species = state.datasets?.pokedex?.[builder.speciesId];
+  const requiredItem = getRequiredItemForSpecies(builder.speciesId, state.datasets);
+  return {
+    displayName: currentConfig?.displayName || species?.name || builder.speciesId,
+    item: resolveBuilderItemName(requiredItem || builder.item),
+    ability: builder.ability || "",
+    teraType: builder.teraType || "",
+    note: builder.note || "",
+    level: Number(currentConfig?.level || DEFAULT_CONFIG_LEVEL),
+    championPoints: validation.points,
+    nature: builder.nature || "Hardy",
+    moveNames: builder.moves.map(resolveBuilderMoveName).filter(Boolean),
+  };
+}
+
+function switchGuidedConfigEditorMode() {
+  const target = getGuidedEditTarget();
+  if (!target || !state.guidedBuilder) {
+    return;
+  }
+  const text = exportConfigToEditableText(buildEditableConfigFromBuilder(state.guidedBuilder));
+  closeGuidedConfig();
+  openTextConfigEditor(target, text);
+}
+
+function switchCodeEditorMode() {
+  const target = activeEditorTarget;
   if (!target) {
     return;
   }
-  const {modal, input} = getEditorElements();
-  activeEditorTarget = {configId, kind};
-  input.value = exportConfigToEditableText(target);
-  modal.hidden = false;
-  input.focus();
-  input.setSelectionRange(0, 0);
+  const {input} = getEditorElements();
+  const text = input.value.trim();
+  if (!text) {
+    setStatusMessage(t(state.language, "error.emptyEditor"));
+    return;
+  }
+  try {
+    const {config} = parseSingleEditedConfig(text);
+    closeConfigEditor();
+    openGuidedConfig(config.speciesId, {
+      seedConfig: config,
+      editTarget: target,
+    });
+  } catch (error) {
+    setStatusMessage(error.message);
+  }
 }
 
 function parseSingleEditedConfig(text) {
-  const {configs, errors} = parseShowdownLibrary(text, state.datasets, {
+  const {configs, feedback} = parseShowdownLibrary(text, state.datasets, {
     fallbackLevel: 50,
     language: state.language,
     resolveConvertedPoint: promptMissingPoint,
@@ -2493,7 +2953,7 @@ function parseSingleEditedConfig(text) {
   if (configs.length !== 1) {
     throw new Error(t(state.language, "error.editSingle"));
   }
-  return {config: configs[0], errors};
+  return {config: configs[0], feedback};
 }
 
 function appendImportedConfigs(configs) {
@@ -2510,6 +2970,7 @@ async function initializeLocalizedLabels() {
   const availableSpecies = state.datasets.availableSpecies || [];
   const itemEntries = Object.values(state.datasets.items || {});
   const moveEntries = Object.values(state.datasets.moves || {});
+  const abilityEntries = Object.values(state.datasets.abilities || {});
   const natureEntries = buildNatureOptions();
   const localizedSpeciesPairs = await Promise.all(availableSpecies.map(async (species) => ([
     species.speciesId,
@@ -2523,6 +2984,10 @@ async function initializeLocalizedLabels() {
     move.name,
     await translatePsChinaText("zh", move.name),
   ])));
+  const localizedAbilityPairs = await Promise.all(abilityEntries.map(async (ability) => ([
+    ability.name,
+    await translatePsChinaText("zh", ability.name),
+  ])));
   state.localizedSpeciesNames = new Map(localizedSpeciesPairs);
   state.localizedItemNames = new Map(
     localizedItemPairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
@@ -2530,10 +2995,33 @@ async function initializeLocalizedLabels() {
   state.localizedMoveNames = new Map(
     localizedMovePairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
   );
-  state.localizedAbilityNames = new Map();
+  state.localizedAbilityNames = new Map(
+    localizedAbilityPairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
+  );
   state.localizedNatureNames = new Map(
     natureEntries.map((name) => [normalizeName(name), NATURE_TRANSLATIONS[name] || name]),
   );
+  const speciesIndex = new Map(state.datasets.speciesIndex);
+  localizedSpeciesPairs.forEach(([speciesId, translatedName]) => {
+    if (!translatedName) {
+      return;
+    }
+    const aliases = [
+      translatedName,
+      translatedName.replace(/[-\s]/g, ""),
+    ];
+    aliases.forEach((alias) => {
+      const normalizedName = normalizeName(alias);
+      const normalizedLookup = normalizeLookupText(alias);
+      if (normalizedName) {
+        speciesIndex.set(normalizedName, speciesId);
+      }
+      if (normalizedLookup) {
+        speciesIndex.set(normalizedLookup, speciesId);
+      }
+    });
+  });
+  state.datasets.speciesIndex = speciesIndex;
   const itemSearchLookup = new Map(state.datasets.itemLookup);
   localizedItemPairs.forEach(([name, translatedName]) => {
     if (!translatedName) {
@@ -2546,6 +3034,18 @@ async function initializeLocalizedLabels() {
     itemSearchLookup.set(normalizeLookupText(translatedName), entry);
   });
   state.datasets.itemSearchLookup = itemSearchLookup;
+  const abilitySearchLookup = new Map(state.datasets.abilityLookup);
+  localizedAbilityPairs.forEach(([name, translatedName]) => {
+    if (!translatedName) {
+      return;
+    }
+    const entry = state.datasets.abilityLookup.get(normalizeName(name));
+    if (!entry) {
+      return;
+    }
+    abilitySearchLookup.set(normalizeLookupText(translatedName), entry);
+  });
+  state.datasets.abilitySearchLookup = abilitySearchLookup;
   const searchLookup = new Map(state.datasets.moveLookup);
   localizedMovePairs.forEach(([name, translatedName]) => {
     if (!translatedName) {
@@ -2589,19 +3089,25 @@ function confirmAddConfigToLibrary(config, baseConfig, reasonKey) {
   }));
 }
 
-function saveLibraryConfigEdit(configId, text) {
-  const {config, errors} = parseSingleEditedConfig(text);
+function persistLibraryConfigEdit(configId, config, feedback = []) {
   const updated = replaceConfig(configId, config);
   if (!updated) {
-    return;
+    return null;
   }
   refreshDerivedState();
   renderAll();
-  renderImportFeedback(errors.join(" "));
-  translateNodes(document.getElementById("import-feedback"));
-  closeConfigEditor();
+  renderLibraryImportFeedback(buildImportFeedbackPayload([config], feedback));
   scheduleStatePersist();
   setStatus("status.editedConfig", {name: updated.displayName});
+  return updated;
+}
+
+function saveLibraryConfigEdit(configId, text) {
+  const {config, feedback} = parseSingleEditedConfig(text);
+  const updated = persistLibraryConfigEdit(configId, config, feedback);
+  if (updated) {
+    closeConfigEditor();
+  }
 }
 
 function saveGuidedConfig() {
@@ -2624,6 +3130,16 @@ function saveGuidedConfig() {
     setStatusMessage(t(state.language, "error.invalidBlock", {index: 1}));
     return;
   }
+  const editTarget = getGuidedEditTarget(state.guidedBuilder);
+  if (editTarget) {
+    const updated = editTarget.kind === "team"
+      ? persistTeamConfigEdit(editTarget.configId, nextConfig)
+      : persistLibraryConfigEdit(editTarget.configId, nextConfig);
+    if (updated) {
+      closeGuidedConfig();
+    }
+    return;
+  }
   const addedConfig = appendImportedConfigs([nextConfig])[0];
   if (state.guidedBuilder.addToTeamOnSave && state.team.length < MAX_TEAM_SIZE) {
     state.team = [...state.team, buildTeamEntry(addedConfig)];
@@ -2641,13 +3157,11 @@ function saveGuidedConfig() {
   );
 }
 
-function saveTeamConfigEdit(configId, text) {
+function persistTeamConfigEdit(configId, config, feedback = []) {
   const current = findTeamConfigById(configId);
   if (!current) {
-    return;
+    return null;
   }
-
-  const {config, errors} = parseSingleEditedConfig(text);
   const baseConfig = findConfigById(current.linkedConfigId);
   const diff = baseConfig ? compareConfigs(baseConfig, config) : null;
   const shouldAdd = diff?.classification === "major"
@@ -2658,15 +3172,22 @@ function saveTeamConfigEdit(configId, text) {
     teamSource: libraryConfig ? "library" : (baseConfig ? "linked" : "team-only"),
   });
   if (!updated) {
-    return;
+    return null;
   }
   refreshDerivedState();
   renderAll();
-  renderTeamImportFeedback(errors.join(" "));
-  translateNodes(document.getElementById("team-import-feedback"));
-  closeConfigEditor();
+  renderCurrentTeamImportFeedback(buildImportFeedbackPayload([config], feedback));
   scheduleStatePersist();
   setStatus("status.editedTeamConfig", {name: updated.displayName});
+  return updated;
+}
+
+function saveTeamConfigEdit(configId, text) {
+  const {config, feedback} = parseSingleEditedConfig(text);
+  const updated = persistTeamConfigEdit(configId, config, feedback);
+  if (updated) {
+    closeConfigEditor();
+  }
 }
 
 function saveConfigEdit() {
@@ -2696,7 +3217,7 @@ function syncTeamWithLibrary() {
   state.savedTeams = state.savedTeams.map((team) => ({...team}));
 }
 
-function applyImportedLibrary(configs, errors, mode) {
+function applyImportedLibrary(configs, feedback, mode) {
   const baseLibrary = mode === "append" ? state.library : [];
   const usedIds = new Set(baseLibrary.map((config) => config.id));
   const importedConfigs = ensureUniqueConfigIds(configs, usedIds);
@@ -2704,8 +3225,7 @@ function applyImportedLibrary(configs, errors, mode) {
   syncTeamWithLibrary();
   refreshDerivedState();
   renderAll();
-  renderImportFeedback([t(state.language, "status.importSuccess", {count: configs.length}), ...errors].join(" "));
-  translateNodes(document.getElementById("import-feedback"));
+  renderLibraryImportFeedback(buildImportFeedbackPayload(configs, feedback));
   scheduleStatePersist();
   setStatus("status.libraryCount", {count: state.library.length});
 }
@@ -2767,13 +3287,12 @@ function resolveImportedTeamMember(importedConfig) {
 function importTeamByCode() {
   const input = document.getElementById("team-import-input").value.trim();
   if (!input) {
-    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
-    translateNodes(document.getElementById("team-import-feedback"));
+    renderCurrentTeamImportFeedback(t(state.language, "team.importEmpty"));
     return;
   }
 
   try {
-    const {configs, errors} = parseShowdownLibrary(input, state.datasets, {
+    const {configs, feedback} = parseShowdownLibrary(input, state.datasets, {
       fallbackLevel: 50,
       language: state.language,
       resolveConvertedPoint: promptMissingPoint,
@@ -2784,13 +3303,11 @@ function importTeamByCode() {
     state.team = configs.map(resolveImportedTeamMember);
     refreshDerivedState();
     renderAll();
-    renderTeamImportFeedback([t(state.language, "status.importedTeam", {count: state.team.length}), ...errors].join(" "));
-    translateNodes(document.getElementById("team-import-feedback"));
+    renderCurrentTeamImportFeedback(buildImportFeedbackPayload(configs, feedback));
     scheduleStatePersist();
     setStatus("status.importedTeam", {count: state.team.length});
   } catch (error) {
-    renderTeamImportFeedback(error.message);
-    translateNodes(document.getElementById("team-import-feedback"));
+    renderCurrentTeamImportFeedback(error.message);
     setStatusMessage(error.message);
   }
 }
@@ -2799,8 +3316,7 @@ function importCustomLibrary(mode = "replace") {
   const input = document.getElementById("custom-library-input").value.trim();
   if (!input) {
     state.library = [];
-    renderImportFeedback(t(state.language, "status.libraryCleared"));
-    translateNodes(document.getElementById("import-feedback"));
+    renderLibraryImportFeedback(t(state.language, "status.libraryCleared"));
     refreshDerivedState();
     renderAll();
     scheduleStatePersist();
@@ -2809,15 +3325,14 @@ function importCustomLibrary(mode = "replace") {
   }
 
   try {
-    const {configs, errors} = parseShowdownLibrary(input, state.datasets, {
+    const {configs, feedback} = parseShowdownLibrary(input, state.datasets, {
       fallbackLevel: 50,
       language: state.language,
       resolveConvertedPoint: promptMissingPoint,
     });
-    applyImportedLibrary(configs, errors, mode);
+    applyImportedLibrary(configs, feedback, mode);
   } catch (error) {
-    renderImportFeedback(error.message);
-    translateNodes(document.getElementById("import-feedback"));
+    renderLibraryImportFeedback(error.message);
     setStatus("status.importCancelled");
   }
 }
@@ -2830,16 +3345,15 @@ async function loadPresetLibrary(path, name, mode = "replace") {
     }
     const text = await response.text();
     document.getElementById("custom-library-input").value = text;
-    const {configs, errors} = parseShowdownLibrary(text, state.datasets, {
+    const {configs, feedback} = parseShowdownLibrary(text, state.datasets, {
       fallbackLevel: 50,
       language: state.language,
       resolveConvertedPoint: promptMissingPoint,
     });
-    applyImportedLibrary(configs, errors, mode);
+    applyImportedLibrary(configs, feedback, mode);
     setStatus("status.loadedPreset", {name});
   } catch (error) {
-    renderImportFeedback(error.message);
-    translateNodes(document.getElementById("import-feedback"));
+    renderLibraryImportFeedback(error.message);
     setStatusMessage(error.message);
   }
 }
@@ -2857,14 +3371,7 @@ function exportLibrary() {
   }
   const content = exportLibraryToShowdown(state.library);
   const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "poke-library.txt";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.URL.revokeObjectURL(url);
+  downloadBlob(blob, "poke-library.txt");
   setStatus("status.exportedLibrary", {count: state.library.length});
 }
 
@@ -2875,15 +3382,29 @@ function exportTeam() {
   }
   const content = exportTeamToShowdown(state.team);
   const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "pokemon-showdown-team.txt";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.URL.revokeObjectURL(url);
+  downloadBlob(blob, "pokemon-showdown-team.txt");
   setStatus("status.exportedTeam", {count: state.team.length});
+}
+
+function exportFullStateBackup() {
+  downloadBlob(exportFullState(state), "poke-type-backup.poketype.json");
+  setStatus("status.exportedFullState");
+}
+
+async function importFullStateFromFile(file) {
+  const text = await file.text();
+  const payload = importFullState(text);
+  applyPersistedPayload(payload);
+  setLanguage(state.language, false);
+  updateIconSchemeControl();
+  initializeBuilderOptions();
+  refreshDerivedState();
+  renderAll();
+  initializeHistory(stateHistory, snapshotHistoryState(state));
+  setActiveView(state.activeView);
+  scheduleStatePersist();
+  renderLibraryImportFeedback(t(state.language, "status.importedFullState"));
+  setStatus("status.importedFullState");
 }
 
 function saveCurrentTeam() {
@@ -2891,6 +3412,7 @@ function saveCurrentTeam() {
   const name = input.value.trim();
   if (!name) {
     setStatus("status.teamNameRequired");
+    toast(t(state.language, "toast.teamNameRequired"), {type: "warning"});
     return;
   }
   const snapshot = {
@@ -2905,6 +3427,7 @@ function saveCurrentTeam() {
   renderAll();
   scheduleStatePersist();
   setStatus("status.savedTeam", {name});
+  toast(t(state.language, "toast.teamSaved", {name}), {type: "success"});
 }
 
 function saveCurrentOpponentTeam() {
@@ -2923,6 +3446,19 @@ function saveCurrentOpponentTeam() {
   setStatus("status.savedOpponentTeam", {name});
 }
 
+function markSavedOpponentTeamOpened(teamId) {
+  state.savedOpponentTeams = state.savedOpponentTeams.map((team) => {
+    if (team.id !== teamId) {
+      return team;
+    }
+    return {
+      ...team,
+      lastOpenedAt: Date.now(),
+      openCount: Number(team.openCount || 0) + 1,
+    };
+  });
+}
+
 function loadSavedTeam(teamId) {
   const target = state.savedTeams.find((team) => team.id === teamId);
   if (!target) {
@@ -2938,6 +3474,7 @@ function loadSavedTeam(teamId) {
   renderAll();
   scheduleStatePersist();
   setStatus("status.loadedTeam", {name: target.name});
+  toast(t(state.language, "toast.teamLoaded", {name: target.name}), {type: "success"});
 }
 
 function loadSavedOpponentTeam(teamId) {
@@ -2946,6 +3483,7 @@ function loadSavedOpponentTeam(teamId) {
     return;
   }
   state.opponentTeam = loadSavedOpponentSelection(target, state.datasets, state.library, state.language);
+  markSavedOpponentTeamOpened(teamId);
   state.activeOpponentConfigSpeciesId = null;
   refreshDerivedState();
   renderAll();
@@ -3135,6 +3673,16 @@ function bindEvents() {
   });
 
   document.getElementById("team-list").addEventListener("click", (event) => {
+    const moveUpButton = event.target.closest("[data-move-team-up]");
+    if (moveUpButton) {
+      moveTeamMember(moveUpButton.dataset.moveTeamUp, -1);
+      return;
+    }
+    const moveDownButton = event.target.closest("[data-move-team-down]");
+    if (moveDownButton) {
+      moveTeamMember(moveDownButton.dataset.moveTeamDown, 1);
+      return;
+    }
     const editButton = event.target.closest("[data-edit-team]");
     if (editButton) {
       openConfigEditor(editButton.dataset.editTeam, "team");
@@ -3147,6 +3695,38 @@ function bindEvents() {
     }
     const button = event.target.closest("[data-remove-config]");
     if (button) removeConfig(button.dataset.removeConfig);
+  });
+  document.getElementById("team-list").addEventListener("dragstart", (event) => {
+    const card = event.target.closest("[data-team-config-id]");
+    if (!card) {
+      return;
+    }
+    draggedTeamConfigId = card.dataset.teamConfigId || "";
+    card.classList.add("team-card-dragging");
+    event.dataTransfer?.setData("text/plain", draggedTeamConfigId);
+    event.dataTransfer.effectAllowed = "move";
+  });
+  document.getElementById("team-list").addEventListener("dragover", (event) => {
+    const card = event.target.closest("[data-team-config-id]");
+    if (!card || !draggedTeamConfigId) {
+      return;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    setTeamDropTarget(card.dataset.teamConfigId || "");
+  });
+  document.getElementById("team-list").addEventListener("drop", (event) => {
+    const card = event.target.closest("[data-team-config-id]");
+    if (!card || !draggedTeamConfigId) {
+      return;
+    }
+    event.preventDefault();
+    reorderTeamMembers(draggedTeamConfigId, card.dataset.teamConfigId || "");
+    clearTeamDragState();
+  });
+  document.getElementById("team-list").addEventListener("dragend", () => {
+    document.querySelectorAll(".team-card-dragging").forEach((node) => node.classList.remove("team-card-dragging"));
+    clearTeamDragState();
   });
 
   document.getElementById("opponent-team-list").addEventListener("click", (event) => {
@@ -3174,6 +3754,11 @@ function bindEvents() {
       openDamagePair({defenderId});
       return;
     }
+    const pinButton = event.target.closest("[data-toggle-opponent-pin]");
+    if (pinButton) {
+      toggleOpponentPin(pinButton.dataset.toggleOpponentPin);
+      return;
+    }
     const button = event.target.closest("[data-remove-opponent-species]");
     if (button) removeOpponentSpecies(button.dataset.removeOpponentSpecies);
   });
@@ -3182,7 +3767,8 @@ function bindEvents() {
     const attackerSelect = event.target.closest("#damage-attacker-select");
     if (attackerSelect) {
       state.damage.attackerId = attackerSelect.value;
-      state.damage.lastPairKey = "";
+      syncDamageSelectionState();
+      renderDamageSection();
       scheduleStatePersist();
       void syncDamageWorkspace(true);
       return;
@@ -3190,7 +3776,8 @@ function bindEvents() {
     const defenderSelect = event.target.closest("#damage-defender-select");
     if (defenderSelect) {
       state.damage.defenderId = defenderSelect.value;
-      state.damage.lastPairKey = "";
+      syncDamageSelectionState();
+      renderDamageSection();
       scheduleStatePersist();
       void syncDamageWorkspace(true);
       return;
@@ -3374,7 +3961,7 @@ function bindEvents() {
   document.getElementById("clear-opponent-team-btn").addEventListener("click", () => {
     state.opponentTeam = [];
     state.activeOpponentConfigSpeciesId = null;
-    state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets);
+    state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {fieldState: state.battleField});
     syncDamageSelectionState();
     renderMatchupSection();
     renderDamageSection();
@@ -3388,8 +3975,7 @@ function bindEvents() {
   document.getElementById("import-team-btn").addEventListener("click", importTeamByCode);
   document.getElementById("clear-team-import-btn").addEventListener("click", () => {
     document.getElementById("team-import-input").value = "";
-    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
-    translateNodes(document.getElementById("team-import-feedback"));
+    renderCurrentTeamImportFeedback(t(state.language, "team.importEmpty"));
   });
   document.getElementById("saved-team-search").addEventListener("input", (event) => {
     state.savedTeamSearch = event.target.value;
@@ -3407,11 +3993,15 @@ function bindEvents() {
 
   document.getElementById("import-custom-btn").addEventListener("click", () => importCustomLibrary("replace"));
   document.getElementById("append-custom-btn").addEventListener("click", () => importCustomLibrary("append"));
-  document.getElementById("load-ag-preset-btn").addEventListener("click", () => {
-    loadPresetLibrary("./config-AG.txt", "AG", "replace");
+  document.getElementById("load-default-preset-btn").addEventListener("click", () => {
+    loadPresetLibrary("./config-default.txt", "Default", "replace");
   });
   document.getElementById("import-file-btn").addEventListener("click", () => {
     document.getElementById("library-file-input").click();
+  });
+  document.getElementById("export-full-state-btn").addEventListener("click", exportFullStateBackup);
+  document.getElementById("import-full-state-btn").addEventListener("click", () => {
+    document.getElementById("full-state-file-input").click();
   });
   document.getElementById("library-file-input").addEventListener("change", async (event) => {
     const [file] = event.target.files || [];
@@ -3420,11 +4010,27 @@ function bindEvents() {
     }
     event.target.value = "";
   });
+  document.getElementById("full-state-file-input").addEventListener("change", async (event) => {
+    const [file] = event.target.files || [];
+    try {
+      if (file) {
+        await importFullStateFromFile(file);
+      }
+    } catch (error) {
+      const message = getFullStateImportErrorMessage(error);
+      renderLibraryImportFeedback(message);
+      setStatusMessage(message);
+    }
+    event.target.value = "";
+  });
   document.getElementById("export-library-btn").addEventListener("click", exportLibrary);
   document.getElementById("save-team-btn").addEventListener("click", saveCurrentTeam);
   document.getElementById("save-opponent-team-btn").addEventListener("click", saveCurrentOpponentTeam);
+  document.getElementById("auto-generate-opponent-team-btn").addEventListener("click", autoGenerateOpponentTeam);
   document.getElementById("save-config-edit-btn").addEventListener("click", saveConfigEdit);
   document.getElementById("save-guided-config-btn").addEventListener("click", saveGuidedConfig);
+  document.getElementById("switch-guided-editor-mode-btn").addEventListener("click", switchCodeEditorMode);
+  document.getElementById("switch-config-editor-mode-btn").addEventListener("click", switchGuidedConfigEditorMode);
   document.querySelectorAll("[data-close-editor]").forEach((node) => {
     node.addEventListener("click", closeConfigEditor);
   });
@@ -3668,89 +4274,68 @@ function setupTooltipEvents() {
     hideTooltip();
   });
   window.addEventListener("pagehide", () => {
-    flushPersistState(state);
+    flushStatePersist();
   });
 }
 
 async function initialize() {
   const persisted = loadPersistedState();
-  state.language = normalizeLanguage(persisted?.language || DEFAULT_LANGUAGE);
-  state.iconScheme = normalizeIconScheme(persisted?.iconScheme);
-  state.recommendPreferences = normalizeRecommendationPreferences(persisted?.recommendPreferences);
-  state.recommendWeights = normalizeRecommendationWeights(persisted?.recommendWeights);
-  state.dismissedRecommendationKeys = Array.isArray(persisted?.dismissedRecommendationKeys)
-    ? persisted.dismissedRecommendationKeys.filter(Boolean)
-    : [];
+  applyPersistedPayload(persisted || {});
   setLanguage(state.language, false);
   setStatus("status.initializing");
   state.datasets = await loadDatasets();
   resetLocalizedLabels();
-  if (persisted?.library) {
-    state.library = ensureUniqueConfigIds(hydrateConfigs(persisted.library, state.datasets, 50));
-  }
-  if (persisted?.team) {
-    state.team = hydrateConfigs(persisted.team, state.datasets, 50);
-  }
-  if (persisted?.opponentTeam) {
-    state.opponentTeam = restoreOpponentTeam(persisted.opponentTeam, state.datasets, state.library, state.language);
-  }
-  if (persisted?.savedTeams) {
-    state.savedTeams = persisted.savedTeams.map((team) => {
-      if (Array.isArray(team.configs)) {
-        return {
-          ...team,
-          configs: hydrateConfigs(team.configs, state.datasets, 50),
-        };
-      }
-      return team;
-    });
-  }
-  if (persisted?.savedOpponentTeams) {
-    state.savedOpponentTeams = normalizeSavedOpponentTeams(persisted.savedOpponentTeams, state.datasets, state.library, state.language);
-  }
-  if (persisted?.activeView) {
-    state.activeView = persisted.activeView;
-  }
-  if (persisted?.damage) {
-    state.damage.attackerId = persisted.damage.attackerId || "";
-    state.damage.defenderId = persisted.damage.defenderId || "";
-    state.damage.focusSide = persisted.damage.focusSide === "defender" ? "defender" : "attacker";
-    state.damage.overridePairKey = persisted.damage.overridePairKey || "";
-    state.damage.overrides = {
-      ...state.damage.overrides,
-      ...(persisted.damage.overrides || {}),
-    };
-    state.damage.field = normalizeDamageField(persisted.damage.field);
-    state.damage.statuses = normalizeDamageStatuses(persisted.damage.statuses);
-    state.damage.healthPercent = normalizeDamageHealth(persisted.damage.healthPercent);
-    state.damage.boosts = normalizeDamageBoosts(persisted.damage.boosts);
-    state.damage.meta = normalizeDamageMeta(persisted.damage.meta);
-    state.damage.teraTypes = normalizeDamageTeraTypes(persisted.damage.teraTypes);
-    const persistedSelections = persisted.damage.moveSelections;
-    if (persistedSelections && typeof persistedSelections === "object") {
-      state.damage.moveSelections = {
-        attacker: Array.isArray(persistedSelections.attacker)
-          ? [0, 1, 2, 3].map((index) => String(persistedSelections.attacker[index] || ""))
-          : ["", "", "", ""],
-        defender: Array.isArray(persistedSelections.defender)
-          ? [0, 1, 2, 3].map((index) => String(persistedSelections.defender[index] || ""))
-          : ["", "", "", ""],
-      };
-    }
-  }
+  applyPersistedPayload(persisted || {});
   initializeBuilderOptions();
   bindEvents();
   setupTooltipEvents();
+  const commandActions = {
+    setActiveView,
+    saveCurrentTeam,
+    setLanguage,
+    toggleIconScheme: () => {
+      const next = state.iconScheme === "showdown" ? "poke-icons" : "showdown";
+      const selector = document.getElementById("icon-scheme-select");
+      if (selector) selector.value = next;
+      setIconScheme(next);
+    },
+    undoStateChange,
+    redoStateChange,
+    openShortcutsHelp,
+  };
+  const commandPalette = createCommandPalette({
+    state,
+    actions: commandActions,
+    commands: buildDefaultCommands({state, actions: commandActions}),
+  });
+  function showCommandPalette() {
+    commandPalette.openPalette();
+    renderCommandPalette(commandPalette, state.language);
+    focusCommandPaletteInput();
+  }
+  installCommandPalette({
+    state,
+    palette: commandPalette,
+    render: renderCommandPalette,
+    language: () => state.language,
+  });
+  installKeybindings({
+    setActiveView,
+    getActiveView: () => state.activeView,
+    saveCurrentTeam,
+    undoStateChange,
+    redoStateChange,
+    openCommandPalette: showCommandPalette,
+  });
   refreshDerivedState();
   renderAll();
   if (!document.getElementById("custom-library-input").value.trim()) {
-    renderImportFeedback(t(state.language, "controls.importEmpty"));
-    translateNodes(document.getElementById("import-feedback"));
+    renderLibraryImportFeedback(t(state.language, "controls.importEmpty"));
   }
   if (!document.getElementById("team-import-input").value.trim()) {
-    renderTeamImportFeedback(t(state.language, "team.importEmpty"));
-    translateNodes(document.getElementById("team-import-feedback"));
+    renderCurrentTeamImportFeedback(t(state.language, "team.importEmpty"));
   }
+  initializeHistory(stateHistory, snapshotHistoryState(state));
   setActiveView(state.activeView);
   if (state.library.length) {
     setStatus("status.restored", {count: state.library.length});
@@ -3765,3 +4350,9 @@ initialize().catch((error) => {
   console.error(error);
   setStatusMessage(t(state.language, "status.initFailed", {message: error.message}));
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}

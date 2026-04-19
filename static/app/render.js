@@ -1,5 +1,6 @@
 import {t} from "./i18n.js";
 import {renderAnalysisView} from "./render-analysis.js";
+import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderDamageView} from "./render-damage.js";
 import {renderMatchupView} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
@@ -42,6 +43,30 @@ function buildTextTooltipMarkup(detail, language) {
       <div class="tooltip-desc-box">${escapeHtml(detail || t(language, "tooltip.noDetail"))}</div>
     </div>
   `;
+}
+
+function buildValidationTooltipMarkup(validation, language) {
+  const items = Array.isArray(validation?.items) ? validation.items : [];
+  if (!items.length) {
+    return buildTextTooltipMarkup(t(language, "validation.noIssues"), language);
+  }
+  const rows = items.slice(0, 5).map((item) => `<div class="tooltip-desc-box">${escapeHtml(item.message)}</div>`).join("");
+  return `<div class="tooltip-stack">${rows}</div>`;
+}
+
+function validationPillMarkup(config, language) {
+  const validation = config?.validation;
+  const items = Array.isArray(validation?.items) ? validation.items : [];
+  if (!items.length) {
+    return "";
+  }
+  const hasErrors = Boolean(validation?.hasErrors);
+  const className = hasErrors ? "validation-pill validation-pill-error" : "validation-pill validation-pill-warning";
+  return renderInfoPill({
+    label: t(language, "validation.badge", {count: items.length}),
+    tooltipMarkup: buildValidationTooltipMarkup(validation, language),
+    className,
+  });
 }
 
 function resolveMoveShortDesc(move, moveLookup) {
@@ -187,8 +212,9 @@ function teamEmptyMarkup(language) {
 
 function teamHeaderMarkup(config, linkedConfig, language, state) {
   const noteMarkup = notePillMarkup(config, language);
+  const validationMarkup = validationPillMarkup(config, language);
   const sourceMarkup = teamSourceTagMarkup(config, linkedConfig, language);
-  const badges = [noteMarkup, sourceMarkup].filter(Boolean).join("");
+  const badges = [noteMarkup, validationMarkup, sourceMarkup].filter(Boolean).join("");
   return `
     <div class="team-card-header">
       <div class="entry-title team-title-row">${spriteMarkup(config, state)}<strong>${config.displayName}</strong></div>
@@ -311,7 +337,7 @@ export function renderLibrary(state) {
     ? `<div class="library-config-grid">${activeLibrary.map((config) => `
         <article class="entry-card library-config-card">
           <div class="entry-main">
-            <div class="entry-title">${spriteMarkup(config, state)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
+            <div class="entry-title">${spriteMarkup(config, state)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}${validationPillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
             <div class="entry-meta">${typePills(config.types, language)}</div>
             <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
             <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
@@ -328,13 +354,13 @@ export function renderLibrary(state) {
         </article>
       `).join("")}</div>`
     : libraryEmptyMarkup(state, language);
-  document.getElementById("library-list").innerHTML = `
+  setInnerHTMLIfChanged(document.getElementById("library-list"), `
     ${speciesBrowserMarkup(state)}
     <section class="library-subsection">
       ${selectedSpeciesHeader(state)}
       ${libraryMarkup}
     </section>
-  `;
+  `);
 }
 
 export function renderTeam(state) {
@@ -351,8 +377,11 @@ export function renderTeam(state) {
   }
   const teamMarkup = state.team.map((config) => {
     const linkedConfig = getLinkedConfig(config, state.library);
+    const teamIndex = state.team.findIndex((entry) => entry.id === config.id);
+    const moveUpDisabled = teamIndex <= 0 ? "disabled" : "";
+    const moveDownDisabled = teamIndex >= state.team.length - 1 ? "disabled" : "";
     return `
-    <article class="team-card">
+    <article class="team-card" draggable="true" data-team-config-id="${escapeHtml(config.id)}">
       <div class="entry-main">
         ${teamHeaderMarkup(config, linkedConfig, language, state)}
         <div class="entry-meta">${typePills(config.types, language)}</div>
@@ -363,6 +392,8 @@ export function renderTeam(state) {
         <p class="muted team-speed-line">${speedSummaryMarkup(config, language)}</p>
       </div>
       <div class="team-card-actions">
+        <button type="button" class="ghost-button mini-action" data-move-team-up="${config.id}" ${moveUpDisabled}>${t(language, "team.moveUp")}</button>
+        <button type="button" class="ghost-button mini-action" data-move-team-down="${config.id}" ${moveDownDisabled}>${t(language, "team.moveDown")}</button>
         <button type="button" class="ghost-button mini-action" data-edit-team="${config.id}">${t(language, "team.tune")}</button>
         <button type="button" class="ghost-button mini-action" data-open-damage-attacker="${config.id}">${t(language, "team.damage")}</button>
         <button type="button" class="ghost-button danger-button mini-action" data-remove-config="${config.id}">${t(language, "team.remove")}</button>
@@ -371,9 +402,10 @@ export function renderTeam(state) {
   `;
   }).join("");
   const placeholders = Array.from({length: emptySlots}, () => `<div class="team-card empty-slot">${t(language, "team.placeholder")}</div>`).join("");
-  document.getElementById("team-list").innerHTML = state.team.length
-    ? teamMarkup + placeholders
-    : teamEmptyMarkup(language);
+  setInnerHTMLIfChanged(
+    document.getElementById("team-list"),
+    state.team.length ? teamMarkup + placeholders : teamEmptyMarkup(language),
+  );
 }
 
 export function renderSavedTeams(state) {
@@ -390,7 +422,7 @@ export function renderSavedTeams(state) {
     }
     return normalizeName([team.name, ...(team.labels || [])].join(" ")).includes(query);
   });
-  list.innerHTML = filteredTeams.length
+  setInnerHTMLIfChanged(list, filteredTeams.length
     ? filteredTeams.map((team) => `
         <article class="entry-card compact saved-team-card">
           <div class="entry-main">
@@ -403,7 +435,7 @@ export function renderSavedTeams(state) {
           </div>
         </article>
       `).join("")
-    : `<p class="empty-state">${t(language, state.savedTeams.length ? "saved.filteredEmpty" : "saved.empty")}</p>`;
+    : `<p class="empty-state">${t(language, state.savedTeams.length ? "saved.filteredEmpty" : "saved.empty")}</p>`);
 }
 
 export function renderAnalysis(state) {
@@ -415,23 +447,11 @@ export function renderMatchup(state) {
 }
 
 export function renderRecommendations(state) {
-  document.getElementById("recommend-list").innerHTML = renderRecommendationsView(state);
+  setInnerHTMLIfChanged(document.getElementById("recommend-list"), renderRecommendationsView(state));
 }
 
 export function renderDamage(state) {
   renderDamageView(state);
-}
-
-function isStandardFastestSpread(entry) {
-  const pts = entry?.championPoints || {};
-  const hp = Number(pts.hp || 0);
-  const atk = Number(pts.atk || 0);
-  const def = Number(pts.def || 0);
-  const spa = Number(pts.spa || 0);
-  const spd = Number(pts.spd || 0);
-  const spe = Number(pts.spe || 0);
-  if (spe !== 32 || hp !== 2 || def !== 0 || spd !== 0) return false;
-  return (atk === 32 && spa === 0) || (atk === 0 && spa === 32);
 }
 
 function getSpeedEntryCategory(entry) {
@@ -452,7 +472,7 @@ function getSpeedEntryCategory(entry) {
   const multiplier = nature ? getNatureMultiplier(nature, "spe") : 1;
 
   if (spe === 32 && multiplier > 1) {
-    return isStandardFastestSpread(entry) ? "fastest" : "tuned";
+    return "fastest";
   }
   if (spe === 0 && multiplier < 1) {
     return "slowest";
@@ -460,13 +480,17 @@ function getSpeedEntryCategory(entry) {
   if (spe === 32) {
     return "output";
   }
+  if (spe > 0) {
+    return "tuned";
+  }
   return "custom";
 }
 
 function buildSpeedPillDomId(entry) {
   const rawId = String(entry?.id || entry?.speciesId || "unknown");
   const mode = entry?.speedTierMode || "base";
-  return `speed-pill-${rawId}-${mode}`.replace(/[^A-Za-z0-9:_-]/g, "_");
+  const side = entry?.matchupSide || "ally";
+  return `speed-pill-${side}-${rawId}-${mode}`.replace(/[^A-Za-z0-9:_-]/g, "_");
 }
 
 function speedModeLabel(mode, language) {
@@ -477,7 +501,7 @@ function speedModeLabel(mode, language) {
 }
 
 function buildSameSpeciesVariantsMarkup(entry, variantIndex, language) {
-  const variants = variantIndex.get(entry.speciesId) || [];
+  const variants = variantIndex.get(`${entry.matchupSide || "ally"}:${entry.speciesId}`) || [];
   const currentPillId = buildSpeedPillDomId(entry);
   const others = variants.filter((v) => v.pillDomId !== currentPillId);
   if (!others.length) {
@@ -549,7 +573,7 @@ function buildSpeedVariantIndex(tiers) {
   tiers.forEach((tier) => {
     tier.entries.forEach((entry) => {
       if (!entry.speciesId) return;
-      const key = entry.speciesId;
+      const key = `${entry.matchupSide || "ally"}:${entry.speciesId}`;
       const list = map.get(key) || [];
       list.push({
         speed: tier.speed,
@@ -581,17 +605,96 @@ export function renderSpeedTiers(state) {
       </div>
     `;
   }).join("");
-  document.getElementById("speed-tiers").innerHTML = `<div class="speed-timeline">${rows}</div>`;
+  setInnerHTMLIfChanged(document.getElementById("speed-tiers"), `
+    <div class="speed-timeline">${rows}</div>
+  `);
 }
 
 export function renderStatus(message) {
   document.getElementById("status-text").textContent = message;
 }
 
-export function renderImportFeedback(message) {
-  document.getElementById("import-feedback").textContent = message;
+function normalizeFeedbackPayload(payload) {
+  if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+    return {
+      summary: String(payload.summary || ""),
+      items: Array.isArray(payload.items) ? payload.items.filter(Boolean) : [],
+    };
+  }
+  return {
+    summary: String(payload || ""),
+    items: [],
+  };
 }
 
-export function renderTeamImportFeedback(message) {
-  document.getElementById("team-import-feedback").textContent = message;
+function compareFeedbackItems(left, right) {
+  const leftBlock = Number(left?.blockIndex || 0);
+  const rightBlock = Number(right?.blockIndex || 0);
+  if (leftBlock !== rightBlock) {
+    return leftBlock - rightBlock;
+  }
+  const leftLine = Number.isInteger(left?.lineNumber) ? left.lineNumber : Number.MAX_SAFE_INTEGER;
+  const rightLine = Number.isInteger(right?.lineNumber) ? right.lineNumber : Number.MAX_SAFE_INTEGER;
+  if (leftLine !== rightLine) {
+    return leftLine - rightLine;
+  }
+  return String(left?.message || "").localeCompare(String(right?.message || ""));
+}
+
+function renderFeedbackRows(items, language) {
+  return [...items].sort(compareFeedbackItems).map((item) => {
+    const levelKey = item.level === "error" ? "import.feedback.levelError" : "import.feedback.levelWarning";
+    const levelClass = item.level === "error" ? "feedback-level-error" : "feedback-level-warning";
+    const configName = item.configName || item.speciesId || t(language, "common.unknown");
+    const lineLabel = Number.isInteger(item.lineNumber)
+      ? t(language, "import.feedback.lineValue", {line: item.lineNumber})
+      : t(language, "import.feedback.noLine");
+    return `
+      <tr>
+        <td><span class="feedback-level ${levelClass}">${t(language, levelKey)}</span></td>
+        <td>${escapeHtml(configName)}</td>
+        <td>${escapeHtml(lineLabel)}</td>
+        <td>${escapeHtml(item.message)}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderFeedbackPanel(summaryId, detailsId, payload, language) {
+  const normalized = normalizeFeedbackPayload(payload);
+  const summary = normalized.summary || t(language, "import.feedback.emptySummary");
+  document.getElementById(summaryId).textContent = summary;
+  const detailsNode = document.getElementById(detailsId);
+  if (!detailsNode) {
+    return;
+  }
+  if (!normalized.items.length) {
+    detailsNode.hidden = true;
+    setInnerHTMLIfChanged(detailsNode, "");
+    return;
+  }
+  detailsNode.hidden = false;
+  setInnerHTMLIfChanged(detailsNode, `
+    <div class="import-feedback-table-wrap">
+      <table class="import-feedback-table">
+        <thead>
+          <tr>
+            <th>${t(language, "import.feedback.columnLevel")}</th>
+            <th>${t(language, "import.feedback.columnConfig")}</th>
+            <th>${t(language, "import.feedback.columnLine")}</th>
+            <th>${t(language, "import.feedback.columnMessage")}</th>
+          </tr>
+        </thead>
+        <tbody>${renderFeedbackRows(normalized.items, language)}</tbody>
+      </table>
+    </div>
+  `);
+}
+
+export function renderImportFeedback(payload, language) {
+  renderFeedbackPanel("import-feedback", "import-feedback-details", payload, language);
+}
+
+export function renderTeamImportFeedback(payload, language) {
+  renderFeedbackPanel("team-import-feedback", "team-import-feedback-details", payload, language);
 }

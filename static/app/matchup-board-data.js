@@ -1,4 +1,5 @@
 import {TYPE_CHART} from "./constants.js";
+import {getSpeedVariants} from "./battle-semantics.js";
 import {getAttackBias} from "./team-roles.js";
 import {getUsageMoveEntries} from "./usage.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
@@ -46,12 +47,8 @@ function getStableSpeciesId(entry) {
 function getAttackMultiplier(attackType, defendTypes = []) {
   return defendTypes.reduce((total, defendType) => total * (TYPE_CHART[attackType]?.[defendType] ?? 1), 1);
 }
-function getFastestSpeed(config) {
-  return Math.max(
-    Number(config.stats?.spe || 0),
-    Number(config.plusOneSpeed?.speed || 0),
-    Number(config.choiceScarfSpeed?.speed || 0),
-  );
+function formatVariantLabel(mode = "base") {
+  return mode;
 }
 function getMinValue(values = []) {
   return values.length ? Math.min(...values) : 0;
@@ -412,7 +409,27 @@ function getMetaLine(entry) {
 function getSpeedSnapshot(entry) {
   const configs = getVariantConfigs(entry);
   const baseSpeeds = configs.map((config) => Number(config.stats?.spe || 0));
-  const fastestSpeeds = configs.map(getFastestSpeed);
+  const variantMap = new Map();
+  configs.forEach((config) => {
+    getSpeedVariants(config).forEach((variant) => {
+      const speeds = variantMap.get(variant.mode) || [];
+      speeds.push(Number(variant.speed || 0));
+      variantMap.set(variant.mode, speeds);
+    });
+  });
+  const variants = ["base", "plus1", "scarf", "double"].flatMap((mode) => {
+    const speeds = variantMap.get(mode) || [];
+    if (!speeds.length) {
+      return [];
+    }
+    return [{
+      mode,
+      label: formatVariantLabel(mode),
+      min: getMinValue(speeds),
+      max: getMaxValue(speeds),
+    }];
+  });
+  const sortSpeed = Math.max(...variants.map((variant) => variant.max), 0);
   return {
     id: getStableSpeciesId(entry) || entry.id,
     label: getMemberLabel(entry),
@@ -421,14 +438,13 @@ function getSpeedSnapshot(entry) {
     spritePosition: entry.spritePosition,
     baseMin: getMinValue(baseSpeeds),
     baseMax: getMaxValue(baseSpeeds),
-    topMin: getMinValue(fastestSpeeds),
-    topMax: getMaxValue(fastestSpeeds),
-    topSpeed: getMaxValue(fastestSpeeds),
+    variants,
+    sortSpeed,
   };
 }
 function buildSpeedRows(team = [], opponentTeam = []) {
-  const allyEntries = team.map(getSpeedSnapshot).sort((left, right) => right.topSpeed - left.topSpeed);
-  const opponentEntries = opponentTeam.map(getSpeedSnapshot).sort((left, right) => right.topSpeed - left.topSpeed);
+  const allyEntries = team.map(getSpeedSnapshot).sort((left, right) => right.sortSpeed - left.sortSpeed);
+  const opponentEntries = opponentTeam.map(getSpeedSnapshot).sort((left, right) => right.sortSpeed - left.sortSpeed);
   return Array.from({length: Math.max(allyEntries.length, opponentEntries.length)}, (_, index) => ({
     ally: allyEntries[index] || null,
     opponent: opponentEntries[index] || null,

@@ -2,6 +2,12 @@ import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_OPPONENT_TEAM_SIZE = 6;
+const OPPONENT_SPECIES_ALIASES = new Map([
+  ["floetteeternal", "floette"],
+]);
+const OPPONENT_SPRITE_SPECIES = new Map([
+  ["floette", "floetteeternal"],
+]);
 
 function getConfigSpeciesId(config = {}) {
   return String(config.speciesId || normalizeName(config.speciesName || config.displayName || config.id || ""));
@@ -15,8 +21,35 @@ function isMegaEntry(entry = {}) {
   return String(entry.forme || "").startsWith("Mega") || String(entry.name || "").includes("-Mega");
 }
 
+function buildCanonicalSpecies(datasets, speciesId, fallbackSpecies = null) {
+  const species = datasets.pokedex?.[speciesId];
+  if (!species) {
+    return fallbackSpecies;
+  }
+  const spriteSpeciesId = OPPONENT_SPRITE_SPECIES.get(speciesId) || speciesId;
+  const spriteSpecies = datasets.pokedex?.[spriteSpeciesId] || species;
+  const spriteIndex = datasets.formsIndex?.[spriteSpeciesId] ?? spriteSpecies.num ?? species.num ?? 0;
+  return {
+    speciesId,
+    spriteSpeciesId,
+    speciesName: species.name,
+    dexNumber: Number(species.num || 0),
+    baseStats: species.baseStats || {},
+    types: species.types || [],
+    abilities: species.abilities || {},
+    spritePosition: {
+      x: (spriteIndex % 12) * 40,
+      y: Math.floor(spriteIndex / 12) * 30,
+    },
+  };
+}
+
 function getOpponentSpeciesId(datasets, rawSpeciesId = "") {
   const speciesId = normalizeName(rawSpeciesId);
+  const aliasSpeciesId = OPPONENT_SPECIES_ALIASES.get(speciesId);
+  if (aliasSpeciesId) {
+    return aliasSpeciesId;
+  }
   const entry = datasets.pokedex?.[speciesId];
   if (!entry || !isMegaEntry(entry)) {
     return speciesId;
@@ -35,11 +68,12 @@ function getSelectedConfig(configs = [], selectedConfigId = "") {
   return configs.find((config) => config.id === selectedConfigId) || null;
 }
 
-function buildOpponentEntry(species, configs = [], selectedConfigId = "") {
+function buildOpponentEntry(species, configs = [], selection = {}) {
   const [firstConfig] = configs;
   if (!firstConfig && !species) {
     return null;
   }
+  const selectedConfigId = selection?.selectedConfigId || "";
   const validSelectedConfigId = sanitizeSelectedConfigId(configs, selectedConfigId);
   const selectedConfig = getSelectedConfig(configs, validSelectedConfigId);
   const activeConfigs = selectedConfig ? [selectedConfig] : configs;
@@ -51,6 +85,7 @@ function buildOpponentEntry(species, configs = [], selectedConfigId = "") {
   return {
     id: `opponent:${speciesId}`,
     speciesId,
+    spriteSpeciesId: species?.spriteSpeciesId || firstConfig?.spriteSpeciesId || speciesId,
     speciesName,
     displayName: speciesName,
     displayLabel: speciesName,
@@ -64,10 +99,11 @@ function buildOpponentEntry(species, configs = [], selectedConfigId = "") {
     configs,
     selectedConfigId: validSelectedConfigId,
     selectedConfigLabel: selectedConfig?.displayLabel || selectedConfig?.displayName || "",
+    pinned: Boolean(selection?.pinned),
   };
 }
 
-function buildOpponentMap(datasets, library = [], language = "zh", selectedConfigMap = new Map()) {
+function buildOpponentMap(datasets, library = [], language = "zh", selectionMap = new Map()) {
   const groups = new Map();
   const availableSpeciesMap = new Map((datasets.availableSpecies || []).map((species) => [species.speciesId, species]));
   library.forEach((config) => {
@@ -86,9 +122,10 @@ function buildOpponentMap(datasets, library = [], language = "zh", selectedConfi
     if (opponentMap.has(speciesId)) {
       return;
     }
-    const canonicalSpecies = availableSpeciesMap.get(speciesId) || species;
+    const canonicalSpecies = availableSpeciesMap.get(speciesId)
+      || buildCanonicalSpecies(datasets, speciesId, species);
     const configs = groups.get(speciesId) || buildSpeciesTemplateConfigs(canonicalSpecies, datasets, language);
-    const entry = buildOpponentEntry(canonicalSpecies, configs, selectedConfigMap.get(speciesId) || "");
+    const entry = buildOpponentEntry(canonicalSpecies, configs, selectionMap.get(speciesId) || {});
     if (entry) {
       opponentMap.set(speciesId, entry);
     }
@@ -108,6 +145,7 @@ function collectSelections(entries = [], library = [], datasets) {
     return {
       speciesId,
       selectedConfigId: String(entry?.selectedConfigId || ""),
+      pinned: Boolean(entry?.pinned),
     };
   }).filter((entry) => entry.speciesId)
     .filter((entry, index, array) => array.findIndex((candidate) => candidate.speciesId === entry.speciesId) === index);
@@ -132,17 +170,43 @@ function getSavedSelections(snapshot = {}, library = [], datasets) {
       .map((entry) => ({
         speciesId: getOpponentSpeciesId(datasets, entry?.speciesId || ""),
         selectedConfigId: String(entry?.selectedConfigId || ""),
+        pinned: Boolean(entry?.pinned),
       }))
       .filter((entry) => entry.speciesId);
   }
   return getSavedSpeciesIds(snapshot, library, datasets).map((speciesId) => ({
     speciesId,
     selectedConfigId: "",
+    pinned: false,
   }));
 }
 
-function buildSelectedConfigMap(entries = []) {
-  return new Map(entries.map((entry) => [entry.speciesId, entry.selectedConfigId || ""]));
+function buildSelectionMap(entries = []) {
+  return new Map(entries.map((entry) => [entry.speciesId, {
+    selectedConfigId: entry.selectedConfigId || "",
+    pinned: Boolean(entry.pinned),
+  }]));
+}
+
+function sortSavedOpponentTeams(savedTeams = []) {
+  return [...savedTeams].sort((left, right) => {
+    const rightOpened = Number(right.lastOpenedAt || 0);
+    const leftOpened = Number(left.lastOpenedAt || 0);
+    if (rightOpened !== leftOpened) {
+      return rightOpened - leftOpened;
+    }
+    const rightCount = Number(right.openCount || 0);
+    const leftCount = Number(left.openCount || 0);
+    if (rightCount !== leftCount) {
+      return rightCount - leftCount;
+    }
+    const rightCreated = Number(right.createdAt || 0);
+    const leftCreated = Number(left.createdAt || 0);
+    if (rightCreated !== leftCreated) {
+      return rightCreated - leftCreated;
+    }
+    return String(left.name || "").localeCompare(String(right.name || ""), "zh-Hans-CN");
+  });
 }
 
 export function buildOpponentLibrary(datasets, library = [], language = "zh") {
@@ -172,7 +236,7 @@ export function findOpponentEntry(datasets, library = [], speciesId = "", langua
 
 export function syncOpponentTeam(opponentTeam = [], datasets, library = [], language = "zh") {
   const selections = collectSelections(opponentTeam, library, datasets).slice(0, MAX_OPPONENT_TEAM_SIZE);
-  const opponentMap = buildOpponentMap(datasets, library, language, buildSelectedConfigMap(selections));
+  const opponentMap = buildOpponentMap(datasets, library, language, buildSelectionMap(selections));
   return selections
     .map((entry) => opponentMap.get(entry.speciesId))
     .filter(Boolean);
@@ -184,27 +248,35 @@ export function restoreOpponentTeam(opponentTeam = [], datasets, library = [], l
 
 export function normalizeSavedOpponentTeams(savedTeams = [], datasets, library = [], language = "zh") {
   const opponentMap = buildOpponentMap(datasets, library, language);
-  return savedTeams.map((team) => {
+  return sortSavedOpponentTeams(savedTeams.map((team) => {
     const selections = getSavedSelections(team, library, datasets)
       .filter((entry) => opponentMap.has(entry.speciesId))
       .slice(0, MAX_OPPONENT_TEAM_SIZE);
     return {
       ...team,
+      createdAt: Number(team.createdAt || 0),
+      lastOpenedAt: Number(team.lastOpenedAt || 0),
+      openCount: Number(team.openCount || 0),
       selections,
       speciesIds: selections.map((entry) => entry.speciesId),
       labels: selections.map((entry) => opponentMap.get(entry.speciesId)?.speciesName || entry.speciesId),
     };
-  });
+  }));
 }
 
 export function createSavedOpponentSnapshot(opponentTeam = [], name = "") {
+  const createdAt = Date.now();
   const selections = opponentTeam.map((entry) => ({
     speciesId: entry.speciesId,
     selectedConfigId: entry.selectedConfigId || "",
+    pinned: Boolean(entry.pinned),
   })).filter((entry) => entry.speciesId);
   return {
     id: `opponent:${Date.now()}`,
     name,
+    createdAt,
+    lastOpenedAt: 0,
+    openCount: 0,
     selections,
     speciesIds: selections.map((entry) => entry.speciesId),
     labels: opponentTeam.map((entry) => entry.speciesName || entry.displayName || "Unknown"),
@@ -214,7 +286,7 @@ export function createSavedOpponentSnapshot(opponentTeam = [], name = "") {
 export function loadSavedOpponentSelection(snapshot = {}, datasets, library = [], language = "zh") {
   const selections = getSavedSelections(snapshot, library, datasets)
     .slice(0, MAX_OPPONENT_TEAM_SIZE);
-  const opponentMap = buildOpponentMap(datasets, library, language, buildSelectedConfigMap(selections));
+  const opponentMap = buildOpponentMap(datasets, library, language, buildSelectionMap(selections));
   return selections
     .filter((entry) => opponentMap.has(entry.speciesId))
     .slice(0, MAX_OPPONENT_TEAM_SIZE)

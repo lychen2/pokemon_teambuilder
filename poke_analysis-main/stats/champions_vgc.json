@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-17T05:05:57.741234+00:00",
+  "generatedAt": "2026-04-19T05:53:56.115066+00:00",
   "format": {
     "name": "[Gen 9 Champions] VGC 2026 Reg M-A",
     "mod": "champions",
@@ -289,7 +289,8 @@
     "whimsicott",
     "wyrdeer",
     "zoroark",
-    "zoroarkhisui"
+    "zoroarkhisui",
+    "gengarmega"
   ],
   "selectionWindow": {
     "sliceStartTier": "OU",

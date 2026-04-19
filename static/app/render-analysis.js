@@ -1,5 +1,7 @@
 import {t} from "./i18n.js";
+import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {spriteMarkup} from "./sprites.js";
+import {getTypeLabel} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -54,6 +56,33 @@ function memberPillsMarkup(members = [], state) {
 
 function emptyTextMarkup(language, key) {
   return `<p class="muted">${t(language, key)}</p>`;
+}
+
+function getAllyTeraEntries(state, language) {
+  const team = state.team || [];
+  return team
+    .map((config) => {
+      const type = config.teraType || "";
+      if (!type) return null;
+      const localized = state.localizedSpeciesNames?.get(config.speciesId);
+      const name = localized || config.speciesName || config.displayName || "";
+      return {type, name, label: getTypeLabel(type, language)};
+    })
+    .filter(Boolean);
+}
+
+function teraHintMarkup(state, language) {
+  const entries = getAllyTeraEntries(state, language);
+  if (!entries.length) return "";
+  const pills = entries
+    .map((entry) => `<span class="mini-pill tera-hint-pill type-${entry.type.toLowerCase()}">${escapeHtml(entry.name)} → ${escapeHtml(entry.label)}</span>`)
+    .join("");
+  return `
+    <div class="analysis-tera-hint">
+      <span class="analysis-label">${t(language, "analysis.teraHintLabel")}</span>
+      <div class="analysis-inline-pills">${pills}</div>
+    </div>
+  `;
 }
 
 function speedDetailPillMarkup(entry, state) {
@@ -455,16 +484,19 @@ export function renderAnalysisView(state) {
   });
 
   if (!analysis) {
-    document.getElementById("analysis-overview").innerHTML = `<p class="empty-state">${t(language, "analysis.empty")}</p>`;
+    setInnerHTMLIfChanged(document.getElementById("analysis-overview"), `<p class="empty-state">${t(language, "analysis.empty")}</p>`);
     tabTargets.forEach((tabId) => {
-      document.getElementById(`analysis-${tabId}-panel`).innerHTML = tabId === activeTab
-        ? `<p class="empty-state">${t(language, "analysis.empty")}</p>`
-        : "";
+      setInnerHTMLIfChanged(
+        document.getElementById(`analysis-${tabId}-panel`),
+        tabId === activeTab ? `<p class="empty-state">${t(language, "analysis.empty")}</p>` : "",
+      );
     });
     return;
   }
 
-  document.getElementById("analysis-overview").innerHTML = `
+  const teraHint = teraHintMarkup(state, language);
+  setInnerHTMLIfChanged(document.getElementById("analysis-overview"), `
+    ${teraHint}
     <div class="metric-card"><strong>${analysis.weaknesses.length}</strong><span>${t(language, "analysis.weaknesses")}</span></div>
     <div class="metric-card"><strong>${analysis.blindSpots.length}</strong><span>${t(language, "analysis.blindSpots")}</span></div>
     <div class="metric-card"><strong>${analysis.coverage.strongCount}</strong><span>${t(language, "analysis.coverageStrong")}</span></div>
@@ -472,10 +504,10 @@ export function renderAnalysisView(state) {
     <div class="metric-card"><strong>${analysis.roles.filledUtilityCount}</strong><span>${t(language, "analysis.rolesFilled")}</span></div>
     <div class="metric-card"><strong>${analysis.cores.bestPairs[0]?.score.toFixed(1) || "0.0"}</strong><span>${t(language, "analysis.bestCore")}</span></div>
     <div class="metric-card"><strong>${analysis.structure.duplicateTypes.join(" / ") || t(language, "common.none")}</strong><span>${t(language, "analysis.duplicateTypes")}</span></div>
-  `;
+  `);
 
   const coreFocusId = state.activeCoreConfigId || analysis.cores.memberOptions[0]?.id || "";
-  document.getElementById("analysis-coverage-panel").innerHTML = renderCoveragePanel(analysis, language, state);
-  document.getElementById("analysis-roles-panel").innerHTML = renderRolesPanel(analysis, language, state);
-  document.getElementById("analysis-cores-panel").innerHTML = renderCoresPanel(analysis, language, coreFocusId, state);
+  setInnerHTMLIfChanged(document.getElementById("analysis-coverage-panel"), renderCoveragePanel(analysis, language, state));
+  setInnerHTMLIfChanged(document.getElementById("analysis-roles-panel"), renderRolesPanel(analysis, language, state));
+  setInnerHTMLIfChanged(document.getElementById("analysis-cores-panel"), renderCoresPanel(analysis, language, coreFocusId, state));
 }

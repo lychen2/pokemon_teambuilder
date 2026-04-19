@@ -1,4 +1,12 @@
-import {TYPE_CHART, TYPE_ORDER} from "./constants.js";
+import {TYPE_ORDER} from "./constants.js";
+import {
+  getBestMoveEffectiveness,
+  getBestMoveEffectivenessAgainstTypes,
+  getCoverageProfileForConfig,
+  getEffectiveSpeed,
+  getFieldFlags,
+  getResistanceProfileForConfig,
+} from "./battle-semantics.js";
 import {t} from "./i18n.js";
 import {normalizeRecommendationPreferences} from "./recommendation-preferences.js";
 import {
@@ -42,52 +50,34 @@ function getMedianSpeed(speedTiers = []) {
   return speedTiers[0]?.speed || 0;
 }
 
-export function getSpeedContext(team = [], speedTiers = []) {
+export function getSpeedContext(team = [], speedTiers = [], fieldState = {}) {
   const medianSpeed = getMedianSpeed(speedTiers);
   const setterCount = team.filter((config) => hasMove(config, TRICK_ROOM_MOVE)).length;
-  const slowCount = team.filter((config) => (config.stats?.spe || 0) <= medianSpeed).length;
+  const slowCount = team.filter((config) => getEffectiveSpeed(config, "ally", fieldState) <= medianSpeed).length;
   const fastCount = team.length - slowCount;
-  const tailwindCount = team.filter((config) => {
+  const speedBoostCount = team.filter((config) => {
     const roles = getUtilityRoles(config);
-    return roles.includes("tailwind") || roles.includes("speedcontrol");
+    return roles.includes("tailwind") || roles.includes("speedboostself");
   }).length;
-  if (setterCount && slowCount >= Math.max(2, fastCount) && tailwindCount === 0) {
-    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount, slowCount, fastCount, tailwindCount, teamSize: team.length};
+  if (setterCount && slowCount >= Math.max(2, fastCount) && speedBoostCount === 0) {
+    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize: team.length};
   }
   if (setterCount && slowCount >= 2 && fastCount >= 2) {
-    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount, slowCount, fastCount, tailwindCount, teamSize: team.length};
+    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize: team.length};
   }
-  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount, slowCount, fastCount, tailwindCount, teamSize: team.length};
+  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize: team.length};
 }
 
-export function getResistanceProfile(types = []) {
-  return Object.fromEntries(
-    TYPE_ORDER.map((attackType) => {
-      return [attackType, getAttackMultiplier(attackType, types)];
-    }),
-  );
+export function getResistanceProfile(subject = [], options = {}) {
+  const config = Array.isArray(subject) ? {types: subject} : subject;
+  return getResistanceProfileForConfig(config, options);
 }
 
-export function getCoverageProfile(moveTypes = []) {
-  return Object.fromEntries(
-    TYPE_ORDER.map((defendType) => {
-      return [defendType, getBestAttackMultiplier(moveTypes, [defendType])];
-    }),
-  );
-}
-
-function getAttackMultiplier(attackType, defendTypes = []) {
-  return defendTypes.reduce((total, defendType) => {
-    const next = TYPE_CHART[attackType]?.[defendType];
-    return total * (next ?? 1);
-  }, 1);
-}
-
-function getBestAttackMultiplier(attackTypes = [], defendTypes = []) {
-  return attackTypes.reduce(
-    (maxValue, attackType) => Math.max(maxValue, getAttackMultiplier(attackType, defendTypes)),
-    0,
-  );
+export function getCoverageProfile(subject = [], options = {}) {
+  const config = Array.isArray(subject)
+    ? {moves: subject.map((type) => ({name: type, id: type, type, category: "Special"}))}
+    : subject;
+  return getCoverageProfileForConfig(config, options);
 }
 
 function buildDefensiveTypePairs() {
@@ -114,11 +104,11 @@ function compareLabels(left, right) {
   return left.label.localeCompare(right.label, "zh-Hans-CN");
 }
 
-function summarizeDefensiveMatrix(team, language) {
+function summarizeDefensiveMatrix(team, language, fieldState) {
   return TYPE_ORDER.map((attackType) => {
     const members = team.map((config) => ({
       member: createMemberReference(config),
-      multiplier: getResistanceProfile(config.types)[attackType] ?? 1,
+      multiplier: getResistanceProfile(config, {fieldState, side: "ally"})[attackType] ?? 1,
     }));
     const average = members.reduce((sum, entry) => sum + entry.multiplier, 0) / Math.max(members.length, 1);
     const weakCount = members.filter((entry) => entry.multiplier > 1).length;
@@ -141,8 +131,8 @@ function summarizeDefensiveMatrix(team, language) {
   ));
 }
 
-function summarizeDefensive(team, language) {
-  return summarizeDefensiveMatrix(team, language).map((entry) => ({
+function summarizeDefensive(team, language, fieldState) {
+  return summarizeDefensiveMatrix(team, language, fieldState).map((entry) => ({
     type: entry.type,
     label: entry.label,
     average: entry.average,
@@ -152,11 +142,11 @@ function summarizeDefensive(team, language) {
   }));
 }
 
-function summarizeOffensiveMatrix(team, language) {
+function summarizeOffensiveMatrix(team, language, fieldState) {
   return TYPE_ORDER.map((defendType) => {
     const members = team.map((config) => ({
       member: createMemberReference(config),
-      effectiveness: getCoverageProfile(config.offensiveTypes || [])[defendType] || 0,
+      effectiveness: getCoverageProfile(config, {fieldState, side: "ally"})[defendType] || 0,
     }));
     const bestEffectiveness = members.reduce((best, entry) => Math.max(best, entry.effectiveness), 0);
     return {
@@ -175,21 +165,22 @@ function summarizeOffensiveMatrix(team, language) {
   ));
 }
 
-function summarizeOffensive(team, language) {
-  return summarizeOffensiveMatrix(team, language).map((entry) => ({
+function summarizeOffensive(team, language, fieldState) {
+  return summarizeOffensiveMatrix(team, language, fieldState).map((entry) => ({
     type: entry.type,
     label: entry.label,
     effectiveness: entry.bestEffectiveness,
   }));
 }
 
-function summarizeOffensivePairs(team, language) {
-  const teamMoveTypes = uniqueStrings(team.flatMap((config) => config.offensiveTypes || []));
+function summarizeOffensivePairs(team, language, fieldState) {
   return DEFENSIVE_TYPE_PAIRS
     .map((types) => ({
       types,
       label: types.map((type) => getTypeLabel(type, language)).join(" / "),
-      effectiveness: getBestAttackMultiplier(teamMoveTypes, types),
+      effectiveness: team.reduce((best, config) => {
+        return Math.max(best, getBestMoveEffectivenessAgainstTypes(config, types, {fieldState, side: "ally"}));
+      }, 0),
     }))
     .filter((entry) => entry.effectiveness <= BLIND_SPOT_THRESHOLD)
     .sort((left, right) => (
@@ -208,6 +199,7 @@ function summarizeOffensiveSinglesNeutral(offensive = []) {
 }
 
 function createMemberReference(config) {
+  const battleFlags = config.battleFlags || {};
   return {
     id: config.id,
     speciesId: config.speciesId || "",
@@ -215,14 +207,15 @@ function createMemberReference(config) {
     label: config.displayName || config.speciesName || t("zh", "common.unknown"),
     note: "",
     speed: config.stats?.spe || 0,
+    battleFlags,
     spritePosition: config.spritePosition || null,
   };
 }
 
-function getSuggestedSpeedScore(candidate, speedContext, speedTiers = []) {
+function getSuggestedSpeedScore(candidate, speedContext, speedTiers = [], fieldState = {}) {
   const medianSpeed = getMedianSpeed(speedTiers);
-  const candidateSpeed = Number(candidate.stats?.spe || 0);
-  const topSpeed = getThreatSpeed(candidate);
+  const candidateSpeed = getEffectiveSpeed(candidate, "ally", fieldState);
+  const topSpeed = getThreatSpeed(candidate, fieldState);
   if (speedContext.mode === SPEED_MODE_TRICK_ROOM) {
     return candidateSpeed <= medianSpeed ? 2.5 : hasMove(candidate, TRICK_ROOM_MOVE) ? 2 : 0;
   }
@@ -244,7 +237,7 @@ function getFocusPatchScore(multiplier) {
 }
 
 function buildSuggestedCoverEntry(candidate, context) {
-  const profile = getResistanceProfile(candidate.types);
+  const profile = getResistanceProfile(candidate, {fieldState: context.fieldState, side: "ally"});
   const candidateRoles = getUtilityRoles(candidate)
     .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId));
   const missingRoles = candidateRoles.filter((roleId) => !context.teamRoles.has(roleId));
@@ -255,7 +248,7 @@ function buildSuggestedCoverEntry(candidate, context) {
     getFocusPatchScore(focusMultiplier) * (context.preferences.patchWeakness ? 1.4 : 0.8)
     + weaknessHelp.length * 1.25
     + missingRoles.length * (context.preferences.patchRoles ? 1.4 : 0.6)
-    + getSuggestedSpeedScore(candidate, context.speedContext, context.speedTiers) * (context.preferences.patchSpeed ? 1.2 : 0.5)
+    + getSuggestedSpeedScore(candidate, context.speedContext, context.speedTiers, context.fieldState) * (context.preferences.patchSpeed ? 1.2 : 0.5)
     - duplicateTypes * (context.preferences.avoidDuplicateTypes ? 1.4 : 0.5)
   );
   return {
@@ -270,7 +263,7 @@ function buildSuggestedCoverEntry(candidate, context) {
   };
 }
 
-function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences) {
+function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences, fieldState) {
   const currentSpecies = new Set(team.map((config) => config.speciesId));
   const teamTypes = new Set(team.flatMap((config) => config.types || []));
   const teamRoles = new Set(
@@ -279,7 +272,7 @@ function buildSuggestedCoversByType(team, weakRows, library, language, speedTier
   );
   const weaknessTypes = weakRows.map((entry) => entry.type);
   return Object.fromEntries(weakRows.map((row) => {
-    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes};
+    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes, fieldState};
     const entries = library
       .filter((candidate) => !currentSpecies.has(candidate.speciesId))
       .map((candidate) => buildSuggestedCoverEntry(candidate, context))
@@ -293,9 +286,9 @@ function buildSuggestedCoversByType(team, weakRows, library, language, speedTier
   }));
 }
 
-function summarizeCoverage(team, language, library, speedTiers, speedContext, preferences) {
-  const defensiveMatrix = summarizeDefensiveMatrix(team, language);
-  const offensiveMatrix = summarizeOffensiveMatrix(team, language);
+function summarizeCoverage(team, language, library, speedTiers, speedContext, preferences, fieldState) {
+  const defensiveMatrix = summarizeDefensiveMatrix(team, language, fieldState);
+  const offensiveMatrix = summarizeOffensiveMatrix(team, language, fieldState);
   const weakRows = defensiveMatrix
     .filter((entry) => entry.average > WEAKNESS_AVERAGE_THRESHOLD)
     .slice(0, 6);
@@ -307,6 +300,7 @@ function summarizeCoverage(team, language, library, speedTiers, speedContext, pr
     speedTiers,
     speedContext,
     preferences,
+    fieldState,
   );
   const defensiveRows = defensiveMatrix.map((entry) => ({
     ...entry,
@@ -338,16 +332,12 @@ function createTierReference(tier, language) {
   };
 }
 
-function getThreatSpeed(candidate) {
-  return Math.max(
-    Number(candidate.stats?.spe || 0),
-    Number(candidate.plusOneSpeed?.speed || 0),
-    Number(candidate.choiceScarfSpeed?.speed || 0),
-  );
+function getThreatSpeed(candidate, fieldState = {}) {
+  return getEffectiveSpeed(candidate, "ally", fieldState);
 }
 
-function summarizePressureThreats(config, library = [], selectedSpeciesIds = new Set(), language = "zh") {
-  const memberSpeed = Number(config.stats?.spe || 0);
+function summarizePressureThreats(config, library = [], selectedSpeciesIds = new Set(), language = "zh", fieldState = {}) {
+  const memberSpeed = getEffectiveSpeed(config, "ally", fieldState);
   return library
     .filter((candidate) => (
       candidate.id !== config.id
@@ -357,8 +347,8 @@ function summarizePressureThreats(config, library = [], selectedSpeciesIds = new
     .map((candidate) => ({
       label: candidate.speciesName || candidate.displayName || t(language, "common.unknown"),
       note: candidate.note || "",
-      speed: getThreatSpeed(candidate),
-      effectiveness: getBestAttackMultiplier(candidate.offensiveTypes || [], config.types || []),
+      speed: getThreatSpeed(candidate, fieldState),
+      effectiveness: getBestMoveEffectiveness(candidate, config, {fieldState, side: "ally", defenderSide: "ally"}),
     }))
     .filter((candidate) => candidate.speed > memberSpeed && candidate.effectiveness >= SUPER_EFFECTIVE_THRESHOLD)
     .sort((left, right) => (
@@ -369,15 +359,21 @@ function summarizePressureThreats(config, library = [], selectedSpeciesIds = new
     .slice(0, THREAT_PREVIEW_LIMIT);
 }
 
-function summarizeSpeed(team, speedTiers, language, speedContext, library) {
+function summarizeSpeed(team, speedTiers, language, speedContext, library, fieldState) {
   const sortedSpeedTiers = getSortedSpeedTiers(speedTiers);
   const selectedSpeciesIds = new Set(team.map((config) => config.speciesId).filter(Boolean));
   return [...team]
-    .sort((left, right) => (right.stats?.spe || 0) - (left.stats?.spe || 0))
+    .sort((left, right) => getEffectiveSpeed(right, "ally", fieldState) - getEffectiveSpeed(left, "ally", fieldState))
     .map((config) => {
-      const speed = config.stats?.spe || 0;
-      const slowerTiers = sortedSpeedTiers.filter((tier) => tier.speed < speed);
-      const fasterTiers = sortedSpeedTiers.filter((tier) => tier.speed > speed);
+      const speed = getEffectiveSpeed(config, "ally", fieldState);
+      const slowerTiers = sortedSpeedTiers.filter((tier) => {
+        const delta = fieldState?.trickRoom ? tier.speed > speed : tier.speed < speed;
+        return delta;
+      });
+      const fasterTiers = sortedSpeedTiers.filter((tier) => {
+        const delta = fieldState?.trickRoom ? tier.speed < speed : tier.speed > speed;
+        return delta;
+      });
       return {
         id: config.id,
         label: config.displayName,
@@ -389,7 +385,7 @@ function summarizeSpeed(team, speedTiers, language, speedContext, library) {
         trickRoomAheadOf: speedContext.mode === SPEED_MODE_STANDARD
           ? []
           : fasterTiers.slice(0, SPEED_PREVIEW_LIMIT).map((tier) => createTierReference(tier, language)).filter(Boolean),
-        pressureThreats: summarizePressureThreats(config, library, selectedSpeciesIds, language),
+        pressureThreats: summarizePressureThreats(config, library, selectedSpeciesIds, language, fieldState),
       };
     });
 }
@@ -433,9 +429,9 @@ function summarizeRoles(team, speedContext) {
     return {id: roleId, count: members.length, members};
   });
   const requiredRolesByMode = {
-    [SPEED_MODE_STANDARD]: ["speedcontrol", "fakeout", "pivot", "disruption", "recovery"],
+    [SPEED_MODE_STANDARD]: ["speedboostself", "speeddebuff", "fakeout", "pivot", "disruption"],
     [SPEED_MODE_TRICK_ROOM]: ["trickroom", "fakeout", "redirection", "recovery", "tank"],
-    [SPEED_MODE_HYBRID]: ["speedcontrol", "trickroom", "fakeout", "pivot", "disruption"],
+    [SPEED_MODE_HYBRID]: ["speedboostself", "trickroom", "fakeout", "pivot", "disruption"],
   };
   const allRoleEntries = [...tactical, ...support, ...structure];
   const requiredRoles = requiredRolesByMode[speedContext.mode] || requiredRolesByMode[SPEED_MODE_STANDARD];
@@ -461,30 +457,34 @@ function getPairEntries(team) {
 
 function countPairPatches(pair, typeList = TYPE_ORDER) {
   return typeList.filter((type) => {
-    const multipliers = pair.map((config) => getResistanceProfile(config.types)[type] ?? 1);
+    const multipliers = pair.map((config) => getResistanceProfile(config)[type] ?? 1);
     return multipliers.some((value) => value > 1) && multipliers.some((value) => value < 1);
   }).length;
 }
 
 function countPairImmunityPatches(pair) {
   return TYPE_ORDER.filter((type) => {
-    const multipliers = pair.map((config) => getResistanceProfile(config.types)[type] ?? 1);
+    const multipliers = pair.map((config) => getResistanceProfile(config)[type] ?? 1);
     return multipliers.some((value) => value > 1) && multipliers.some((value) => value === 0);
   }).length;
 }
 
 function countSharedWeaknesses(pair) {
   return TYPE_ORDER.filter((type) => {
-    return pair.every((config) => (getResistanceProfile(config.types)[type] ?? 1) > 1);
+    return pair.every((config) => (getResistanceProfile(config)[type] ?? 1) > 1);
   }).length;
 }
 
-function countSingleCoverage(attackTypes = []) {
-  return TYPE_ORDER.filter((defendType) => getBestAttackMultiplier(attackTypes, [defendType]) >= SUPER_EFFECTIVE_THRESHOLD).length;
+function countSingleCoverage(pair = []) {
+  return TYPE_ORDER.filter((defendType) => {
+    return pair.some((config) => getBestMoveEffectivenessAgainstTypes(config, [defendType]) >= SUPER_EFFECTIVE_THRESHOLD);
+  }).length;
 }
 
-function countDualCoverage(attackTypes = []) {
-  return DEFENSIVE_TYPE_PAIRS.filter((types) => getBestAttackMultiplier(attackTypes, types) >= SUPER_EFFECTIVE_THRESHOLD).length;
+function countDualCoverage(pair = []) {
+  return DEFENSIVE_TYPE_PAIRS.filter((types) => {
+    return pair.some((config) => getBestMoveEffectivenessAgainstTypes(config, types) >= SUPER_EFFECTIVE_THRESHOLD);
+  }).length;
 }
 
 function getPairRoles(pair) {
@@ -506,28 +506,29 @@ function scoreCoreEntry(entry) {
   );
 }
 
-function getWeaknessTypes(types = []) {
-  return TYPE_ORDER.filter((type) => getAttackMultiplier(type, types) > 1);
+function getWeaknessTypes(member = {}) {
+  return TYPE_ORDER.filter((type) => (getResistanceProfile(member)[type] ?? 1) > 1);
 }
 
 function buildPartnerSuggestion(member, team, language) {
-  const weaknessTypes = getWeaknessTypes(member.types || []);
+  const weaknessTypes = getWeaknessTypes(member);
   const otherMembers = team.filter((config) => config.id !== member.id);
   const coveredByTeam = weaknessTypes
     .map((type) => ({
       type,
       label: getTypeLabel(type, language),
       members: otherMembers
-        .filter((config) => getAttackMultiplier(type, config.types || []) < 1)
+        .filter((config) => (getResistanceProfile(config)[type] ?? 1) < 1)
         .map(createMemberReference),
     }))
     .filter((entry) => entry.members.length);
   const suggestions = PARTNER_TYPE_COMBOS
     .map((types) => {
-      const covered = weaknessTypes.filter((type) => getAttackMultiplier(type, types) < 1);
-      const immune = weaknessTypes.filter((type) => getAttackMultiplier(type, types) === 0);
-      const partnerWeaknesses = getWeaknessTypes(types);
-      const synergy = partnerWeaknesses.filter((type) => getAttackMultiplier(type, member.types || []) < 1).length;
+      const partner = {types};
+      const covered = weaknessTypes.filter((type) => (getResistanceProfile(partner)[type] ?? 1) < 1);
+      const immune = weaknessTypes.filter((type) => (getResistanceProfile(partner)[type] ?? 1) === 0);
+      const partnerWeaknesses = getWeaknessTypes(partner);
+      const synergy = partnerWeaknesses.filter((type) => (getResistanceProfile(member)[type] ?? 1) < 1).length;
       return {
         label: types.map((type) => getTypeLabel(type, language)).join(" / "),
         types,
@@ -564,7 +565,6 @@ function summarizePartnerSuggestions(team, language) {
 }
 
 function buildCoreEntry(pair, weaknessTypes) {
-  const attackTypes = uniqueStrings(pair.flatMap((config) => config.offensiveTypes || []));
   const entry = {
     members: pair.map(createMemberReference),
     roles: getPairRoles(pair),
@@ -572,8 +572,8 @@ function buildCoreEntry(pair, weaknessTypes) {
     patchedWeaknesses: countPairPatches(pair),
     immunityPatches: countPairImmunityPatches(pair),
     sharedWeaknesses: countSharedWeaknesses(pair),
-    singleCoverageCount: countSingleCoverage(attackTypes),
-    pairCoverageCount: countDualCoverage(attackTypes),
+    singleCoverageCount: countSingleCoverage(pair),
+    pairCoverageCount: countDualCoverage(pair),
   };
   return {...entry, score: scoreCoreEntry(entry)};
 }
@@ -599,30 +599,36 @@ function summarizeCores(team, weaknesses = [], language = "zh") {
   };
 }
 
-export function analyzeTeam(team, speedTiers = [], language = "zh", library = [], preferences = {}) {
+export function analyzeTeam(team, speedTiers = [], language = "zh", library = [], preferences = {}, options = {}) {
   if (!team.length) {
     return null;
   }
 
+  const fieldState = options.fieldState || {};
+  const teamWithFlags = team.map((config) => ({
+    ...config,
+    battleFlags: getFieldFlags(config, "ally", fieldState),
+  }));
   const recommendPreferences = normalizeRecommendationPreferences(preferences);
-  const defensive = summarizeDefensive(team, language);
-  const offensive = summarizeOffensive(team, language);
-  const offensivePairs = summarizeOffensivePairs(team, language);
+  const defensive = summarizeDefensive(teamWithFlags, language, fieldState);
+  const offensive = summarizeOffensive(teamWithFlags, language, fieldState);
+  const offensivePairs = summarizeOffensivePairs(teamWithFlags, language, fieldState);
   const offensiveSinglesNeutral = summarizeOffensiveSinglesNeutral(offensive);
-  const structure = summarizeStructure(team, language);
-  const speedContext = getSpeedContext(team, speedTiers);
-  const coverage = summarizeCoverage(team, language, library, speedTiers, speedContext, recommendPreferences);
+  const structure = summarizeStructure(teamWithFlags, language);
+  const speedContext = getSpeedContext(teamWithFlags, speedTiers, fieldState);
+  const coverage = summarizeCoverage(teamWithFlags, language, library, speedTiers, speedContext, recommendPreferences, fieldState);
   const weaknesses = coverage.weakRows;
   const blindSpots = (offensivePairs.length ? offensivePairs : offensiveSinglesNeutral).slice(0, 8);
   return {
+    fieldState,
     defensive,
     offensive,
     offensivePairs,
     offensiveSinglesNeutral,
     coverage,
-    roles: summarizeRoles(team, speedContext),
-    cores: summarizeCores(team, weaknesses, language),
-    speed: summarizeSpeed(team, speedTiers, language, speedContext, library),
+    roles: summarizeRoles(teamWithFlags, speedContext),
+    cores: summarizeCores(teamWithFlags, weaknesses, language),
+    speed: summarizeSpeed(teamWithFlags, speedTiers, language, speedContext, library, fieldState),
     speedContext,
     structure,
     weaknesses,

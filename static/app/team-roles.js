@@ -2,7 +2,8 @@ import {normalizeName} from "./utils.js";
 
 const TRICK_ROOM_MOVE = "trickroom";
 const TAILWIND_MOVES = new Set(["tailwind"]);
-const SPEED_CONTROL_MOVES = new Set(["tailwind", "icywind", "electroweb", "thunderwave", "scaryface", "cottonspore", "bulldoze", "rocktomb", "stringshot"]);
+const SPEED_DEBUFF_MOVES = new Set(["icywind", "electroweb", "scaryface", "cottonspore", "bulldoze", "rocktomb", "stringshot"]);
+const PARALYSIS_CONTROL_MOVES = new Set(["thunderwave", "nuzzle", "glare", "stunspore"]);
 const PIVOT_MOVES = new Set(["partingshot", "uturn", "voltswitch", "flipturn", "batonpass", "teleport", "chillyreception"]);
 const REDIRECTION_MOVES = new Set(["followme", "ragepowder"]);
 const GUARD_MOVES = new Set(["wideguard", "quickguard"]);
@@ -28,7 +29,9 @@ const SWEEPER_ATTACK_THRESHOLD = 155;
 const WALLBREAKER_ATTACK_THRESHOLD = 175;
 const OFFENSE_LEAN_THRESHOLD = 24;
 const SUPPORT_SIGNAL_ROLES = new Set([
-  "speedcontrol",
+  "speedboostself",
+  "speeddebuff",
+  "paralysiscontrol",
   "tailwind",
   "trickroom",
   "screens",
@@ -45,11 +48,11 @@ const SUPPORT_SIGNAL_ROLES = new Set([
   "intimidate",
 ]);
 
-export const TACTICAL_ROLE_ORDER = ["speedcontrol", "tailwind", "trickroom", "screens", "weather", "terrain", "setup"];
+export const TACTICAL_ROLE_ORDER = ["speedboostself", "speeddebuff", "paralysiscontrol", "tailwind", "trickroom", "screens", "weather", "terrain", "setup"];
 export const SUPPORT_ROLE_ORDER = ["fakeout", "redirection", "guard", "pivot", "disruption", "statdrop", "recovery", "antisetup", "priority", "intimidate", "powderimmune"];
 export const STRUCTURE_ROLE_ORDER = ["sweeper", "frailsweeper", "tank", "support", "bulkysupport"];
 export const KEY_ROLE_ORDER = [...TACTICAL_ROLE_ORDER, ...SUPPORT_ROLE_ORDER];
-export const RECOMMENDATION_ROLE_IDS = ["speedcontrol", "trickroom", "fakeout", "redirection", "pivot", "disruption", "screens", "weather", "terrain", "intimidate"];
+export const RECOMMENDATION_ROLE_IDS = ["speedboostself", "speeddebuff", "paralysiscontrol", "trickroom", "fakeout", "redirection", "pivot", "disruption", "screens", "weather", "terrain", "intimidate"];
 export const ATTACK_BIAS_ORDER = ["physical", "special", "mixed", "support"];
 
 export function getNormalizedMoveNames(config) {
@@ -171,7 +174,9 @@ function getPrimaryStructureRole(config) {
 
 export function getUtilityRoles(config) {
   const roles = [];
-  if (hasTrackedMove(config, SPEED_CONTROL_MOVES)) roles.push("speedcontrol");
+  if (hasTrackedMove(config, TAILWIND_MOVES)) roles.push("speedboostself");
+  if (hasTrackedMove(config, SPEED_DEBUFF_MOVES)) roles.push("speeddebuff");
+  if (hasTrackedMove(config, PARALYSIS_CONTROL_MOVES)) roles.push("paralysiscontrol");
   if (hasTrackedMove(config, TAILWIND_MOVES)) roles.push("tailwind");
   if (hasMove(config, TRICK_ROOM_MOVE)) roles.push("trickroom");
   if (hasTrackedMove(config, SCREEN_MOVES)) roles.push("screens");

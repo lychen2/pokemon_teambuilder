@@ -1,0 +1,3156 @@
+Castform @ Leftovers
+Ability: Forecast
+Level: 50
+Note: 28.7% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Weather Ball
+- Icy Wind
+- Protect
+- Cosmic Power
+
+Castform @ Leftovers
+Ability: Forecast
+Level: 50
+Note: 21.6% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 32 SpD / 2 Spe
+Modest Nature
+- Weather Ball
+- Icy Wind
+- Protect
+- Cosmic Power
+
+Meganium-Mega @ Meganiumite
+Ability: Mega Sol
+Level: 50
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Solar Beam
+- Weather Ball
+- Dazzling Gleam
+- Protect
+
+Pelipper @ Focus Sash
+Ability: Drizzle
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Hurricane
+- Weather Ball
+- Tailwind
+- Protect
+
+Tinkaton @ Occa Berry
+Ability: Mold Breaker
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Gigaton Hammer
+- Fake Out
+- Play Rough
+- Encore
+
+Krookodile @ Choice Scarf
+Ability: Intimidate
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Earthquake
+- Knock Off
+- Rock Slide
+- Protect
+
+Glimmora-Mega @ Glimmoranite
+Ability: Adaptability
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Power Gem
+- Spiky Shield
+- Earth Power
+- Sludge Bomb
+
+Floette-Mega @ Floettite
+Ability: Fairy Aura
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Dazzling Gleam
+- Calm Mind
+- Moonblast
+
+Talonflame @ Sharp Beak
+Ability: Gale Wings
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Tailwind
+- Protect
+- Flare Blitz
+- Brave Bird
+
+Typhlosion-Hisui @ Choice Scarf
+Ability: Blaze
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Eruption
+- Shadow Ball
+- Heat Wave
+- Overheat
+
+Tyranitar-Mega @ Tyranitarite
+Ability: Sand Stream
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Slide
+- Protect
+- Knock Off
+- Low Kick
+
+Garchomp @ Choice Scarf
+Ability: Rough Skin
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Earthquake
+- Dragon Claw
+- Protect
+- Rock Slide
+
+Incineroar @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
+Careful Nature
+- Fake Out
+- Parting Shot
+- Flare Blitz
+- Darkest Lariat
+
+Gengar-Mega @ Gengarite
+Ability: Shadow Tag
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Shadow Ball
+- Sludge Bomb
+- Perish Song
+
+Sneasler @ White Herb
+Ability: Unburden
+Level: 50
+Note: 47.2% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Dire Claw
+- Fake Out
+- Protect
+
+Sneasler @ White Herb
+Ability: Unburden
+Level: 50
+Note: 12.6% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Dire Claw
+- Fake Out
+- Protect
+
+Kingambit @ Black Glasses
+Ability: Defiant
+Level: 50
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Sucker Punch
+- Protect
+- Kowtow Cleave
+- Iron Head
+
+Basculegion @ Choice Scarf
+Ability: Adaptability
+Level: 50
+Note: 42.2% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Last Respects
+- Wave Crash
+- Aqua Jet
+- Flip Turn
+
+Basculegion @ Choice Scarf
+Ability: Adaptability
+Level: 50
+Note: 18.0% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Last Respects
+- Wave Crash
+- Aqua Jet
+- Flip Turn
+
+Ninetales-Alola @ Focus Sash
+Ability: Snow Warning
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Blizzard
+- Protect
+- Aurora Veil
+- Freeze-Dry
+
+Gyarados-Mega @ Gyaradosite
+Ability: Mold Breaker
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Waterfall
+- Protect
+- Thunder Wave
+- Taunt
+
+Whimsicott @ Focus Sash
+Ability: Prankster
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Tailwind
+- Moonblast
+- Encore
+- Protect
+
+Maushold @ Chople Berry
+Ability: Friend Guard
+Level: 50
+Note: 23.2% 采用率
+Points: 32 HP / 0 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Follow Me
+- Super Fang
+- Protect
+- Taunt
+
+Maushold @ Chople Berry
+Ability: Friend Guard
+Level: 50
+Note: 12.0% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Follow Me
+- Super Fang
+- Protect
+- Taunt
+
+Azumarill @ Sitrus Berry
+Ability: Huge Power
+Level: 50
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Aqua Jet
+- Protect
+- Belly Drum
+- Play Rough
+
+Palafin @ Mystic Water
+Ability: Zero to Hero
+Level: 50
+Note: 21.0% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Jet Punch
+- Wave Crash
+- Protect
+- Flip Turn
+
+Palafin @ Mystic Water
+Ability: Zero to Hero
+Level: 50
+Note: 18.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Jet Punch
+- Wave Crash
+- Protect
+- Flip Turn
+
+Clefable @ Sitrus Berry
+Ability: Unaware
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Follow Me
+- Moonblast
+- Protect
+- Helping Hand
+
+Starmie-Mega @ Starminite
+Ability: Huge Power
+Level: 50
+Note: 43.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Liquidation
+- Protect
+- Aqua Jet
+- Zen Headbutt
+
+Starmie-Mega @ Starminite
+Ability: Huge Power
+Level: 50
+Note: 13.6% 采用率
+Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Liquidation
+- Protect
+- Aqua Jet
+- Zen Headbutt
+
+Emolga @ Focus Sash
+Ability: Motor Drive
+Level: 50
+Note: 22.2% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Nuzzle
+- Encore
+- Acrobatics
+
+Emolga @ Focus Sash
+Ability: Motor Drive
+Level: 50
+Note: 16.7% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Nuzzle
+- Encore
+- Acrobatics
+
+Ninetales @ Bright Powder
+Ability: Drought
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Snarl
+- Will-O-Wisp
+- Weather Ball
+
+Venusaur @ Focus Sash
+Ability: Chlorophyll
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Sludge Bomb
+- Protect
+- Sleep Powder
+- Earth Power
+
+Arcanine-Hisui @ Choice Scarf
+Ability: Intimidate
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Flare Blitz
+- Rock Slide
+- Protect
+- Extreme Speed
+
+Goodra-Hisui @ Leftovers
+Ability: Gooey
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Body Press
+- Shelter
+- Life Dew
+- Flash Cannon
+
+Torkoal @ Charcoal
+Ability: Drought
+Level: 50
+Note: 36.0% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Eruption
+- Protect
+- Heat Wave
+- Earth Power
+
+Torkoal @ Charcoal
+Ability: Drought
+Level: 50
+Note: 17.2% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Eruption
+- Protect
+- Heat Wave
+- Earth Power
+
+Sinistcha @ Sitrus Berry
+Ability: Hospitality
+Level: 50
+Note: 26.7% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Matcha Gotcha
+- Rage Powder
+- Trick Room
+- Life Dew
+
+Sinistcha @ Sitrus Berry
+Ability: Hospitality
+Level: 50
+Note: 10.6% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Matcha Gotcha
+- Rage Powder
+- Trick Room
+- Life Dew
+
+Excadrill @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Iron Head
+- High Horsepower
+- Earthquake
+
+Hawlucha-Mega @ Hawluchanite
+Ability: No Guard
+Level: 50
+Note: 42.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Entrainment
+- Close Combat
+- Protect
+- Brave Bird
+
+Hawlucha-Mega @ Hawluchanite
+Ability: No Guard
+Level: 50
+Note: 10.1% 采用率
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Entrainment
+- Close Combat
+- Protect
+- Brave Bird
+
+Kommo-o @ Leftovers
+Ability: Overcoat
+Level: 50
+Note: 21.2% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Clanging Scales
+- Aura Sphere
+- Clangorous Soul
+
+Kommo-o @ Leftovers
+Ability: Overcoat
+Level: 50
+Note: 18.1% 采用率
+Points: 5 HP / 0 Atk / 1 Def / 30 SpA / 1 SpD / 29 Spe
+Modest Nature
+- Protect
+- Clanging Scales
+- Aura Sphere
+- Clangorous Soul
+
+Farigiraf @ Sitrus Berry
+Ability: Armor Tail
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Trick Room
+- Hyper Voice
+- Psychic
+- Helping Hand
+
+Vivillon @ Focus Sash
+Ability: Compound Eyes
+Level: 50
+Note: 35.5% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Sleep Powder
+- Protect
+- Tailwind
+- Rage Powder
+
+Vivillon @ Focus Sash
+Ability: Compound Eyes
+Level: 50
+Note: 11.0% 采用率
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Sleep Powder
+- Protect
+- Tailwind
+- Rage Powder
+
+Ampharos-Mega @ Ampharosite
+Ability: Mold Breaker
+Level: 50
+Note: 36.0% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Protect
+- Dragon Pulse
+- Thunderbolt
+- Volt Switch
+
+Ampharos-Mega @ Ampharosite
+Ability: Mold Breaker
+Level: 50
+Note: 15.3% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Protect
+- Dragon Pulse
+- Thunderbolt
+- Volt Switch
+
+Aggron-Mega @ Aggronite
+Ability: Filter
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Careful Nature
+- Body Press
+- Heavy Slam
+- Protect
+- Iron Defense
+
+Volcarona @ Leftovers
+Ability: Flame Body
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Rage Powder
+- Heat Wave
+- Quiver Dance
+
+Sableye @ Roseli Berry
+Ability: Prankster
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Careful Nature
+- Fake Out
+- Encore
+- Foul Play
+- Disable
+
+Charizard-Mega-Y @ Charizardite Y
+Ability: Drought
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Heat Wave
+- Solar Beam
+- Weather Ball
+
+Rotom-Wash @ Sitrus Berry
+Ability: Levitate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Hydro Pump
+- Thunderbolt
+- Volt Switch
+- Protect
+
+Zoroark-Hisui @ Focus Sash
+Ability: Illusion
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Bitter Malice
+- Protect
+- Icy Wind
+- Taunt
+
+Froslass-Mega @ Froslassite
+Ability: Snow Warning
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Blizzard
+- Protect
+- Shadow Ball
+- Aurora Veil
+
+Milotic @ Leftovers
+Ability: Competitive
+Level: 50
+Points: 32 HP / 0 Atk / 21 Def / 10 SpA / 1 SpD / 2 Spe
+Modest Nature
+- Protect
+- Scald
+- Icy Wind
+- Ice Beam
+
+Kangaskhan-Mega @ Kangaskhanite
+Ability: Parental Bond
+Level: 50
+Note: 23.1% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Fake Out
+- Sucker Punch
+- Double-Edge
+- Drain Punch
+
+Kangaskhan-Mega @ Kangaskhanite
+Ability: Parental Bond
+Level: 50
+Note: 11.1% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Fake Out
+- Sucker Punch
+- Double-Edge
+- Drain Punch
+
+Corviknight @ Leftovers
+Ability: Mirror Armor
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Impish Nature
+- Brave Bird
+- Tailwind
+- Roost
+- Iron Head
+
+Gardevoir-Mega @ Gardevoirite
+Ability: Pixilate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Hyper Voice
+- Psyshock
+- Trick Room
+
+Aerodactyl @ Focus Sash
+Ability: Unnerve
+Level: 50
+Note: 58.4% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Tailwind
+- Dual Wingbeat
+- Protect
+
+Aerodactyl @ Focus Sash
+Ability: Unnerve
+Level: 50
+Note: 12.8% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Tailwind
+- Dual Wingbeat
+- Protect
+
+Aegislash @ Spell Tag
+Ability: Stance Change
+Level: 50
+Points: 32 HP / 29 Atk / 0 Def / 0 SpA / 0 SpD / 5 Spe
+Adamant Nature
+- King's Shield
+- Iron Head
+- Shadow Sneak
+- Poltergeist
+
+Hydreigon @ Choice Scarf
+Ability: Levitate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Draco Meteor
+- Dark Pulse
+- Protect
+- Snarl
+
+Scovillain-Mega @ Scovillainite
+Ability: Spicy Spray
+Level: 50
+Points: 32 HP / 0 Atk / 10 Def / 0 SpA / 24 SpD / 0 Spe
+Calm Nature
+- Protect
+- Rage Powder
+- Flamethrower
+- Leech Seed
+
+Primarina @ Mystic Water
+Ability: Liquid Voice
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Moonblast
+- Protect
+- Calm Mind
+
+Scizor-Mega @ Scizorite
+Ability: Technician
+Level: 50
+Note: 18.6% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Bullet Punch
+- Swords Dance
+- Protect
+- Bug Bite
+
+Scizor-Mega @ Scizorite
+Ability: Technician
+Level: 50
+Note: 12.3% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Bullet Punch
+- Swords Dance
+- Protect
+- Bug Bite
+
+Politoed @ Sitrus Berry
+Ability: Drizzle
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Calm Nature
+- Protect
+- Weather Ball
+- Perish Song
+- Icy Wind
+
+Delphox-Mega @ Delphoxite
+Ability: Levitate
+Level: 50
+Note: 22.8% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Heat Wave
+- Protect
+- Psychic
+- Encore
+
+Delphox-Mega @ Delphoxite
+Ability: Levitate
+Level: 50
+Note: 18.7% 采用率
+Points: 9 HP / 0 Atk / 23 Def / 5 SpA / 0 SpD / 29 Spe
+Timid Nature
+- Heat Wave
+- Protect
+- Psychic
+- Encore
+
+Dragonite-Mega @ Dragoninite
+Ability: Multiscale
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Extreme Speed
+- Hurricane
+- Tailwind
+
+Archaludon @ Leftovers
+Ability: Stamina
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Electro Shot
+- Flash Cannon
+- Protect
+- Draco Meteor
+
+Meowstic @ Mental Herb
+Ability: Prankster
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Psychic Terrain
+- Fake Out
+- Expanding Force
+- Helping Hand
+
+Armarouge @ Focus Sash
+Ability: Flash Fire
+Level: 50
+Note: 18.7% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Armor Cannon
+- Expanding Force
+- Protect
+- Trick Room
+
+Armarouge @ Focus Sash
+Ability: Flash Fire
+Level: 50
+Note: 15.8% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Armor Cannon
+- Expanding Force
+- Protect
+- Trick Room
+
+Armarouge @ Focus Sash
+Ability: Flash Fire
+Level: 50
+Note: 11.6% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Armor Cannon
+- Expanding Force
+- Protect
+- Trick Room
+
+Orthworm @ Sitrus Berry
+Ability: Earth Eater
+Level: 50
+Note: 28.7% 采用率
+Points: 32 HP / 0 Atk / 5 Def / 0 SpA / 29 SpD / 0 Spe
+Impish Nature
+- Shed Tail
+- Body Press
+- Heavy Slam
+- Iron Defense
+
+Orthworm @ Sitrus Berry
+Ability: Earth Eater
+Level: 50
+Note: 12.1% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Impish Nature
+- Shed Tail
+- Body Press
+- Heavy Slam
+- Iron Defense
+
+Golurk-Mega @ Golurkite
+Ability: Unseen Fist
+Level: 50
+Note: 24.7% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Protect
+- Headlong Rush
+- Poltergeist
+- Ice Punch
+
+Golurk-Mega @ Golurkite
+Ability: Unseen Fist
+Level: 50
+Note: 21.0% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Protect
+- Headlong Rush
+- Poltergeist
+- Ice Punch
+
+Golurk-Mega @ Golurkite
+Ability: Unseen Fist
+Level: 50
+Note: 11.1% 采用率
+Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 0 Spe
+Brave Nature
+- Protect
+- Headlong Rush
+- Poltergeist
+- Ice Punch
+
+Golurk-Mega @ Golurkite
+Ability: Unseen Fist
+Level: 50
+Note: 10.5% 采用率
+Points: 27 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 5 Spe
+Brave Nature
+- Protect
+- Headlong Rush
+- Poltergeist
+- Ice Punch
+
+Feraligatr-Mega @ Feraligite
+Ability: Dragonize
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Double-Edge
+- Dragon Dance
+- Liquidation
+
+Mimikyu @ Mental Herb
+Ability: Disguise
+Level: 50
+Note: 19.1% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Play Rough
+- Trick Room
+- Protect
+- Shadow Sneak
+
+Mimikyu @ Mental Herb
+Ability: Disguise
+Level: 50
+Note: 10.6% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Play Rough
+- Trick Room
+- Protect
+- Shadow Sneak
+
+Serperior @ Coba Berry
+Ability: Contrary
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Leaf Storm
+- Protect
+- Glare
+- Dragon Pulse
+
+Gallade-Mega @ Galladite
+Ability: Inner Focus
+Level: 50
+Note: 21.3% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Sacred Sword
+- Psycho Cut
+- Protect
+- Trick Room
+
+Gallade-Mega @ Galladite
+Ability: Inner Focus
+Level: 50
+Note: 19.2% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Sacred Sword
+- Psycho Cut
+- Protect
+- Trick Room
+
+Rotom-Frost @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: 42.2% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Blizzard
+- Thunderbolt
+- Volt Switch
+- Electroweb
+
+Rotom-Frost @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: 25.0% 采用率
+Points: 32 HP / 0 Atk / 9 Def / 25 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Blizzard
+- Thunderbolt
+- Volt Switch
+- Electroweb
+
+Appletun @ Leftovers
+Ability: Thick Fat
+Level: 50
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Apple Acid
+- Protect
+- Dragon Pulse
+- Iron Defense
+
+Drampa-Mega @ Drampanite
+Ability: Berserk
+Level: 50
+Note: 35.9% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Hyper Voice
+- Protect
+- Calm Mind
+- Earth Power
+
+Drampa-Mega @ Drampanite
+Ability: Berserk
+Level: 50
+Note: 19.8% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Hyper Voice
+- Protect
+- Calm Mind
+- Earth Power
+
+Oranguru @ Mental Herb
+Ability: Inner Focus
+Level: 50
+Note: 18.5% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Instruct
+- Trick Room
+- Protect
+- Psychic
+
+Oranguru @ Mental Herb
+Ability: Inner Focus
+Level: 50
+Note: 10.3% 采用率
+Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
+Relaxed Nature
+- Instruct
+- Trick Room
+- Protect
+- Psychic
+
+Hatterene @ Fairy Feather
+Ability: Magic Bounce
+Level: 50
+Note: 33.5% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Dazzling Gleam
+- Trick Room
+- Protect
+- Psychic
+
+Hatterene @ Fairy Feather
+Ability: Magic Bounce
+Level: 50
+Note: 10.5% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Dazzling Gleam
+- Trick Room
+- Protect
+- Psychic
+
+Dragapult @ Focus Sash
+Ability: Clear Body
+Level: 50
+Note: 28.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Dragon Darts
+- Phantom Force
+- Will-O-Wisp
+- Protect
+
+Dragapult @ Focus Sash
+Ability: Clear Body
+Level: 50
+Note: 26.6% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Dragon Darts
+- Phantom Force
+- Will-O-Wisp
+- Protect
+
+Arcanine @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Note: 17.3% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 4 SpD / 28 Spe
+Adamant Nature
+- Snarl
+- Flare Blitz
+- Protect
+- Will-O-Wisp
+
+Arcanine @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Note: 17.2% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Snarl
+- Flare Blitz
+- Protect
+- Will-O-Wisp
+
+Lucario-Mega @ Lucarionite
+Ability: Adaptability
+Level: 50
+Note: 32.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Protect
+- Meteor Mash
+- Bullet Punch
+
+Lucario-Mega @ Lucarionite
+Ability: Adaptability
+Level: 50
+Note: 18.2% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Protect
+- Meteor Mash
+- Bullet Punch
+
+Sylveon @ Fairy Feather
+Ability: Pixilate
+Level: 50
+Note: 15.3% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Hyper Voice
+- Protect
+- Quick Attack
+- Hyper Beam
+
+Sylveon @ Fairy Feather
+Ability: Pixilate
+Level: 50
+Note: 11.3% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Protect
+- Quick Attack
+- Hyper Beam
+
+Weavile @ Focus Sash
+Ability: Pressure
+Level: 50
+Note: 49.5% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Knock Off
+- Triple Axel
+- Icicle Crash
+
+Weavile @ Focus Sash
+Ability: Pressure
+Level: 50
+Note: 11.8% 采用率
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Knock Off
+- Triple Axel
+- Icicle Crash
+
+Weavile @ Focus Sash
+Ability: Pressure
+Level: 50
+Note: 11.6% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Knock Off
+- Triple Axel
+- Icicle Crash
+
+Rhyperior @ Hard Stone
+Ability: Solid Rock
+Level: 50
+Note: 22.1% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Earthquake
+- Rock Slide
+- Protect
+- High Horsepower
+
+Rhyperior @ Hard Stone
+Ability: Solid Rock
+Level: 50
+Note: 17.3% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Earthquake
+- Rock Slide
+- Protect
+- High Horsepower
+
+Chimecho-Mega @ Chimechite
+Ability: Levitate
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Protect
+- Flash Cannon
+- Calm Mind
+- Psychic
+
+Rotom-Mow @ Choice Scarf
+Ability: Levitate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Leaf Storm
+- Volt Switch
+- Thunderbolt
+- Electroweb
+
+Rotom-Heat @ Choice Scarf
+Ability: Levitate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Overheat
+- Volt Switch
+- Thunderbolt
+- Will-O-Wisp
+
+Basculegion-F @ Mystic Water
+Ability: Swift Swim
+Level: 50
+Note: 21.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Last Respects
+- Flip Turn
+- Wave Crash
+- Shadow Ball
+
+Basculegion-F @ Mystic Water
+Ability: Swift Swim
+Level: 50
+Note: 16.8% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Last Respects
+- Flip Turn
+- Wave Crash
+- Shadow Ball
+
+Basculegion-F @ Mystic Water
+Ability: Swift Swim
+Level: 50
+Note: 12.3% 采用率
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Last Respects
+- Flip Turn
+- Wave Crash
+- Shadow Ball
+
+Beedrill-Mega @ Beedrillite
+Ability: Adaptability
+Level: 50
+Note: 49.9% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Poison Jab
+- U-turn
+- Protect
+- Drill Run
+
+Beedrill-Mega @ Beedrillite
+Ability: Adaptability
+Level: 50
+Note: 13.1% 采用率
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Poison Jab
+- U-turn
+- Protect
+- Drill Run
+
+Beedrill-Mega @ Beedrillite
+Ability: Adaptability
+Level: 50
+Note: 10.3% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Poison Jab
+- U-turn
+- Protect
+- Drill Run
+
+Tyrantrum @ Mental Herb
+Ability: Strong Jaw
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Head Smash
+- Dragon Claw
+- High Horsepower
+- Protect
+
+Klefki @ Mental Herb
+Ability: Prankster
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Reflect
+- Light Screen
+- Thunder Wave
+- Dazzling Gleam
+
+Vaporeon @ Leftovers
+Ability: Water Absorb
+Level: 50
+Points: 0 HP / 0 Atk / 32 Def / 32 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Wish
+- Scald
+- Yawn
+- Acid Armor
+
+Hydrapple @ Leftovers
+Ability: Regenerator
+Level: 50
+Note: 26.7% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Protect
+- Draco Meteor
+- Fickle Beam
+- Pollen Puff
+
+Hydrapple @ Leftovers
+Ability: Regenerator
+Level: 50
+Note: 10.6% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Protect
+- Draco Meteor
+- Fickle Beam
+- Pollen Puff
+
+Altaria-Mega @ Altarianite
+Ability: Pixilate
+Level: 50
+Points: 32 HP / 0 Atk / 0 Def / 0 SpA / 32 SpD / 2 Spe
+Modest Nature
+- Protect
+- Hyper Voice
+- Tailwind
+- Perish Song
+
+Empoleon @ Leftovers
+Ability: Competitive
+Level: 50
+Note: 30.5% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 19 SpA / 0 SpD / 15 Spe
+Modest Nature
+- Protect
+- Flash Cannon
+- Roar
+- Water Pulse
+
+Empoleon @ Leftovers
+Ability: Competitive
+Level: 50
+Note: 10.5% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Protect
+- Flash Cannon
+- Roar
+- Water Pulse
+
+Tsareena @ Occa Berry
+Ability: Queenly Majesty
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Trop Kick
+- Low Kick
+- Triple Axel
+
+Infernape @ Focus Sash
+Ability: Iron Fist
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Protect
+- Close Combat
+- Fire Punch
+
+Crabominable-Mega @ Crabominite
+Ability: Iron Fist
+Level: 50
+Note: 35.0% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Protect
+- Drain Punch
+- Ice Hammer
+- Thunder Punch
+
+Crabominable-Mega @ Crabominite
+Ability: Iron Fist
+Level: 50
+Note: 20.1% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Protect
+- Drain Punch
+- Ice Hammer
+- Thunder Punch
+
+Raichu-Alola @ Magnet
+Ability: Surge Surfer
+Level: 50
+Note: 35.7% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Psychic
+- Fake Out
+- Protect
+- Volt Switch
+
+Raichu-Alola @ Magnet
+Ability: Surge Surfer
+Level: 50
+Note: 13.0% 采用率
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Psychic
+- Fake Out
+- Protect
+- Volt Switch
+
+Raichu-Alola @ Magnet
+Ability: Surge Surfer
+Level: 50
+Note: 11.0% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Psychic
+- Fake Out
+- Protect
+- Volt Switch
+
+Alcremie @ Leftovers
+Ability: Aroma Veil
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Protect
+- Decorate
+- Dazzling Gleam
+- Mystical Fire
+
+Machamp @ Roseli Berry
+Ability: No Guard
+Level: 50
+Note: 27.8% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Dynamic Punch
+- Stone Edge
+- Bulk Up
+- Protect
+
+Machamp @ Roseli Berry
+Ability: No Guard
+Level: 50
+Note: 23.2% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Dynamic Punch
+- Stone Edge
+- Bulk Up
+- Protect
+
+Machamp @ Roseli Berry
+Ability: No Guard
+Level: 50
+Note: 11.8% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Dynamic Punch
+- Stone Edge
+- Bulk Up
+- Protect
+
+Passimian @ Black Belt
+Ability: Defiant
+Level: 50
+Note: 24.1% 采用率
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Protect
+- Gunk Shot
+- Knock Off
+
+Passimian @ Black Belt
+Ability: Defiant
+Level: 50
+Note: 18.6% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Protect
+- Gunk Shot
+- Knock Off
+
+Jolteon @ Choice Scarf
+Ability: Volt Absorb
+Level: 50
+Note: 41.2% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Protect
+- Thunderbolt
+- Shadow Ball
+
+Jolteon @ Choice Scarf
+Ability: Volt Absorb
+Level: 50
+Note: 11.8% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Protect
+- Thunderbolt
+- Shadow Ball
+
+Jolteon @ Choice Scarf
+Ability: Volt Absorb
+Level: 50
+Note: 11.3% 采用率
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Protect
+- Thunderbolt
+- Shadow Ball
+
+Jolteon @ Choice Scarf
+Ability: Volt Absorb
+Level: 50
+Note: 10.6% 采用率
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Protect
+- Thunderbolt
+- Shadow Ball
+
+Sharpedo-Mega @ Sharpedonite
+Ability: Strong Jaw
+Level: 50
+Note: 47.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Crunch
+- Liquidation
+- Ice Fang
+
+Sharpedo-Mega @ Sharpedonite
+Ability: Strong Jaw
+Level: 50
+Note: 13.3% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Crunch
+- Liquidation
+- Ice Fang
+
+Steelix @ Leftovers
+Ability: Sturdy
+Level: 50
+Note: 15.3% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Wide Guard
+- Protect
+- Gyro Ball
+- Body Press
+
+Steelix @ Leftovers
+Ability: Sturdy
+Level: 50
+Note: 11.8% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Brave Nature
+- Wide Guard
+- Protect
+- Gyro Ball
+- Body Press
+
+Lopunny-Mega @ Lopunnite
+Ability: Scrappy
+Level: 50
+Note: 43.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Fake Out
+- Protect
+- Triple Axel
+
+Lopunny-Mega @ Lopunnite
+Ability: Scrappy
+Level: 50
+Note: 12.1% 采用率
+Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Fake Out
+- Protect
+- Triple Axel
+
+Mamoswine @ Focus Sash
+Ability: Oblivious
+Level: 50
+Note: 28.7% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Icicle Crash
+- Ice Shard
+- Protect
+- High Horsepower
+
+Mamoswine @ Focus Sash
+Ability: Oblivious
+Level: 50
+Note: 16.2% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Icicle Crash
+- Ice Shard
+- Protect
+- High Horsepower
+
+Slowking-Galar @ Sitrus Berry
+Ability: Regenerator
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Relaxed Nature
+- Chilly Reception
+- Trick Room
+- Psychic
+- Sludge Bomb
+
+Samurott-Hisui @ Scope Lens
+Ability: Sharpness
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Sacred Sword
+- Ceaseless Edge
+- Aqua Cutter
+- Sucker Punch
+
+Araquanid @ Mystic Water
+Ability: Water Bubble
+Level: 50
+Note: 27.8% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Liquidation
+- Wide Guard
+- Protect
+- Leech Life
+
+Araquanid @ Mystic Water
+Ability: Water Bubble
+Level: 50
+Note: 12.1% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Liquidation
+- Wide Guard
+- Protect
+- Leech Life
+
+Blastoise-Mega @ Blastoisinite
+Ability: Mega Launcher
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Water Spout
+- Protect
+- Ice Beam
+- Fake Out
+
+Rampardos @ Hard Stone
+Ability: Sheer Force
+Level: 50
+Note: 18.2% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Rock Slide
+- Supercell Slam
+- Head Smash
+- Iron Head
+
+Rampardos @ Hard Stone
+Ability: Sheer Force
+Level: 50
+Note: 14.6% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Rock Slide
+- Supercell Slam
+- Head Smash
+- Iron Head
+
+Rampardos @ Hard Stone
+Ability: Sheer Force
+Level: 50
+Note: 12.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Brave Nature
+- Rock Slide
+- Supercell Slam
+- Head Smash
+- Iron Head
+
+Chesnaught-Mega @ Chesnaughtite
+Ability: Bulletproof
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Impish Nature
+- Body Press
+- Spiky Shield
+- Wood Hammer
+- Leech Seed
+
+Manectric-Mega @ Manectite
+Ability: Intimidate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Protect
+- Snarl
+- Thunderbolt
+
+Snorlax @ Sitrus Berry
+Ability: Thick Fat
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Body Slam
+- Belly Drum
+- Protect
+- Earthquake
+
+Camerupt-Mega @ Cameruptite
+Ability: Sheer Force
+Level: 50
+Note: 30.2% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Earth Power
+- Heat Wave
+- Protect
+- Eruption
+
+Camerupt-Mega @ Cameruptite
+Ability: Sheer Force
+Level: 50
+Note: 20.2% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Earth Power
+- Heat Wave
+- Protect
+- Eruption
+
+Camerupt-Mega @ Cameruptite
+Ability: Sheer Force
+Level: 50
+Note: 11.5% 采用率
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Earth Power
+- Heat Wave
+- Protect
+- Eruption
+
+Decidueye-Hisui @ Coba Berry
+Ability: Scrappy
+Level: 50
+Note: 14.6% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Triple Arrows
+- Leaf Blade
+- Protect
+- Tailwind
+
+Decidueye-Hisui @ Coba Berry
+Ability: Scrappy
+Level: 50
+Note: 13.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Triple Arrows
+- Leaf Blade
+- Protect
+- Tailwind
+
+Decidueye-Hisui @ Coba Berry
+Ability: Scrappy
+Level: 50
+Note: 10.1% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Triple Arrows
+- Leaf Blade
+- Protect
+- Tailwind
+
+Raichu @ Focus Sash
+Ability: Lightning Rod
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Fake Out
+- Volt Switch
+- Nuzzle
+- Encore
+
+Diggersby @ Choice Scarf
+Ability: Huge Power
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Earthquake
+- Rock Slide
+- U-turn
+- Wild Charge
+
+Gliscor @ Leftovers
+Ability: Hyper Cutter
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Dual Wingbeat
+- High Horsepower
+- Protect
+- Swords Dance
+
+Victreebel-Mega @ Victreebelite
+Ability: Innards Out
+Level: 50
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Sleep Powder
+- Strength Sap
+- Sludge Bomb
+- Giga Drain
+
+Greninja-Mega @ Greninjite
+Ability: Protean
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Dark Pulse
+- Protect
+- Ice Beam
+- Hydro Pump
+
+Ceruledge @ Focus Sash
+Ability: Weak Armor
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Bitter Blade
+- Swords Dance
+- Poltergeist
+- Shadow Sneak
+
+Chandelure-Mega @ Chandelurite
+Ability: Infiltrator
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Shadow Ball
+- Heat Wave
+- Protect
+- Trick Room
+
+Clawitzer @ Bright Powder
+Ability: Mega Launcher
+Level: 50
+Note: 23.8% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Water Pulse
+- Dragon Pulse
+- Dark Pulse
+- Heal Pulse
+
+Clawitzer @ Bright Powder
+Ability: Mega Launcher
+Level: 50
+Note: 16.2% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Water Pulse
+- Dragon Pulse
+- Dark Pulse
+- Heal Pulse
+
+Forretress @ Focus Sash
+Ability: Sturdy
+Level: 50
+Note: 22.5% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Spikes
+- Stealth Rock
+- Protect
+- Explosion
+
+Forretress @ Focus Sash
+Ability: Sturdy
+Level: 50
+Note: 10.5% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Relaxed Nature
+- Spikes
+- Stealth Rock
+- Protect
+- Explosion
+
+Cofagrigus @ Leftovers
+Ability: Mummy
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Trick Room
+- Shadow Ball
+- Will-O-Wisp
+- Destiny Bond
+
+Skarmory-Mega @ Skarmorite
+Ability: Stalwart
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Iron Head
+- Brave Bird
+- Protect
+- Tailwind
+
+Ditto @ Focus Sash
+Ability: Imposter
+Level: 50
+Note: 12.8% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Timid Nature
+- Transform
+
+Ditto @ Focus Sash
+Ability: Imposter
+Level: 50
+Note: 10.5% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Transform
+
+Houndoom-Mega @ Houndoominite
+Ability: Solar Power
+Level: 50
+Note: 45.5% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Dark Pulse
+- Heat Wave
+- Solar Beam
+- Flamethrower
+
+Houndoom-Mega @ Houndoominite
+Ability: Solar Power
+Level: 50
+Note: 10.3% 采用率
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Dark Pulse
+- Heat Wave
+- Solar Beam
+- Flamethrower
+
+Glaceon @ Leftovers
+Ability: Snow Cloak
+Level: 50
+Note: 24.0% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Protect
+- Calm Mind
+
+Glaceon @ Leftovers
+Ability: Snow Cloak
+Level: 50
+Note: 10.3% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Protect
+- Calm Mind
+
+Kleavor @ Choice Scarf
+Ability: Sharpness
+Level: 50
+Note: 39.0% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Stone Axe
+- X-Scissor
+- Close Combat
+- U-turn
+
+Kleavor @ Choice Scarf
+Ability: Sharpness
+Level: 50
+Note: 12.5% 采用率
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Adamant Nature
+- Stone Axe
+- X-Scissor
+- Close Combat
+- U-turn
+
+Heracross-Mega @ Heracronite
+Ability: Skill Link
+Level: 50
+Note: 27.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Blast
+- Protect
+- Close Combat
+- Pin Missile
+
+Heracross-Mega @ Heracronite
+Ability: Skill Link
+Level: 50
+Note: 13.3% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Rock Blast
+- Protect
+- Close Combat
+- Pin Missile
+
+Slowking @ Colbur Berry
+Ability: Regenerator
+Level: 50
+Note: 12.1% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Sassy Nature
+- Trick Room
+- Chilly Reception
+- Psychic
+- Protect
+
+Slowking @ Colbur Berry
+Ability: Regenerator
+Level: 50
+Note: 11.0% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 1 SpA / 1 SpD / 0 Spe
+Sassy Nature
+- Trick Room
+- Chilly Reception
+- Psychic
+- Protect
+
+Torterra @ Leftovers
+Ability: Shell Armor
+Level: 50
+Note: 15.5% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Leech Seed
+- Seed Bomb
+- Wood Hammer
+
+Torterra @ Leftovers
+Ability: Shell Armor
+Level: 50
+Note: 15.0% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Leech Seed
+- Seed Bomb
+- Wood Hammer
+
+Heliolisk @ Magnet
+Ability: Dry Skin
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Thunderbolt
+- Hyper Voice
+- Protect
+- Shed Tail
+
+Ariados @ Focus Sash
+Ability: Sniper
+Level: 50
+Note: 22.0% 采用率
+Points: 32 HP / 0 Atk / 30 Def / 0 SpA / 4 SpD / 0 Spe
+Bold Nature
+- Swords Dance
+- Toxic Thread
+- Leech Life
+- Cross Poison
+
+Ariados @ Focus Sash
+Ability: Sniper
+Level: 50
+Note: 13.1% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 32 SpD / 0 Spe
+Bold Nature
+- Swords Dance
+- Toxic Thread
+- Leech Life
+- Cross Poison
+
+Alakazam-Mega @ Alakazite
+Ability: Trace
+Level: 50
+Note: 33.5% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Speed Swap
+- Psychic
+- Protect
+- Expanding Force
+
+Alakazam-Mega @ Alakazite
+Ability: Trace
+Level: 50
+Note: 16.2% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Speed Swap
+- Psychic
+- Protect
+- Expanding Force
+
+Alakazam-Mega @ Alakazite
+Ability: Trace
+Level: 50
+Note: 11.8% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Speed Swap
+- Psychic
+- Protect
+- Expanding Force
+
+Toucannon @ Chesto Berry
+Ability: Skill Link
+Level: 50
+Note: 19.5% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Acrobatics
+- Bullet Seed
+- Rock Blast
+- Rest
+
+Toucannon @ Chesto Berry
+Ability: Skill Link
+Level: 50
+Note: 12.6% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Brave Nature
+- Acrobatics
+- Bullet Seed
+- Rock Blast
+- Rest
+
+Meowscarada @ Choice Scarf
+Ability: Protean
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Flower Trick
+- Knock Off
+- Triple Axel
+- Thunder Punch
+
+Emboar-Mega @ Emboarite
+Ability: Mold Breaker
+Level: 50
+Note: 16.3% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Flare Blitz
+- Drain Punch
+- Sucker Punch
+
+Emboar-Mega @ Emboarite
+Ability: Mold Breaker
+Level: 50
+Note: 14.8% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Protect
+- Flare Blitz
+- Drain Punch
+- Sucker Punch
+
+Emboar-Mega @ Emboarite
+Ability: Mold Breaker
+Level: 50
+Note: 14.6% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Flare Blitz
+- Drain Punch
+- Sucker Punch
+
+Conkeldurr @ Black Belt
+Ability: Iron Fist
+Level: 50
+Note: 22.1% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Drain Punch
+- Mach Punch
+- Protect
+- Ice Punch
+
+Conkeldurr @ Black Belt
+Ability: Iron Fist
+Level: 50
+Note: 14.6% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Drain Punch
+- Mach Punch
+- Protect
+- Ice Punch
+
+Hippowdon @ Leftovers
+Ability: Sand Stream
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Impish Nature
+- Yawn
+- Slack Off
+- High Horsepower
+- Protect
+
+Espathra @ Focus Sash
+Ability: Speed Boost
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Lumina Crash
+- Helping Hand
+- Trick Room
+
+Luxray @ Magnet
+Ability: Intimidate
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Wild Charge
+- Quick Attack
+- Eerie Impulse
+- Ice Fang
+
+Glalie @ Shell Bell
+Ability: Moody
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Sheer Cold
+- Disable
+- Taunt
+
+Slowbro-Mega @ Slowbronite
+Ability: Shell Armor
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Quiet Nature
+- Trick Room
+- Scald
+- Psychic
+- Protect
+
+Quaquaval @ White Herb
+Ability: Moxie
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Aqua Step
+- Triple Axel
+- Protect
+
+Skeledirge @ Sitrus Berry
+Ability: Unaware
+Level: 50
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Shadow Ball
+- Torch Song
+- Protect
+- Slack Off
+
+Beartic @ Never-Melt Ice
+Ability: Slush Rush
+Level: 50
+Note: 28.5% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Icicle Crash
+- Protect
+- Close Combat
+- Heavy Slam
+
+Beartic @ Never-Melt Ice
+Ability: Slush Rush
+Level: 50
+Note: 12.5% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Icicle Crash
+- Protect
+- Close Combat
+- Heavy Slam
+
+Tauros-Paldea-Aqua @ Mystic Water
+Ability: Intimidate
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Aqua Jet
+- Protect
+- Wave Crash
+
+Bastiodon @ Leftovers
+Ability: Sturdy
+Level: 50
+Note: 21.5% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Wide Guard
+- Body Press
+- Heavy Slam
+- Foul Play
+
+Bastiodon @ Leftovers
+Ability: Sturdy
+Level: 50
+Note: 14.6% 采用率
+Points: 2 HP / 0 Atk / 32 Def / 0 SpA / 32 SpD / 0 Spe
+Relaxed Nature
+- Wide Guard
+- Body Press
+- Heavy Slam
+- Foul Play
+
+Bastiodon @ Leftovers
+Ability: Sturdy
+Level: 50
+Note: 11.6% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Relaxed Nature
+- Wide Guard
+- Body Press
+- Heavy Slam
+- Foul Play
+
+Vanilluxe @ Quick Claw
+Ability: Snow Warning
+Level: 50
+Note: 23.5% 采用率
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Aurora Veil
+- Blizzard
+- Protect
+- Freeze-Dry
+
+Vanilluxe @ Quick Claw
+Ability: Snow Warning
+Level: 50
+Note: 23.0% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Aurora Veil
+- Blizzard
+- Protect
+- Freeze-Dry
+
+Toxicroak @ Shuca Berry
+Ability: Dry Skin
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Fake Out
+- Close Combat
+- Gunk Shot
+- Poison Jab
+
+Bellibolt @ Magnet
+Ability: Electromorphosis
+Level: 50
+Points: 32 HP / 0 Atk / 10 Def / 0 SpA / 24 SpD / 0 Spe
+Calm Nature
+- Parabolic Charge
+- Protect
+- Thunder
+- Thunderbolt
+
+Roserade @ White Herb
+Ability: Poison Point
+Level: 50
+Note: 38.2% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Leaf Storm
+- Leech Seed
+- Sludge Bomb
+- Protect
+
+Roserade @ White Herb
+Ability: Poison Point
+Level: 50
+Note: 17.0% 采用率
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Leaf Storm
+- Leech Seed
+- Sludge Bomb
+- Protect
+
+Roserade @ White Herb
+Ability: Poison Point
+Level: 50
+Note: 10.1% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Leaf Storm
+- Leech Seed
+- Sludge Bomb
+- Protect
+
+Lycanroc @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Note: 44.9% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Slide
+- Endeavor
+- Protect
+- Accelerock
+
+Lycanroc @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Note: 10.3% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Slide
+- Endeavor
+- Protect
+- Accelerock
+
+Medicham-Mega @ Medichamite
+Ability: Pure Power
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Fake Out
+- Close Combat
+- Protect
+- Zen Headbutt
+
+Abomasnow-Mega @ Abomasite
+Ability: Snow Warning
+Level: 50
+Note: 24.1% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Aurora Veil
+- Protect
+- Blizzard
+- Giga Drain
+
+Abomasnow-Mega @ Abomasite
+Ability: Snow Warning
+Level: 50
+Note: 15.5% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Aurora Veil
+- Protect
+- Blizzard
+- Giga Drain
+
+Aurorus @ Leftovers
+Ability: Refrigerate
+Level: 50
+Note: 20.5% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Ancient Power
+- Protect
+- Calm Mind
+
+Aurorus @ Leftovers
+Ability: Refrigerate
+Level: 50
+Note: 13.8% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Ancient Power
+- Protect
+- Calm Mind
+
+Gourgeist @ Focus Sash
+Ability: Frisk
+Level: 50
+Note: 18.2% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Trick-or-Treat
+- Trick Room
+- Explosion
+- Protect
+
+Gourgeist @ Focus Sash
+Ability: Frisk
+Level: 50
+Note: 14.6% 采用率
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 32 SpD / 0 Spe
+Adamant Nature
+- Trick-or-Treat
+- Trick Room
+- Explosion
+- Protect
+
+Umbreon @ Sitrus Berry
+Ability: Inner Focus
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Foul Play
+- Yawn
+- Moonlight
+- Snarl
+
+Garganacl @ Leftovers
+Ability: Purifying Salt
+Level: 50
+Note: 21.0% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Salt Cure
+- Wide Guard
+- Protect
+- Stealth Rock
+
+Garganacl @ Leftovers
+Ability: Purifying Salt
+Level: 50
+Note: 18.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Salt Cure
+- Wide Guard
+- Protect
+- Stealth Rock
+
+Stunfisk @ Bright Powder
+Ability: Sand Veil
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 32 SpD / 0 Spe
+Modest Nature
+- Discharge
+- Scald
+- Mud-Slap
+- Earth Power
+
+Leafeon @ Focus Sash
+Ability: Chlorophyll
+Level: 50
+Note: 12.5% 采用率
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Knock Off
+- Solar Blade
+- Leaf Blade
+
+Leafeon @ Focus Sash
+Ability: Chlorophyll
+Level: 50
+Note: 12.3% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Knock Off
+- Solar Blade
+- Leaf Blade
+
+Pinsir-Mega @ Pinsirite
+Ability: Aerilate
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Body Slam
+- Protect
+- Lunge
+- Close Combat
+
+Tauros-Paldea-Blaze @ Charcoal
+Ability: Anger Point
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Protect
+- Flame Charge
+- Rock Slide
+
+Garbodor @ Sitrus Berry
+Ability: Stench
+Level: 50
+Note: 16.7% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Rock Blast
+- Acid Spray
+- Haze
+- Protect
+
+Garbodor @ Sitrus Berry
+Ability: Stench
+Level: 50
+Note: 12.6% 采用率
+Points: 32 HP / 11 Atk / 17 Def / 0 SpA / 6 SpD / 0 Spe
+Adamant Nature
+- Rock Blast
+- Acid Spray
+- Haze
+- Protect
+
+Espeon @ Choice Scarf
+Ability: Magic Bounce
+Level: 50
+Note: 32.7% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Calm Mind
+- Psyshock
+- Dazzling Gleam
+- Trick
+
+Espeon @ Choice Scarf
+Ability: Magic Bounce
+Level: 50
+Note: 13.8% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Calm Mind
+- Psyshock
+- Dazzling Gleam
+- Trick
+
+Noivern @ Focus Sash
+Ability: Infiltrator
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Psychic
+- Dark Pulse
+- Air Slash
+
+Mr. Rime @ Colbur Berry
+Ability: Ice Body
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Freeze-Dry
+- Blizzard
+- Dazzling Gleam
+- Fake Out
+
+Lycanroc-Midnight @ Choice Scarf
+Ability: No Guard
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Slide
+- Stone Edge
+- Close Combat
+- Play Rough
+
+Salazzle @ Focus Sash
+Ability: Corrosion
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Flamethrower
+- Sludge Bomb
+- Will-O-Wisp
+
+Audino-Mega @ Audinite
+Ability: Healer
+Level: 50
+Points: 22 HP / 0 Atk / 1 Def / 30 SpA / 13 SpD / 0 Spe
+Bold Nature
+- Ally Switch
+- Hyper Voice
+- Helping Hand
+- Trick Room
+
+Aromatisse @ Focus Sash
+Ability: Aroma Veil
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Trick Room
+- Moonblast
+- Protect
+- Light Screen
+
+Toxapex @ Leftovers
+Ability: Regenerator
+Level: 50
+Note: 17.8% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Bold Nature
+- Baneful Bunker
+- Toxic
+- Gunk Shot
+- Liquidation
+
+Toxapex @ Leftovers
+Ability: Regenerator
+Level: 50
+Note: 11.8% 采用率
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Baneful Bunker
+- Toxic
+- Gunk Shot
+- Liquidation
+
+Rotom-Fan @ Choice Scarf
+Ability: Levitate
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Discharge
+- Dark Pulse
+- Air Slash
+- Will-O-Wisp
+
+Lycanroc-Dusk @ Choice Scarf
+Ability: Tough Claws
+Level: 50
+Note: 55.2% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Play Rough
+- Accelerock
+- Rock Slide
+
+Lycanroc-Dusk @ Choice Scarf
+Ability: Tough Claws
+Level: 50
+Note: 13.8% 采用率
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Play Rough
+- Accelerock
+- Rock Slide
+
+Lycanroc-Dusk @ Choice Scarf
+Ability: Tough Claws
+Level: 50
+Note: 10.8% 采用率
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Play Rough
+- Accelerock
+- Rock Slide
+
+Meowstic-M-Mega @ Meowsticite
+Ability: Trace
+Level: 50
+Note: 38.5% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Psychic
+- Thunderbolt
+- Helping Hand
+
+Meowstic-M-Mega @ Meowsticite
+Ability: Trace
+Level: 50
+Note: 13.8% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Protect
+- Psychic
+- Thunderbolt
+- Helping Hand
+
+Meowstic-M-Mega @ Meowsticite
+Ability: Trace
+Level: 50
+Note: 10.6% 采用率
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Psychic
+- Thunderbolt
+- Helping Hand
+
+Slowbro-Galar @ Quick Claw
+Ability: Quick Draw
+Level: 50
+Note: 22.2% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Shell Side Arm
+- Calm Mind
+- Slack Off
+- Stored Power
+
+Slowbro-Galar @ Quick Claw
+Ability: Quick Draw
+Level: 50
+Note: 10.1% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Shell Side Arm
+- Calm Mind
+- Slack Off
+- Stored Power
+
+Pangoro @ Choice Scarf
+Ability: Scrappy
+Level: 50
+Note: 16.3% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Darkest Lariat
+- Close Combat
+- Rock Slide
+- Headlong Rush
+
+Pangoro @ Choice Scarf
+Ability: Scrappy
+Level: 50
+Note: 14.1% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Darkest Lariat
+- Close Combat
+- Rock Slide
+- Headlong Rush
+
+Reuniclus @ Focus Sash
+Ability: Regenerator
+Level: 50
+Note: 19.7% 采用率
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Trick Room
+- Protect
+- Helping Hand
+- Psyshock
+
+Reuniclus @ Focus Sash
+Ability: Regenerator
+Level: 50
+Note: 13.8% 采用率
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Trick Room
+- Protect
+- Helping Hand
+- Psyshock
+
+Avalugg-Hisui @ Lum Berry
+Ability: Sturdy
+Level: 50
+Note: 24.1% 采用率
+Points: 2 HP / 32 Atk / 32 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Rock Slide
+- Mountain Gale
+- Body Press
+- Protect
+
+Avalugg-Hisui @ Lum Berry
+Ability: Sturdy
+Level: 50
+Note: 14.3% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Rock Slide
+- Mountain Gale
+- Body Press
+- Protect
+
+Liepard @ Chople Berry
+Ability: Prankster
+Level: 50
+Note: 16.7% 采用率
+Points: 32 HP / 0 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Encore
+- Swagger
+- Throat Chop
+
+Liepard @ Chople Berry
+Ability: Prankster
+Level: 50
+Note: 11.5% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Fake Out
+- Encore
+- Swagger
+- Throat Chop
+
+Tauros-Paldea-Combat @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Protect
+- Iron Head
+- Wild Charge
+
+Florges @ Focus Sash
+Ability: Symbiosis
+Level: 50
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Protect
+- Wish
+- Moonblast
+- Alluring Voice
+
+Pidgeot-Mega @ Pidgeotite
+Ability: No Guard
+Level: 50
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Heat Wave
+- Air Slash
+- Brave Bird
+- Steel Wing
+
+Rotom @ Magnet
+Ability: Levitate
+Level: 50
+Note: 32.0% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Thunderbolt
+- Shadow Ball
+- Hyper Voice
+- Volt Switch
+
+Rotom @ Magnet
+Ability: Levitate
+Level: 50
+Note: 15.8% 采用率
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Modest Nature
+- Thunderbolt
+- Shadow Ball
+- Hyper Voice
+- Volt Switch
+
+Goodra @ Leftovers
+Ability: Gooey
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Dragon Pulse
+- Flamethrower
+- Ice Beam
+- Protect
+
+Mudsdale @ Yache Berry
+Ability: Stamina
+Level: 50
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Body Press
+- Protect
+- Stomping Tantrum
+- Heavy Slam
+
+Absol-Mega @ Absolite
+Ability: Magic Bounce
+Level: 50
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Knock Off
+- Protect
+- Close Combat
+- X-Scissor
+
+Spiritomb @ Sitrus Berry
+Ability: Pressure
+Level: 50
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Sassy Nature
+- Hex
+- Will-O-Wisp
+- Pain Split
+- Trick Room
+
+Sandaconda @ Leftovers
+Ability: Shed Skin
+Level: 50
+Points: 24 HP / 0 Atk / 0 Def / 0 SpA / 32 SpD / 10 Spe
+Careful Nature
+- High Horsepower
+- Protect
+- Iron Head
+- Glare
+
+Banette-Mega @ Banettite
+Ability: Prankster
+Level: 50
+Note: 20.2% 采用率
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Encore
+- Poltergeist
+- Shadow Sneak
+
+Banette-Mega @ Banettite
+Ability: Prankster
+Level: 50
+Note: 12.8% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Encore
+- Poltergeist
+- Shadow Sneak
+
+Trevenant @ Sitrus Berry
+Ability: Harvest
+Level: 50
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Earthquake
+- Forest's Curse
+- Growth
+- Wood Hammer
+
+Decidueye @ Leftovers
+Ability: Overgrow
+Level: 50
+Note: 19.1% 采用率
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Shadow Sneak
+- Giga Drain
+- Facade
+- Haze
+
+Decidueye @ Leftovers
+Ability: Overgrow
+Level: 50
+Note: 17.2% 采用率
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Shadow Sneak
+- Giga Drain
+- Facade
+- Haze
+
+Typhlosion @ Charcoal
+Ability: Flash Fire
+Level: 50
+Note: 50.7% 采用率
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Lava Plume
+- Eruption
+- Solar Beam
+- Protect
+
+Typhlosion @ Charcoal
+Ability: Flash Fire
+Level: 50
+Note: 13.3% 采用率
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Lava Plume
+- Eruption
+- Solar Beam
+- Protect
+
+Flareon @ Shuca Berry
+Ability: Flash Fire
+Level: 50
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Lava Plume
+- Wish
+- Copycat
+- Flame Charge

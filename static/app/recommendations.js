@@ -38,9 +38,27 @@ function sortRecommendations(left, right) {
   return (
     right.recommendationScore - left.recommendationScore
     || right.breakdown.focus - left.breakdown.focus
+    || right.recommendationFloorPenalty - left.recommendationFloorPenalty
     || right.coveredThreats.length - left.coveredThreats.length
     || right.breakdown.quality - left.breakdown.quality
   );
+}
+
+function applyFocusTypeFilter(recommendations = [], focusType = "") {
+  if (!focusType) {
+    return recommendations.sort(sortRecommendations);
+  }
+  const matching = recommendations
+    .filter((entry) => entry.breakdown.focus > 0)
+    .sort(sortRecommendations);
+  const fallback = recommendations
+    .filter((entry) => entry.breakdown.focus <= 0)
+    .sort(sortRecommendations)
+    .map((entry) => ({...entry, recommendationFocusFallback: true}));
+  if (matching.length >= 5) {
+    return matching;
+  }
+  return [...matching, ...fallback];
 }
 
 export function recommendConfigs(library, team, speedTiers, language = "zh", options = {}) {
@@ -50,7 +68,7 @@ export function recommendConfigs(library, team, speedTiers, language = "zh", opt
   const preferences = normalizeRecommendationPreferences(options.preferences);
   const weights = options.weights || {};
   const focusType = options.focusType || "";
-  const analysis = analyzeTeam(team, speedTiers, language, library, preferences);
+  const analysis = analyzeTeam(team, speedTiers, language, library, preferences, {fieldState: options.fieldState});
   const currentSpecies = new Set(team.map((config) => config.speciesId));
   const dismissedKeys = new Set(options.dismissedKeys || []);
   const megaCount = team.filter((member) => isMegaConfig(member)).length;
@@ -73,8 +91,8 @@ export function recommendConfigs(library, team, speedTiers, language = "zh", opt
     weights,
     focusType,
   ).filter((candidate) => !(megaCount >= MAX_TEAM_MEGAS && isMegaConfig(candidate)));
-  return [...configuredRecommendations, ...templateRecommendations]
-    .filter((entry) => !dismissedKeys.has(entry.recommendationKey))
-    .sort(sortRecommendations)
+  const activeRecommendations = [...configuredRecommendations, ...templateRecommendations]
+    .filter((entry) => !dismissedKeys.has(entry.recommendationKey));
+  return applyFocusTypeFilter(activeRecommendations, focusType)
     .slice(0, 12);
 }

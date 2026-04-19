@@ -132,6 +132,10 @@
   flex: 0 0 auto;
 }
 
+.matchup-breakdown-row {
+  margin-top: 6px;
+}
+
 .matchup-lead-body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -165,6 +169,64 @@
 
 .matchup-board-panel {
   overflow: hidden;
+}
+
+.matchup-board-matrix-panel {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.matchup-board-matrix {
+  display: grid;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.matchup-board-matrix-row {
+  display: grid;
+  grid-template-columns: 38px repeat(6, minmax(42px, 1fr));
+  gap: 6px;
+  min-width: 320px;
+}
+
+.matchup-board-matrix-header,
+.matchup-board-matrix-cell,
+.matchup-board-matrix-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border-radius: 12px;
+}
+
+.matchup-board-matrix-header,
+.matchup-board-matrix-corner {
+  border: 1px solid rgba(138, 122, 106, 0.16);
+  background: rgba(244, 247, 251, 0.92);
+}
+
+.matchup-board-matrix-cell {
+  border: 1px solid rgba(138, 122, 106, 0.12);
+  font-family: var(--mono-font);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.matchup-board-matrix-cell.neutral {
+  color: var(--ink);
+  background: rgba(244, 247, 251, 0.92);
+}
+
+.matchup-board-matrix-cell.positive {
+  color: #1e5e46;
+  background: rgba(182, 226, 202, calc(0.18 + var(--matchup-cell-strength, 0) * 0.62));
+}
+
+.matchup-board-matrix-cell.negative {
+  color: #8b3b35;
+  background: rgba(241, 189, 183, calc(0.18 + var(--matchup-cell-strength, 0) * 0.62));
 }
 
 .matchup-board-layout {
@@ -334,6 +396,73 @@
   color: var(--ink);
 }
 
+.matchup-board-hit-unknown {
+  color: var(--muted);
+  background: rgba(244, 247, 251, 0.92);
+}
+
+.matchup-board-hit-ally-zero,
+.matchup-board-hit-opponent-strong {
+  color: #7f1d1d;
+  background: #fecaca;
+  border-color: #f87171;
+}
+
+.matchup-board-hit-ally-quarter {
+  color: #9a3412;
+  background: #fed7aa;
+  border-color: #fb923c;
+}
+
+.matchup-board-hit-ally-half {
+  color: #9a3412;
+  background: #fdba74;
+  border-color: #f97316;
+}
+
+.matchup-board-hit-ally-neutral,
+.matchup-board-hit-opponent-neutral {
+  color: #4b5563;
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.matchup-board-hit-ally-super {
+  color: #166534;
+  background: #bbf7d0;
+  border-color: #4ade80;
+}
+
+.matchup-board-hit-ally-strong {
+  color: #0b4d87;
+  background: #cfe7ff;
+  border-color: #7fb6e8;
+}
+
+.matchup-board-hit-opponent-zero {
+  color: #0b4d87;
+  background: #cfe7ff;
+  border-color: #7fb6e8;
+}
+
+.matchup-board-hit-opponent-quarter {
+  color: #166534;
+  background: #bbf7d0;
+  border-color: #4ade80;
+}
+
+.matchup-board-hit-opponent-half {
+  color: #166534;
+  background: #86efac;
+  border-color: #22c55e;
+}
+
+.matchup-board-hit-opponent-super {
+  color: #9a3412;
+  background: #fed7aa;
+  border-color: #fb923c;
+}
+
 .matchup-board-move-list {
   display: grid;
   gap: 4px;
@@ -440,12 +569,13 @@
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 2px 4px;
-  border-radius: 999px;
+  padding: 3px 6px;
+  border-radius: 12px;
   font-family: var(--mono-font);
   font-size: 11px;
   color: #2f6ea3;
   background: rgba(213, 230, 243, 0.92);
+  gap: 5px;
 }
 
 .matchup-board-speed-side-opponent .matchup-board-speed-number {
@@ -453,7 +583,12 @@
   background: rgba(245, 224, 221, 0.95);
 }
 
-.matchup-board-speed-number-top {
+.matchup-board-speed-mode {
+  font-size: 10px;
+  opacity: 0.78;
+}
+
+.matchup-board-speed-number strong {
   font-weight: 700;
 }
 

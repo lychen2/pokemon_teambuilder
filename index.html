@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poke Type Static Builder</title>
     <link rel="icon" type="image/png" href="./icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <meta name="theme-color" content="#1b2130">
     <link rel="stylesheet" href="./static/css/base.css">
     <link rel="stylesheet" href="./static/css/layout.css">
     <link rel="stylesheet" href="./static/css/shell.css">
@@ -117,6 +119,7 @@
                   <button id="clear-team-import-btn" type="button" class="ghost-button" data-i18n="team.importClear">清空输入</button>
                 </div>
                 <p id="team-import-feedback" class="muted" data-i18n="team.importEmpty">未导入队伍代码。</p>
+                <div id="team-import-feedback-details" class="import-feedback-details" hidden></div>
               </div>
             </div>
           </section>
@@ -133,15 +136,19 @@
             </p>
             <textarea id="custom-library-input" rows="10" placeholder="Incineroar @ Safety Goggles&#10;Ability: Intimidate&#10;Level: 50&#10;Tera Type: Grass&#10;EVs: 236 HP / 4 Atk / 116 Def / 4 SpD / 148 Spe&#10;Impish Nature&#10;- Fake Out&#10;- Parting Shot&#10;- Flare Blitz&#10;- Knock Off" data-i18n-placeholder="controls.importPlaceholder"></textarea>
             <div class="action-row">
-              <button id="load-ag-preset-btn" type="button" class="ghost-button" data-i18n="controls.loadAgPreset">载入 AG 预设</button>
+              <button id="load-default-preset-btn" type="button" class="ghost-button" data-i18n="controls.loadDefaultPreset">载入默认预设</button>
               <button id="import-custom-btn" type="button" data-i18n="controls.importReplace">覆盖导入</button>
               <button id="append-custom-btn" type="button" class="ghost-button" data-i18n="controls.importAppend">追加导入</button>
               <button id="import-file-btn" type="button" class="ghost-button" data-i18n="controls.importFile">文件导入</button>
               <button id="export-library-btn" type="button" class="ghost-button" data-i18n="controls.exportLibrary">导出配置库</button>
+              <button id="export-full-state-btn" type="button" class="ghost-button" data-i18n="controls.exportFullState">导出全部状态</button>
+              <button id="import-full-state-btn" type="button" class="ghost-button" data-i18n="controls.importFullState">导入全部状态</button>
               <button id="clear-custom-btn" type="button" class="ghost-button" data-i18n="controls.clearLibrary">清空配置库</button>
             </div>
             <input id="library-file-input" type="file" accept=".txt,.team,.pokelib,text/plain" hidden>
+            <input id="full-state-file-input" type="file" accept=".json,.poketype.json,application/json" hidden>
             <p id="import-feedback" class="muted" data-i18n="controls.importEmpty">未导入任何自定义配置。</p>
+            <div id="import-feedback-details" class="import-feedback-details" hidden></div>
           </details>
         </section>
 
@@ -188,7 +195,10 @@
               <section class="subpanel matchup-opponent-panel">
                 <div class="section-head">
                   <h3 data-i18n="matchup.opponentTitle">对面队伍</h3>
-                  <button id="clear-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.clearOpponent">清空对面</button>
+                  <div class="action-row">
+                    <button id="auto-generate-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.autoFill">自动填充 6 只</button>
+                    <button id="clear-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.clearOpponent">清空对面</button>
+                  </div>
                 </div>
                 <p class="muted" data-i18n="matchup.opponentCopy">从当前配置库里快速勾出对面的 6 只宝可梦。</p>
                 <div id="opponent-team-list" class="team-grid matchup-team-grid"></div>
@@ -263,6 +273,7 @@
         <p class="muted modal-copy" data-i18n="editor.copy">直接修改这条配置的 Showdown 文本并保存。若同时保留 `EVs:` 和 `Points:`，会优先按 `Points:` 读取。</p>
         <textarea id="config-editor-input" rows="16"></textarea>
         <div class="action-row modal-actions">
+          <button id="switch-guided-editor-mode-btn" type="button" class="ghost-button" data-i18n="editor.switchToGuided">切回表单编辑</button>
           <button id="save-config-edit-btn" type="button" data-i18n="editor.save">保存修改</button>
           <button type="button" class="ghost-button" data-close-editor data-i18n="editor.cancel">取消</button>
         </div>
@@ -323,8 +334,43 @@
 
         <p id="guided-config-feedback" class="muted"></p>
         <div class="action-row modal-actions">
+          <button id="switch-config-editor-mode-btn" type="button" class="ghost-button" data-i18n="editor.switchToCode" hidden>切换到代码编辑</button>
           <button id="save-guided-config-btn" type="button" data-i18n="builder.save">加入配置库</button>
           <button type="button" class="ghost-button" data-close-guided-config data-i18n="editor.cancel">取消</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+    <div id="command-palette-modal" class="modal-shell" hidden>
+      <div class="modal-backdrop" data-close-palette></div>
+      <section class="modal-panel command-palette-panel" aria-modal="true" role="dialog" aria-labelledby="command-palette-title">
+        <div class="command-palette-header">
+          <h2 id="command-palette-title" class="visually-hidden" data-i18n="palette.title">命令面板</h2>
+          <input id="command-palette-input" type="search" autocomplete="off" data-i18n-placeholder="palette.placeholder" placeholder="输入命令名称或关键字…">
+        </div>
+        <div id="command-palette-list" class="command-palette-list"></div>
+      </section>
+    </div>
+
+    <div id="shortcuts-help-modal" class="modal-shell" hidden>
+      <div class="modal-backdrop" data-close-shortcuts></div>
+      <section class="modal-panel" aria-modal="true" role="dialog" aria-labelledby="shortcuts-help-title">
+        <div class="section-head">
+          <h2 id="shortcuts-help-title" data-i18n="shortcuts.title">键盘快捷键</h2>
+          <button type="button" class="ghost-button modal-close-button" data-close-shortcuts data-i18n="editor.cancel">取消</button>
+        </div>
+        <p class="muted modal-copy" data-i18n="shortcuts.copy">以下快捷键可以随时使用；在输入框中时不会触发。</p>
+        <div class="shortcuts-list">
+          <div class="shortcuts-row"><kbd>1</kbd>–<kbd>6</kbd><span data-i18n="shortcuts.switchView">切换主视图（配置库 / 分析 / 对局 / 推荐 / 伤害 / 速度）</span></div>
+          <div class="shortcuts-row"><kbd>/</kbd><span data-i18n="shortcuts.focusSearch">聚焦当前视图的搜索框</span></div>
+          <div class="shortcuts-row"><kbd>?</kbd><span data-i18n="shortcuts.openHelp">打开快捷键速查</span></div>
+          <div class="shortcuts-row"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd><span data-i18n="shortcuts.openPalette">打开命令面板</span></div>
+          <div class="shortcuts-row"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>S</kbd><span data-i18n="shortcuts.saveTeam">保存当前队伍（需先输入名称）</span></div>
+          <div class="shortcuts-row"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Z</kbd><span data-i18n="shortcuts.undo">撤销</span></div>
+          <div class="shortcuts-row"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd><span data-i18n="shortcuts.redo">重做</span></div>
+          <div class="shortcuts-row"><kbd>Esc</kbd><span data-i18n="shortcuts.closeModal">关闭弹窗</span></div>
         </div>
       </section>
     </div>

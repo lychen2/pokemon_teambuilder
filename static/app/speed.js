@@ -1,8 +1,13 @@
+import {normalizeName} from "./utils.js";
+
 const PLUS_ONE_SPEED_ABILITIES = new Set([
   "Quick Feet",
   "Speed Boost",
 ]);
 const CHOICE_SCARF = "Choice Scarf";
+const IRON_BALL = "Iron Ball";
+const CHOICE_SCARF_ID = normalizeName(CHOICE_SCARF);
+const IRON_BALL_ID = normalizeName(IRON_BALL);
 
 const CONDITIONAL_PLUS_ONE_SPEED_ABILITIES = new Set([
   "Protosynthesis",
@@ -27,6 +32,26 @@ function getMoveSpeedBoostStage(move = {}) {
     Number(move.selfBoost?.boosts?.spe || 0),
     Number(move.secondary?.self?.boosts?.spe || 0),
   );
+}
+
+function getHeldItemSpeedData(item, stats = {}) {
+  const speed = Number(stats.spe || 0);
+  const itemId = normalizeName(item);
+  if (itemId === CHOICE_SCARF_ID) {
+    return {
+      speed: Math.floor(speed * 1.5),
+      source: CHOICE_SCARF,
+      mode: "scarf",
+    };
+  }
+  if (itemId === IRON_BALL_ID) {
+    return {
+      speed: Math.floor(speed * 0.5),
+      source: IRON_BALL,
+      mode: "ironball",
+    };
+  }
+  return null;
 }
 
 export function canAbilityBoostSpeed(ability, stats = {}) {
@@ -82,12 +107,17 @@ export function getDoubleSpeedData({ability, stats = {}}) {
   };
 }
 
+export function getHeldItemAdjustedSpeed({item, stats = {}}) {
+  return getHeldItemSpeedData(item, stats)?.speed ?? Number(stats.spe || 0);
+}
+
 export function getChoiceScarfSpeedData({item, stats = {}}) {
-  if (item !== CHOICE_SCARF) {
+  const heldItemSpeed = getHeldItemSpeedData(item, stats);
+  if (heldItemSpeed?.mode !== "scarf") {
     return null;
   }
   return {
-    speed: Math.floor(Number(stats.spe || 0) * 1.5),
-    sources: [CHOICE_SCARF],
+    speed: heldItemSpeed.speed,
+    sources: [heldItemSpeed.source],
   };
 }

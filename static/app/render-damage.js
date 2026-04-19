@@ -1,6 +1,7 @@
 import {TYPE_ORDER} from "./constants.js";
 import {translateDamageDescription, translateDamageKoText} from "./damage-i18n.js";
 import {t} from "./i18n.js";
+import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {getTypeLabel} from "./utils.js";
 
 const SIDE_TOGGLE_FIELDS = [
@@ -307,21 +308,21 @@ function speedVerdictMarkup(state, summary, attacker, defender, language) {
   `;
 }
 
-function adjustCardMarkup(side, entry, state, language) {
+function adjustCardMarkup(side, entry, state, language, mode = "offense") {
   if (!entry) {
     return "";
   }
   const title = getLocalizedSpeciesName(state, entry);
-  if (side === "attacker") {
+  if (mode === "offense") {
     return `
       <div class="damage-adjust-card">
         <div class="damage-adjust-card-title">${escapeHtml(title)}</div>
-        ${metaControlMarkup("attacker", state.damage.meta.attacker, language)}
-        ${teraTypeMarkup("attacker", state.damage.teraTypes?.attacker || entry.config?.teraType || entry.config?.types?.[0] || "", language)}
-        ${boostGridMarkup("attacker", state.damage.boosts.attacker, language)}
+        ${metaControlMarkup(side, state.damage.meta?.[side], language)}
+        ${teraTypeMarkup(side, state.damage.teraTypes?.[side] || entry.config?.teraType || entry.config?.types?.[0] || "", language)}
+        ${boostGridMarkup(side, state.damage.boosts?.[side], language)}
         <div class="damage-slider-list">
-          ${sliderMarkup({key: "attackerAtk", label: t(language, "damage.attackerAtk"), value: state.damage.overrides.attackerAtk})}
-          ${sliderMarkup({key: "attackerSpa", label: t(language, "damage.attackerSpa"), value: state.damage.overrides.attackerSpa})}
+          ${sliderMarkup({key: `${side}Atk`, label: t(language, "damage.pointAtk"), value: state.damage.overrides[`${side}Atk`]})}
+          ${sliderMarkup({key: `${side}Spa`, label: t(language, "damage.pointSpa"), value: state.damage.overrides[`${side}Spa`]})}
         </div>
       </div>
     `;
@@ -329,13 +330,13 @@ function adjustCardMarkup(side, entry, state, language) {
   return `
     <div class="damage-adjust-card">
       <div class="damage-adjust-card-title">${escapeHtml(title)}</div>
-      ${metaControlMarkup("defender", state.damage.meta.defender, language)}
-      ${teraTypeMarkup("defender", state.damage.teraTypes?.defender || entry.config?.teraType || entry.config?.types?.[0] || "", language)}
-      ${boostGridMarkup("defender", state.damage.boosts.defender, language)}
+      ${metaControlMarkup(side, state.damage.meta?.[side], language)}
+      ${teraTypeMarkup(side, state.damage.teraTypes?.[side] || entry.config?.teraType || entry.config?.types?.[0] || "", language)}
+      ${boostGridMarkup(side, state.damage.boosts?.[side], language)}
       <div class="damage-slider-list">
-        ${sliderMarkup({key: "defenderHp", label: t(language, "damage.defenderHp"), value: state.damage.overrides.defenderHp})}
-        ${sliderMarkup({key: "defenderDef", label: t(language, "damage.defenderDef"), value: state.damage.overrides.defenderDef})}
-        ${sliderMarkup({key: "defenderSpd", label: t(language, "damage.defenderSpd"), value: state.damage.overrides.defenderSpd})}
+        ${sliderMarkup({key: `${side}Hp`, label: t(language, "damage.pointHp"), value: state.damage.overrides[`${side}Hp`]})}
+        ${sliderMarkup({key: `${side}Def`, label: t(language, "damage.pointDef"), value: state.damage.overrides[`${side}Def`]})}
+        ${sliderMarkup({key: `${side}Spd`, label: t(language, "damage.pointSpd"), value: state.damage.overrides[`${side}Spd`]})}
       </div>
     </div>
   `;
@@ -414,7 +415,28 @@ function pickerPanelMarkup(side, slotIndex, picker, language) {
   `;
 }
 
-function moveSummaryMarkup(slotMoveNames = [], summaryMoves = [], language, tone = "", side = "", picker = null) {
+function damageBarMarkup(summaryMove, defenderHpPercent) {
+  const maxPct = Number(summaryMove?.maxPercent || 0);
+  if (!maxPct) return "";
+  const minPct = Number(summaryMove?.minPercent || 0);
+  const cappedMin = Math.max(0, Math.min(100, minPct));
+  const cappedMax = Math.max(cappedMin, Math.min(100, maxPct));
+  const tone = maxPct >= 100 ? "lethal" : maxPct >= 50 ? "bad" : maxPct >= 25 ? "warn" : "good";
+  const hp = Math.max(0, Math.min(100, Number(defenderHpPercent || 0)));
+  const width = Math.max(2, cappedMax - cappedMin);
+  const label = minPct === maxPct ? `${minPct}%` : `${minPct}% – ${maxPct}%`;
+  return `
+    <div class="damage-bar" data-damage-tone="${tone}" title="${escapeHtml(label)}">
+      <div class="damage-bar-track">
+        <span class="damage-bar-fill" style="left:${cappedMin}%; width:${width}%;"></span>
+        <span class="damage-bar-hp" style="left:${hp}%;"></span>
+      </div>
+      <strong class="damage-bar-value">${escapeHtml(label)}</strong>
+    </div>
+  `;
+}
+
+function moveSummaryMarkup(slotMoveNames = [], summaryMoves = [], language, tone = "", side = "", picker = null, defenderHpPercent = 100) {
   return `
     <div class="stack-list damage-move-list">
       ${[0, 1, 2, 3].map((slotIndex) => {
@@ -425,6 +447,7 @@ function moveSummaryMarkup(slotMoveNames = [], summaryMoves = [], language, tone
         const title = hasMove ? (summaryMove?.moveName || slotMoveName) : t(language, "damage.moveSlotEmpty");
         const bodyDamage = hasMove ? translateDamageDescription(language, summaryMove?.damageText || t(language, "damage.noDamageText")) : "";
         const bodyKo = hasMove ? translateDamageKoText(language, summaryMove?.koText || "") : "";
+        const barMarkup = hasMove ? damageBarMarkup(summaryMove, defenderHpPercent) : "";
         const cardClasses = ["entry-card", "compact", "damage-move-card"];
         if (tone) cardClasses.push(tone);
         if (isOpen) cardClasses.push("damage-move-card-editing");
@@ -442,6 +465,7 @@ function moveSummaryMarkup(slotMoveNames = [], summaryMoves = [], language, tone
               <div class="entry-main">
                 <div class="entry-title"><strong>${escapeHtml(title)}</strong></div>
                 ${bodyDamage ? `<p class="muted">${escapeHtml(bodyDamage)}</p>` : ""}
+                ${barMarkup}
                 ${bodyKo ? `<p class="muted">${escapeHtml(bodyKo)}</p>` : ""}
               </div>
             </button>
@@ -501,7 +525,7 @@ export function renderDamageView(state) {
   const pairTitle = selectedAttacker && selectedDefender
     ? `${getLocalizedSpeciesName(state, selectedAttacker)} ↔ ${getLocalizedSpeciesName(state, selectedDefender)}`
     : t(language, "damage.summaryEmpty");
-  document.getElementById("damage-controls").innerHTML = `
+  setInnerHTMLIfChanged(document.getElementById("damage-controls"), `
     <div class="analysis-detail-grid damage-control-grid">
       <label><span>${t(language, "damage.attackerLabel")}</span><select id="damage-attacker-select">${optionMarkup(state.damageAttackers, state.damage.attackerId, t(language, "damage.attackerPlaceholder"))}</select></label>
       <label><span>${t(language, "damage.attackerStatusLabel")}</span>${selectMarkup("statuses.attacker", statusOptions(language), state.damage.statuses.attacker)}</label>
@@ -519,16 +543,16 @@ export function renderDamageView(state) {
       <button type="button" data-sync-damage-workspace ${state.damage.loading ? 'disabled="disabled"' : ""}>${t(language, "damage.syncButton")}</button>
     </div>
     <p class="muted">${t(language, "damage.controlsHelp")}</p>
-  `;
-  document.getElementById("damage-field").innerHTML = `
+  `);
+  setInnerHTMLIfChanged(document.getElementById("damage-field"), `
     <div class="section-head section-head-tight"><div><h3>${t(language, "damage.fieldTitle")}</h3><p class="muted">${t(language, "damage.fieldHelp")}</p></div></div>
     <div class="damage-field-grid">
       ${sideFieldMarkup(state.damage.field.attacker, "attacker", language)}
       ${sideFieldMarkup(state.damage.field.defender, "defender", language)}
       ${independentFieldMarkup(state.damage.field, language)}
     </div>
-  `;
-  document.getElementById("damage-summary").innerHTML = `
+  `);
+  setInnerHTMLIfChanged(document.getElementById("damage-summary"), `
     <div class="section-head section-head-tight">
       <div><h3>${t(language, "damage.summaryTitle")}</h3><p class="muted">${escapeHtml(pairTitle)}</p></div>
       ${state.damage.loading ? `<span class="source-tag">${t(language, "damage.loading")}</span>` : ""}
@@ -538,8 +562,8 @@ export function renderDamageView(state) {
     ${selectedAttacker && selectedDefender ? `
       <section class="damage-adjust-panel">
         <div class="damage-adjust-grid">
-          ${adjustCardMarkup(primarySide, primaryEntry, state, language)}
-          ${adjustCardMarkup(secondarySide, secondaryEntry, state, language)}
+          ${adjustCardMarkup(primarySide, primaryEntry, state, language, "offense")}
+          ${adjustCardMarkup(secondarySide, secondaryEntry, state, language, "defense")}
         </div>
       </section>
     ` : ""}
@@ -560,9 +584,9 @@ export function renderDamageView(state) {
     )}
     ${selectedAttacker && selectedDefender ? `
       <div class="damage-summary-columns">
-        <section><div class="analysis-label">${primaryTitle}</div>${moveSummaryMarkup(primarySlots, primaryMoves || [], language, "active", primarySide, picker)}</section>
-        <section><div class="analysis-label">${secondaryTitle}</div>${moveSummaryMarkup(secondarySlots, secondaryMoves || [], language, "", secondarySide, picker)}</section>
+        <section><div class="analysis-label">${primaryTitle}</div>${moveSummaryMarkup(primarySlots, primaryMoves || [], language, "active", primarySide, picker, state.damage.healthPercent?.[primarySide === "attacker" ? "defender" : "attacker"])}</section>
+        <section><div class="analysis-label">${secondaryTitle}</div>${moveSummaryMarkup(secondarySlots, secondaryMoves || [], language, "", secondarySide, picker, state.damage.healthPercent?.[secondarySide === "attacker" ? "defender" : "attacker"])}</section>
       </div>
     ` : ""}
-  `;
+  `);
 }

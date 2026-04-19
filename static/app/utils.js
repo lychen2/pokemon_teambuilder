@@ -234,3 +234,13 @@ export function uniqueStrings(values) {
 export function formatStatLine(stats = {}) {
   return `HP ${stats.hp || 0} / Atk ${stats.atk || 0} / Def ${stats.def || 0} / SpA ${stats.spa || 0} / SpD ${stats.spd || 0} / Spe ${stats.spe || 0}`;
 }
+
+export function isTypingTarget(target) {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+  if (target.isContentEditable) {
+    return true;
+  }
+  return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+}

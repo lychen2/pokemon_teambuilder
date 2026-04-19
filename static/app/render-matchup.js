@@ -1,5 +1,6 @@
 import {t} from "./i18n.js";
 import {filterOpponentLibrary, getOpponentVariantCount} from "./matchup-selection.js";
+import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderMatchupBoard} from "./render-matchup-board.js";
 import {renderRecommendationListOnly} from "./render-recommendations.js";
 import {spriteMarkup} from "./sprites.js";
@@ -152,6 +153,7 @@ function configPickerMarkup(entry, state, variantCount, language) {
 function opponentCardMarkup(entry, state) {
   const language = state.language;
   const variantCount = getOpponentVariantCount(entry);
+  const pinLabel = entry.pinned ? t(language, "matchup.unpin") : t(language, "matchup.pin");
   return `
     <article class="team-card">
       <div class="entry-main">
@@ -159,9 +161,11 @@ function opponentCardMarkup(entry, state) {
         <div class="entry-meta">${typePills(entry.types, language)}</div>
         <p class="muted">${buildConfigSummary(entry.labels)}</p>
         <p class="muted">${buildSpeedSummary(entry, language)}</p>
+        ${entry.pinned ? `<div class="entry-tags"><span class="source-tag">${t(language, "matchup.pinned")}</span></div>` : ""}
         ${configPickerMarkup(entry, state, variantCount, language)}
       </div>
       <div class="team-card-actions">
+        <button type="button" class="ghost-button mini-action" data-toggle-opponent-pin="${entry.speciesId}">${pinLabel}</button>
         <button type="button" class="ghost-button mini-action" data-open-damage-defender="${entry.speciesId}">${t(language, "team.damage")}</button>
         <button type="button" class="ghost-button danger-button mini-action" data-remove-opponent-species="${entry.speciesId}">${t(language, "team.remove")}</button>
       </div>
@@ -170,10 +174,11 @@ function opponentCardMarkup(entry, state) {
 }
 
 function savedOpponentCardMarkup(entry, language) {
+  const openMeta = entry.openCount ? `<span class="source-tag">${t(language, "matchup.savedOpened", {count: entry.openCount})}</span>` : "";
   return `
     <article class="entry-card compact saved-team-card">
       <div class="entry-main">
-        <div class="entry-title"><strong>${escapeHtml(entry.name)}</strong><span class="source-tag">${entry.speciesIds.length} / 6</span></div>
+        <div class="entry-title"><strong>${escapeHtml(entry.name)}</strong><span class="source-tag">${entry.speciesIds.length} / 6</span>${openMeta}</div>
         <p class="muted">${escapeHtml(entry.labels.join(" / ") || t(language, "common.emptyTeam"))}</p>
       </div>
       <div class="card-actions">
@@ -220,6 +225,14 @@ function leadCardMarkup(entry, language, state) {
           ${backlineMarkup}
         </div>
       </div>
+      <div class="analysis-inline-pills matchup-breakdown-row">
+        <span class="mini-pill">${t(language, "matchup.breakdown.pressure", {value: entry.breakdown.pressure.toFixed(1)})}</span>
+        <span class="mini-pill analysis-alert-pill">${t(language, "matchup.breakdown.exposure", {value: entry.breakdown.exposure.toFixed(1)})}</span>
+        ${entry.breakdown.redirection ? `<span class="mini-pill analysis-good-pill">${t(language, "matchup.breakdown.redirection", {value: entry.breakdown.redirection.toFixed(1)})}</span>` : ""}
+        ${entry.breakdown.wideGuard ? `<span class="mini-pill analysis-good-pill">${t(language, "matchup.breakdown.wideGuard", {value: entry.breakdown.wideGuard.toFixed(1)})}</span>` : ""}
+        ${entry.breakdown.helpingHand ? `<span class="mini-pill analysis-good-pill">${t(language, "matchup.breakdown.helpingHand", {value: entry.breakdown.helpingHand.toFixed(1)})}</span>` : ""}
+        ${entry.breakdown.protect ? `<span class="mini-pill analysis-good-pill">${t(language, "matchup.breakdown.protect", {value: entry.breakdown.protect.toFixed(1)})}</span>` : ""}
+      </div>
       ${entry.roles.length ? `<div class="analysis-inline-pills">${rolePillsMarkup(entry.roles, language)}</div>` : ""}
     </article>
   `;
@@ -248,20 +261,29 @@ function speedLineCardMarkup(tier, language, state) {
 function renderBuilder(state) {
   const language = state.language;
   const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch);
-  document.getElementById("opponent-team-list").innerHTML = state.opponentTeam.length
-    ? state.opponentTeam.map((entry) => opponentCardMarkup(entry, state)).join("")
-    : `<div class="team-card empty-slot">${t(language, "matchup.opponentPlaceholder")}</div>`;
-  document.getElementById("saved-opponent-list").innerHTML = state.savedOpponentTeams.length
-    ? state.savedOpponentTeams.map((entry) => savedOpponentCardMarkup(entry, language)).join("")
-    : `<p class="empty-state">${t(language, "matchup.savedEmpty")}</p>`;
+  setInnerHTMLIfChanged(
+    document.getElementById("opponent-team-list"),
+    state.opponentTeam.length
+      ? state.opponentTeam.map((entry) => opponentCardMarkup(entry, state)).join("")
+      : `<div class="team-card empty-slot">${t(language, "matchup.opponentPlaceholder")}</div>`,
+  );
+  setInnerHTMLIfChanged(
+    document.getElementById("saved-opponent-list"),
+    state.savedOpponentTeams.length
+      ? state.savedOpponentTeams.map((entry) => savedOpponentCardMarkup(entry, language)).join("")
+      : `<p class="empty-state">${t(language, "matchup.savedEmpty")}</p>`,
+  );
   document.getElementById("matchup-library-summary").textContent = t(language, "matchup.librarySummary", {
     species: state.matchupLibrary.length,
     sets: state.library.length,
     filtered: filtered.length,
   });
-  document.getElementById("matchup-library-list").innerHTML = filtered.length
-    ? `<div class="species-browser-grid">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
-    : `<p class="empty-state">${t(language, "library.empty")}</p>`;
+  setInnerHTMLIfChanged(
+    document.getElementById("matchup-library-list"),
+    filtered.length
+      ? `<div class="species-browser-grid">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
+      : `<p class="empty-state">${t(language, "library.empty")}</p>`,
+  );
 }
 
 function renderAnalysis(state) {
@@ -269,7 +291,7 @@ function renderAnalysis(state) {
   const analysis = state.matchup;
   const container = document.getElementById("matchup-analysis");
   if (!state.team.length) {
-    container.innerHTML = `<p class="empty-state">${t(language, "matchup.needAlly")}</p>`;
+    setInnerHTMLIfChanged(container, `<p class="empty-state">${t(language, "matchup.needAlly")}</p>`);
     return;
   }
   const recommendationSection = `
@@ -284,14 +306,14 @@ function renderAnalysis(state) {
     </section>
   `;
   if (!state.opponentTeam.length) {
-    container.innerHTML = `${recommendationSection}<p class="empty-state">${t(language, "matchup.needOpponent")}</p>`;
+    setInnerHTMLIfChanged(container, `${recommendationSection}<p class="empty-state">${t(language, "matchup.needOpponent")}</p>`);
     return;
   }
   if (!analysis) {
-    container.innerHTML = `${recommendationSection}<p class="empty-state">${t(language, "analysis.empty")}</p>`;
+    setInnerHTMLIfChanged(container, `${recommendationSection}<p class="empty-state">${t(language, "analysis.empty")}</p>`);
     return;
   }
-  container.innerHTML = `
+  setInnerHTMLIfChanged(container, `
     <div class="analysis-overview matchup-overview">
       <article class="metric-card"><span>${t(language, "matchup.overviewAlly")}</span><strong>${analysis.overview.allyCount}</strong></article>
       <article class="metric-card"><span>${t(language, "matchup.overviewOpponent")}</span><strong>${analysis.overview.opponentCount}</strong></article>
@@ -309,7 +331,7 @@ function renderAnalysis(state) {
       <div class="stack-list compact-list">${analysis.speedLines.map((tier) => speedLineCardMarkup(tier, language, state)).join("")}</div>
     </section>
     ${renderMatchupBoard(analysis.board, state)}
-  `;
+  `);
 }
 
 export function renderMatchupView(state) {

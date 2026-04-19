@@ -1,4 +1,4 @@
-import {getResistanceProfile} from "../analysis.js";
+import {getResistanceProfileForConfig} from "../battle-semantics.js";
 
 const ENABLED_FACTOR = 1.2;
 const DISABLED_FACTOR = 0.5;
@@ -26,7 +26,7 @@ export function getThreatTypes(analysis) {
 }
 
 export function getCoverSummary(candidate, analysis) {
-  const profile = getResistanceProfile(candidate.types);
+  const profile = getResistanceProfileForConfig(candidate, {fieldState: analysis.fieldState, side: "ally"});
   const threatTypes = getThreatTypes(analysis);
   const teamWeaknessTypes = analysis.weaknesses.map((entry) => entry.type);
   return {

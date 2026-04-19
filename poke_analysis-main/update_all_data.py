@@ -117,6 +117,10 @@ def json5_to_json(text):
     return re.sub(r'([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)(\s*:)', r'\1"\2"\3', text)
 
 
+def normalize_species_id(value):
+    return re.sub(r"[^a-z0-9]+", "", str(value or "").lower())
+
+
 def load_json5_object(path):
     return json.loads(json5_to_json(path.read_text(encoding="utf-8")))
 
@@ -249,6 +253,47 @@ def collect_usable_species_ids(champions_table, active_format):
     }
 
 
+def is_mega_entry(entry):
+    return str(entry.get("forme", "")).startswith("Mega") or "-Mega" in str(entry.get("name", ""))
+
+
+def is_legal_champions_item(item):
+    if not isinstance(item, dict):
+        return False
+    is_nonstandard = item.get("isNonstandard")
+    return is_nonstandard in (None, "")
+
+
+def expand_usable_species_ids_with_mega_forms(pokedex, items, usable_species_ids):
+    expanded = []
+    seen = set()
+    for species_id in usable_species_ids:
+        entry = pokedex.get(species_id, {})
+        if is_mega_entry(entry) and not is_legal_champions_item(
+            items.get(normalize_species_id(entry.get("requiredItem")))
+        ):
+            continue
+        if species_id in seen:
+            continue
+        expanded.append(species_id)
+        seen.add(species_id)
+
+    usable_base_ids = {normalize_species_id(species_id) for species_id in expanded}
+    mega_species_ids = [
+        species_id for species_id, entry in pokedex.items()
+        if is_mega_entry(entry)
+        and normalize_species_id(entry.get("baseSpecies")) in usable_base_ids
+        and is_legal_champions_item(items.get(normalize_species_id(entry.get("requiredItem"))))
+        and species_id not in seen
+    ]
+
+    for species_id in mega_species_ids:
+        expanded.append(species_id)
+        seen.add(species_id)
+
+    return expanded
+
+
 def write_text_source(url, destination, label):
     print(f"Updating {label}.")
     content = fetch_text(url)
@@ -300,12 +345,22 @@ def write_champions_vgc_data():
     formats = write_formats_data()
     teambuilder = parse_teambuilder_table(fetch_text(TEAMBUILDER_SOURCE))
     base_items = load_json5_object(STATS_DIR / "items.json")
+    base_pokedex = json.loads((STATS_DIR / "pokedex.json").read_text(encoding="utf-8"))
     champions = teambuilder.get("champions")
     if not isinstance(champions, dict):
         raise ValueError("Champions table not found in teambuilder data")
 
     active_format = select_champions_vgc_format(formats)
     usable_species = collect_usable_species_ids(champions, active_format)
+    merged_items = {
+        **base_items,
+        **enrich_champions_item_overrides(base_items, champions.get("overrideItemData", {})),
+    }
+    expanded_usable_species_ids = expand_usable_species_ids_with_mega_forms(
+        base_pokedex,
+        merged_items,
+        usable_species["usableSpeciesIds"],
+    )
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "format": {
@@ -316,7 +371,7 @@ def write_champions_vgc_data():
             "restricted": active_format.get("restricted", []),
             "banlist": active_format.get("banlist", []),
         },
-        "usableSpeciesIds": usable_species["usableSpeciesIds"],
+        "usableSpeciesIds": expanded_usable_species_ids,
         "selectionWindow": {
             "sliceStartTier": usable_species["sliceStartTier"],
             "sliceStartIndex": usable_species["sliceStartIndex"],

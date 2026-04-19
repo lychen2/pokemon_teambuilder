@@ -1,5 +1,9 @@
 import {SCORE_WEIGHTS, TYPE_ORDER} from "../constants.js";
-import {getCoverageProfile, getResistanceProfile} from "../analysis.js";
+import {
+  getCoverageProfileForConfig,
+  getEffectiveSpeed,
+  getResistanceProfileForConfig,
+} from "../battle-semantics.js";
 import {getSuggestedMoveNamesForSpecies} from "../matchup-board-data.js";
 import {RECOMMENDATION_ROLE_IDS, getAttackBias, getUtilityRoles, hasMove} from "../team-roles.js";
 import {clamp, normalizeName} from "../utils.js";
@@ -57,7 +61,9 @@ function buildSupplementalCoverage(candidate, datasets) {
     }
     const isStab = (candidate.types || []).includes(move.type);
     const moveWeight = slotFactor * (isStab ? SUPPLEMENTAL_STAB_WEIGHT : SUPPLEMENTAL_NON_STAB_WEIGHT);
-    const moveCoverage = getCoverageProfile([move.type]);
+    const moveCoverage = getCoverageProfileForConfig({
+      moves: [{name: move.name, id: move.id || move.name, type: move.type, category: move.category || "Special"}],
+    });
     TYPE_ORDER.forEach((defendType) => {
       const multiplier = moveCoverage[defendType] || 0;
       const current = coverage[defendType];
@@ -71,29 +77,22 @@ function buildSupplementalCoverage(candidate, datasets) {
   return coverage;
 }
 
-function scoreStandardSpeed(candidate, speedTiers) {
+function scoreStandardSpeed(candidate, speedTiers, analysis) {
   const totalCount = speedTiers.reduce((sum, tier) => sum + tier.totalCount, 0);
   if (!totalCount) {
     return 0;
   }
-  const speeds = [
-    candidate.stats?.spe || 0,
-    candidate.plusOneSpeed?.speed || 0,
-    candidate.choiceScarfSpeed?.speed || 0,
-  ].filter(Boolean);
-  const bestCoverage = speeds.reduce((best, speed) => {
-    const coveredCount = countCoveredEntries(speedTiers, (tier) => tier.speed < speed);
-    return Math.max(best, coveredCount / totalCount);
-  }, 0);
+  const speed = getEffectiveSpeed(candidate, "ally", analysis.fieldState || {});
+  const bestCoverage = countCoveredEntries(speedTiers, (tier) => tier.speed < speed) / totalCount;
   return clamp(bestCoverage * SCORE_WEIGHTS.speed, 0, SCORE_WEIGHTS.speed);
 }
 
-function scoreTrickRoomSpeed(candidate, speedTiers) {
+function scoreTrickRoomSpeed(candidate, speedTiers, analysis) {
   const totalCount = speedTiers.reduce((sum, tier) => sum + tier.totalCount, 0);
   if (!totalCount) {
     return 0;
   }
-  const coveredCount = countCoveredEntries(speedTiers, (tier) => tier.speed > (candidate.stats?.spe || 0));
+  const coveredCount = countCoveredEntries(speedTiers, (tier) => tier.speed > getEffectiveSpeed(candidate, "ally", analysis.fieldState || {}));
   return clamp((coveredCount / totalCount) * TRICK_ROOM_BASE_WEIGHT, 0, TRICK_ROOM_BASE_WEIGHT);
 }
 
@@ -102,7 +101,7 @@ function hasTrickRoomBonus(candidate, analysis) {
 }
 
 export function scoreResistance(candidate, analysis, preferences, weights) {
-  const profile = getResistanceProfile(candidate.types);
+  const profile = getResistanceProfileForConfig(candidate, {fieldState: analysis.fieldState, side: "ally"});
   const coverSummary = getCoverSummary(candidate, analysis);
   const rawScore = analysis.weaknesses.reduce((score, weakness) => {
     const multiplier = profile[weakness.type] ?? 1;
@@ -122,7 +121,7 @@ export function scoreFocus(candidate, focusType = "") {
   if (!focusType) {
     return 0;
   }
-  const multiplier = getResistanceProfile(candidate.types)[focusType] ?? 1;
+  const multiplier = getResistanceProfileForConfig(candidate)[focusType] ?? 1;
   if (multiplier === 0) return FOCUS_IMMUNITY_SCORE;
   if (multiplier < 1) return FOCUS_RESIST_SCORE;
   if (multiplier > 1) return -FOCUS_WEAKNESS_PENALTY;
@@ -131,7 +130,7 @@ export function scoreFocus(candidate, focusType = "") {
 
 export function scoreCoverage(candidate, analysis, preferences, weights, datasets) {
   const current = Object.fromEntries(analysis.offensive.map((entry) => [entry.type, entry.effectiveness]));
-  const next = getCoverageProfile(candidate.offensiveTypes || []);
+  const next = getCoverageProfileForConfig(candidate, {fieldState: analysis.fieldState, side: "ally"});
   const supplemental = buildSupplementalCoverage(candidate, datasets);
   const directScore = TYPE_ORDER.reduce((score, type) => {
     if ((next[type] || 0) <= (current[type] || 0)) return score;
@@ -163,8 +162,8 @@ export function scoreCoverage(candidate, analysis, preferences, weights, dataset
 }
 
 export function scoreSpeed(candidate, speedTiers, analysis, preferences, weights) {
-  const standardScore = scoreStandardSpeed(candidate, speedTiers);
-  const trickRoomScore = scoreTrickRoomSpeed(candidate, speedTiers);
+  const standardScore = scoreStandardSpeed(candidate, speedTiers, analysis);
+  const trickRoomScore = scoreTrickRoomSpeed(candidate, speedTiers, analysis);
   const trickRoomBonus = hasTrickRoomBonus(candidate, analysis) ? TRICK_ROOM_SETTER_BONUS : 0;
   let rawScore = standardScore;
   if (analysis.speedContext.mode === "trickroom") {

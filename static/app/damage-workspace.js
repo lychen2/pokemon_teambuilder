@@ -104,6 +104,11 @@ function buildPokemonPayload(config = {}) {
 export function createDamageWorkspace() {
   async function syncPair(attacker, defender, field) {
     const worker = getWorker();
+    if (pendingRequests.size) {
+      const stale = [...pendingRequests.values()];
+      pendingRequests.clear();
+      stale.forEach(({resolve}) => resolve(null));
+    }
     return new Promise((resolve, reject) => {
       const id = ++requestId;
       pendingRequests.set(id, {resolve, reject});

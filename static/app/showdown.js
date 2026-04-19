@@ -13,6 +13,7 @@ import {
   getNatureSummary,
   normalizeChampionPoints,
   getSpritePosition,
+  normalizeLookupText,
   normalizeName,
 } from "./utils.js";
 
@@ -22,40 +23,117 @@ const EV_LABELS = {hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe
 const EV_TRIM_PRIORITY = ["hp", "def", "spd"];
 const SHOWDOWN_TOTAL_EV_CAP = 508;
 const SHOWDOWN_STAT_EV_CAP = 252;
+const IMPORT_IGNORED_PREFIXES = new Set(["ivs", "happiness", "shiny"]);
+const IMPORT_FEEDBACK_ERROR = "error";
+const IMPORT_FEEDBACK_WARNING = "warning";
+
+function createImportFeedbackItem({
+  level = IMPORT_FEEDBACK_WARNING,
+  code = "",
+  blockIndex = 0,
+  lineNumber = null,
+  speciesId = "",
+  configName = "",
+  message = "",
+} = {}) {
+  return {
+    level,
+    code,
+    blockIndex: Number(blockIndex) || 0,
+    lineNumber: Number.isInteger(lineNumber) ? lineNumber : null,
+    speciesId: speciesId || "",
+    configName: configName || "",
+    message: String(message || ""),
+  };
+}
+
+function normalizeValidation(validation) {
+  const items = Array.isArray(validation?.items) ? validation.items.filter(Boolean) : [];
+  return {
+    hasWarnings: items.some((item) => item.level === IMPORT_FEEDBACK_WARNING),
+    hasErrors: items.some((item) => item.level === IMPORT_FEEDBACK_ERROR),
+    items,
+  };
+}
+
+function attachValidation(config, items) {
+  return {
+    ...config,
+    validation: normalizeValidation({items}),
+  };
+}
+
+function getLookupKeys(value) {
+  return [normalizeLookupText(value), normalizeName(value)].filter(Boolean);
+}
+
+function getLookupEntry(lookup, searchLookup, name) {
+  return getLookupKeys(name).reduce((found, key) => {
+    if (found) {
+      return found;
+    }
+    return searchLookup?.get(key) || lookup?.get(key) || null;
+  }, null);
+}
+
+function resolveSpeciesId(context, name) {
+  return getLookupKeys(name).reduce((found, key) => found || context.speciesIndex.get(key) || "", "");
+}
+
+function normalizeImportText(text) {
+  return String(text || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/\r/g, "")
+    .replace(/\t/g, "  ");
+}
+
+function normalizeImportLine(line) {
+  return String(line || "").trim();
+}
+
+function getPrefixedValue(line, label) {
+  const match = String(line || "").match(new RegExp(`^${label}:\\s*(.*)$`));
+  return match ? match[1].trim() : null;
+}
 
 function parseStatLine(line, prefix) {
   const values = createEmptySpread();
   const raw = line.slice(prefix.length).split("/");
+  let parsed = false;
   for (const part of raw) {
-    const match = part.trim().match(/^(\d+)\s+([A-Za-z]+)$/);
+    const match = part.trim().match(/^\s*(\d+)\s*([A-Za-z]+)\s*$/);
     if (!match) {
       continue;
     }
     const stat = STAT_MAP[match[2]];
     if (stat) {
       values[stat] = Number(match[1]);
+      parsed = true;
     }
   }
-  return values;
+  return {values, parsed};
 }
 
 function extractSpeciesName(firstLine) {
-  const [left] = firstLine.split(" @ ");
+  const [left] = firstLine.split(/\s*@\s*/);
   const noGender = left.replace(/\s+\((M|F)\)$/, "").trim();
   const nicknameMatch = noGender.match(/^(.+?)\s+\((.+)\)$/);
   return (nicknameMatch ? nicknameMatch[2] : noGender).trim();
 }
 
-function buildMoveSet(moveNames, moveLookup) {
+function buildMoveSet(moveNames, moveLookup, moveSearchLookup) {
   return moveNames.map((name) => {
-    const detail = moveLookup.get(normalizeName(name));
+    const detail = getLookupEntry(moveLookup, moveSearchLookup, name);
     if (!detail) {
       return {
+        id: normalizeName(name),
         name,
         type: "",
         category: "Status",
         accuracy: 0,
         basePower: 0,
+        priority: 0,
+        target: "",
         shortDesc: "",
         flags: {},
         boosts: null,
@@ -67,11 +145,14 @@ function buildMoveSet(moveNames, moveLookup) {
       };
     }
     return {
+      id: normalizeName(detail.id || detail.name || name),
       name: detail.name,
       type: detail.type,
       category: detail.category || "Status",
       accuracy: detail.accuracy ?? 0,
       basePower: Number(detail.basePower || 0),
+      priority: Number(detail.priority || 0),
+      target: detail.target || "",
       shortDesc: detail.shortDesc || "",
       flags: detail.flags || {},
       boosts: detail.boosts || null,
@@ -82,10 +163,6 @@ function buildMoveSet(moveNames, moveLookup) {
       mindBlownRecoil: Boolean(detail.mindBlownRecoil),
     };
   });
-}
-
-function getLookupEntry(lookup, name) {
-  return lookup.get(normalizeName(name)) || null;
 }
 
 function sanitizeOptionalText(value) {
@@ -103,8 +180,8 @@ function isMegaEntry(entry) {
 
 function resolveSpecies(config, context) {
   const speciesId = config.speciesId
-    || context.speciesIndex.get(normalizeName(config.speciesName))
-    || context.speciesIndex.get(normalizeName(config.displayName));
+    || resolveSpeciesId(context, config.speciesName)
+    || resolveSpeciesId(context, config.displayName);
   if (!speciesId) {
     return null;
   }
@@ -123,6 +200,20 @@ function buildPersistedMoveNames(config) {
     return [];
   }
   return config.moves.map((move) => move.name).filter(Boolean);
+}
+
+function canonicalizeNamedValue(value, lookup, searchLookup) {
+  const clean = sanitizeOptionalText(value);
+  if (!clean) {
+    return "";
+  }
+  return getLookupEntry(lookup, searchLookup, clean)?.name || clean;
+}
+
+function canonicalizeMoveNames(moveNames = [], context) {
+  return moveNames.map((name) => {
+    return getLookupEntry(context.moveLookup, context.moveSearchLookup, name)?.name || String(name || "").trim();
+  }).filter(Boolean);
 }
 
 function applySelectedPoint(points, stat, language) {
@@ -174,16 +265,16 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
   }
 
   const {speciesId, entry} = species;
-  const moveNames = buildPersistedMoveNames(config);
+  const moveNames = canonicalizeMoveNames(buildPersistedMoveNames(config), context);
   const championPoints = resolveChampionPoints(config, resolveConvertedPoint, language);
   const note = sanitizeOptionalText(config.note);
-  const ability = sanitizeOptionalText(config.ability);
-  const item = sanitizeOptionalText(config.item);
+  const ability = canonicalizeNamedValue(config.ability, context.abilityLookup, context.abilitySearchLookup);
+  const item = canonicalizeNamedValue(config.item, context.itemLookup, context.itemSearchLookup);
   const evs = getChampionPointTotal(config.evs || {})
     ? {...createEmptySpread(), ...(config.evs || {})}
     : createEvsFromPoints(championPoints);
   const spriteIndex = context.formsIndex[speciesId] ?? entry.num ?? 0;
-  const moves = buildMoveSet(moveNames, context.moveLookup);
+  const moves = buildMoveSet(moveNames, context.moveLookup, context.moveSearchLookup);
   const nature = config.nature || "Hardy";
   const teraType = isMegaEntry(entry) ? "" : config.teraType || "";
   const stats = applyNatureToChampionStats(
@@ -225,8 +316,8 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     baseStats: entry.baseStats,
     spritePosition: getSpritePosition(spriteIndex),
     moves,
-    abilityInfo: getLookupEntry(context.abilityLookup, ability),
-    itemInfo: getLookupEntry(context.itemLookup, item),
+    abilityInfo: getLookupEntry(context.abilityLookup, context.abilitySearchLookup, ability),
+    itemInfo: getLookupEntry(context.itemLookup, context.itemSearchLookup, item),
     natureInfo: getNatureSummary(nature),
     offensiveTypes: [...new Set(moves.filter((move) => move.category !== "Status").map((move) => move.type))],
     stats,
@@ -235,29 +326,136 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
     doubleSpeed,
     spreadLabel: formatChampionPoints(championPoints),
     originalSpreadLabel: formatSpread(nature, evs),
+    validation: normalizeValidation(config.validation),
   };
 }
 
+function getLearnsetMap(speciesId, context) {
+  const direct = context.championsVgc?.learnsets?.[speciesId] || context.learnsets?.[speciesId]?.learnset;
+  if (direct) {
+    return direct;
+  }
+  const baseSpeciesId = normalizeName(context.pokedex?.[speciesId]?.baseSpecies || "");
+  return context.championsVgc?.learnsets?.[baseSpeciesId]
+    || context.learnsets?.[baseSpeciesId]?.learnset
+    || null;
+}
+
+function validateImportedConfig(config, context, index, language, lineMeta = {}) {
+  const feedback = [];
+  const speciesEntry = context.pokedex?.[config.speciesId];
+  const legalAbilities = new Set(Object.values(speciesEntry?.abilities || {}).filter(Boolean));
+  if (config.item && !getLookupEntry(context.itemLookup, context.itemSearchLookup, config.item)) {
+    feedback.push(createImportFeedbackItem({
+      level: IMPORT_FEEDBACK_WARNING,
+      code: "unknown-item",
+      blockIndex: index,
+      lineNumber: lineMeta.item ?? null,
+      speciesId: config.speciesId,
+      configName: config.displayName || config.speciesName,
+      message: t(language, "import.warning.unknownItem", {
+        index,
+        name: config.displayName || config.speciesName,
+        value: config.item,
+      }),
+    }));
+  }
+  if (config.ability && !legalAbilities.has(config.ability)) {
+    feedback.push(createImportFeedbackItem({
+      level: IMPORT_FEEDBACK_WARNING,
+      code: "illegal-ability",
+      blockIndex: index,
+      lineNumber: lineMeta.ability ?? null,
+      speciesId: config.speciesId,
+      configName: config.displayName || config.speciesName,
+      message: t(language, "import.warning.illegalAbility", {
+        index,
+        name: config.displayName || config.speciesName,
+        value: config.ability,
+      }),
+    }));
+  }
+  const learnset = getLearnsetMap(config.speciesId, context);
+  (config.moveNames || []).forEach((moveName) => {
+    const move = getLookupEntry(context.moveLookup, context.moveSearchLookup, moveName);
+    const moveLine = lineMeta.moves?.get(normalizeName(moveName)) ?? null;
+    if (!move) {
+      feedback.push(createImportFeedbackItem({
+        level: IMPORT_FEEDBACK_WARNING,
+        code: "unknown-move",
+        blockIndex: index,
+        lineNumber: moveLine,
+        speciesId: config.speciesId,
+        configName: config.displayName || config.speciesName,
+        message: t(language, "import.warning.unknownMove", {
+          index,
+          name: config.displayName || config.speciesName,
+          value: moveName,
+        }),
+      }));
+      return;
+    }
+    if (learnset && !learnset[normalizeName(move.name)]) {
+      feedback.push(createImportFeedbackItem({
+        level: IMPORT_FEEDBACK_WARNING,
+        code: "illegal-move",
+        blockIndex: index,
+        lineNumber: moveLine,
+        speciesId: config.speciesId,
+        configName: config.displayName || config.speciesName,
+        message: t(language, "import.warning.illegalMove", {
+          index,
+          name: config.displayName || config.speciesName,
+          value: move.name,
+        }),
+      }));
+    }
+  });
+  return feedback;
+}
+
 function createCustomConfig(block, index, context, fallbackLevel, resolveConvertedPoint, language) {
-  const lines = block.split(/\n/).map((line) => line.trim()).filter(Boolean);
+  const lines = normalizeImportText(block)
+    .split("\n")
+    .map((line, lineIndex) => ({value: normalizeImportLine(line), lineIndex: lineIndex + 1}))
+    .filter((entry) => entry.value);
   if (!lines.length) {
-    return null;
+    return {config: null, feedback: []};
   }
 
-  const speciesLabel = extractSpeciesName(lines[0]);
-  const speciesId = context.speciesIndex.get(normalizeName(speciesLabel));
+  const headerLine = lines[0].value;
+  const speciesLabel = extractSpeciesName(headerLine);
+  const speciesId = resolveSpeciesId(context, speciesLabel);
   if (!speciesId) {
-    return null;
+    return {
+      config: null,
+      feedback: [createImportFeedbackItem({
+        level: IMPORT_FEEDBACK_ERROR,
+        code: "invalid-block-header",
+        blockIndex: index + 1,
+        lineNumber: 1,
+        configName: speciesLabel || headerLine,
+        message: t(language, "error.invalidBlockHeader", {
+          index: index + 1,
+          value: speciesLabel || headerLine,
+        }),
+      })],
+    };
   }
 
   const entry = context.pokedex[speciesId];
-  const [firstLine, item = ""] = lines[0].split(" @ ");
+  const [firstLine, item = ""] = headerLine.split(/\s*@\s*/);
+  const lineMeta = {
+    item: item.trim() ? 1 : null,
+    ability: null,
+    moves: new Map(),
+  };
   const config = {
     id: `custom:${speciesId}:${index}`,
     source: "custom",
     speciesId,
     speciesName: entry.name,
-    displayName: firstLine.split(" @ ")[0].trim(),
+    displayName: firstLine.trim(),
     types: entry.types || [],
     ability: "",
     item: item.trim(),
@@ -272,39 +470,143 @@ function createCustomConfig(block, index, context, fallbackLevel, resolveConvert
     usage: 0,
     baseStats: entry.baseStats,
   };
+  const feedback = [];
 
   for (const line of lines.slice(1)) {
-    if (line.startsWith("Ability: ")) config.ability = line.slice(9).trim();
-    if (line.startsWith("Level: ")) config.level = Number(line.slice(7).trim()) || config.level;
-    if (line.startsWith("Tera Type: ")) config.teraType = line.slice(11).trim();
-    if (line.startsWith("EVs: ")) config.evs = parseStatLine(line, "EVs: ");
-    if (line.startsWith("Points: ")) config.championPoints = parseStatLine(line, "Points: ");
-    if (line.startsWith("Note: ")) config.note = line.slice(6).trim();
-    if (line.startsWith("备注: ")) config.note = line.slice(3).trim();
-    if (line.endsWith(" Nature")) config.nature = line.replace(" Nature", "").trim();
-    if (line.startsWith("- ")) config.moveNames.push(line.slice(2).trim());
+    const abilityValue = getPrefixedValue(line.value, "Ability");
+    if (abilityValue != null) {
+      config.ability = abilityValue;
+      lineMeta.ability = line.lineIndex;
+      continue;
+    }
+    const levelValue = getPrefixedValue(line.value, "Level");
+    if (levelValue != null) {
+      config.level = Number(levelValue) || config.level;
+      continue;
+    }
+    const teraValue = getPrefixedValue(line.value, "Tera Type");
+    if (teraValue != null) {
+      config.teraType = teraValue;
+      continue;
+    }
+    if (getPrefixedValue(line.value, "EVs") != null) {
+      const parsed = parseStatLine(line.value, "EVs:");
+      config.evs = parsed.values;
+      if (!parsed.parsed) {
+        feedback.push(createImportFeedbackItem({
+          level: IMPORT_FEEDBACK_WARNING,
+          code: "invalid-stat-line",
+          blockIndex: index + 1,
+          lineNumber: line.lineIndex,
+          speciesId,
+          configName: config.displayName || config.speciesName,
+          message: t(language, "import.warning.invalidStatLine", {
+            index: index + 1,
+            line: line.lineIndex,
+            value: line.value,
+          }),
+        }));
+      }
+      continue;
+    }
+    if (getPrefixedValue(line.value, "Points") != null) {
+      const parsed = parseStatLine(line.value, "Points:");
+      config.championPoints = parsed.values;
+      if (!parsed.parsed) {
+        feedback.push(createImportFeedbackItem({
+          level: IMPORT_FEEDBACK_WARNING,
+          code: "invalid-points-line",
+          blockIndex: index + 1,
+          lineNumber: line.lineIndex,
+          speciesId,
+          configName: config.displayName || config.speciesName,
+          message: t(language, "import.warning.invalidStatLine", {
+            index: index + 1,
+            line: line.lineIndex,
+            value: line.value,
+          }),
+        }));
+      }
+      continue;
+    }
+    const noteValue = getPrefixedValue(line.value, "Note");
+    if (noteValue != null) {
+      config.note = noteValue;
+      continue;
+    }
+    const localizedNoteValue = getPrefixedValue(line.value, "备注");
+    if (localizedNoteValue != null) {
+      config.note = localizedNoteValue;
+      continue;
+    }
+    if (line.value.endsWith(" Nature")) {
+      config.nature = line.value.replace(" Nature", "").trim();
+      continue;
+    }
+    if (line.value.startsWith("- ")) {
+      const moveName = line.value.slice(2).trim();
+      config.moveNames.push(moveName);
+      lineMeta.moves.set(normalizeName(moveName), line.lineIndex);
+      continue;
+    }
+    const prefix = line.value.includes(":") ? normalizeName(line.value.split(":")[0]) : "";
+    if (IMPORT_IGNORED_PREFIXES.has(prefix)) {
+      continue;
+    }
+    feedback.push(createImportFeedbackItem({
+      level: IMPORT_FEEDBACK_WARNING,
+      code: "unparsed-line",
+      blockIndex: index + 1,
+      lineNumber: line.lineIndex,
+      speciesId,
+      configName: config.displayName || config.speciesName,
+      message: t(language, "import.warning.unparsedLine", {
+        index: index + 1,
+        line: line.lineIndex,
+        value: line.value,
+      }),
+    }));
   }
 
-  return finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, language);
+  const finalized = finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, language);
+  if (!finalized) {
+    return {
+      config: null,
+      feedback: [createImportFeedbackItem({
+        level: IMPORT_FEEDBACK_ERROR,
+        code: "invalid-block",
+        blockIndex: index + 1,
+        speciesId,
+        configName: config.displayName || config.speciesName,
+        message: t(language, "error.invalidBlock", {index: index + 1}),
+      })],
+    };
+  }
+  const validationItems = [...feedback, ...validateImportedConfig(finalized, context, index + 1, language, lineMeta)];
+  return {
+    config: attachValidation(finalized, validationItems),
+    feedback: validationItems,
+  };
 }
 
 export function parseShowdownLibrary(text, context, options = {}) {
   const fallbackLevel = options.fallbackLevel || FALLBACK_LEVEL;
   const language = options.language || "zh";
-  const blocks = text.split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
+  const blocks = normalizeImportText(text).split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
   const configs = [];
-  const errors = [];
+  const feedback = [];
 
   blocks.forEach((block, index) => {
     const parsed = createCustomConfig(block, index, context, fallbackLevel, options.resolveConvertedPoint, language);
-    if (!parsed) {
-      errors.push(t(language, "error.invalidBlock", {index: index + 1}));
+    if (!parsed.config) {
+      feedback.push(...parsed.feedback);
       return;
     }
-    configs.push(parsed);
+    configs.push(parsed.config);
+    feedback.push(...parsed.feedback);
   });
 
-  return {configs, errors};
+  return {configs, feedback};
 }
 
 export function hydrateConfigs(configs = [], context, fallbackLevel) {
