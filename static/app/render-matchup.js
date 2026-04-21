@@ -17,6 +17,25 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
+function renderHighlightedText(label = "", ranges = []) {
+  if (!ranges.length) {
+    return escapeHtml(label);
+  }
+  const sorted = [...ranges].sort((left, right) => left[0] - right[0]);
+  let output = "";
+  let cursor = 0;
+  sorted.forEach(([start, end]) => {
+    if (start < cursor) {
+      return;
+    }
+    output += escapeHtml(label.slice(cursor, start));
+    output += `<mark>${escapeHtml(label.slice(start, end))}</mark>`;
+    cursor = end;
+  });
+  output += escapeHtml(label.slice(cursor));
+  return output;
+}
+
 function getTypeClassName(type) {
   return `type-${String(type || "").toLowerCase()}`;
 }
@@ -78,8 +97,16 @@ function getLocalizedSpeciesName(state, entry) {
 function quickPickSpriteMarkup(entry, state) {
   const language = state.language;
   const selected = state.opponentTeam.some((member) => member.speciesId === entry.speciesId);
+  const searchMatch = entry.searchMatch || null;
+  const speciesLabel = getLocalizedSpeciesName(state, entry);
+  const speciesMarkup = searchMatch?.kind === "species"
+    ? renderHighlightedText(speciesLabel, searchMatch.ranges)
+    : escapeHtml(speciesLabel);
+  const detailMarkup = searchMatch && searchMatch.kind !== "species"
+    ? `<span class="species-browser-match-detail">${renderHighlightedText(searchMatch.label, searchMatch.ranges)}</span>`
+    : "";
   const titleParts = [
-    getLocalizedSpeciesName(state, entry),
+    speciesLabel,
     buildSpeedSummary(entry, language),
   ];
   if (entry.labels?.length) {
@@ -88,12 +115,14 @@ function quickPickSpriteMarkup(entry, state) {
   return `
     <button
       type="button"
-      class="species-browser-button ${selected ? "active" : ""}"
+      class="species-browser-button ${selected ? "active" : ""} ${searchMatch ? "searching" : ""}"
       data-add-opponent-species="${entry.speciesId}"
       title="${escapeHtml(titleParts.filter(Boolean).join(" · "))}"
       aria-pressed="${selected ? "true" : "false"}"
+      aria-label="${escapeHtml(speciesLabel)}"
     >
       ${spriteMarkup(entry, state)}
+      ${searchMatch ? `<span class="species-browser-match-copy"><span class="species-browser-match-label">${speciesMarkup}</span>${detailMarkup}</span>` : ""}
     </button>
   `;
 }
@@ -261,6 +290,7 @@ function speedLineCardMarkup(tier, language, state) {
 function renderBuilder(state) {
   const language = state.language;
   const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch);
+  const searching = Boolean(String(state.matchupSearch || "").trim());
   setInnerHTMLIfChanged(
     document.getElementById("opponent-team-list"),
     state.opponentTeam.length
@@ -281,7 +311,7 @@ function renderBuilder(state) {
   setInnerHTMLIfChanged(
     document.getElementById("matchup-library-list"),
     filtered.length
-      ? `<div class="species-browser-grid">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
+      ? `<div class="species-browser-grid ${searching ? "searching" : ""}">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
       : `<p class="empty-state">${t(language, "library.empty")}</p>`,
   );
 }

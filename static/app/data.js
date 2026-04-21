@@ -4,6 +4,9 @@ import {buildGlobalItemUsageCounts, buildGlobalMoveUsageCounts, buildUsageLookup
 import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
+const ALWAYS_ACTIVE_MOVE_OVERRIDES = Object.freeze({
+  weatherball: {basePower: 100},
+});
 
 function registerSpeciesAlias(index, alias, speciesId) {
   const normalizedName = normalizeName(alias);
@@ -27,6 +30,19 @@ function buildSpeciesIndex(pokedex) {
 
 function buildMoveLookup(moves) {
   return buildNamedLookup(moves);
+}
+
+function normalizeMoveEntries(moves = {}) {
+  return Object.fromEntries(
+    Object.entries(moves).map(([key, entry]) => {
+      const moveId = normalizeName(entry?.id || entry?.name || key);
+      const override = ALWAYS_ACTIVE_MOVE_OVERRIDES[moveId];
+      if (!override) {
+        return [key, entry];
+      }
+      return [key, {...entry, ...override}];
+    }),
+  );
 }
 
 function mergeDexEntries(baseEntries, overrides = {}) {
@@ -92,7 +108,7 @@ export async function loadDatasets() {
   ]);
 
   const mergedPokedex = mergeDexEntries(pokedex, championsVgc.overrideSpeciesData);
-  const mergedMoves = mergeDexEntries(moves, championsVgc.overrideMoveData);
+  const mergedMoves = normalizeMoveEntries(mergeDexEntries(moves, championsVgc.overrideMoveData));
   const mergedAbilities = mergeDexEntries(abilities, championsVgc.overrideAbilityData);
   const mergedItems = mergeDexEntries(items, championsVgc.overrideItemData);
   const moveLookup = buildMoveLookup(mergedMoves);

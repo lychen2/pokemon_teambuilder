@@ -150,6 +150,17 @@ export function applyPsChinaTranslation(language, roots = document.body) {
   return translationQueue;
 }
 
+export async function translatePsChinaBatch(language, values = []) {
+  if (language !== "zh") {
+    return values;
+  }
+  const translator = await loadTranslator();
+  if (!translator) {
+    return values;
+  }
+  return values.map((value) => translatePlainText(translator, value));
+}
+
 export async function translatePsChinaText(language, text) {
   if (language !== "zh") {
     return text;

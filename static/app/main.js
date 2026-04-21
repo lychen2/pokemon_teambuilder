@@ -1,6 +1,6 @@
 import {analyzeTeam} from "./analysis.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
-import {buildSyntheticSpeedEntries} from "./champions-vgc.js";
+import {buildSyntheticSpeedEntries, clearSpeciesTemplateCache} from "./champions-vgc.js";
 import {ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
 import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, loadDatasets} from "./data.js";
 import {createDamageWorkspace} from "./damage-workspace.js";
@@ -40,7 +40,7 @@ import {
   PERSIST_SIZE_WARNING_BYTES,
   schedulePersistState,
 } from "./persistence.js";
-import {applyPsChinaTranslation, translatePsChinaText} from "./pschina-translation.js";
+import {applyPsChinaTranslation, translatePsChinaBatch, translatePsChinaText} from "./pschina-translation.js";
 import {
   DEFAULT_RECOMMENDATION_PREFERENCES,
   DEFAULT_RECOMMENDATION_WEIGHTS,
@@ -48,11 +48,13 @@ import {
   normalizeRecommendationWeights,
 } from "./recommendation-preferences.js";
 import {recommendConfigs} from "./recommendations.js";
+import {buildOutputReferenceConfigs, calculateOutputStrengthTiers} from "./output-strength.js";
 import {renderAnalysis, renderDamage, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
 import {invalidateRenderCache} from "./render-cache.js";
-import {installKeybindings, openShortcutsHelp} from "./keybindings.js";
+import {closeShortcutsHelp, installKeybindings, openShortcutsHelp} from "./keybindings.js";
 import {buildDefaultCommands, createCommandPalette} from "./command-palette.js";
 import {focusCommandPaletteInput, installCommandPalette, renderCommandPalette} from "./render-command-palette.js";
+import {renderOutputStrength} from "./render-output.js";
 import {createHistoryStore, initializeHistory, recordHistory, redoHistory, snapshotHistoryState, undoHistory} from "./history.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
 import {getHeldItemAdjustedSpeed} from "./speed.js";
@@ -207,6 +209,8 @@ const state = {
   speedTiers: [],
   speedLineTiers: [],
   syntheticSpeedEntries: [],
+  outputReferences: [],
+  outputStrengthTiers: [],
   team: [],
   opponentTeam: [],
   activeOpponentConfigSpeciesId: null,
@@ -240,6 +244,11 @@ const state = {
 const stateHistory = createHistoryStore();
 let persistLimitWarningShown = false;
 let draggedTeamConfigId = "";
+let matchupSearchDebounceTimer = 0;
+let activeCommandPalette = null;
+let activeModalState = null;
+let modalMutationObserver = null;
+let localizedLabelsTimer = 0;
 
 const TOOLTIP_OFFSET = 12;
 const BUILDER_STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
@@ -249,6 +258,8 @@ const SPEED_BENCHMARK_SLOWEST = "slowest";
 const SPEED_BENCHMARK_FAST_NATURE = "Jolly";
 const SPEED_BENCHMARK_SLOW_NATURE = "Brave";
 const SPEED_BENCHMARK_SLOW_PERCENTILE = 0.0002;
+const LOCALIZATION_BATCH_SIZE = 120;
+const LOCALIZATION_SYNC_DELAY_MS = 600;
 const EMPTY_BUILDER_POINTS = Object.freeze({
   hp: 0,
   atk: 0,
@@ -706,6 +717,11 @@ function refreshSpeedState() {
   });
 }
 
+function refreshOutputState() {
+  state.outputReferences = buildOutputReferenceConfigs(state.datasets, state.language);
+  state.outputStrengthTiers = calculateOutputStrengthTiers([...state.outputReferences, ...state.library], state.datasets);
+}
+
 function getRecommendationPool() {
   if (!state.datasets?.availableSpecies?.length) {
     return state.library;
@@ -720,6 +736,7 @@ function refreshBattleState() {
   const recommendationPool = getRecommendationPool();
   sanitizeBattleFlags();
   refreshSpeedState();
+  refreshOutputState();
   state.analysis = analyzeTeam(
     state.team,
     state.speedTiers,
@@ -1178,6 +1195,15 @@ function renderMatchupSection() {
   translateNodes(document.getElementById("matchup-view"));
 }
 
+function scheduleMatchupSearchRender(nextValue) {
+  state.matchupSearch = nextValue;
+  window.clearTimeout(matchupSearchDebounceTimer);
+  matchupSearchDebounceTimer = window.setTimeout(() => {
+    matchupSearchDebounceTimer = 0;
+    renderMatchupSection();
+  }, 150);
+}
+
 function renderRecommendationsSection() {
   renderRecommendations(state);
   translateNodes(document.getElementById("recommend-view"));
@@ -1225,6 +1251,11 @@ function renderSpeedSection() {
   translateNodes(document.getElementById("speed-view"));
 }
 
+function renderOutputSection() {
+  renderOutputStrength(state);
+  translateNodes(document.getElementById("output-view"));
+}
+
 function renderAll() {
   renderLibrarySection();
   renderTeamSection();
@@ -1233,6 +1264,7 @@ function renderAll() {
   renderRecommendationsSection();
   renderDamageSection();
   renderSpeedSection();
+  renderOutputSection();
   renderGuidedConfig();
 }
 
@@ -1261,6 +1293,37 @@ function resetLocalizedLabels() {
   }
 }
 
+function clearLocalizedLabelsTimer() {
+  if (!localizedLabelsTimer) {
+    return;
+  }
+  window.clearTimeout(localizedLabelsTimer);
+  localizedLabelsTimer = 0;
+}
+
+function yieldToMainThread() {
+  return new Promise((resolve) => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => resolve(), {timeout: 50});
+      return;
+    }
+    window.setTimeout(resolve, 0);
+  });
+}
+
+async function translateLabelPairsInChunks(entries = [], readName, readKey) {
+  const pairs = [];
+  for (let index = 0; index < entries.length; index += LOCALIZATION_BATCH_SIZE) {
+    const batch = entries.slice(index, index + LOCALIZATION_BATCH_SIZE);
+    const translatedNames = await translatePsChinaBatch("zh", batch.map((entry) => readName(entry)));
+    batch.forEach((entry, batchIndex) => {
+      pairs.push([readKey(entry), translatedNames[batchIndex] || readName(entry)]);
+    });
+    await yieldToMainThread();
+  }
+  return pairs;
+}
+
 async function syncLocalizedLabelsInBackground() {
   if (state.language !== "zh" || !state.datasets) {
     return;
@@ -1271,12 +1334,24 @@ async function syncLocalizedLabelsInBackground() {
     if (requestId !== localizedLabelsRequestId || state.language !== "zh") {
       return;
     }
+    await yieldToMainThread();
     initializeBuilderOptions();
     refreshDerivedState();
     renderAll();
   } catch (error) {
     console.error("本地化标签初始化失败", error);
   }
+}
+
+function scheduleLocalizedLabelsSync(delay = LOCALIZATION_SYNC_DELAY_MS) {
+  if (state.language !== "zh" || !state.datasets) {
+    return;
+  }
+  clearLocalizedLabelsTimer();
+  localizedLabelsTimer = window.setTimeout(() => {
+    localizedLabelsTimer = 0;
+    void syncLocalizedLabelsInBackground();
+  }, delay);
 }
 
 function updateLanguageSwitch() {
@@ -1306,7 +1381,9 @@ function updateIconSchemeControl() {
 function setLanguage(language, rerender = true) {
   state.language = normalizeLanguage(language);
   localizedLabelsRequestId += 1;
+  clearLocalizedLabelsTimer();
   resetLocalizedLabels();
+  clearSpeciesTemplateCache(state.datasets);
   applyStaticTranslations(state.language);
   updateLanguageSwitch();
   updateIconSchemeControl();
@@ -1328,7 +1405,7 @@ function setLanguage(language, rerender = true) {
   refreshDerivedState();
   invalidateRenderCache();
   renderAll();
-  void syncLocalizedLabelsInBackground();
+  scheduleLocalizedLabelsSync();
   scheduleStatePersist();
 }
 
@@ -1375,6 +1452,7 @@ function renderBattleViews(options = {}) {
   renderMatchupSection();
   renderRecommendationsSection();
   renderSpeedSection();
+  renderOutputSection();
   if (options.renderDamage) {
     renderDamageSection();
   }
@@ -1907,6 +1985,175 @@ function closeGuidedConfig() {
   movesGrid.innerHTML = "";
   feedback.textContent = "";
   feedback.classList.remove("is-error");
+}
+
+function getVisibleModalShell() {
+  return document.querySelector(".modal-shell:not([hidden])");
+}
+
+function getModalPanel(modal) {
+  const panel = modal?.querySelector('[role="dialog"], .modal-panel');
+  if (panel && panel.tabIndex < 0 && !panel.hasAttribute("tabindex")) {
+    panel.tabIndex = -1;
+  }
+  return panel || modal;
+}
+
+function isVisibleFocusableElement(element) {
+  if (!(element instanceof HTMLElement)) {
+    return false;
+  }
+  if (element.hidden || element.getAttribute("aria-hidden") === "true" || element.hasAttribute("disabled")) {
+    return false;
+  }
+  return element.getClientRects().length > 0;
+}
+
+function getModalFocusableElements(modal) {
+  if (!modal) {
+    return [];
+  }
+  return Array.from(modal.querySelectorAll([
+    "button:not([disabled])",
+    "[href]",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    '[tabindex]:not([tabindex="-1"])',
+  ].join(","))).filter((element) => isVisibleFocusableElement(element) && !element.closest("[hidden]"));
+}
+
+function focusInitialModalElement(modal) {
+  const focusable = getModalFocusableElements(modal);
+  const preferred = focusable.find((element) => element.matches("textarea, input:not([type='hidden']), select, [data-modal-initial-focus]"));
+  const target = preferred || focusable[0] || getModalPanel(modal);
+  if (target instanceof HTMLElement) {
+    target.focus();
+  }
+}
+
+function restoreModalFocus(previousFocus) {
+  if (previousFocus instanceof HTMLElement && previousFocus.isConnected && !previousFocus.closest("[hidden]")) {
+    previousFocus.focus();
+    return;
+  }
+  const fallback = Array.from(document.querySelectorAll(".view-tab.active, .ghost-button, .add-button, button, input, textarea, select"))
+    .find((element) => isVisibleFocusableElement(element) && !element.closest(".modal-shell[hidden]"));
+  if (fallback instanceof HTMLElement) {
+    fallback.focus();
+  }
+}
+
+function handleModalVisibilityChange(modal) {
+  if (!modal) {
+    return;
+  }
+  if (!modal.hidden) {
+    const previousFocus = document.activeElement instanceof HTMLElement && !modal.contains(document.activeElement)
+      ? document.activeElement
+      : activeModalState?.previousFocus || null;
+    activeModalState = {
+      modalId: modal.id,
+      previousFocus,
+    };
+    queueMicrotask(() => {
+      if (!modal.hidden) {
+        focusInitialModalElement(modal);
+      }
+    });
+    return;
+  }
+  if (activeModalState?.modalId !== modal.id) {
+    return;
+  }
+  const nextFocus = activeModalState.previousFocus;
+  activeModalState = null;
+  queueMicrotask(() => {
+    if (!getVisibleModalShell()) {
+      restoreModalFocus(nextFocus);
+    }
+  });
+}
+
+function closeVisibleModal(modal = getVisibleModalShell()) {
+  if (!modal) {
+    return false;
+  }
+  if (modal.id === "config-editor-modal") {
+    closeConfigEditor();
+    return true;
+  }
+  if (modal.id === "guided-config-modal") {
+    closeGuidedConfig();
+    return true;
+  }
+  if (modal.id === "command-palette-modal") {
+    if (activeCommandPalette) {
+      activeCommandPalette.closePalette();
+      renderCommandPalette(activeCommandPalette, state.language);
+    } else {
+      modal.hidden = true;
+    }
+    return true;
+  }
+  if (modal.id === "shortcuts-help-modal") {
+    closeShortcutsHelp();
+    return true;
+  }
+  const fallbackCloseButton = modal.querySelector("[data-close-editor], [data-close-guided-config], [data-close-palette], [data-close-shortcuts]");
+  if (fallbackCloseButton instanceof HTMLElement) {
+    fallbackCloseButton.click();
+    return true;
+  }
+  return false;
+}
+
+function trapModalTabKey(event, modal) {
+  const focusable = getModalFocusableElements(modal);
+  if (!focusable.length) {
+    event.preventDefault();
+    focusInitialModalElement(modal);
+    return;
+  }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+  if (!(active instanceof HTMLElement) || !modal.contains(active)) {
+    event.preventDefault();
+    focusInitialModalElement(modal);
+    return;
+  }
+  if (event.shiftKey && active === first) {
+    event.preventDefault();
+    last.focus();
+    return;
+  }
+  if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function setupModalFocusTrap() {
+  if (modalMutationObserver) {
+    modalMutationObserver.disconnect();
+  }
+  const modals = Array.from(document.querySelectorAll(".modal-shell"));
+  modalMutationObserver = new MutationObserver((records) => {
+    records.forEach((record) => {
+      handleModalVisibilityChange(record.target);
+    });
+  });
+  modals.forEach((modal) => {
+    modalMutationObserver.observe(modal, {attributes: true, attributeFilter: ["hidden"]});
+  });
+  document.addEventListener("focusin", (event) => {
+    const modal = getVisibleModalShell();
+    if (!modal || modal.contains(event.target)) {
+      return;
+    }
+    focusInitialModalElement(modal);
+  });
 }
 
 function typePillMarkup(type) {
@@ -2972,22 +3219,26 @@ async function initializeLocalizedLabels() {
   const moveEntries = Object.values(state.datasets.moves || {});
   const abilityEntries = Object.values(state.datasets.abilities || {});
   const natureEntries = buildNatureOptions();
-  const localizedSpeciesPairs = await Promise.all(availableSpecies.map(async (species) => ([
-    species.speciesId,
-    await translatePsChinaText("zh", species.speciesName),
-  ])));
-  const localizedItemPairs = await Promise.all(itemEntries.map(async (item) => ([
-    item.name,
-    await translatePsChinaText("zh", item.name),
-  ])));
-  const localizedMovePairs = await Promise.all(moveEntries.map(async (move) => ([
-    move.name,
-    await translatePsChinaText("zh", move.name),
-  ])));
-  const localizedAbilityPairs = await Promise.all(abilityEntries.map(async (ability) => ([
-    ability.name,
-    await translatePsChinaText("zh", ability.name),
-  ])));
+  const localizedSpeciesPairs = await translateLabelPairsInChunks(
+    availableSpecies,
+    (species) => species.speciesName,
+    (species) => species.speciesId,
+  );
+  const localizedItemPairs = await translateLabelPairsInChunks(
+    itemEntries,
+    (item) => item.name,
+    (item) => item.name,
+  );
+  const localizedMovePairs = await translateLabelPairsInChunks(
+    moveEntries,
+    (move) => move.name,
+    (move) => move.name,
+  );
+  const localizedAbilityPairs = await translateLabelPairsInChunks(
+    abilityEntries,
+    (ability) => ability.name,
+    (ability) => ability.name,
+  );
   state.localizedSpeciesNames = new Map(localizedSpeciesPairs);
   state.localizedItemNames = new Map(
     localizedItemPairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
@@ -3022,6 +3273,7 @@ async function initializeLocalizedLabels() {
     });
   });
   state.datasets.speciesIndex = speciesIndex;
+  await yieldToMainThread();
   const itemSearchLookup = new Map(state.datasets.itemLookup);
   localizedItemPairs.forEach(([name, translatedName]) => {
     if (!translatedName) {
@@ -3034,6 +3286,7 @@ async function initializeLocalizedLabels() {
     itemSearchLookup.set(normalizeLookupText(translatedName), entry);
   });
   state.datasets.itemSearchLookup = itemSearchLookup;
+  await yieldToMainThread();
   const abilitySearchLookup = new Map(state.datasets.abilityLookup);
   localizedAbilityPairs.forEach(([name, translatedName]) => {
     if (!translatedName) {
@@ -3046,6 +3299,7 @@ async function initializeLocalizedLabels() {
     abilitySearchLookup.set(normalizeLookupText(translatedName), entry);
   });
   state.datasets.abilitySearchLookup = abilitySearchLookup;
+  await yieldToMainThread();
   const searchLookup = new Map(state.datasets.moveLookup);
   localizedMovePairs.forEach(([name, translatedName]) => {
     if (!translatedName) {
@@ -3663,8 +3917,7 @@ function bindEvents() {
   document.getElementById("matchup-analysis").addEventListener("change", handleRecommendWeightCommit);
 
   document.getElementById("matchup-search").addEventListener("input", (event) => {
-    state.matchupSearch = event.target.value;
-    renderMatchupSection();
+    scheduleMatchupSearchRender(event.target.value);
   });
 
   document.getElementById("matchup-library-list").addEventListener("click", (event) => {
@@ -4114,12 +4367,20 @@ function bindEvents() {
     openBuilderAutocomplete(input);
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !document.getElementById("config-editor-modal").hidden) {
-      closeConfigEditor();
+    if (event.defaultPrevented) {
       return;
     }
-    if (event.key === "Escape" && !document.getElementById("guided-config-modal").hidden) {
-      closeGuidedConfig();
+    const activeModal = getVisibleModalShell();
+    if (!activeModal) {
+      return;
+    }
+    if (event.key === "Tab") {
+      trapModalTabKey(event, activeModal);
+      return;
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeVisibleModal(activeModal);
     }
   });
   document.getElementById("clear-custom-btn").addEventListener("click", () => {
@@ -4283,11 +4544,13 @@ async function initialize() {
   applyPersistedPayload(persisted || {});
   setLanguage(state.language, false);
   setStatus("status.initializing");
+  clearSpeciesTemplateCache();
   state.datasets = await loadDatasets();
   resetLocalizedLabels();
   applyPersistedPayload(persisted || {});
   initializeBuilderOptions();
   bindEvents();
+  setupModalFocusTrap();
   setupTooltipEvents();
   const commandActions = {
     setActiveView,
@@ -4308,6 +4571,7 @@ async function initialize() {
     actions: commandActions,
     commands: buildDefaultCommands({state, actions: commandActions}),
   });
+  activeCommandPalette = commandPalette;
   function showCommandPalette() {
     commandPalette.openPalette();
     renderCommandPalette(commandPalette, state.language);
@@ -4339,11 +4603,11 @@ async function initialize() {
   setActiveView(state.activeView);
   if (state.library.length) {
     setStatus("status.restored", {count: state.library.length});
-    void syncLocalizedLabelsInBackground();
+    scheduleLocalizedLabelsSync();
     return;
   }
   setStatus("status.loadedEmpty");
-  void syncLocalizedLabelsInBackground();
+  scheduleLocalizedLabelsSync();
 }
 
 initialize().catch((error) => {

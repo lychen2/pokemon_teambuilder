@@ -10,6 +10,7 @@ const SLOWEST_TEMPLATE_ID = "slowest";
 const OUTPUT_TEMPLATE_ID = "output";
 const SPEED_ABILITY_TEMPLATE_ID = "ability";
 const OUTPUT_TEMPLATE_MIN_BASE_SPEED = 30;
+const TEMPLATE_GROUP_CACHE = new Map();
 
 const TEMPLATE_NOTE_KEYS = {
   [FASTEST_TEMPLATE_ID]: "library.templateFastest",
@@ -142,8 +143,45 @@ function createTemplateGroup(species, datasets, language) {
   };
 }
 
-export function buildSpeciesTemplateConfigs(species, datasets, language) {
+function getDatasetTemplateCache(datasets) {
+  let cache = TEMPLATE_GROUP_CACHE.get(datasets);
+  if (!cache) {
+    cache = new Map();
+    TEMPLATE_GROUP_CACHE.set(datasets, cache);
+  }
+  return cache;
+}
+
+function getTemplateCacheKey(speciesId, language) {
+  return `${language}:${speciesId}`;
+}
+
+function getTemplateGroup(species, datasets, language) {
+  if (!species?.speciesId) {
+    return null;
+  }
+  const cache = getDatasetTemplateCache(datasets);
+  const cacheKey = getTemplateCacheKey(species.speciesId, language);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
+  }
   const group = createTemplateGroup(species, datasets, language);
+  if (group) {
+    cache.set(cacheKey, group);
+  }
+  return group;
+}
+
+export function clearSpeciesTemplateCache(datasets = null) {
+  if (datasets) {
+    TEMPLATE_GROUP_CACHE.delete(datasets);
+    return;
+  }
+  TEMPLATE_GROUP_CACHE.clear();
+}
+
+export function buildSpeciesTemplateConfigs(species, datasets, language) {
+  const group = getTemplateGroup(species, datasets, language);
   return group?.templates || [];
 }
 
@@ -151,7 +189,7 @@ export function buildAvailableSpeciesOptions(datasets, library, language) {
   const configuredSpecies = new Set(library.map((config) => config.speciesId));
   return (datasets.availableSpecies || [])
     .filter((species) => !configuredSpecies.has(species.speciesId))
-    .map((species) => createTemplateGroup(species, datasets, language))
+    .map((species) => getTemplateGroup(species, datasets, language))
     .filter(Boolean)
     .sort(compareSpeciesByDex);
 }
@@ -178,7 +216,7 @@ export function buildSyntheticSpeedEntries(datasets, library, language) {
   const configuredSpecies = new Set(library.map((config) => config.speciesId));
   return (datasets.availableSpecies || [])
     .filter((species) => !configuredSpecies.has(species.speciesId))
-    .map((species) => createTemplateGroup(species, datasets, language))
+    .map((species) => getTemplateGroup(species, datasets, language))
     .filter(Boolean)
     .flatMap((group) => group.speedAbilityTemplate
       ? [...group.templates, group.speedAbilityTemplate]

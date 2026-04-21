@@ -2,6 +2,11 @@ import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_OPPONENT_TEAM_SIZE = 6;
+const SEARCH_MATCH_WEIGHTS = Object.freeze({
+  species: 0,
+  label: 1,
+  move: 2,
+});
 const OPPONENT_SPECIES_ALIASES = new Map([
   ["floetteeternal", "floette"],
 ]);
@@ -188,6 +193,75 @@ function buildSelectionMap(entries = []) {
   }]));
 }
 
+function mergeRanges(ranges = []) {
+  if (!ranges.length) {
+    return [];
+  }
+  const sorted = [...ranges].sort((left, right) => left[0] - right[0]);
+  const merged = [sorted[0]];
+  for (const [start, end] of sorted.slice(1)) {
+    const last = merged[merged.length - 1];
+    if (start <= last[1]) {
+      last[1] = Math.max(last[1], end);
+      continue;
+    }
+    merged.push([start, end]);
+  }
+  return merged;
+}
+
+function buildHighlightRanges(label = "", query = "") {
+  const tokens = String(query || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (!label || !tokens.length) {
+    return [];
+  }
+  const lowered = String(label).toLowerCase();
+  const ranges = tokens.map((token) => {
+    const index = lowered.indexOf(token);
+    return index >= 0 ? [index, index + token.length] : null;
+  }).filter(Boolean);
+  return mergeRanges(ranges);
+}
+
+function resolveSearchMatch(entry, rawQuery, searchToken) {
+  const candidates = [
+    {kind: "species", texts: [entry.localizedSpeciesName, entry.speciesName]},
+    {kind: "label", texts: entry.labels || []},
+    {kind: "move", texts: entry.moveNames || []},
+  ];
+  let bestMatch = null;
+  candidates.forEach(({kind, texts}) => {
+    texts.filter(Boolean).forEach((label) => {
+      const normalized = normalizeLookupText(label);
+      const matchIndex = normalized.indexOf(searchToken);
+      if (matchIndex < 0) {
+        return;
+      }
+      const candidate = {
+        kind,
+        label,
+        weight: SEARCH_MATCH_WEIGHTS[kind] ?? Number.MAX_SAFE_INTEGER,
+        matchIndex,
+        ranges: buildHighlightRanges(label, rawQuery),
+      };
+      if (!bestMatch) {
+        bestMatch = candidate;
+        return;
+      }
+      if (candidate.weight !== bestMatch.weight) {
+        if (candidate.weight < bestMatch.weight) {
+          bestMatch = candidate;
+        }
+        return;
+      }
+      if (candidate.matchIndex < bestMatch.matchIndex) {
+        bestMatch = candidate;
+      }
+    });
+  });
+  return bestMatch;
+}
+
 function sortSavedOpponentTeams(savedTeams = []) {
   return [...savedTeams].sort((left, right) => {
     const rightOpened = Number(right.lastOpenedAt || 0);
@@ -214,20 +288,32 @@ export function buildOpponentLibrary(datasets, library = [], language = "zh") {
 }
 
 export function filterOpponentLibrary(entries = [], searchText = "") {
+  const rawQuery = String(searchText || "").trim();
   const searchToken = normalizeLookupText(searchText);
   if (!searchToken) {
     return entries;
   }
 
-  return entries.filter((entry) => {
-    const haystack = normalizeLookupText([
-      entry.speciesName,
-      entry.localizedSpeciesName,
-      entry.labels.join(" "),
-      entry.moveNames.join(" "),
-    ].join(" "));
-    return haystack.includes(searchToken);
-  });
+  return entries
+    .map((entry, index) => ({
+      entry,
+      index,
+      searchMatch: resolveSearchMatch(entry, rawQuery, searchToken),
+    }))
+    .filter((entry) => entry.searchMatch)
+    .sort((left, right) => {
+      if (left.searchMatch.weight !== right.searchMatch.weight) {
+        return left.searchMatch.weight - right.searchMatch.weight;
+      }
+      if (left.searchMatch.matchIndex !== right.searchMatch.matchIndex) {
+        return left.searchMatch.matchIndex - right.searchMatch.matchIndex;
+      }
+      return left.index - right.index;
+    })
+    .map(({entry, searchMatch}) => ({
+      ...entry,
+      searchMatch,
+    }));
 }
 
 export function findOpponentEntry(datasets, library = [], speciesId = "", language = "zh") {

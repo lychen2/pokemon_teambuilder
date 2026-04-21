@@ -107,6 +107,17 @@ resultDisplayMode = "SPs";
 const SIDE_KEYS = ["attacker", "defender"];
 const MOVE_SLOTS = [0, 1, 2, 3];
 const BOOSTS = {[AT]: 0, [DF]: 0, [SA]: 0, [SD]: 0, [SP]: 0};
+const WEATHER_BALL_NAME = "Weather Ball";
+const WEATHER_ABILITY_TO_FIELD = Object.freeze({
+  Drought: "Sun",
+  Drizzle: "Rain",
+  "Sand Stream": "Sand",
+  "Snow Warning": "Snow",
+  "Orichalcum Pulse": "Sun",
+  "Desolate Land": "Sun",
+  "Primordial Sea": "Rain",
+  "Mega Sol": "Sun",
+});
 const RUIN_SELECTORS = Object.freeze({
   "Sword of Ruin": "input:checkbox[id='sword-of-ruin']:checked",
   "Tablets of Ruin": "input:checkbox[id='tablets-of-ruin']:checked",
@@ -229,8 +240,21 @@ function resolveMoveHits(defaults, ability, item) {
   return 1;
 }
 
+function normalizeMoveDefaults(moveName, defaults) {
+  if (moveName !== WEATHER_BALL_NAME) {
+    return defaults;
+  }
+  return {
+    ...defaults,
+    bp: 100,
+  };
+}
+
 function buildMove(moveName, ability, item) {
-  const defaults = moves[moveName] || moves["(No Move)"] || {bp: 0, type: "Normal", category: "Status"};
+  const defaults = normalizeMoveDefaults(
+    moveName,
+    moves[moveName] || moves["(No Move)"] || {bp: 0, type: "Normal", category: "Status"},
+  );
   return {
     ...defaults,
     name: moveName,
@@ -311,7 +335,11 @@ function buildPokemon(input) {
   };
 }
 
-function buildSide(field, defenderIndex) {
+function resolveFieldWeather(field = {}, attacker = {}) {
+  return field.weather || WEATHER_ABILITY_TO_FIELD[attacker.ability] || "";
+}
+
+function buildSide(field, defenderIndex, weather = "") {
   const defenderKey = SIDE_KEYS[defenderIndex];
   const attackerKey = SIDE_KEYS[1 - defenderIndex];
   const defenderSide = field[defenderKey] || {};
@@ -319,7 +347,7 @@ function buildSide(field, defenderIndex) {
   return new Side(
     field.format || "Doubles",
     field.terrain || "",
-    field.weather || "",
+    weather,
     Boolean(field.gravity),
     Boolean(defenderSide.stealthRock),
     Number(defenderSide.spikes || 0),
@@ -347,17 +375,18 @@ function buildSide(field, defenderIndex) {
   );
 }
 
-function buildField(field) {
+function buildField(field, attacker) {
+  const weather = resolveFieldWeather(field, attacker);
   return {
     isNeutralizingGas: Boolean(field.independent?.neutralizingGas),
     getNeutralGas: () => Boolean(field.independent?.neutralizingGas),
     getTailwind: (index) => Boolean(field[SIDE_KEYS[index]]?.tailwind),
-    getWeather: () => field.weather || "",
+    getWeather: () => weather,
     getTerrain: () => field.terrain || "",
     getSwamp: (index) => Boolean(field[SIDE_KEYS[index]]?.swamp),
     clearWeather: () => {},
     clearTerrain: () => {},
-    getSide: (index) => buildSide(field, index),
+    getSide: (index) => buildSide(field, index, weather),
   };
 }
 
@@ -402,12 +431,14 @@ self.onmessage = (event) => {
     syncRuntimeSelectors(attacker, defender, field || {});
     const left = buildPokemon(attacker);
     const right = buildPokemon(defender);
-    const battleField = buildField(field || {});
-    const results = CALCULATE_ALL_MOVES_SV(left, right, battleField);
-    const leftSide = battleField.getSide(0);
-    const rightSide = battleField.getSide(1);
+    const leftField = buildField(field || {}, attacker || {});
+    const rightField = buildField(field || {}, defender || {});
+    const results = CALCULATE_ALL_MOVES_SV(left, right, leftField);
+    const counterResults = CALCULATE_ALL_MOVES_SV(right, left, rightField);
+    const rightSide = leftField.getSide(1);
+    const leftSide = rightField.getSide(1);
     const counter = MOVE_SLOTS.map((slot) => (
-      buildMoveResult(results[1][slot], right.moves[slot], left, leftSide, right.ability === "Bad Dreams")
+      buildMoveResult(counterResults[0][slot], right.moves[slot], left, leftSide, right.ability === "Bad Dreams")
     ));
     const result = buildSummary(left, right, results[0], counter, rightSide);
     self.postMessage({id, ok: true, result});

@@ -160,6 +160,7 @@
             <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
             <button type="button" class="view-tab" data-view="damage-view" data-i18n="tabs.damage">伤害工作台</button>
             <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
+            <button type="button" class="view-tab" data-view="output-view" data-i18n="tabs.output">输出强度</button>
           </nav>
 
           <section id="library-view" class="view-panel active">
@@ -258,6 +259,15 @@
               <p id="speed-summary" class="muted"></p>
             </div>
             <div id="speed-tiers" class="stack-list compact-list view-list"></div>
+          </section>
+
+          <section id="output-view" class="view-panel">
+            <div class="section-head">
+              <h2 data-i18n="views.outputTitle">输出强度</h2>
+              <p class="muted" data-i18n="views.outputCopy">按配置库已配置招式的输出上限与稳定输出，快速整理火力参考线。</p>
+              <p id="output-summary" class="muted"></p>
+            </div>
+            <div id="output-tiers" class="stack-list compact-list view-list"></div>
           </section>
         </section>
       </section>

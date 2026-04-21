@@ -1,4 +1,4 @@
-const CACHE_VERSION = "poke-type-v3-20260420";
+const CACHE_VERSION = "poke-type-v8-20260421";
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 const IMAGE_CACHE = `${CACHE_VERSION}-image`;

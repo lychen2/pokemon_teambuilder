@@ -5,6 +5,7 @@ import {getUsageMoveEntries} from "./usage.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MOVE_LIMIT = 4;
+const OPPONENT_BOARD_MOVE_LIMIT = 6;
 const PREVIEW_LIMIT = 3;
 const RELIABLE_ACCURACY = 90;
 const DRAWBACK_POWER_THRESHOLD = 120;
@@ -272,15 +273,15 @@ function getConfiguredAttackMoves(entry) {
       .filter(configuredMoveFilter),
   );
 }
-function getSeedMoves(entry, targets = [], memberTypes = []) {
+function getSeedMoves(entry, targets = [], memberTypes = [], limit = MOVE_LIMIT) {
   const preferredCategory = getPreferredCategory(entry);
   const configuredMoves = getConfiguredAttackMoves(entry);
   if (!configuredMoves.length) return [];
   if (isGroupedEntry(entry)) {
-    return rankMoves(configuredMoves, targets, memberTypes, preferredCategory).slice(0, MOVE_LIMIT);
+    return rankMoves(configuredMoves, targets, memberTypes, preferredCategory).slice(0, limit);
   }
   return configuredMoves
-    .slice(0, MOVE_LIMIT)
+    .slice(0, limit)
     .map((move) => ({
       ...scoreMove(move, targets),
       isStab: memberTypes.includes(move.type),
@@ -327,7 +328,7 @@ function addRequiredStabMoves(targetList, rankedLegalMoves, memberTypes, selecte
     addMoveIfPresent(targetList, preferredReliable || fallback, selectedMoveIds);
   });
 }
-function supplementMoves(selected, entry, targets = [], memberTypes = [], datasets) {
+function supplementMoves(selected, entry, targets = [], memberTypes = [], datasets, limit = MOVE_LIMIT) {
   const preferredCategory = getPreferredCategory(entry);
   const rankedLegalMoves = rankMoves(getLegalMoves(entry, datasets), targets, memberTypes, preferredCategory);
   const rankedUsageMoves = rankMoves(getUsageAttackMoves(entry, datasets), targets, memberTypes, preferredCategory);
@@ -337,7 +338,7 @@ function supplementMoves(selected, entry, targets = [], memberTypes = [], datase
   addRequiredStabMoves(nextMoves, [...rankedUsageMoves, ...rankedLegalMoves], memberTypes, selectedMoveIds);
   rankedUsageMoves.forEach((move) => {
     const moveId = normalizeName(move.name);
-    if (nextMoves.length >= MOVE_LIMIT || selectedMoveIds.has(moveId)) return;
+    if (nextMoves.length >= limit || selectedMoveIds.has(moveId)) return;
     if (!move.isStab && countTypeMoves(nextMoves, move.type, false) >= 1) return;
     addMoveIfPresent(nextMoves, move, selectedMoveIds);
   });
@@ -346,13 +347,13 @@ function supplementMoves(selected, entry, targets = [], memberTypes = [], datase
   }
   rankedLegalMoves.forEach((move) => {
     const moveId = normalizeName(move.name);
-    if (nextMoves.length >= MOVE_LIMIT || selectedMoveIds.has(moveId)) return;
+    if (nextMoves.length >= limit || selectedMoveIds.has(moveId)) return;
     if (!move.isStab && countTypeMoves(nextMoves, move.type, false) >= 1) return;
     addMoveIfPresent(nextMoves, move, selectedMoveIds);
   });
-  return nextMoves.slice(0, MOVE_LIMIT);
+  return nextMoves.slice(0, limit);
 }
-function padMoveRows(moves = [], targets = []) {
+function padMoveRows(moves = [], targets = [], limit = MOVE_LIMIT) {
   const rows = moves.map((move) => ({
     key: normalizeName(move.name),
     name: move.name,
@@ -360,7 +361,7 @@ function padMoveRows(moves = [], targets = []) {
     isMissing: false,
     multipliers: move.multipliers,
   }));
-  while (rows.length < MOVE_LIMIT) {
+  while (rows.length < limit) {
     rows.push({
       key: `missing:${rows.length}`,
       name: "",
@@ -371,12 +372,15 @@ function padMoveRows(moves = [], targets = []) {
   }
   return rows;
 }
-function getConfiguredDisplayMoves(entry, targets = []) {
+function getConfiguredDisplayMoves(entry, targets = [], limit = MOVE_LIMIT) {
   const config = getVariantConfigs(entry)[0];
   if (!config?.moves?.length) {
     return [];
   }
-  return config.moves.slice(0, MOVE_LIMIT).map((move) => ({
+  return config.moves
+    .filter((move) => move?.category !== "Status" && Number(move?.basePower || 0) > 0)
+    .slice(0, limit)
+    .map((move) => ({
     ...move,
     multipliers: move.category !== "Status" && move.type
       ? getMoveMetrics(move, targets).multipliers
@@ -450,20 +454,26 @@ function buildSpeedRows(team = [], opponentTeam = []) {
     opponent: opponentEntries[index] || null,
   }));
 }
-function createCard(entry, targets = [], summaries = [], includeResistance = false, datasets, autoFillMoves = true, preserveConfiguredMoves = false) {
+function createCard(entry, targets = [], summaries = [], includeResistance = false, datasets, autoFillMoves = true, preserveConfiguredMoves = false, moveLimit = MOVE_LIMIT) {
   const memberTypes = entry.types || [];
   const shouldPreserveConfiguredMoves = preserveConfiguredMoves || Boolean(entry.selectedConfigId);
   const selectedMoves = shouldPreserveConfiguredMoves
-    ? getConfiguredDisplayMoves(entry, targets)
+    ? (() => {
+      const configuredMoves = getConfiguredDisplayMoves(entry, targets, moveLimit);
+      if (!autoFillMoves || configuredMoves.length >= moveLimit) {
+        return configuredMoves;
+      }
+      return supplementMoves(configuredMoves, entry, targets, memberTypes, datasets, moveLimit);
+    })()
     : (() => {
-      const seedMoves = getSeedMoves(entry, targets, memberTypes);
-      const shouldAutoFill = autoFillMoves && seedMoves.length < MOVE_LIMIT;
+      const seedMoves = getSeedMoves(entry, targets, memberTypes, moveLimit);
+      const shouldAutoFill = autoFillMoves && seedMoves.length < moveLimit;
       if (!autoFillMoves) {
-        return seedMoves.slice(0, MOVE_LIMIT);
+        return seedMoves.slice(0, moveLimit);
       }
       return shouldAutoFill
-        ? supplementMoves(seedMoves, entry, targets, memberTypes, datasets)
-        : seedMoves.slice(0, MOVE_LIMIT);
+        ? supplementMoves(seedMoves, entry, targets, memberTypes, datasets, moveLimit)
+        : seedMoves.slice(0, moveLimit);
     })();
   const supportMoves = getCommonSupportMoveNames(entry, datasets, selectedMoves);
   return {
@@ -485,7 +495,7 @@ function createCard(entry, targets = [], summaries = [], includeResistance = fal
       }))
       : [],
     supportMoves,
-    moveRows: padMoveRows(selectedMoves, targets),
+    moveRows: padMoveRows(selectedMoves, targets, moveLimit),
     targets,
     summaryEntries: createSummaryEntries(summaries, includeResistance),
   };
@@ -535,10 +545,10 @@ export function resolveDamageMoveNamesForConfig(config, allyTargets = [], datase
   const entry = buildEntryFromSpecies(config.speciesId, datasets, existingNames);
   if (!entry) return existingNames.slice(0, MOVE_LIMIT);
   const memberTypes = entry.types || [];
-  const seedMoves = getSeedMoves(entry, allyTargets, memberTypes);
+  const seedMoves = getSeedMoves(entry, allyTargets, memberTypes, MOVE_LIMIT);
   const filled = seedMoves.length >= MOVE_LIMIT
     ? seedMoves.slice(0, MOVE_LIMIT)
-    : supplementMoves(seedMoves, entry, allyTargets, memberTypes, datasets);
+    : supplementMoves(seedMoves, entry, allyTargets, memberTypes, datasets, MOVE_LIMIT);
   const resolvedNames = filled.map((move) => move?.name).filter(Boolean);
   if (resolvedNames.length) return resolvedNames;
   return existingNames.slice(0, MOVE_LIMIT);
@@ -551,10 +561,10 @@ export function buildMatchupBoard({team = [], opponentTeam = [], allyThreats = [
   const allyTargets = buildTargetRefs(opponentTeam);
   const opponentTargets = buildTargetRefs(team);
   return {
-    allyCards: team.map((entry) => createCard(entry, allyTargets, allyThreatMap.get(entry.id)?.threats || [], false, datasets, false, true)),
+    allyCards: team.map((entry) => createCard(entry, allyTargets, allyThreatMap.get(entry.id)?.threats || [], false, datasets, false, true, MOVE_LIMIT)),
     opponentCards: opponentTeam.map((entry) => {
       const key = getStableSpeciesId(entry) || entry.id;
-      return createCard(entry, opponentTargets, opponentAnswerMap.get(key)?.answers || [], true, datasets, true);
+      return createCard(entry, opponentTargets, opponentAnswerMap.get(key)?.answers || [], true, datasets, true, false, OPPONENT_BOARD_MOVE_LIMIT);
     }),
     speedRows: buildSpeedRows(team, opponentTeam),
   };
