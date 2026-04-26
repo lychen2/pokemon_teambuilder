@@ -32,6 +32,7 @@ function buildStatePayload(state) {
     iconScheme: state.iconScheme,
     recommendPreferences: state.recommendPreferences,
     recommendWeights: state.recommendWeights,
+    recommendBiasAuto: state.recommendBiasAuto,
     dismissedRecommendationKeys: state.dismissedRecommendationKeys,
     savedTeams: state.savedTeams,
     savedOpponentTeams: state.savedOpponentTeams,
@@ -40,6 +41,7 @@ function buildStatePayload(state) {
       attackerId: state.damage.attackerId,
       defenderId: state.damage.defenderId,
       focusSide: state.damage.focusSide,
+      scanMode: state.damage.scanMode,
       field: state.damage.field,
     },
   };

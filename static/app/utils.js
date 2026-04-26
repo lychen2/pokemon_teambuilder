@@ -39,6 +39,10 @@ export function isMegaConfig(config = {}) {
   return speciesId.includes("mega") || /(?:^|\b|-)\s*mega(?:\b|[-\s]|$)/i.test(speciesName);
 }
 
+export function countMegaConfigs(configs = []) {
+  return configs.filter((config) => isMegaConfig(config)).length;
+}
+
 export function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
@@ -229,6 +233,44 @@ export function getItemSpritePosition(index) {
 
 export function uniqueStrings(values) {
   return [...new Set(values.filter(Boolean))];
+}
+
+function getAbilitySet(entry = {}) {
+  return Object.values(entry.abilities || {}).filter(Boolean).sort();
+}
+
+function hasSameStringArray(left = [], right = []) {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function hasSameBaseStats(left = {}, right = {}) {
+  return ["hp", "atk", "def", "spa", "spd", "spe"].every((stat) => Number(left[stat] || 0) === Number(right[stat] || 0));
+}
+
+function isBattleEquivalentForm(entry = {}, baseEntry = {}) {
+  if (!entry.baseSpecies) return false;
+  if (String(entry.forme || "").startsWith("Mega")) return false;
+  if (entry.requiredItem || entry.requiredMove || entry.battleOnly || entry.changesFrom) return false;
+  return hasSameStringArray(entry.types || [], baseEntry.types || [])
+    && hasSameBaseStats(entry.baseStats || {}, baseEntry.baseStats || {})
+    && hasSameStringArray(getAbilitySet(entry), getAbilitySet(baseEntry));
+}
+
+export function getBattleEquivalentSpeciesId(speciesId = "", datasets = null) {
+  const normalizedSpeciesId = normalizeName(speciesId);
+  if (!normalizedSpeciesId || !datasets?.pokedex?.[normalizedSpeciesId]) {
+    return normalizedSpeciesId;
+  }
+  const entry = datasets.pokedex[normalizedSpeciesId];
+  const baseSpeciesId = normalizeName(entry.baseSpecies || "");
+  if (!baseSpeciesId || baseSpeciesId === normalizedSpeciesId) {
+    return normalizedSpeciesId;
+  }
+  const baseEntry = datasets.pokedex?.[baseSpeciesId];
+  if (!baseEntry || !isBattleEquivalentForm(entry, baseEntry)) {
+    return normalizedSpeciesId;
+  }
+  return getBattleEquivalentSpeciesId(baseSpeciesId, datasets);
 }
 
 export function formatStatLine(stats = {}) {

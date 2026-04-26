@@ -197,9 +197,17 @@ function resolveSpecies(input) {
   if (pokedex[directName]) return directName;
   const mega = directName.match(/^(.*)-Mega(?:-([A-Z]))?$/);
   if (mega) {
-    const base = speciesLookup.get(normalizeCalcName(mega[1]));
-    if (!base) throw new Error(`伤害计算器里找不到物种：${directName}`);
-    return mega[2] ? `Mega ${base} ${mega[2]}` : `Mega ${base}`;
+    const baseName = mega[1];
+    const suffix = mega[2] || "";
+    const candidate = suffix ? `Mega ${baseName} ${suffix}` : `Mega ${baseName}`;
+    const directMega = speciesLookup.get(normalizeCalcName(candidate));
+    if (directMega) return directMega;
+    const base = speciesLookup.get(normalizeCalcName(baseName));
+    if (base) {
+      const rebuilt = suffix ? `Mega ${base} ${suffix}` : `Mega ${base}`;
+      if (pokedex[rebuilt]) return rebuilt;
+    }
+    throw new Error(`伤害计算器里找不到物种：${directName}`);
   }
   const normalizedName = speciesLookup.get(normalizeCalcName(directName));
   if (normalizedName) return normalizedName;

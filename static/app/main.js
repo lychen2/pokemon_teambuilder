@@ -40,17 +40,18 @@ import {
   PERSIST_SIZE_WARNING_BYTES,
   schedulePersistState,
 } from "./persistence.js";
-import {applyPsChinaTranslation, translatePsChinaBatch, translatePsChinaText} from "./pschina-translation.js";
 import {
   DEFAULT_RECOMMENDATION_PREFERENCES,
   DEFAULT_RECOMMENDATION_WEIGHTS,
+  getRecommendationScoreMix,
   normalizeRecommendationPreferences,
   normalizeRecommendationWeights,
 } from "./recommendation-preferences.js";
 import {recommendConfigs} from "./recommendations.js";
 import {buildOutputReferenceConfigs, calculateOutputStrengthTiers} from "./output-strength.js";
 import {renderAnalysis, renderDamage, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
-import {invalidateRenderCache} from "./render-cache.js";
+import {renderRecommendationCards} from "./render-recommendations.js";
+import {invalidateRenderCache, setInnerHTMLIfChanged} from "./render-cache.js";
 import {closeShortcutsHelp, installKeybindings, openShortcutsHelp} from "./keybindings.js";
 import {buildDefaultCommands, createCommandPalette} from "./command-palette.js";
 import {focusCommandPaletteInput, installCommandPalette, renderCommandPalette} from "./render-command-palette.js";
@@ -147,6 +148,15 @@ const DEFAULT_BATTLE_FIELD = {
   allyFlags: {},
   opponentFlags: {},
 };
+const DEFAULT_MATCHUP_FILTERS = {
+  types: [],
+  speedBucket: "",
+  roles: [],
+};
+const DEFAULT_LIBRARY_COMPARE = {
+  speciesId: "",
+  selectedConfigIds: [],
+};
 
 const state = {
   datasets: null,
@@ -160,6 +170,10 @@ const state = {
     attackerId: "",
     defenderId: "",
     focusSide: "attacker",
+    scanMode: "attacker",
+    scanResult: null,
+    scanLoading: false,
+    scanError: "",
     result: null,
     loading: false,
     error: "",
@@ -194,9 +208,12 @@ const state = {
   recommendFocusType: "",
   recommendPreferences: {...DEFAULT_RECOMMENDATION_PREFERENCES},
   recommendWeights: {...DEFAULT_RECOMMENDATION_WEIGHTS},
+  recommendBiasAuto: true,
+  recommendScoreMix: getRecommendationScoreMix(0, DEFAULT_RECOMMENDATION_WEIGHTS),
   dismissedRecommendationKeys: [],
   search: "",
   matchupSearch: "",
+  matchupFilters: {...DEFAULT_MATCHUP_FILTERS, types: [], roles: []},
   battleField: {...DEFAULT_BATTLE_FIELD, allyFlags: {}, opponentFlags: {}},
   library: [],
   filteredLibrary: [],
@@ -205,6 +222,7 @@ const state = {
   selectedSpeciesId: null,
   selectedSpecies: null,
   selectedSpeciesHasConfigs: false,
+  libraryCompare: {...DEFAULT_LIBRARY_COMPARE, selectedConfigIds: []},
   matchupLibrary: [],
   speedTiers: [],
   speedLineTiers: [],
@@ -238,8 +256,6 @@ const state = {
   localizedMoveNames: new Map(),
   localizedAbilityNames: new Map(),
   localizedNatureNames: new Map(),
-  localizedDetailTexts: new Map(),
-  localizedDetailPromises: new Map(),
 };
 const stateHistory = createHistoryStore();
 let persistLimitWarningShown = false;
@@ -248,7 +264,6 @@ let matchupSearchDebounceTimer = 0;
 let activeCommandPalette = null;
 let activeModalState = null;
 let modalMutationObserver = null;
-let localizedLabelsTimer = 0;
 
 const TOOLTIP_OFFSET = 12;
 const BUILDER_STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
@@ -258,8 +273,6 @@ const SPEED_BENCHMARK_SLOWEST = "slowest";
 const SPEED_BENCHMARK_FAST_NATURE = "Jolly";
 const SPEED_BENCHMARK_SLOW_NATURE = "Brave";
 const SPEED_BENCHMARK_SLOW_PERCENTILE = 0.0002;
-const LOCALIZATION_BATCH_SIZE = 120;
-const LOCALIZATION_SYNC_DELAY_MS = 600;
 const EMPTY_BUILDER_POINTS = Object.freeze({
   hp: 0,
   atk: 0,
@@ -295,9 +308,9 @@ const TYPE_CHIP_COLORS = Object.freeze({
 let globalTooltip = null;
 let activeEditorTarget = null;
 let activeBuilderAutocomplete = null;
-let localizedLabelsRequestId = 0;
 let damageWorkspace = null;
-let damageSyncRequestId = 0;
+let damagePairRequestId = 0;
+let damageScanRequestId = 0;
 let damageSliderSyncTimer = 0;
 const POINT_PROMPT_MAP = {
   hp: "hp",
@@ -397,6 +410,14 @@ function resetDamagePairState(attackerConfig, defenderConfig) {
     attacker: attackerConfig?.teraType || attackerConfig?.types?.[0] || "",
     defender: defenderConfig?.teraType || defenderConfig?.types?.[0] || "",
   };
+  invalidateDamageScan();
+}
+
+function invalidateDamageScan() {
+  damageScanRequestId += 1;
+  state.damage.scanResult = null;
+  state.damage.scanError = "";
+  state.damage.scanLoading = false;
 }
 
 function applyDamageOverrides(config, overrides, role, status, currentHpPercent) {
@@ -520,6 +541,7 @@ function setDamageOverride(overrideKey, value) {
     [overrideKey]: Math.max(0, Math.min(32, Math.round(Number(value || 0)))),
   };
   state.damage.lastPairKey = "";
+  invalidateDamageScan();
 }
 
 function createUniqueConfigId(baseId, usedIds) {
@@ -540,24 +562,12 @@ function ensureUniqueConfigIds(configs, existingIds = new Set()) {
   }));
 }
 
-function translateNodes(...nodes) {
-  void applyPsChinaTranslation(state.language, nodes);
-}
-
 function renderLibraryImportFeedback(payload) {
   renderImportFeedback(payload, state.language);
-  translateNodes(
-    document.getElementById("import-feedback"),
-    document.getElementById("import-feedback-details"),
-  );
 }
 
 function renderCurrentTeamImportFeedback(payload) {
   renderTeamImportFeedback(payload, state.language);
-  translateNodes(
-    document.getElementById("team-import-feedback"),
-    document.getElementById("team-import-feedback-details"),
-  );
 }
 
 function buildImportFeedbackPayload(configs = [], feedback = []) {
@@ -616,6 +626,29 @@ function flushStatePersist() {
   flushPersistState(state, {onError: handlePersistError});
 }
 
+function resetLibraryCompare(speciesId = "") {
+  state.libraryCompare = {
+    speciesId,
+    selectedConfigIds: [],
+  };
+}
+
+function sanitizeLibraryCompare() {
+  const speciesId = state.selectedSpeciesId || "";
+  const selectedIds = speciesId === state.libraryCompare?.speciesId
+    ? state.libraryCompare.selectedConfigIds || []
+    : [];
+  const validIds = new Set(
+    state.library
+      .filter((config) => config.speciesId === speciesId)
+      .map((config) => config.id),
+  );
+  state.libraryCompare = {
+    speciesId,
+    selectedConfigIds: selectedIds.filter((configId) => validIds.has(configId)).slice(0, 2),
+  };
+}
+
 function refreshFilteredLibrary() {
   const searchToken = normalizeName(state.search);
   const speciesSearch = state.library.reduce((map, config) => {
@@ -632,6 +665,7 @@ function refreshFilteredLibrary() {
     map.set(config.speciesId, `${current} ${haystack}`);
     return map;
   }, new Map());
+  sanitizeLibraryCompare();
   state.selectedSpecies = state.allSpeciesBrowser.find((entry) => entry.speciesId === state.selectedSpeciesId) || null;
   state.selectedSpeciesHasConfigs = state.selectedSpecies
     ? state.library.some((config) => config.speciesId === state.selectedSpeciesId)
@@ -732,18 +766,57 @@ function getRecommendationPool() {
   return state.library.filter((config) => availableSpeciesIds.has(config.speciesId));
 }
 
-function refreshBattleState() {
+function refreshRecommendationsState() {
   const recommendationPool = getRecommendationPool();
+  const weaknessTypes = new Set((state.analysis?.coverage?.weakRows || []).map((entry) => entry.type));
+  if (state.recommendFocusType && !weaknessTypes.has(state.recommendFocusType)) {
+    state.recommendFocusType = "";
+  }
+  const recommendationState = recommendConfigs(
+    recommendationPool,
+    state.team,
+    state.speedTiers,
+    state.language,
+    {
+      analysis: state.analysis,
+      preferences: state.recommendPreferences,
+      weights: state.recommendWeights,
+      autoBias: state.recommendBiasAuto,
+      focusType: state.recommendFocusType,
+      datasets: state.datasets,
+      dismissedKeys: state.dismissedRecommendationKeys,
+      fieldState: state.battleField,
+    },
+  );
+  if (state.recommendBiasAuto) {
+    state.recommendWeights = {
+      ...state.recommendWeights,
+      pairingBias: recommendationState.scoreMix.pairingBias,
+    };
+  }
+  state.recommendations = recommendationState.recommendations;
+  state.recommendScoreMix = recommendationState.scoreMix;
+}
+
+function applyAutoRecommendBias() {
+  state.recommendBiasAuto = true;
+  refreshRecommendationsState();
+  renderRecommendationsSection();
+  scheduleStatePersist();
+}
+
+function refreshBattleState() {
   sanitizeBattleFlags();
   refreshSpeedState();
   refreshOutputState();
+  const recommendationPool = getRecommendationPool();
   state.analysis = analyzeTeam(
     state.team,
     state.speedTiers,
     state.language,
     recommendationPool,
     state.recommendPreferences,
-    {fieldState: state.battleField},
+    {fieldState: state.battleField, datasets: state.datasets},
   );
   state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {
     fieldState: state.battleField,
@@ -751,24 +824,7 @@ function refreshBattleState() {
   if (!state.team.some((config) => config.id === state.activeCoreConfigId)) {
     state.activeCoreConfigId = state.team[0]?.id || null;
   }
-  const weaknessTypes = new Set((state.analysis?.coverage?.weakRows || []).map((entry) => entry.type));
-  if (state.recommendFocusType && !weaknessTypes.has(state.recommendFocusType)) {
-    state.recommendFocusType = "";
-  }
-  state.recommendations = recommendConfigs(
-    recommendationPool,
-    state.team,
-    state.speedTiers,
-    state.language,
-    {
-      preferences: state.recommendPreferences,
-      weights: state.recommendWeights,
-      focusType: state.recommendFocusType,
-      datasets: state.datasets,
-      dismissedKeys: state.dismissedRecommendationKeys,
-      fieldState: state.battleField,
-    },
-  );
+  refreshRecommendationsState();
   syncDamageSelectionState();
 }
 
@@ -857,6 +913,12 @@ function syncDamageSelectionState() {
     if (state.damage.movePicker?.side === "defender") {
       state.damage.movePicker = {side: "", index: -1, query: ""};
     }
+  }
+  if (
+    state.damage.attackerId !== previousAttackerId
+    || state.damage.defenderId !== previousDefenderId
+  ) {
+    invalidateDamageScan();
   }
   if (!state.damage.attackerId || !state.damage.defenderId) {
     state.damage.result = null;
@@ -993,7 +1055,6 @@ function renderDamageMovePickerPanel() {
       ${renderAutocompleteOptionContent(entry, {kind: "move", index: picker.index})}
     </button>
   `).join("");
-  hydrateAutocompletePanelDetails(panel, matches.slice(0, 40), {kind: "move", index: picker.index});
 }
 
 function openDamageMovePicker(side, index) {
@@ -1023,6 +1084,7 @@ function selectDamageMoveValue(side, index, value) {
   const canonical = state.datasets?.moveLookup?.get(normalizeName(value))?.name || value;
   state.damage.moveSelections[side][index] = canonical;
   state.damage.movePicker = {side: "", index: -1, query: ""};
+  invalidateDamageScan();
   renderDamageSection();
   void syncDamageWorkspace(true);
   scheduleStatePersist();
@@ -1058,6 +1120,111 @@ function getSelectedDamageDefender() {
   );
 }
 
+function buildDamageScanRangeText(entry = {}) {
+  const min = Number(entry.minPercent || 0);
+  const max = Number(entry.maxPercent || 0);
+  return min === max ? `${max}%` : `${min}% - ${max}%`;
+}
+
+function buildAttackerScanRow(defender, result) {
+  const displayMoves = state.damage.displayMoveNames?.attacker || [];
+  const cells = displayMoves.map((moveName) => {
+    const match = (result.leftMoves || []).find((entry) => entry.moveName === moveName) || null;
+    return {
+      moveName: moveName || t(state.language, "common.none"),
+      minPercent: match?.minPercent || 0,
+      maxPercent: match?.maxPercent || 0,
+      koText: match?.koText || "",
+      rangeText: match ? buildDamageScanRangeText(match) : "--",
+    };
+  });
+  return {
+    openId: defender.id,
+    speciesId: defender.speciesId || "",
+    speciesName: defender.speciesName || defender.displayName || "",
+    label: buildDamageOptionLabel(defender),
+    cells,
+  };
+}
+
+function buildDefenderScanRow(attacker, result) {
+  const moves = result.leftMoves || [];
+  const bestCell = moves.reduce((winner, current) => {
+    return Number(current.maxPercent || 0) > Number(winner.maxPercent || 0) ? current : winner;
+  }, moves[0] || {moveName: "", minPercent: 0, maxPercent: 0, koText: ""});
+  return {
+    openId: attacker.id,
+    speciesId: attacker.speciesId || "",
+    speciesName: attacker.speciesName || attacker.displayName || "",
+    label: buildDamageOptionLabel(attacker),
+    bestCell: {
+      moveName: bestCell.moveName || t(state.language, "common.none"),
+      minPercent: bestCell.minPercent || 0,
+      maxPercent: bestCell.maxPercent || 0,
+      koText: bestCell.koText || "",
+      rangeText: bestCell.moveName ? buildDamageScanRangeText(bestCell) : "--",
+    },
+  };
+}
+
+function buildOpponentAttackConfigs() {
+  return state.damageDefenders.map((entry) => {
+    const moveNames = resolveDamageMoveNamesForConfig(entry.config, buildDamageAllyTargets(), state.datasets);
+    return {
+      ...entry.config,
+      moveNames,
+      status: DEFAULT_DAMAGE_STATUSES.defender,
+      currentHpPercent: DEFAULT_DAMAGE_HEALTH.defender,
+    };
+  });
+}
+
+async function syncDamageScan(mode = state.damage.scanMode) {
+  const ally = getSelectedDamageAttacker();
+  if (!ally) {
+    invalidateDamageScan();
+    renderDamageSection();
+    return;
+  }
+  if (!state.damageDefenders.length) {
+    state.damage.scanResult = null;
+    state.damage.scanError = t(state.language, "damage.scanNeedOpponents");
+    state.damage.scanLoading = false;
+    renderDamageSection();
+    return;
+  }
+  if (!damageWorkspace) {
+    damageWorkspace = createDamageWorkspace();
+  }
+  const requestId = ++damageScanRequestId;
+  state.damage.scanMode = mode;
+  state.damage.scanLoading = true;
+  state.damage.scanError = "";
+  scheduleStatePersist();
+  renderDamageSection();
+  try {
+    const rows = mode === "defender"
+      ? await damageWorkspace.scanAttackersIntoDefender(buildOpponentAttackConfigs(), ally, state.damage.field)
+      : await damageWorkspace.scanAttackerAgainstTargets(ally, state.damageDefenders.map((entry) => entry.config), state.damage.field);
+    if (requestId !== damageScanRequestId) return;
+    state.damage.scanResult = {
+      mode,
+      rows: mode === "defender"
+        ? rows.map(({attacker, result}) => buildDefenderScanRow(attacker, result))
+        : rows.map(({defender, result}) => buildAttackerScanRow(defender, result)),
+    };
+    state.damage.scanLoading = false;
+    state.damage.scanError = "";
+    renderDamageSection();
+  } catch (error) {
+    if (requestId !== damageScanRequestId) return;
+    state.damage.scanLoading = false;
+    state.damage.scanResult = null;
+    state.damage.scanError = error instanceof Error ? error.message : String(error);
+    renderDamageSection();
+  }
+}
+
 async function syncDamageWorkspace(force = false) {
   const attacker = getSelectedDamageAttacker();
   const defender = getSelectedDamageDefender();
@@ -1080,13 +1247,13 @@ async function syncDamageWorkspace(force = false) {
     renderDamageSection();
     return;
   }
-  const requestId = ++damageSyncRequestId;
+  const requestId = ++damagePairRequestId;
   state.damage.loading = true;
   state.damage.error = "";
   renderDamageSection();
   try {
     const result = await damageWorkspace.syncPair(attacker, defender, state.damage.field);
-    if (requestId !== damageSyncRequestId) {
+    if (requestId !== damagePairRequestId) {
       return;
     }
     if (result === null) {
@@ -1098,7 +1265,7 @@ async function syncDamageWorkspace(force = false) {
     state.damage.error = "";
     renderDamageSection();
   } catch (error) {
-    if (requestId !== damageSyncRequestId) {
+    if (requestId !== damagePairRequestId) {
       return;
     }
     state.damage.loading = false;
@@ -1131,7 +1298,6 @@ function refreshDerivedState() {
 
 function renderLibrarySection() {
   renderLibrary(state);
-  translateNodes(document.getElementById("library-view"));
 }
 
 function renderTeamSection() {
@@ -1139,11 +1305,6 @@ function renderTeamSection() {
   renderTeam(state);
   renderSavedTeams(state);
   syncTeamSidebarUi();
-  translateNodes(
-    document.querySelector(".team-sidebar"),
-    document.getElementById("team-list"),
-    document.getElementById("saved-team-list"),
-  );
 }
 
 function syncTeamSidebarState() {
@@ -1182,17 +1343,10 @@ function setActiveTeamSidebarTab(tabId) {
 
 function renderAnalysisSection() {
   renderAnalysis(state);
-  translateNodes(
-    document.getElementById("analysis-overview"),
-    document.getElementById("analysis-coverage-panel"),
-    document.getElementById("analysis-roles-panel"),
-    document.getElementById("analysis-cores-panel"),
-  );
 }
 
 function renderMatchupSection() {
   renderMatchup(state);
-  translateNodes(document.getElementById("matchup-view"));
 }
 
 function scheduleMatchupSearchRender(nextValue) {
@@ -1206,7 +1360,6 @@ function scheduleMatchupSearchRender(nextValue) {
 
 function renderRecommendationsSection() {
   renderRecommendations(state);
-  translateNodes(document.getElementById("recommend-view"));
 }
 
 function buildDamageDisplaySlots(side) {
@@ -1228,12 +1381,6 @@ function renderDamageSection() {
     defender: buildDamageDisplaySlots("defender"),
   };
   renderDamage(state);
-  translateNodes(
-    document.getElementById("damage-view"),
-    document.getElementById("damage-controls"),
-    document.getElementById("damage-field"),
-    document.getElementById("damage-summary"),
-  );
   if (
     state.activeView === "damage-view"
     && !state.damage.loading
@@ -1248,110 +1395,66 @@ function renderDamageSection() {
 
 function renderSpeedSection() {
   renderSpeedTiers(state);
-  translateNodes(document.getElementById("speed-view"));
 }
 
 function renderOutputSection() {
   renderOutputStrength(state);
-  translateNodes(document.getElementById("output-view"));
+}
+
+function renderCurrentWorkspaceSection() {
+  switch (state.activeView) {
+    case "library-view":
+      renderLibrarySection();
+      break;
+    case "analysis-view":
+      renderAnalysisSection();
+      break;
+    case "matchup-view":
+      renderMatchupSection();
+      break;
+    case "recommend-view":
+      renderRecommendationsSection();
+      break;
+    case "damage-view":
+      renderDamageSection();
+      break;
+    case "speed-view":
+      renderSpeedSection();
+      break;
+    case "output-view":
+      renderOutputSection();
+      break;
+    default:
+      renderLibrarySection();
+      break;
+  }
 }
 
 function renderAll() {
-  renderLibrarySection();
   renderTeamSection();
-  renderAnalysisSection();
-  renderMatchupSection();
-  renderRecommendationsSection();
-  renderDamageSection();
-  renderSpeedSection();
-  renderOutputSection();
+  renderCurrentWorkspaceSection();
   renderGuidedConfig();
 }
 
 function setStatus(key, params = {}) {
   state.status = {key, params};
   renderStatus(t(state.language, key, params));
-  translateNodes(document.getElementById("status-text"));
 }
 
 function setStatusMessage(message) {
   state.status = null;
   renderStatus(message);
-  translateNodes(document.getElementById("status-text"));
 }
 
-function resetLocalizedLabels() {
-  state.localizedSpeciesNames = new Map();
-  state.localizedItemNames = new Map();
-  state.localizedMoveNames = new Map();
-  state.localizedAbilityNames = new Map();
+function syncLocalizedData() {
+  state.localizedSpeciesNames = new Map(state.datasets?.localizedSpeciesNames || []);
+  state.localizedItemNames = new Map(state.datasets?.localizedItemNames || []);
+  state.localizedMoveNames = new Map(state.datasets?.localizedMoveNames || []);
+  state.localizedAbilityNames = new Map(state.datasets?.localizedAbilityNames || []);
   state.localizedNatureNames = new Map();
-  if (state.datasets) {
-    state.datasets.abilitySearchLookup = state.datasets.abilityLookup;
-    state.datasets.itemSearchLookup = state.datasets.itemLookup;
-    state.datasets.moveSearchLookup = state.datasets.moveLookup;
-  }
-}
-
-function clearLocalizedLabelsTimer() {
-  if (!localizedLabelsTimer) {
-    return;
-  }
-  window.clearTimeout(localizedLabelsTimer);
-  localizedLabelsTimer = 0;
-}
-
-function yieldToMainThread() {
-  return new Promise((resolve) => {
-    if (typeof window.requestIdleCallback === "function") {
-      window.requestIdleCallback(() => resolve(), {timeout: 50});
-      return;
-    }
-    window.setTimeout(resolve, 0);
+  buildNatureOptions().forEach((name) => {
+    state.localizedNatureNames.set(normalizeName(name), NATURE_TRANSLATIONS[name] || name);
   });
-}
-
-async function translateLabelPairsInChunks(entries = [], readName, readKey) {
-  const pairs = [];
-  for (let index = 0; index < entries.length; index += LOCALIZATION_BATCH_SIZE) {
-    const batch = entries.slice(index, index + LOCALIZATION_BATCH_SIZE);
-    const translatedNames = await translatePsChinaBatch("zh", batch.map((entry) => readName(entry)));
-    batch.forEach((entry, batchIndex) => {
-      pairs.push([readKey(entry), translatedNames[batchIndex] || readName(entry)]);
-    });
-    await yieldToMainThread();
-  }
-  return pairs;
-}
-
-async function syncLocalizedLabelsInBackground() {
-  if (state.language !== "zh" || !state.datasets) {
-    return;
-  }
-  const requestId = ++localizedLabelsRequestId;
-  try {
-    await initializeLocalizedLabels();
-    if (requestId !== localizedLabelsRequestId || state.language !== "zh") {
-      return;
-    }
-    await yieldToMainThread();
-    initializeBuilderOptions();
-    refreshDerivedState();
-    renderAll();
-  } catch (error) {
-    console.error("本地化标签初始化失败", error);
-  }
-}
-
-function scheduleLocalizedLabelsSync(delay = LOCALIZATION_SYNC_DELAY_MS) {
-  if (state.language !== "zh" || !state.datasets) {
-    return;
-  }
-  clearLocalizedLabelsTimer();
-  localizedLabelsTimer = window.setTimeout(() => {
-    localizedLabelsTimer = 0;
-    void syncLocalizedLabelsInBackground();
-  }, delay);
 }
 
 function updateLanguageSwitch() {
@@ -1380,9 +1483,6 @@ function updateIconSchemeControl() {
 
 function setLanguage(language, rerender = true) {
   state.language = normalizeLanguage(language);
-  localizedLabelsRequestId += 1;
-  clearLocalizedLabelsTimer();
-  resetLocalizedLabels();
   clearSpeciesTemplateCache(state.datasets);
   applyStaticTranslations(state.language);
   updateLanguageSwitch();
@@ -1405,7 +1505,6 @@ function setLanguage(language, rerender = true) {
   refreshDerivedState();
   invalidateRenderCache();
   renderAll();
-  scheduleLocalizedLabelsSync();
   scheduleStatePersist();
 }
 
@@ -1431,9 +1530,7 @@ function setActiveView(viewId) {
   document.querySelectorAll(".view-panel").forEach((panel) => {
     panel.classList.toggle("active", panel.id === viewId);
   });
-  if (viewId === "damage-view") {
-    void syncDamageWorkspace();
-  }
+  renderCurrentWorkspaceSection();
   scheduleStatePersist();
 }
 
@@ -1459,25 +1556,17 @@ function renderBattleViews(options = {}) {
 }
 
 function setRecommendFocusType(type = "", rerender = true) {
-  const recommendationPool = getRecommendationPool();
   state.recommendFocusType = type || "";
-  state.recommendations = recommendConfigs(
-    recommendationPool,
-    state.team,
-    state.speedTiers,
-    state.language,
-    {
-      preferences: state.recommendPreferences,
-      weights: state.recommendWeights,
-      focusType: state.recommendFocusType,
-      datasets: state.datasets,
-      dismissedKeys: state.dismissedRecommendationKeys,
-      fieldState: state.battleField,
-    },
-  );
+  refreshRecommendationsState();
   if (rerender) {
     renderRecommendationsSection();
   }
+}
+
+function applyAnalysisRecommendFocus(type = "") {
+  setRecommendFocusType(type, false);
+  setActiveView("recommend-view");
+  renderRecommendationsSection();
 }
 
 function toggleRecommendPreference(preferenceId) {
@@ -1498,9 +1587,10 @@ function setRecommendWeight(weightId, value) {
   if (!(weightId in state.recommendWeights)) {
     return;
   }
+  state.recommendBiasAuto = false;
   state.recommendWeights = {
     ...state.recommendWeights,
-    [weightId]: Math.min(200, Math.max(0, Math.round(Number(value || 0)))),
+    [weightId]: Math.min(100, Math.max(0, Math.round(Number(value || 0)))),
   };
   refreshBattleState();
   renderAnalysisSection();
@@ -1508,12 +1598,34 @@ function setRecommendWeight(weightId, value) {
   scheduleStatePersist();
 }
 
+function updateRecommendWeightSummary(weightId, scope = document) {
+  const summary = scope.querySelector(`[data-recommend-weight-summary="${weightId}"]`);
+  if (!summary) {
+    return;
+  }
+  const scoreMix = state.recommendScoreMix
+    || getRecommendationScoreMix(state.team.length, state.recommendWeights);
+  summary.textContent = t(state.language, "recommend.weightSummary", {
+    preset: scoreMix.presetBias,
+    pairing: scoreMix.pairingBias,
+    team: scoreMix.teamShapeBias,
+  });
+}
+
+function renderRecommendationCardLists() {
+  const cards = renderRecommendationCards(state);
+  document.querySelectorAll(".recommend-list-stack").forEach((container) => {
+    setInnerHTMLIfChanged(container, cards);
+  });
+}
+
 function setRecommendWeightPreview(weightId, value, scope = document) {
   const preview = scope.querySelector(`[data-recommend-weight-value="${weightId}"]`);
   if (!preview) {
     return;
   }
-  preview.textContent = `${Math.min(200, Math.max(0, Math.round(Number(value || 0))))}%`;
+  preview.textContent = String(Math.min(100, Math.max(0, Math.round(Number(value || 0)))));
+  updateRecommendWeightSummary(weightId, scope);
 }
 
 function handleRecommendWeightPreview(event) {
@@ -1521,7 +1633,17 @@ function handleRecommendWeightPreview(event) {
   if (!input) {
     return;
   }
+  if (!(input.dataset.recommendWeight in state.recommendWeights)) {
+    return;
+  }
+  state.recommendBiasAuto = false;
+  state.recommendWeights = {
+    ...state.recommendWeights,
+    [input.dataset.recommendWeight]: Math.min(100, Math.max(0, Math.round(Number(input.value || 0)))),
+  };
+  refreshRecommendationsState();
   setRecommendWeightPreview(input.dataset.recommendWeight, input.value, event.currentTarget);
+  renderRecommendationCardLists();
 }
 
 function handleRecommendWeightCommit(event) {
@@ -1586,6 +1708,9 @@ function applyPersistedPayload(persisted) {
   state.iconScheme = normalizeIconScheme(persisted?.iconScheme);
   state.recommendPreferences = normalizeRecommendationPreferences(persisted?.recommendPreferences);
   state.recommendWeights = normalizeRecommendationWeights(persisted?.recommendWeights);
+  state.recommendBiasAuto = typeof persisted?.recommendBiasAuto === "boolean"
+    ? persisted.recommendBiasAuto
+    : true;
   state.dismissedRecommendationKeys = Array.isArray(persisted?.dismissedRecommendationKeys)
     ? persisted.dismissedRecommendationKeys.filter(Boolean)
     : [];
@@ -1594,11 +1719,13 @@ function applyPersistedPayload(persisted) {
     state.damage.attackerId = "";
     state.damage.defenderId = "";
     state.damage.focusSide = "attacker";
+    state.damage.scanMode = "attacker";
     state.damage.field = normalizeDamageField();
   } else {
     state.damage.attackerId = persisted.damage.attackerId || "";
     state.damage.defenderId = persisted.damage.defenderId || "";
     state.damage.focusSide = persisted.damage.focusSide === "defender" ? "defender" : "attacker";
+    state.damage.scanMode = persisted.damage.scanMode === "defender" ? "defender" : "attacker";
     state.damage.field = normalizeDamageField(persisted.damage.field);
   }
   if (!state.datasets) {
@@ -1717,8 +1844,69 @@ function selectSpecies(speciesId) {
     return;
   }
   state.selectedSpeciesId = speciesId;
+  resetLibraryCompare(speciesId);
   refreshFilteredLibrary();
   renderLibrarySection();
+}
+
+function toggleLibraryCompare(configId) {
+  const compare = state.libraryCompare || DEFAULT_LIBRARY_COMPARE;
+  const selectedIds = compare.speciesId === state.selectedSpeciesId ? [...compare.selectedConfigIds] : [];
+  const existingIndex = selectedIds.indexOf(configId);
+  if (existingIndex >= 0) {
+    selectedIds.splice(existingIndex, 1);
+  } else if (selectedIds.length < 2) {
+    selectedIds.push(configId);
+  } else {
+    selectedIds.splice(0, 1);
+    selectedIds.push(configId);
+  }
+  state.libraryCompare = {
+    speciesId: state.selectedSpeciesId || "",
+    selectedConfigIds: selectedIds,
+  };
+  renderLibrarySection();
+}
+
+function toggleMatchupFilterValue(key, value) {
+  const current = new Set(state.matchupFilters[key] || []);
+  if (current.has(value)) {
+    current.delete(value);
+  } else {
+    current.add(value);
+  }
+  state.matchupFilters = {
+    ...state.matchupFilters,
+    [key]: [...current],
+  };
+  renderMatchupSection();
+}
+
+function setMatchupSpeedFilter(speedBucket = "") {
+  state.matchupFilters = {
+    ...state.matchupFilters,
+    speedBucket,
+  };
+  renderMatchupSection();
+}
+
+function clearMatchupFilterGroup(groupId = "") {
+  if (groupId === "types" || groupId === "roles") {
+    state.matchupFilters = {
+      ...state.matchupFilters,
+      [groupId]: [],
+    };
+    renderMatchupSection();
+  }
+}
+
+function clearMatchupFilters() {
+  state.matchupFilters = {
+    ...DEFAULT_MATCHUP_FILTERS,
+    types: [],
+    roles: [],
+  };
+  renderMatchupSection();
 }
 
 function replaceTeamConfig(configId, nextConfig, metadata = {}) {
@@ -2417,7 +2605,7 @@ function partitionMoveNamesByLegality(moveNames = [], builder) {
   if (!builder?.speciesId) {
     return {legal: [...moveNames], illegal: []};
   }
-  const legalMoveIds = getLegalMoveIds(builder.speciesId, state.datasets);
+  const legalMoveIds = getLegalMoveIds(builder.speciesId, state.datasets, {itemName: builder.item});
   const legalMoves = [];
   const illegalMoves = [];
   moveNames.forEach((moveName) => {
@@ -2515,54 +2703,16 @@ function buildTypeChipMarkup(type) {
 
 function getAutocompleteDetailText(entry, context) {
   if (context.kind === "move") {
-    return entry.move?.shortDesc || entry.move?.desc || "";
+    return state.language === "zh"
+      ? entry.move?.localizedShortDesc || entry.move?.localizedDesc || entry.move?.shortDesc || entry.move?.desc || ""
+      : entry.move?.shortDesc || entry.move?.desc || "";
   }
   if (context.kind === "item") {
-    return entry.item?.shortDesc || entry.item?.desc || "";
+    return state.language === "zh"
+      ? entry.item?.localizedShortDesc || entry.item?.localizedDesc || entry.item?.shortDesc || entry.item?.desc || ""
+      : entry.item?.shortDesc || entry.item?.desc || "";
   }
   return "";
-}
-
-function getLocalizedDetailText(detailText = "") {
-  if (state.language !== "zh" || !detailText) {
-    return detailText;
-  }
-  return state.localizedDetailTexts.get(detailText) || detailText;
-}
-
-function getRenderedDetailText(detailText = "") {
-  if (!detailText) {
-    return "";
-  }
-  if (state.language !== "zh") {
-    return detailText;
-  }
-  return state.localizedDetailTexts.get(detailText) || "";
-}
-
-function loadLocalizedDetailText(detailText = "") {
-  if (state.language !== "zh" || !detailText) {
-    return Promise.resolve(detailText);
-  }
-  if (state.localizedDetailTexts.has(detailText)) {
-    return Promise.resolve(state.localizedDetailTexts.get(detailText));
-  }
-  if (state.localizedDetailPromises.has(detailText)) {
-    return state.localizedDetailPromises.get(detailText);
-  }
-  const promise = translatePsChinaText("zh", detailText)
-    .then((translatedText) => {
-      const resolvedText = translatedText || detailText;
-      state.localizedDetailTexts.set(detailText, resolvedText);
-      state.localizedDetailPromises.delete(detailText);
-      return resolvedText;
-    })
-    .catch(() => {
-      state.localizedDetailPromises.delete(detailText);
-      return detailText;
-    });
-  state.localizedDetailPromises.set(detailText, promise);
-  return promise;
 }
 
 function renderMoveAutocompleteMeta(move) {
@@ -2584,14 +2734,13 @@ function renderMoveAutocompleteMeta(move) {
 function renderAutocompleteOptionContent(entry, context) {
   const primaryLabel = state.language === "zh" ? entry.label : entry.value;
   const detailText = getAutocompleteDetailText(entry, context);
-  const renderedDetailText = getRenderedDetailText(detailText);
   if (context.kind === "item") {
     return `
       <span class="builder-autocomplete-row">
         <span class="builder-autocomplete-leading">${itemSpriteMarkup(entry.item)}</span>
         <span class="builder-autocomplete-copy">
           <span>${escapeHtml(primaryLabel)}</span>
-          ${detailText ? `<small class="builder-autocomplete-detail">${escapeHtml(renderedDetailText)}</small>` : ""}
+          ${detailText ? `<small class="builder-autocomplete-detail">${escapeHtml(detailText)}</small>` : ""}
         </span>
       </span>
     `;
@@ -2600,7 +2749,7 @@ function renderAutocompleteOptionContent(entry, context) {
     return `
       <span class="builder-autocomplete-copy">
         <span>${escapeHtml(primaryLabel)}</span>
-        ${detailText ? `<small class="builder-autocomplete-detail">${escapeHtml(renderedDetailText)}</small>` : ""}
+        ${detailText ? `<small class="builder-autocomplete-detail">${escapeHtml(detailText)}</small>` : ""}
       </span>
     `;
   }
@@ -2610,62 +2759,9 @@ function renderAutocompleteOptionContent(entry, context) {
         <span>${escapeHtml(primaryLabel)}</span>
       </span>
       ${renderMoveAutocompleteMeta(entry.move)}
-      ${detailText ? `<small class="builder-autocomplete-detail">${escapeHtml(renderedDetailText)}</small>` : ""}
+      ${detailText ? `<small class="builder-autocomplete-detail">${escapeHtml(detailText)}</small>` : ""}
     </span>
   `;
-}
-
-function syncAutocompleteDetailNode(node, detailText = "") {
-  if (!node || !detailText) {
-    return;
-  }
-  const localizedDetailText = getLocalizedDetailText(detailText);
-  node.textContent = localizedDetailText;
-}
-
-function hydrateAutocompletePanelDetails(panel, matches = [], context) {
-  if (state.language !== "zh" || !panel?.isConnected || !matches.length) {
-    return;
-  }
-  const optionNodes = panel.querySelectorAll("[data-builder-autocomplete-entry-index]");
-  matches.forEach((entry, index) => {
-    const optionNode = optionNodes[index];
-    const detailNode = optionNode?.querySelector(".builder-autocomplete-detail");
-    const detailText = getAutocompleteDetailText(entry, context);
-    if (!detailNode || !detailText || state.localizedDetailTexts.has(detailText)) {
-      syncAutocompleteDetailNode(detailNode, detailText);
-      return;
-    }
-    void loadLocalizedDetailText(detailText).then((localizedDetailText) => {
-      if (!panel.isConnected || optionNodes[index] !== optionNode || !localizedDetailText) {
-        return;
-      }
-      detailNode.textContent = localizedDetailText;
-    });
-  });
-}
-
-async function localizeAbilitySelectOptions(select, abilityNames = []) {
-  if (state.language !== "zh" || !select?.isConnected || !abilityNames.length) {
-    return;
-  }
-  const translatedPairs = await Promise.all(abilityNames.map(async (abilityName) => ({
-    abilityId: normalizeName(abilityName),
-    abilityName,
-    translatedName: await translatePsChinaText("zh", abilityName),
-  })));
-  if (!select.isConnected) {
-    return;
-  }
-  translatedPairs.forEach(({abilityId, abilityName, translatedName}) => {
-    state.localizedAbilityNames.set(abilityId, translatedName || abilityName);
-  });
-  Array.from(select.options).forEach((option) => {
-    const localizedName = state.localizedAbilityNames.get(normalizeName(option.value));
-    if (localizedName) {
-      option.textContent = localizedName;
-    }
-  });
 }
 
 function getBuilderMoveOptionPairs(builder) {
@@ -2802,7 +2898,6 @@ function renderBuilderAutocompletePanel(context) {
       ${renderAutocompleteOptionContent(entry, context)}
     </button>
   `).join("");
-  hydrateAutocompletePanelDetails(panel, matches, context);
   activeBuilderAutocomplete = context;
 }
 
@@ -2896,7 +2991,6 @@ function renderGuidedConfigForm(builder) {
     })),
     builder.nature,
   );
-  void localizeAbilitySelectOptions(abilitySelect, abilityOptions);
   pointsGrid.innerHTML = BUILDER_STATS.map((stat) => `
     <label class="builder-point-card">
       <span>${t(state.language, `builder.stats.${stat}`)}</span>
@@ -2919,7 +3013,6 @@ function renderGuidedConfigForm(builder) {
       <span id="builder-move-legality-${index}" class="move-legality"></span>
     </label>
   `).join("");
-  translateNodes(types, pointsGrid, movesGrid);
 }
 
 function getBuilderErrorMessages(errors) {
@@ -3207,111 +3300,6 @@ function appendImportedConfigs(configs) {
   const additions = ensureUniqueConfigIds(configs, new Set(state.library.map((config) => config.id)));
   state.library = [...state.library, ...additions];
   return additions;
-}
-
-async function initializeLocalizedLabels() {
-  if (state.language !== "zh") {
-    resetLocalizedLabels();
-    return;
-  }
-  const availableSpecies = state.datasets.availableSpecies || [];
-  const itemEntries = Object.values(state.datasets.items || {});
-  const moveEntries = Object.values(state.datasets.moves || {});
-  const abilityEntries = Object.values(state.datasets.abilities || {});
-  const natureEntries = buildNatureOptions();
-  const localizedSpeciesPairs = await translateLabelPairsInChunks(
-    availableSpecies,
-    (species) => species.speciesName,
-    (species) => species.speciesId,
-  );
-  const localizedItemPairs = await translateLabelPairsInChunks(
-    itemEntries,
-    (item) => item.name,
-    (item) => item.name,
-  );
-  const localizedMovePairs = await translateLabelPairsInChunks(
-    moveEntries,
-    (move) => move.name,
-    (move) => move.name,
-  );
-  const localizedAbilityPairs = await translateLabelPairsInChunks(
-    abilityEntries,
-    (ability) => ability.name,
-    (ability) => ability.name,
-  );
-  state.localizedSpeciesNames = new Map(localizedSpeciesPairs);
-  state.localizedItemNames = new Map(
-    localizedItemPairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
-  );
-  state.localizedMoveNames = new Map(
-    localizedMovePairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
-  );
-  state.localizedAbilityNames = new Map(
-    localizedAbilityPairs.map(([name, translatedName]) => [normalizeName(name), translatedName || name]),
-  );
-  state.localizedNatureNames = new Map(
-    natureEntries.map((name) => [normalizeName(name), NATURE_TRANSLATIONS[name] || name]),
-  );
-  const speciesIndex = new Map(state.datasets.speciesIndex);
-  localizedSpeciesPairs.forEach(([speciesId, translatedName]) => {
-    if (!translatedName) {
-      return;
-    }
-    const aliases = [
-      translatedName,
-      translatedName.replace(/[-\s]/g, ""),
-    ];
-    aliases.forEach((alias) => {
-      const normalizedName = normalizeName(alias);
-      const normalizedLookup = normalizeLookupText(alias);
-      if (normalizedName) {
-        speciesIndex.set(normalizedName, speciesId);
-      }
-      if (normalizedLookup) {
-        speciesIndex.set(normalizedLookup, speciesId);
-      }
-    });
-  });
-  state.datasets.speciesIndex = speciesIndex;
-  await yieldToMainThread();
-  const itemSearchLookup = new Map(state.datasets.itemLookup);
-  localizedItemPairs.forEach(([name, translatedName]) => {
-    if (!translatedName) {
-      return;
-    }
-    const entry = state.datasets.itemLookup.get(normalizeName(name));
-    if (!entry) {
-      return;
-    }
-    itemSearchLookup.set(normalizeLookupText(translatedName), entry);
-  });
-  state.datasets.itemSearchLookup = itemSearchLookup;
-  await yieldToMainThread();
-  const abilitySearchLookup = new Map(state.datasets.abilityLookup);
-  localizedAbilityPairs.forEach(([name, translatedName]) => {
-    if (!translatedName) {
-      return;
-    }
-    const entry = state.datasets.abilityLookup.get(normalizeName(name));
-    if (!entry) {
-      return;
-    }
-    abilitySearchLookup.set(normalizeLookupText(translatedName), entry);
-  });
-  state.datasets.abilitySearchLookup = abilitySearchLookup;
-  await yieldToMainThread();
-  const searchLookup = new Map(state.datasets.moveLookup);
-  localizedMovePairs.forEach(([name, translatedName]) => {
-    if (!translatedName) {
-      return;
-    }
-    const entry = state.datasets.moveLookup.get(normalizeName(name));
-    if (!entry) {
-      return;
-    }
-    searchLookup.set(normalizeLookupText(translatedName), entry);
-  });
-  state.datasets.moveSearchLookup = searchLookup;
 }
 
 function initializeBuilderOptions() {
@@ -3640,6 +3628,20 @@ function exportTeam() {
   setStatus("status.exportedTeam", {count: state.team.length});
 }
 
+async function copyTeamToClipboard() {
+  if (!state.team.length) {
+    setStatus("status.emptyTeamExport");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(exportTeamToShowdown(state.team));
+    setStatus("status.copiedTeam", {count: state.team.length});
+  } catch (error) {
+    toast(t(state.language, "toast.copyTeamFailed"), {type: "error"});
+    setStatusMessage(error?.message || t(state.language, "toast.copyTeamFailed"));
+  }
+}
+
 function exportFullStateBackup() {
   downloadBlob(exportFullState(state), "poke-type-backup.poketype.json");
   setStatus("status.exportedFullState");
@@ -3783,6 +3785,13 @@ function bindEvents() {
     }
     setActiveAnalysisTab(button.dataset.analysisTab);
   });
+  document.getElementById("analysis-view").addEventListener("click", (event) => {
+    const focusButton = event.target.closest("[data-analysis-focus-type]");
+    if (!focusButton) {
+      return;
+    }
+    applyAnalysisRecommendFocus(focusButton.dataset.analysisFocusType || "");
+  });
 
   document.getElementById("analysis-cores-panel").addEventListener("change", (event) => {
     const select = event.target.closest("[data-core-focus]");
@@ -3791,6 +3800,13 @@ function bindEvents() {
     }
     state.activeCoreConfigId = select.value || null;
     renderAnalysisSection();
+  });
+  document.getElementById("analysis-cores-panel").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-add-config]");
+    if (!button) {
+      return;
+    }
+    addConfig(button.dataset.addConfig);
   });
 
   document.getElementById("language-switch").addEventListener("click", (event) => {
@@ -3809,6 +3825,11 @@ function bindEvents() {
     const speciesButton = event.target.closest("[data-pick-species]");
     if (speciesButton) {
       selectSpecies(speciesButton.dataset.pickSpecies);
+      return;
+    }
+    const compareButton = event.target.closest("[data-compare-config]");
+    if (compareButton) {
+      toggleLibraryCompare(compareButton.dataset.compareConfig);
       return;
     }
     const createButton = event.target.closest("[data-create-species-config]");
@@ -3838,6 +3859,11 @@ function bindEvents() {
   });
 
   document.getElementById("recommend-list").addEventListener("click", (event) => {
+    const autoBiasButton = event.target.closest("[data-apply-recommend-auto-bias]");
+    if (autoBiasButton) {
+      applyAutoRecommendBias();
+      return;
+    }
     const dismissButton = event.target.closest("[data-dismiss-recommendation]");
     if (dismissButton) {
       dismissRecommendation(dismissButton.dataset.dismissRecommendation);
@@ -3921,6 +3947,31 @@ function bindEvents() {
   });
 
   document.getElementById("matchup-library-list").addEventListener("click", (event) => {
+    const clearButton = event.target.closest("[data-clear-matchup-filters]");
+    if (clearButton) {
+      clearMatchupFilters();
+      return;
+    }
+    const clearGroupButton = event.target.closest("[data-matchup-clear-filter-group]");
+    if (clearGroupButton) {
+      clearMatchupFilterGroup(clearGroupButton.dataset.matchupClearFilterGroup || "");
+      return;
+    }
+    const typeButton = event.target.closest("[data-matchup-type-filter]");
+    if (typeButton) {
+      toggleMatchupFilterValue("types", typeButton.dataset.matchupTypeFilter);
+      return;
+    }
+    const roleButton = event.target.closest("[data-matchup-role-filter]");
+    if (roleButton) {
+      toggleMatchupFilterValue("roles", roleButton.dataset.matchupRoleFilter);
+      return;
+    }
+    const speedButton = event.target.closest("[data-matchup-speed-filter]");
+    if (speedButton) {
+      setMatchupSpeedFilter(speedButton.dataset.matchupSpeedFilter || "");
+      return;
+    }
     const button = event.target.closest("[data-add-opponent-species]");
     if (button) addOpponentSpecies(button.dataset.addOpponentSpecies);
   });
@@ -4039,6 +4090,7 @@ function bindEvents() {
     if (fieldSelect) {
       applyDamageFieldChange(fieldSelect.dataset.damageField, fieldSelect);
       state.damage.lastPairKey = "";
+      invalidateDamageScan();
       scheduleStatePersist();
       void syncDamageWorkspace(true);
       return;
@@ -4052,6 +4104,7 @@ function bindEvents() {
     }
     applyDamageFieldChange(fieldControl.dataset.damageField, fieldControl);
     state.damage.lastPairKey = "";
+    invalidateDamageScan();
     scheduleStatePersist();
     void syncDamageWorkspace(true);
   });
@@ -4067,6 +4120,11 @@ function bindEvents() {
     const button = event.target.closest("[data-sync-damage-workspace]");
     if (button) {
       void syncDamageWorkspace(true);
+      return;
+    }
+    const scanButton = event.target.closest("[data-run-damage-scan]");
+    if (scanButton) {
+      void syncDamageScan(scanButton.dataset.runDamageScan);
     }
   });
 
@@ -4110,6 +4168,13 @@ function bindEvents() {
         editButton.dataset.damageMoveSide,
         Number(editButton.dataset.damageMoveIndex),
       );
+      return;
+    }
+    const scanButton = event.target.closest("[data-damage-scan-open]");
+    if (scanButton) {
+      event.preventDefault();
+      state.damage.focusSide = scanButton.dataset.damageScanFocus === "defender" ? "defender" : "attacker";
+      openDamagePair({defenderId: scanButton.dataset.damageScanOpen});
     }
   });
 
@@ -4137,6 +4202,7 @@ function bindEvents() {
     if (fieldControl) {
       applyDamageFieldChange(fieldControl.dataset.damageField, fieldControl);
       state.damage.lastPairKey = "";
+      invalidateDamageScan();
       scheduleStatePersist();
       void syncDamageWorkspace(true);
       return;
@@ -4221,6 +4287,9 @@ function bindEvents() {
     scheduleStatePersist();
   });
   document.getElementById("export-team-btn").addEventListener("click", exportTeam);
+  document.getElementById("copy-team-btn").addEventListener("click", () => {
+    void copyTeamToClipboard();
+  });
   document.getElementById("sidebar-save-team-btn").addEventListener("click", () => {
     setActiveTeamSidebarTab("saved");
     document.getElementById("saved-team-name").focus();
@@ -4233,7 +4302,6 @@ function bindEvents() {
   document.getElementById("saved-team-search").addEventListener("input", (event) => {
     state.savedTeamSearch = event.target.value;
     renderSavedTeams(state);
-    translateNodes(document.getElementById("saved-team-list"));
   });
   document.getElementById("team-list").addEventListener("click", (event) => {
     const openImportButton = event.target.closest("[data-open-team-import]");
@@ -4546,7 +4614,7 @@ async function initialize() {
   setStatus("status.initializing");
   clearSpeciesTemplateCache();
   state.datasets = await loadDatasets();
-  resetLocalizedLabels();
+  syncLocalizedData();
   applyPersistedPayload(persisted || {});
   initializeBuilderOptions();
   bindEvents();
@@ -4603,11 +4671,9 @@ async function initialize() {
   setActiveView(state.activeView);
   if (state.library.length) {
     setStatus("status.restored", {count: state.library.length});
-    scheduleLocalizedLabelsSync();
     return;
   }
   setStatus("status.loadedEmpty");
-  scheduleLocalizedLabelsSync();
 }
 
 initialize().catch((error) => {

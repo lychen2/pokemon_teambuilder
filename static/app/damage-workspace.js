@@ -101,30 +101,74 @@ function buildPokemonPayload(config = {}) {
   };
 }
 
+function cancelPendingRequestsByKind(kind) {
+  if (!kind) {
+    return;
+  }
+  [...pendingRequests.entries()]
+    .filter(([, pending]) => pending.kind === kind)
+    .forEach(([id, pending]) => {
+      pendingRequests.delete(id);
+      pending.resolve(null);
+    });
+}
+
+function buildRequestPayload(attacker, defender, field) {
+  return {
+    attacker: buildPokemonPayload(attacker),
+    defender: buildPokemonPayload(defender),
+    field: buildFieldState(field),
+  };
+}
+
+function enqueueRequest(payload, options = {}) {
+  const worker = getWorker();
+  cancelPendingRequestsByKind(options.cancelKind || "");
+  return new Promise((resolve, reject) => {
+    const id = ++requestId;
+    pendingRequests.set(id, {resolve, reject, kind: options.kind || "pair"});
+    worker.postMessage({id, ...payload});
+  });
+}
+
+function mapScanResults(entries, results, projector) {
+  return entries
+    .map((entry, index) => {
+      const result = results[index];
+      if (!entry || !result) return null;
+      return projector(entry, result);
+    })
+    .filter(Boolean);
+}
+
 export function createDamageWorkspace() {
   async function syncPair(attacker, defender, field) {
-    const worker = getWorker();
-    if (pendingRequests.size) {
-      const stale = [...pendingRequests.values()];
-      pendingRequests.clear();
-      stale.forEach(({resolve}) => resolve(null));
-    }
-    return new Promise((resolve, reject) => {
-      const id = ++requestId;
-      pendingRequests.set(id, {resolve, reject});
-      worker.postMessage({
-        id,
-        attacker: buildPokemonPayload(attacker),
-        defender: buildPokemonPayload(defender),
-        field: buildFieldState(field),
-      });
+    return enqueueRequest(buildRequestPayload(attacker, defender, field), {
+      kind: "pair",
+      cancelKind: "pair",
     });
+  }
+
+  async function scanAttackerAgainstTargets(attacker, targets, field) {
+    const results = await Promise.all(
+      targets.map((defender) => enqueueRequest(buildRequestPayload(attacker, defender, field), {kind: "scan"})),
+    );
+    return mapScanResults(targets, results, (defender, result) => ({defender, result}));
+  }
+
+  async function scanAttackersIntoDefender(attackers, defender, field) {
+    const results = await Promise.all(
+      attackers.map((attacker) => enqueueRequest(buildRequestPayload(attacker, defender, field), {kind: "scan"})),
+    );
+    return mapScanResults(attackers, results, (attacker, result) => ({attacker, result}));
   }
 
   return {
     async waitForReady() {
       getWorker();
     },
+    scanAttackersIntoDefender,
+    scanAttackerAgainstTargets,
     syncPair,
   };
 }

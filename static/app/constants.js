@@ -7,6 +7,7 @@ export const DATA_PATHS = {
   items: "./poke_analysis-main/stats/items.json",
   championsVgc: "./poke_analysis-main/stats/champions_vgc.json",
   pokeIconMap: "./static/poke-icons-map.json",
+  localizationData: "./static/localization-data.json",
   usage: "./static/usage.json",
 };
 
@@ -118,6 +119,7 @@ export const SCORE_WEIGHTS = {
   synergy: 5,
   teammates: 4,
   quality: 3,
+  counterChain: 6,
 };
 
 export const CHAMPION_TOTAL_POINTS = 66;

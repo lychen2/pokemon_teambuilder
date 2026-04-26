@@ -4,6 +4,26 @@ function normalizeUsageKey(value) {
   return normalizeName(String(value || "").replace(/\*/g, ""));
 }
 
+function addUsageKey(keys, value) {
+  const key = normalizeUsageKey(value);
+  if (key) {
+    keys.push(key);
+  }
+}
+
+function getUsageFallbackKeys(datasets, speciesId = "", speciesName = "") {
+  const keys = [];
+  addUsageKey(keys, speciesId);
+  addUsageKey(keys, speciesName);
+  const species = datasets?.pokedex?.[speciesId];
+  if (species) {
+    addUsageKey(keys, species.name);
+    addUsageKey(keys, species.baseSpecies);
+    addUsageKey(keys, species.changesFrom);
+  }
+  return [...new Set(keys)];
+}
+
 function buildTeammateMap(teammates = {}) {
   const map = new Map();
   Object.entries(teammates).forEach(([name, count]) => {
@@ -97,7 +117,7 @@ export function buildGlobalItemUsageCounts(usageData = {}, itemLookup) {
 }
 
 export function getUsageProfile(datasets, speciesId = "", speciesName = "") {
-  const keys = [speciesId, speciesName].map(normalizeUsageKey).filter(Boolean);
+  const keys = getUsageFallbackKeys(datasets, speciesId, speciesName);
   for (const key of keys) {
     const entry = datasets?.usageLookup?.get(key);
     if (entry?.profile) {
@@ -203,7 +223,8 @@ export function getUsageItemEntries(speciesId, datasets, options = {}) {
 }
 
 export function getUsageForSpecies(datasets, speciesId = "", speciesName = "") {
-  return Number(getUsageProfile(datasets, speciesId, speciesName)?.usage || 0);
+  const profile = getUsageProfile(datasets, speciesId, speciesName);
+  return Number(profile?.usage ?? profile?.usageRankScore ?? profile?.rankScore ?? 0);
 }
 
 export function getUsageTeammateShare(datasets, sourceSpeciesId, teammateSpeciesId) {
@@ -215,9 +236,16 @@ export function getUsageTeammateShare(datasets, sourceSpeciesId, teammateSpecies
   if (!sourceProfile?.teammateMap?.size || !sourceProfile.teammateTotal) {
     return 0;
   }
-  const count = Number(sourceProfile.teammateMap.get(normalizeUsageKey(teammateSpeciesId)) || 0);
-  if (!count) {
-    return 0;
+  const teammateKeys = getUsageFallbackKeys(
+    datasets,
+    teammateSpeciesId,
+    datasets?.pokedex?.[teammateSpeciesId]?.name || teammateSpeciesId,
+  );
+  for (const key of teammateKeys) {
+    const count = Number(sourceProfile.teammateMap.get(key) || 0);
+    if (count > 0) {
+      return count / sourceProfile.teammateTotal;
+    }
   }
-  return count / sourceProfile.teammateTotal;
+  return 0;
 }

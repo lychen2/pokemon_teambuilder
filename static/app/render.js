@@ -2,6 +2,7 @@ import {t} from "./i18n.js";
 import {renderAnalysisView} from "./render-analysis.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderDamageView} from "./render-damage.js";
+import {compareToggleMarkup, renderLibraryComparePanel} from "./render-library-compare.js";
 import {renderMatchupView} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
 import {spriteMarkup} from "./sprites.js";
@@ -18,6 +19,24 @@ function escapeHtml(text) {
 
 function getLocalizedSpeciesName(state, species) {
   return state.localizedSpeciesNames?.get(species.speciesId) || species.localizedSpeciesName || species.speciesName;
+}
+
+function getLocalizedConfigName(state, config = {}) {
+  return getLocalizedSpeciesName(state, config);
+}
+
+function getLocalizedEntryName(entry = {}, language) {
+  if (language !== "zh") {
+    return entry?.name || "";
+  }
+  return entry?.localizedName || entry?.name || "";
+}
+
+function getLocalizedEntryDescription(entry = {}, language) {
+  if (language !== "zh") {
+    return entry?.shortDesc || entry?.desc || "";
+  }
+  return entry?.localizedShortDesc || entry?.localizedDesc || entry?.shortDesc || entry?.desc || "";
 }
 
 function itemSpriteMarkup(itemInfo) {
@@ -69,18 +88,22 @@ function validationPillMarkup(config, language) {
   });
 }
 
-function resolveMoveShortDesc(move, moveLookup) {
-  if (move?.shortDesc) return move.shortDesc;
-  if (move?.desc) return move.desc;
+function resolveMoveShortDesc(move, moveLookup, language) {
   const entry = moveLookup?.get(normalizeName(move?.name || ""));
-  return entry?.shortDesc || entry?.desc || "";
+  if (entry) {
+    return getLocalizedEntryDescription(entry, language);
+  }
+  if (language === "zh") {
+    return move?.localizedShortDesc || move?.localizedDesc || move?.shortDesc || move?.desc || "";
+  }
+  return move?.shortDesc || move?.desc || "";
 }
 
 function buildMoveTooltipMarkup(move, language, moveLookup) {
   const typeLabel = move.type ? getTypeLabel(move.type, language) : t(language, "common.unknown");
   const categoryLabel = getMoveCategoryLabel(move.category, language);
   const typeClass = move.type ? getTypeClassName(move.type) : "";
-  const description = resolveMoveShortDesc(move, moveLookup);
+  const description = resolveMoveShortDesc(move, moveLookup, language);
   return `
     <div class="tooltip-stack">
       <div class="tooltip-meta-row">
@@ -94,7 +117,9 @@ function buildMoveTooltipMarkup(move, language, moveLookup) {
 
 function movesMarkup(config, language, moveLookup) {
   return (config.moves || []).map((move) => renderInfoPill({
-    label: move.name,
+    label: language === "zh"
+      ? getLocalizedEntryName(moveLookup?.get(normalizeName(move.name)) || move, language)
+      : move.name,
     tooltipMarkup: buildMoveTooltipMarkup(move, language, moveLookup),
   })).join("");
 }
@@ -118,20 +143,20 @@ function buildMetaMarkup(config, language) {
   const pills = [];
   if (config.item) {
     pills.push(renderInfoPill({
-      label: config.item,
+      label: language === "zh" ? getLocalizedEntryName(config.itemInfo, language) || config.item : config.item,
       leadingMarkup: itemSpriteMarkup(config.itemInfo),
-      tooltipMarkup: buildTextTooltipMarkup(config.itemInfo?.shortDesc || config.itemInfo?.desc || t(language, "tooltip.noItemDesc"), language),
+      tooltipMarkup: buildTextTooltipMarkup(getLocalizedEntryDescription(config.itemInfo, language) || t(language, "tooltip.noItemDesc"), language),
     }));
   }
   if (config.ability) {
     pills.push(renderInfoPill({
-      label: config.ability,
-      tooltipMarkup: buildTextTooltipMarkup(config.abilityInfo?.shortDesc || config.abilityInfo?.desc || t(language, "tooltip.noAbilityDesc"), language),
+      label: language === "zh" ? getLocalizedEntryName(config.abilityInfo, language) || config.ability : config.ability,
+      tooltipMarkup: buildTextTooltipMarkup(getLocalizedEntryDescription(config.abilityInfo, language) || t(language, "tooltip.noAbilityDesc"), language),
     }));
   }
   if (config.nature) {
     pills.push(renderInfoPill({
-      label: config.nature,
+      label: getLocalizedNatureName(config.nature, language),
       tooltipMarkup: buildTextTooltipMarkup(getNatureSummary(config.nature, language), language),
     }));
   }
@@ -174,7 +199,7 @@ function teamSourceCopyMarkup(config, linkedConfig, language) {
   if (config.teamSource === "library") {
     return "";
   }
-  return `<p class="muted team-origin-copy">${t(language, "team.source.linkedCopy", {name: linkedConfig.displayLabel || linkedConfig.displayName})}</p>`;
+  return `<p class="muted team-origin-copy">${t(language, "team.source.linkedCopy", {name: linkedConfig.displayLabel || linkedConfig.displayName || linkedConfig.speciesName})}</p>`;
 }
 
 function speedSummaryMarkup(config, language) {
@@ -217,7 +242,7 @@ function teamHeaderMarkup(config, linkedConfig, language, state) {
   const badges = [noteMarkup, validationMarkup, sourceMarkup].filter(Boolean).join("");
   return `
     <div class="team-card-header">
-      <div class="entry-title team-title-row">${spriteMarkup(config, state)}<strong>${config.displayName}</strong></div>
+      <div class="entry-title team-title-row">${spriteMarkup(config, state)}<strong>${getLocalizedConfigName(state, config)}</strong></div>
       ${badges ? `<div class="entry-tags team-badge-row">${badges}</div>` : ""}
     </div>
   `;
@@ -228,7 +253,7 @@ function renderSpeedSourcePill(state, source, language) {
   const move = getLookupEntry(datasets.moveLookup, source);
   if (move) {
     return renderInfoPill({
-      label: move.name,
+      label: getLocalizedEntryName(move, language),
       tooltipMarkup: buildMoveTooltipMarkup(move, language),
       className: "mini-pill speed-boost-source",
     });
@@ -237,9 +262,9 @@ function renderSpeedSourcePill(state, source, language) {
   const itemInfo = getLookupEntry(datasets.itemLookup, source);
   if (itemInfo) {
     return renderInfoPill({
-      label: itemInfo.name || source,
+      label: getLocalizedEntryName(itemInfo, language) || source,
       leadingMarkup: itemSpriteMarkup(itemInfo),
-      tooltipMarkup: buildTextTooltipMarkup(itemInfo.shortDesc || itemInfo.desc || t(language, "tooltip.noItemDesc"), language),
+      tooltipMarkup: buildTextTooltipMarkup(getLocalizedEntryDescription(itemInfo, language) || t(language, "tooltip.noItemDesc"), language),
       className: "mini-pill speed-boost-source",
     });
   }
@@ -247,8 +272,8 @@ function renderSpeedSourcePill(state, source, language) {
   const abilityInfo = getLookupEntry(datasets.abilityLookup, source);
   if (abilityInfo) {
     return renderInfoPill({
-      label: abilityInfo.name || source,
-      tooltipMarkup: buildTextTooltipMarkup(abilityInfo.shortDesc || abilityInfo.desc || t(language, "tooltip.noAbilityDesc"), language),
+      label: getLocalizedEntryName(abilityInfo, language) || source,
+      tooltipMarkup: buildTextTooltipMarkup(getLocalizedEntryDescription(abilityInfo, language) || t(language, "tooltip.noAbilityDesc"), language),
       className: "mini-pill speed-boost-source",
     });
   }
@@ -329,6 +354,7 @@ function libraryEmptyMarkup(state, language) {
 export function renderLibrary(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
+  const selectedCompareIds = state.libraryCompare?.selectedConfigIds || [];
   document.getElementById("library-summary").textContent = t(language, "library.summary", {
     total: state.library.length,
     filtered: activeLibrary.length,
@@ -337,7 +363,7 @@ export function renderLibrary(state) {
     ? `<div class="library-config-grid">${activeLibrary.map((config) => `
         <article class="entry-card library-config-card">
           <div class="entry-main">
-            <div class="entry-title">${spriteMarkup(config, state)}<strong>${config.displayName}</strong>${notePillMarkup(config, language)}${validationPillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
+            <div class="entry-title">${spriteMarkup(config, state)}<strong>${getLocalizedConfigName(state, config)}</strong>${notePillMarkup(config, language)}${validationPillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
             <div class="entry-meta">${typePills(config.types, language)}</div>
             <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
             <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
@@ -347,6 +373,7 @@ export function renderLibrary(state) {
           </div>
           <div class="card-actions library-card-actions">
             <button type="button" class="add-button" data-add-config="${config.id}">${t(language, "library.add")}</button>
+            ${compareToggleMarkup(config.id, selectedCompareIds, language)}
             <button type="button" class="ghost-button mini-action" data-edit-config="${config.id}">${t(language, "library.edit")}</button>
             <button type="button" class="ghost-button mini-action" data-note-config="${config.id}">${t(language, "library.note")}</button>
             <button type="button" class="ghost-button danger-button mini-action" data-delete-config="${config.id}">${t(language, "library.delete")}</button>
@@ -358,6 +385,7 @@ export function renderLibrary(state) {
     ${speciesBrowserMarkup(state)}
     <section class="library-subsection">
       ${selectedSpeciesHeader(state)}
+      ${renderLibraryComparePanel(state)}
       ${libraryMarkup}
     </section>
   `);
@@ -517,7 +545,7 @@ function buildSameSpeciesVariantsMarkup(entry, variantIndex, language) {
 
 function buildSpeedEntryTooltip(entry, language, variantIndex) {
   const lines = [];
-  const name = entry.speciesName || entry.displayName;
+  const name = language === "zh" ? entry.localizedSpeciesName || entry.speciesName : entry.speciesName || entry.displayName;
   if (name) {
     lines.push(name);
   }
@@ -543,7 +571,7 @@ function buildSpeedEntryTooltip(entry, language, variantIndex) {
 
 function renderSpeedTierEntryPills(entry, state, language, variantIndex) {
   const tooltipMarkup = buildSpeedEntryTooltip(entry, language, variantIndex);
-  const label = escapeHtml(entry.speciesName || entry.displayName || "");
+  const label = escapeHtml(language === "zh" ? entry.localizedSpeciesName || entry.speciesName || entry.displayName || "" : entry.speciesName || entry.displayName || "");
   const category = getSpeedEntryCategory(entry);
   const pillDomId = buildSpeedPillDomId(entry);
   const parts = [];

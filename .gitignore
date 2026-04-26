@@ -4,3 +4,5 @@
 __pycache__/
 *.pyc
 pokepast-archive-*.json
+poke_analysis-main/stats/pokechamp_cache.json
+poke_analysis-main/stats/pokepaste_cache.json

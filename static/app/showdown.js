@@ -1,5 +1,6 @@
 import {FALLBACK_LEVEL} from "./constants.js";
 import {t} from "./i18n.js";
+import {getLearnsetMap} from "./learnsets.js";
 import {getChoiceScarfSpeedData, getDoubleSpeedData, getPlusOneSpeedData} from "./speed.js";
 import {
   applyNatureToChampionStats,
@@ -330,15 +331,25 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
   };
 }
 
-function getLearnsetMap(speciesId, context) {
-  const direct = context.championsVgc?.learnsets?.[speciesId] || context.learnsets?.[speciesId]?.learnset;
-  if (direct) {
-    return direct;
+function getValidationBlockIndex(config = {}) {
+  const existingItems = Array.isArray(config.validation?.items) ? config.validation.items : [];
+  const blockIndex = Number(existingItems[0]?.blockIndex || 0);
+  return blockIndex > 0 ? blockIndex : 1;
+}
+
+function refreshConfigValidation(config, context, language = "zh") {
+  const finalized = finalizeConfig(config, context, config.level, null, language);
+  if (!finalized) {
+    return null;
   }
-  const baseSpeciesId = normalizeName(context.pokedex?.[speciesId]?.baseSpecies || "");
-  return context.championsVgc?.learnsets?.[baseSpeciesId]
-    || context.learnsets?.[baseSpeciesId]?.learnset
-    || null;
+  const validationItems = validateImportedConfig(
+    finalized,
+    context,
+    getValidationBlockIndex(config),
+    language,
+    {},
+  );
+  return attachValidation(finalized, validationItems);
 }
 
 function validateImportedConfig(config, context, index, language, lineMeta = {}) {
@@ -375,7 +386,7 @@ function validateImportedConfig(config, context, index, language, lineMeta = {})
       }),
     }));
   }
-  const learnset = getLearnsetMap(config.speciesId, context);
+  const learnset = getLearnsetMap(config.speciesId, context, {itemName: config.item});
   (config.moveNames || []).forEach((moveName) => {
     const move = getLookupEntry(context.moveLookup, context.moveSearchLookup, moveName);
     const moveLine = lineMeta.moves?.get(normalizeName(moveName)) ?? null;
@@ -611,7 +622,10 @@ export function parseShowdownLibrary(text, context, options = {}) {
 
 export function hydrateConfigs(configs = [], context, fallbackLevel) {
   return configs
-    .map((config) => finalizeConfig(config, context, fallbackLevel))
+    .map((config) => refreshConfigValidation({
+      ...config,
+      level: Number(config?.level) || fallbackLevel || FALLBACK_LEVEL,
+    }, context))
     .filter(Boolean);
 }
 
@@ -621,6 +635,13 @@ export function exportConfigToEditableText(config) {
 
 function buildPointsLine(points = {}) {
   return `Points: ${points.hp || 0} HP / ${points.atk || 0} Atk / ${points.def || 0} Def / ${points.spa || 0} SpA / ${points.spd || 0} SpD / ${points.spe || 0} Spe`;
+}
+
+function buildChampionEvsLine(points = {}) {
+  return EV_STAT_ORDER
+    .filter((stat) => Number(points[stat] || 0) > 0)
+    .map((stat) => `${Number(points[stat] || 0)} ${EV_LABELS[stat]}`)
+    .join(" / ");
 }
 
 function trimPointsForEvCap(points = {}) {
@@ -677,9 +698,13 @@ function exportConfigsToShowdown(configs = [], mode = "points") {
     if (config.ability) lines.push(`Ability: ${config.ability}`);
     if (config.level) lines.push(`Level: ${config.level}`);
     if (config.teraType) lines.push(`Tera Type: ${config.teraType}`);
-    if (config.note) lines.push(`Note: ${config.note}`);
     if (mode === "evs") {
       const evLine = buildEvsLine(resolveExportEvs(config));
+      if (evLine) {
+        lines.push(`EVs: ${evLine}`);
+      }
+    } else if (mode === "champion-evs") {
+      const evLine = buildChampionEvsLine(config.championPoints || {});
       if (evLine) {
         lines.push(`EVs: ${evLine}`);
       }
@@ -705,5 +730,5 @@ export function exportLibraryToShowdown(configs = []) {
 }
 
 export function exportTeamToShowdown(configs = []) {
-  return exportConfigsToShowdown(configs, "evs");
+  return exportConfigsToShowdown(configs, "champion-evs");
 }

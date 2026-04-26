@@ -9,14 +9,18 @@ import {
   isSpreadMove,
 } from "./battle-semantics.js";
 import {calculateSpeedLineTiers} from "./data.js";
+import {buildLeadTurnOnePlan} from "./lead-turn-plan.js";
 import {buildMatchupBoard} from "./matchup-board-data.js";
 import {getAttackBias, getUtilityRoles, hasMove} from "./team-roles.js";
+import {countMegaConfigs} from "./utils.js";
 
 const PREVIEW_LIMIT = 3;
 const FOUR_SELECTION_SIZE = 4;
 const CACHE_LIMIT = 16;
 const DUPLICATE_WEATHER_LEAD_PENALTY = 3;
 const DUPLICATE_WEATHER_LINEUP_PENALTY = 2.5;
+const EXTRA_MEGA_LEAD_PENALTY = 12;
+const EXTRA_MEGA_LINEUP_PENALTY = 18;
 const LEAD_ROLE_BONUS = Object.freeze({
   fakeout: 4,
   tailwind: 3,
@@ -97,6 +101,10 @@ function countRoleMembers(team = [], roleId) {
 
 function getDuplicateRolePenalty(team = [], roleId, penaltyPerExtra) {
   return Math.max(0, countRoleMembers(team, roleId) - 1) * penaltyPerExtra;
+}
+
+function getExtraMegaPenalty(team = [], penaltyPerExtra = 0) {
+  return Math.max(0, countMegaConfigs(team) - 1) * penaltyPerExtra;
 }
 
 function getLeadUtilityBonus(pair = []) {
@@ -295,8 +303,9 @@ function scorePairIntoPair(myPair, theirPair, context) {
     }).score));
   }, 0);
   const support = getPairSupportBreakdown(myPair, theirPair, context);
+  const megaPenalty = getExtraMegaPenalty(myPair, EXTRA_MEGA_LEAD_PENALTY);
   const result = {
-    score: pressure - exposure * 0.65 + Object.values(support).reduce((sum, value) => sum + value, 0),
+    score: pressure - exposure * 0.65 + Object.values(support).reduce((sum, value) => sum + value, 0) - megaPenalty,
     breakdown: {
       pressure,
       exposure,
@@ -325,7 +334,8 @@ function scoreLineup(lineup, opponentTeam, leadScore, context) {
   }, 0);
   const roles = new Set(lineup.flatMap((config) => getUtilityRoles(config)));
   const weatherPenalty = getDuplicateRolePenalty(lineup, "weather", DUPLICATE_WEATHER_LINEUP_PENALTY);
-  return answerScore - exposure * 0.45 + roles.size * 0.75 + leadScore * 0.5 - weatherPenalty;
+  const megaPenalty = getExtraMegaPenalty(lineup, EXTRA_MEGA_LINEUP_PENALTY);
+  return answerScore - exposure * 0.45 + roles.size * 0.75 + leadScore * 0.5 - weatherPenalty - megaPenalty;
 }
 
 function summarizeLeadPair(pair, opponentPairs, context) {
@@ -354,6 +364,7 @@ function summarizeLeadPair(pair, opponentPairs, context) {
     targets: keyTargets,
     roles: [...new Set(pair.flatMap((config) => getUtilityRoles(config)))],
     breakdown: averageBreakdown,
+    turnOnePlan: buildLeadTurnOnePlan(pair, context.opponentTeam, context.fieldState),
   };
 }
 
@@ -465,6 +476,7 @@ export function analyzeMatchup(team = [], opponentTeam = [], datasets = null, op
   if (MATCHUP_CACHE.has(cacheKey)) return MATCHUP_CACHE.get(cacheKey);
   const context = {
     fieldState,
+    opponentTeam,
     attackerSide: "ally",
     defenderSide: "opponent",
     pressureCache: new Map(),

@@ -7,6 +7,52 @@ const datasetCache = {value: null};
 const ALWAYS_ACTIVE_MOVE_OVERRIDES = Object.freeze({
   weatherball: {basePower: 100},
 });
+const CUSTOM_MEGA_STONE_DESC_PATTERN = /^If held by (.+), this item allows it to Mega Evolve in battle\.$/;
+
+function translateNameList(localization, value) {
+  return String(value || "")
+    .split(/(\s*,\s*|\s+or\s+)/)
+    .map((part) => {
+      if (!part.trim()) {
+        return part;
+      }
+      if (/^\s*,\s*$/.test(part)) {
+        return "、";
+      }
+      if (/^\s+or\s+$/.test(part)) {
+        return "或";
+      }
+      return getLocalizedText(localization, part.replaceAll("é", "e"));
+    })
+    .join("");
+}
+
+function getLocalizedText(localization, value = "") {
+  const normalizedValue = String(value || "");
+  if (!normalizedValue) {
+    return "";
+  }
+  const megaStoneMatch = normalizedValue.match(CUSTOM_MEGA_STONE_DESC_PATTERN);
+  if (megaStoneMatch) {
+    return `${translateNameList(localization, megaStoneMatch[1])}携带时可在战斗中进行超级进化。`;
+  }
+  return localization?.translations?.[normalizedValue.replaceAll("é", "e")] || normalizedValue;
+}
+
+function localizeDexEntry(entry = {}, localization) {
+  if (!entry || typeof entry !== "object") {
+    return entry;
+  }
+  const localizedName = getLocalizedText(localization, entry.name || "");
+  const localizedShortDesc = getLocalizedText(localization, entry.shortDesc || "");
+  const localizedDesc = getLocalizedText(localization, entry.desc || "");
+  return {
+    ...entry,
+    localizedName: localizedName || entry.name || "",
+    localizedShortDesc: localizedShortDesc || localizedDesc || entry.shortDesc || "",
+    localizedDesc: localizedDesc || localizedShortDesc || entry.desc || "",
+  };
+}
 
 function registerSpeciesAlias(index, alias, speciesId) {
   const normalizedName = normalizeName(alias);
@@ -23,6 +69,9 @@ function buildSpeciesIndex(pokedex) {
   const index = new Map();
   for (const [speciesId, entry] of Object.entries(pokedex)) {
     const aliases = [speciesId, entry.name, entry.name.replace(/-/g, ""), entry.name.replace(/\s+/g, "")];
+    if (entry.localizedName) {
+      aliases.push(entry.localizedName, entry.localizedName.replace(/-/g, ""), entry.localizedName.replace(/\s+/g, ""));
+    }
     aliases.forEach((alias) => registerSpeciesAlias(index, alias, speciesId));
   }
   return index;
@@ -56,12 +105,30 @@ function mergeDexEntries(baseEntries, overrides = {}) {
   return merged;
 }
 
+function localizeDexEntries(entries, localization) {
+  return Object.fromEntries(
+    Object.entries(entries || {}).map(([key, entry]) => [key, localizeDexEntry(entry, localization)]),
+  );
+}
+
 function buildNamedLookup(entries) {
   const lookup = new Map();
   for (const [key, entry] of Object.entries(entries)) {
     lookup.set(normalizeName(key), entry);
     lookup.set(normalizeName(entry.name || key), entry);
   }
+  return lookup;
+}
+
+function buildLocalizedSearchLookup(entries, baseLookup) {
+  const lookup = new Map(baseLookup);
+  Object.values(entries || {}).forEach((entry) => {
+    const localizedName = entry.localizedName || "";
+    const normalizedLookup = normalizeLookupText(localizedName);
+    if (normalizedLookup) {
+      lookup.set(normalizedLookup, entry);
+    }
+  });
   return lookup;
 }
 
@@ -95,8 +162,9 @@ export async function loadDatasets() {
     return datasetCache.value;
   }
 
-  const [pokeIconMap, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc, usage] = await Promise.all([
+  const [pokeIconMap, localizationData, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc, usage] = await Promise.all([
     fetchJson(DATA_PATHS.pokeIconMap),
+    fetchJson(DATA_PATHS.localizationData),
     fetchJson(DATA_PATHS.pokedex),
     fetchJson(DATA_PATHS.formsIndex),
     fetchJson(DATA_PATHS.moves),
@@ -107,15 +175,43 @@ export async function loadDatasets() {
     fetchJson(DATA_PATHS.usage),
   ]);
 
-  const mergedPokedex = mergeDexEntries(pokedex, championsVgc.overrideSpeciesData);
-  const mergedMoves = normalizeMoveEntries(mergeDexEntries(moves, championsVgc.overrideMoveData));
-  const mergedAbilities = mergeDexEntries(abilities, championsVgc.overrideAbilityData);
-  const mergedItems = mergeDexEntries(items, championsVgc.overrideItemData);
+  const mergedPokedex = localizeDexEntries(
+    mergeDexEntries(pokedex, championsVgc.overrideSpeciesData),
+    localizationData,
+  );
+  const mergedMoves = localizeDexEntries(
+    normalizeMoveEntries(mergeDexEntries(moves, championsVgc.overrideMoveData)),
+    localizationData,
+  );
+  const mergedAbilities = localizeDexEntries(
+    mergeDexEntries(abilities, championsVgc.overrideAbilityData),
+    localizationData,
+  );
+  const mergedItems = localizeDexEntries(
+    mergeDexEntries(items, championsVgc.overrideItemData),
+    localizationData,
+  );
   const moveLookup = buildMoveLookup(mergedMoves);
   const abilityLookup = buildNamedLookup(mergedAbilities);
   const itemLookup = buildNamedLookup(mergedItems);
+  const moveSearchLookup = buildLocalizedSearchLookup(mergedMoves, moveLookup);
+  const abilitySearchLookup = buildLocalizedSearchLookup(mergedAbilities, abilityLookup);
+  const itemSearchLookup = buildLocalizedSearchLookup(mergedItems, itemLookup);
+  const localizedSpeciesNames = new Map(
+    Object.entries(mergedPokedex).map(([speciesId, entry]) => [speciesId, entry.localizedName || entry.name || speciesId]),
+  );
+  const localizedItemNames = new Map(
+    Object.values(mergedItems).map((entry) => [normalizeName(entry.name), entry.localizedName || entry.name]),
+  );
+  const localizedMoveNames = new Map(
+    Object.values(mergedMoves).map((entry) => [normalizeName(entry.name), entry.localizedName || entry.name]),
+  );
+  const localizedAbilityNames = new Map(
+    Object.values(mergedAbilities).map((entry) => [normalizeName(entry.name), entry.localizedName || entry.name]),
+  );
 
   datasetCache.value = {
+    localization: localizationData,
     pokedex: mergedPokedex,
     formsIndex,
     moves: mergedMoves,
@@ -127,13 +223,19 @@ export async function loadDatasets() {
     usageLookup: buildUsageLookup(usage),
     globalMoveUsageCounts: buildGlobalMoveUsageCounts(usage, moveLookup),
     globalItemUsageCounts: buildGlobalItemUsageCounts(usage, itemLookup),
+    localizedSpeciesNames,
+    localizedItemNames,
+    localizedMoveNames,
+    localizedAbilityNames,
     pokeIconMap,
     availableSpecies: buildAvailableSpecies(mergedPokedex, formsIndex, championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || []),
     speciesIndex: buildSpeciesIndex(mergedPokedex),
     moveLookup,
-    moveSearchLookup: moveLookup,
+    moveSearchLookup,
     abilityLookup,
+    abilitySearchLookup,
     itemLookup,
+    itemSearchLookup,
   };
   return datasetCache.value;
 }

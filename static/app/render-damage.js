@@ -2,7 +2,8 @@ import {TYPE_ORDER} from "./constants.js";
 import {translateDamageDescription, translateDamageKoText} from "./damage-i18n.js";
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
-import {getTypeLabel} from "./utils.js";
+import {renderDamageScanPanel} from "./damage-scan-view.js";
+import {getTypeLabel, normalizeName} from "./utils.js";
 
 const SIDE_TOGGLE_FIELDS = [
   "reflect",
@@ -251,7 +252,7 @@ function getLocalizedMoveName(state, moveName = "") {
   if (state.language !== "zh") {
     return moveName;
   }
-  return state.localizedMoveNames?.get(String(moveName || "").trim().toLowerCase()) || moveName;
+  return state.localizedMoveNames?.get(normalizeName(moveName)) || moveName;
 }
 
 function replaceDamageTextTokens(state, text, tokens = []) {
@@ -588,5 +589,6 @@ export function renderDamageView(state) {
         <section><div class="analysis-label">${secondaryTitle}</div>${moveSummaryMarkup(secondarySlots, secondaryMoves || [], language, "", secondarySide, picker, state.damage.healthPercent?.[secondarySide === "attacker" ? "defender" : "attacker"])}</section>
       </div>
     ` : ""}
+    ${renderDamageScanPanel(state)}
   `);
 }

@@ -39,11 +39,26 @@ function renderRolePill(roleId, language, className = "") {
   );
 }
 
+function getLocalizedMemberLabel(member = {}, state, language) {
+  const fallback = member.label || member.speciesName || t(language, "common.unknown");
+  if (language !== "zh") {
+    return fallback;
+  }
+  return state.localizedSpeciesNames?.get(member.speciesId) || fallback;
+}
+
+function getLocalizedMoveName(moveName = "", state) {
+  if (state.language !== "zh") {
+    return moveName;
+  }
+  return state.localizedMoveNames?.get(String(moveName || "").toLowerCase().replace(/[^a-z0-9]+/g, "")) || moveName;
+}
+
 function memberPillMarkup(member, state) {
   return `
     <span class="mini-pill analysis-member-pill">
       ${spriteMarkup(member, state)}
-      <span>${escapeHtml(member.label)}</span>
+      <span>${escapeHtml(getLocalizedMemberLabel(member, state, state.language))}</span>
     </span>
   `;
 }
@@ -85,6 +100,67 @@ function teraHintMarkup(state, language) {
   `;
 }
 
+function archetypePillsMarkup(identity, language) {
+  const pills = [identity.primaryArchetypeId, ...(identity.secondaryArchetypeIds || [])]
+    .filter(Boolean)
+    .map((archetypeId, index) => {
+      const className = index === 0 ? "analysis-good-pill" : "";
+      return `<span class="mini-pill ${className}">${escapeHtml(t(language, `analysis.archetype.${archetypeId}`))}</span>`;
+    })
+    .join("");
+  return `
+    <div class="analysis-identity-card">
+      <div class="analysis-label">${t(language, "analysis.identityTitle")}</div>
+      <div class="analysis-inline-pills">${pills}</div>
+    </div>
+  `;
+}
+
+function comboCardMarkup(entry, language) {
+  const toneClass = entry.status === "complete" ? "good" : "";
+  const missingText = entry.missingTypes.length
+    ? t(language, "analysis.identityComboNear", {types: entry.missingTypes.join(" / ")})
+    : t(language, "analysis.identityComboComplete");
+  const focusButton = entry.focusType
+    ? `<button type="button" class="ghost-button mini-action" data-analysis-focus-type="${escapeHtml(entry.focusType)}">${t(language, "analysis.identityFocusAction", {type: entry.missingTypes[0]})}</button>`
+    : "";
+  return `
+    <article class="analysis-cover-card ${toneClass}">
+      <div class="analysis-list-head">
+        <strong>${escapeHtml(entry.label)}</strong>
+        <span class="mini-pill ${entry.status === "complete" ? "analysis-good-pill" : ""}">
+          ${t(language, `analysis.identityStatus.${entry.status}`)}
+        </span>
+      </div>
+      <p class="muted">${escapeHtml(missingText)}</p>
+      <div class="analysis-inline-pills">
+        ${entry.coveredTypes.map((type) => `<span class="mini-pill">${escapeHtml(type)}</span>`).join("")}
+      </div>
+      ${focusButton}
+    </article>
+  `;
+}
+
+function identityOverviewMarkup(identity, language) {
+  if (!identity) {
+    return "";
+  }
+  const combos = (identity.defensiveCombos || []).filter((entry) => entry.status !== "missing");
+  return `
+    <div class="analysis-identity-stack">
+      ${archetypePillsMarkup(identity, language)}
+      <div class="analysis-identity-card">
+        <div class="analysis-label">${t(language, "analysis.identityComboTitle")}</div>
+        <div class="analysis-cover-grid">
+          ${combos.length
+            ? combos.map((entry) => comboCardMarkup(entry, language)).join("")
+            : `<p class="muted">${t(language, "analysis.identityComboEmpty")}</p>`}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function speedDetailPillMarkup(entry, state) {
   if (!entry) {
     return "";
@@ -93,7 +169,7 @@ function speedDetailPillMarkup(entry, state) {
     <span class="speed-analysis-ref">
       <span class="mini-pill speed-analysis-name">
         ${spriteMarkup(entry, state)}
-        <span>${escapeHtml(entry.label)}</span>
+        <span>${escapeHtml(getLocalizedMemberLabel(entry, state, state.language))}</span>
       </span>
       ${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}
       <span class="mini-pill speed-analysis-speed">Spe ${escapeHtml(entry.speed)}</span>
@@ -136,6 +212,46 @@ function coverageCardMarkup(entry, language, state) {
   `;
 }
 
+function moveSuggestionMarkup(move, state, language) {
+  return `
+    <span class="mini-pill ${move.effectiveness >= 2 ? "analysis-good-pill" : ""}">
+      ${escapeHtml(getLocalizedMoveName(move.name, state))}
+      · ${formatMultiplier(move.effectiveness)}x
+      ${move.basePower ? ` · ${t(language, "output.basePower")} ${escapeHtml(move.basePower)}` : ""}
+    </span>
+  `;
+}
+
+function coverageGapCardMarkup(entry, language, state) {
+  return `
+    <article class="analysis-list-card analysis-gap-card ${entry.patchable ? "good" : "bad"}">
+      <div class="analysis-list-head">
+        <strong>${escapeHtml(entry.label)}</strong>
+        <div class="analysis-inline-pills">
+          <span class="mini-pill">${t(language, "analysis.coverGapCurrent", {value: formatMultiplier(entry.currentBestEffectiveness)})}</span>
+          <span class="mini-pill ${entry.patchable ? "analysis-good-pill" : "analysis-alert-pill"}">${t(language, "analysis.coverGapPotential", {value: formatMultiplier(entry.potentialBestEffectiveness)})}</span>
+        </div>
+      </div>
+      ${entry.patchable ? `
+        <p class="muted">${t(language, "analysis.coverGapPatchable")}</p>
+        <div class="analysis-gap-member-list">
+          ${entry.suggestions.map((suggestion) => `
+            <article class="analysis-gap-member-card">
+              <div class="analysis-list-head">
+                ${memberPillMarkup(suggestion.member, state)}
+                <span class="source-tag">${t(language, "analysis.coverGapMemberBest", {value: formatMultiplier(suggestion.bestEffectiveness)})}</span>
+              </div>
+              <div class="analysis-inline-pills">
+                ${suggestion.moves.map((move) => moveSuggestionMarkup(move, state, language)).join("")}
+              </div>
+            </article>
+          `).join("")}
+        </div>
+      ` : `<p class="muted recommend-penalty-copy">${t(language, "analysis.coverGapNoPatch")}</p>`}
+    </article>
+  `;
+}
+
 function formatMultiplier(value) {
   return Number(value).toFixed(Number.isInteger(value) ? 0 : 2).replace(/\.00$/, "");
 }
@@ -152,10 +268,10 @@ function getMultiplierTone(value, type = "defense") {
   return "";
 }
 
-function matrixHeadersMarkup(members = []) {
+function matrixHeadersMarkup(members = [], state, language) {
   return members.map((entry) => `
-    <div class="analysis-matrix-column-head" title="${escapeHtml(entry.member.label)}">
-      <span>${escapeHtml(entry.member.label)}</span>
+    <div class="analysis-matrix-column-head" title="${escapeHtml(getLocalizedMemberLabel(entry.member, state, language))}">
+      <span>${escapeHtml(getLocalizedMemberLabel(entry.member, state, language))}</span>
     </div>
   `).join("");
 }
@@ -164,11 +280,14 @@ function matrixStyle(entries = []) {
   return `grid-template-columns: minmax(124px, 1.1fr) repeat(${entries.length}, minmax(58px, 1fr));`;
 }
 
-function suggestedCoverMarkup(entry, language) {
+function suggestedCoverMarkup(entry, language, state) {
+  const label = language === "zh"
+    ? state.localizedSpeciesNames?.get(entry.speciesId) || entry.speciesName || entry.displayName
+    : entry.displayName;
   return `
     <article class="analysis-cover-card">
       <div class="analysis-list-head">
-        <strong>${escapeHtml(entry.displayName)}</strong>
+        <strong>${escapeHtml(label)}</strong>
         <span class="mini-pill ${entry.resistance < 1 ? "analysis-good-pill" : ""}">
           ${t(language, "analysis.coverMatrixResist", {value: formatMultiplier(entry.resistance)})}
         </span>
@@ -185,7 +304,7 @@ function suggestedCoverMarkup(entry, language) {
   `;
 }
 
-function defensiveMatrixRowMarkup(entry, language) {
+function defensiveMatrixRowMarkup(entry, language, state) {
   return `
     <article class="analysis-matrix-row-card ${entry.average > 1.15 ? "bad" : ""}">
       <div class="analysis-matrix-row" style="${matrixStyle(entry.members)}">
@@ -195,7 +314,7 @@ function defensiveMatrixRowMarkup(entry, language) {
         </div>
         ${entry.members.map((cell) => `
           <div class="analysis-matrix-cell ${getMultiplierTone(cell.multiplier, "defense")}">
-            <span class="analysis-matrix-cell-name">${escapeHtml(cell.member.label)}</span>
+            <span class="analysis-matrix-cell-name">${escapeHtml(getLocalizedMemberLabel(cell.member, state, language))}</span>
             <strong>${formatMultiplier(cell.multiplier)}x</strong>
           </div>
         `).join("")}
@@ -204,7 +323,7 @@ function defensiveMatrixRowMarkup(entry, language) {
         <div class="analysis-cover-suggestions">
           <div class="analysis-label">${t(language, "analysis.coverSuggestedTitle")}</div>
           <div class="analysis-cover-grid">
-            ${entry.suggestedCovers.map((candidate) => suggestedCoverMarkup(candidate, language)).join("")}
+            ${entry.suggestedCovers.map((candidate) => suggestedCoverMarkup(candidate, language, state)).join("")}
           </div>
         </div>
       ` : ""}
@@ -212,7 +331,7 @@ function defensiveMatrixRowMarkup(entry, language) {
   `;
 }
 
-function offensiveMatrixRowMarkup(entry, language) {
+function offensiveMatrixRowMarkup(entry, language, state) {
   return `
     <article class="analysis-matrix-row-card">
       <div class="analysis-matrix-row" style="${matrixStyle(entry.members)}">
@@ -222,7 +341,7 @@ function offensiveMatrixRowMarkup(entry, language) {
         </div>
         ${entry.members.map((cell) => `
           <div class="analysis-matrix-cell ${getMultiplierTone(cell.effectiveness, "offense")}">
-            <span class="analysis-matrix-cell-name">${escapeHtml(cell.member.label)}</span>
+            <span class="analysis-matrix-cell-name">${escapeHtml(getLocalizedMemberLabel(cell.member, state, language))}</span>
             <strong>${formatMultiplier(cell.effectiveness)}x</strong>
           </div>
         `).join("")}
@@ -249,7 +368,7 @@ function speedCardMarkup(entry, language, state) {
   return `
     <article class="entry-card compact">
       <div class="entry-main">
-        <div class="entry-title"><strong>${escapeHtml(entry.label)}</strong>${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}<span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
+        <div class="entry-title"><strong>${escapeHtml(getLocalizedMemberLabel(entry, state, language))}</strong>${entry.note ? `<span class="mini-pill speed-note-pill">${escapeHtml(entry.note)}</span>` : ""}<span class="source-tag">Spe ${entry.speed}</span>${entry.isTrickRoomSetter ? `<span class="source-tag">${t(language, "analysis.trickRoomSetter")}</span>` : ""}</div>
         ${speedAnalysisRowMarkup(
           t(language, "analysis.aheadOfLabel"),
           entry.aheadOf.length ? entry.aheadOf.map((item) => speedDetailPillMarkup(item, state)).join("") : `<span class="muted">${t(language, "analysis.noMajorTier")}</span>`,
@@ -279,6 +398,7 @@ function coreMetricPillsMarkup(entry, language) {
       <span class="mini-pill ${entry.sharedWeaknesses ? "analysis-alert-pill" : ""}">${t(language, "analysis.coreSharedWeakness", {count: entry.sharedWeaknesses})}</span>
       <span class="mini-pill">${t(language, "analysis.coreSingleCoverage", {count: entry.singleCoverageCount})}</span>
       <span class="mini-pill">${t(language, "analysis.coreDualCoverage", {count: entry.pairCoverageCount})}</span>
+      ${entry.comboBonus ? `<span class="mini-pill analysis-good-pill">${t(language, "analysis.coreComboBonus", {value: entry.comboBonus.toFixed(1)})}</span>` : ""}
     </div>
   `;
 }
@@ -291,7 +411,7 @@ function coreCardMarkup(entry, language, tone, state) {
           ${entry.members.map((member) => `
             <span class="mini-pill analysis-core-member">
               ${spriteMarkup(member, state)}
-              <span>${escapeHtml(member.label)}</span>
+              <span>${escapeHtml(getLocalizedMemberLabel(member, state, language))}</span>
             </span>
           `).join("")}
         </div>
@@ -300,6 +420,7 @@ function coreCardMarkup(entry, language, tone, state) {
       ${coreMetricPillsMarkup(entry, language)}
       <p class="muted analysis-core-copy">${t(language, "analysis.coreUtility", {roles: entry.roles.length || 0, immunities: entry.immunityPatches})}</p>
       ${entry.roles.length ? `<div class="analysis-inline-pills">${entry.roles.map((role) => renderRolePill(role, language, "mini-pill")).join("")}</div>` : ""}
+      ${entry.synergyReasons?.length ? `<div class="analysis-inline-pills">${entry.synergyReasons.map((reason) => `<span class="mini-pill analysis-good-pill">${escapeHtml(reason)}</span>`).join("")}</div>` : ""}
     </article>
   `;
 }
@@ -307,21 +428,7 @@ function coreCardMarkup(entry, language, tone, state) {
 function renderCoveragePanel(analysis, language, state) {
   const defensiveHeaders = analysis.coverage.defensiveMatrix[0]?.members || [];
   const offensiveHeaders = analysis.coverage.offensiveMatrix[0]?.members || [];
-  const blindSpotMarkup = analysis.offensivePairs.length
-    ? analysis.offensivePairs.slice(0, 10).map((entry) => `
-      <div class="chip-card bad">
-        <strong>${entry.label}</strong>
-        <span>${t(language, "analysis.highest", {value: entry.effectiveness.toFixed(2)})}</span>
-      </div>
-    `).join("")
-    : analysis.offensiveSinglesNeutral.length
-      ? analysis.offensiveSinglesNeutral.slice(0, 10).map((entry) => `
-        <div class="chip-card">
-          <strong>${entry.label}</strong>
-          <span>${t(language, "analysis.highest", {value: entry.effectiveness.toFixed(2)})}</span>
-        </div>
-      `).join("")
-      : `<p class="empty-state">${t(language, "analysis.fullSingleCoverage")}</p>`;
+  const gapCards = analysis.coverage.offensiveGapCards || [];
 
   return `
     <div class="analysis-detail-grid">
@@ -330,10 +437,10 @@ function renderCoveragePanel(analysis, language, state) {
         <p class="muted">${t(language, "analysis.coverMatrixIncomingCopy")}</p>
         <div class="analysis-matrix-head" style="${matrixStyle(defensiveHeaders)}">
           <div class="analysis-matrix-corner">${t(language, "analysis.coverMatrixAxisIncoming")}</div>
-          ${matrixHeadersMarkup(defensiveHeaders)}
+          ${matrixHeadersMarkup(defensiveHeaders, state, language)}
         </div>
         <div class="analysis-list-stack">
-          ${analysis.coverage.defensiveMatrix.map((entry) => defensiveMatrixRowMarkup(entry, language)).join("")}
+          ${analysis.coverage.defensiveMatrix.map((entry) => defensiveMatrixRowMarkup(entry, language, state)).join("")}
         </div>
       </section>
       <section class="subpanel">
@@ -341,16 +448,18 @@ function renderCoveragePanel(analysis, language, state) {
         <p class="muted">${t(language, "analysis.coverMatrixOutgoingCopy")}</p>
         <div class="analysis-matrix-head" style="${matrixStyle(offensiveHeaders)}">
           <div class="analysis-matrix-corner">${t(language, "analysis.coverMatrixAxisOutgoing")}</div>
-          ${matrixHeadersMarkup(offensiveHeaders)}
+          ${matrixHeadersMarkup(offensiveHeaders, state, language)}
         </div>
         <div class="analysis-list-stack">
-          ${analysis.coverage.offensiveMatrix.map((entry) => offensiveMatrixRowMarkup(entry, language)).join("")}
+          ${analysis.coverage.offensiveMatrix.map((entry) => offensiveMatrixRowMarkup(entry, language, state)).join("")}
         </div>
       </section>
     </div>
     <section class="subpanel">
       <h3>${t(language, "analysis.coverageGapTitle")}</h3>
-      <div class="chip-list">${blindSpotMarkup}</div>
+      ${gapCards.length
+        ? `<div class="analysis-gap-grid">${gapCards.map((entry) => coverageGapCardMarkup(entry, language, state)).join("")}</div>`
+        : `<p class="empty-state">${t(language, "analysis.fullSingleCoverage")}</p>`}
     </section>
   `;
 }
@@ -418,6 +527,57 @@ function coreSuggestionMarkup(entry, language) {
   `;
 }
 
+function coreCandidatePillsMarkup(labels = [], language, className = "") {
+  if (!labels.length) {
+    return `<span class="mini-pill">${t(language, "common.none")}</span>`;
+  }
+  return labels.map((label) => `<span class="mini-pill ${className}">${escapeHtml(label)}</span>`).join("");
+}
+
+function coreLibraryCandidateMarkup(entry, language, state) {
+  const tone = entry.riskLabels.length > entry.focusCoveredLabels.length ? "bad" : "good";
+  const localizedBase = language === "zh"
+    ? state.localizedSpeciesNames?.get(entry.speciesId) || entry.speciesName || entry.label
+    : entry.speciesName || entry.label;
+  const noteIndex = String(entry.label || "").indexOf("（");
+  const displayLabel = noteIndex >= 0 ? `${localizedBase}${entry.label.slice(noteIndex)}` : (entry.label || localizedBase);
+  return `
+    <article class="analysis-core-card ${tone}">
+      <div class="analysis-list-head">
+        <strong>${escapeHtml(displayLabel)}</strong>
+        <span class="source-tag score-tag">${t(language, "analysis.coreScore", {value: entry.score.toFixed(1)})}</span>
+      </div>
+      <div>
+        <div class="analysis-label">${t(language, "analysis.coreCandidateFocusCover")}</div>
+        <div class="analysis-inline-pills">
+          ${entry.focusCoveredLabels.length ? coreCandidatePillsMarkup(entry.focusCoveredLabels, language, "analysis-good-pill") : `<span class="mini-pill">${t(language, "common.none")}</span>`}
+        </div>
+      </div>
+      <div>
+        <div class="analysis-label">${t(language, "analysis.coreCandidateTeamCover")}</div>
+        <div class="analysis-inline-pills">
+          ${entry.teamCoveredLabels.length ? coreCandidatePillsMarkup(entry.teamCoveredLabels, language, "analysis-good-pill") : `<span class="mini-pill">${t(language, "common.none")}</span>`}
+        </div>
+      </div>
+      <div>
+        <div class="analysis-label">${t(language, "analysis.coreCandidateRisk")}</div>
+        <div class="analysis-inline-pills">
+          ${entry.riskLabels.length ? coreCandidatePillsMarkup(entry.riskLabels, language, "analysis-alert-pill") : `<span class="mini-pill">${t(language, "analysis.coreCandidateNoRisk")}</span>`}
+        </div>
+      </div>
+      ${entry.roleIds.length ? `
+        <div>
+          <div class="analysis-label">${t(language, "analysis.coreCandidateRoles")}</div>
+          <div class="analysis-inline-pills">${entry.roleIds.map((roleId) => renderRolePill(roleId, language, "mini-pill")).join("")}</div>
+        </div>
+      ` : ""}
+      <div class="analysis-card-actions">
+        <button type="button" class="ghost-button mini-action" data-add-config="${escapeHtml(entry.configId)}">${t(language, "analysis.coreCandidateAdd")}</button>
+      </div>
+    </article>
+  `;
+}
+
 function renderCoresPanel(analysis, language, focusId, state) {
   const focusEntry = analysis.cores.suggestionsById[focusId];
   return `
@@ -427,7 +587,7 @@ function renderCoresPanel(analysis, language, focusId, state) {
           <h3>${t(language, "analysis.coreSuggestTitle")}</h3>
           <select class="analysis-focus-select" data-core-focus>
             ${analysis.cores.memberOptions.map((member) => `
-              <option value="${escapeHtml(member.id)}" ${member.id === focusId ? "selected" : ""}>${escapeHtml(member.label)}</option>
+              <option value="${escapeHtml(member.id)}" ${member.id === focusId ? "selected" : ""}>${escapeHtml(getLocalizedMemberLabel(member, state, language))}</option>
             `).join("")}
           </select>
         </div>
@@ -445,11 +605,24 @@ function renderCoresPanel(analysis, language, focusId, state) {
                 </article>
               `).join("")}</div>`
               : `<p class="muted">${t(language, "analysis.coreNoTeamCover")}</p>`}
+            <div class="analysis-subsection-head">
+              <h4>${t(language, "analysis.coreLibraryTitle")}</h4>
+              <p class="muted">${t(language, "analysis.coreLibraryCopy")}</p>
+            </div>
             <div class="analysis-core-grid">
-              ${focusEntry.suggestions.length
-                ? focusEntry.suggestions.map((entry) => coreSuggestionMarkup(entry, language)).join("")
+              ${focusEntry.libraryCandidates?.length
+                ? focusEntry.libraryCandidates.map((entry) => coreLibraryCandidateMarkup(entry, language, state)).join("")
                 : `<p class="empty-state">${t(language, "analysis.coreNoSuggestion")}</p>`}
             </div>
+            ${focusEntry.suggestions?.length ? `
+              <div class="analysis-subsection-head">
+                <h4>${t(language, "analysis.coreTypeIdeaTitle")}</h4>
+                <p class="muted">${t(language, "analysis.coreTypeIdeaCopy")}</p>
+              </div>
+              <div class="analysis-core-grid">
+                ${focusEntry.suggestions.map((entry) => coreSuggestionMarkup(entry, language)).join("")}
+              </div>
+            ` : ""}
           ` : `<p class="empty-state">${t(language, "analysis.coreNeedMoreMembers")}</p>`}
         </div>
       </section>
@@ -458,6 +631,12 @@ function renderCoresPanel(analysis, language, focusId, state) {
         <div class="analysis-core-grid">
           ${analysis.cores.bestPairs.length
             ? analysis.cores.bestPairs.map((entry) => coreCardMarkup(entry, language, "good", state)).join("")
+            : `<p class="empty-state">${t(language, "analysis.coreNeedMoreMembers")}</p>`}
+        </div>
+        <h3>${t(language, "analysis.coreBestTrioTitle")}</h3>
+        <div class="analysis-core-grid">
+          ${analysis.cores.bestTrios.length
+            ? analysis.cores.bestTrios.map((entry) => coreCardMarkup(entry, language, "good", state)).join("")
             : `<p class="empty-state">${t(language, "analysis.coreNeedMoreMembers")}</p>`}
         </div>
         <h3>${t(language, "analysis.coreRiskTitle")}</h3>
@@ -495,8 +674,10 @@ export function renderAnalysisView(state) {
   }
 
   const teraHint = teraHintMarkup(state, language);
+  const identityMarkup = identityOverviewMarkup(analysis.identity, language);
   setInnerHTMLIfChanged(document.getElementById("analysis-overview"), `
     ${teraHint}
+    ${identityMarkup}
     <div class="metric-card"><strong>${analysis.weaknesses.length}</strong><span>${t(language, "analysis.weaknesses")}</span></div>
     <div class="metric-card"><strong>${analysis.blindSpots.length}</strong><span>${t(language, "analysis.blindSpots")}</span></div>
     <div class="metric-card"><strong>${analysis.coverage.strongCount}</strong><span>${t(language, "analysis.coverageStrong")}</span></div>

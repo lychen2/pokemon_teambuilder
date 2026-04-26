@@ -1,5 +1,6 @@
 import {FALLBACK_LEVEL, NATURE_EFFECTS, TYPE_ORDER} from "./constants.js";
 import {hydrateConfigs} from "./showdown.js";
+import {getLearnsetMap} from "./learnsets.js";
 import {getUsageReferenceMoveEntries} from "./usage.js";
 import {
   applyNatureToChampionStats,
@@ -107,36 +108,11 @@ function resolveItemEntry(itemName, datasets) {
   return lookup.get(normalizeLookupText(itemName)) || null;
 }
 
-function getStandardLearnsetMap(speciesId, datasets) {
-  const direct = datasets.learnsets?.[speciesId]?.learnset;
-  const species = datasets.pokedex[speciesId];
-  const baseSpeciesId = normalizeName(species?.baseSpecies || "");
-  const baseLearnset = datasets.learnsets?.[baseSpeciesId]?.learnset || null;
-  if (direct && baseLearnset) {
-    return {...baseLearnset, ...direct};
-  }
-  return direct || baseLearnset || null;
+export function getLegalMoveIds(speciesId, datasets, options = {}) {
+  return new Set(Object.keys(getLearnsetMap(speciesId, datasets, options) || {}));
 }
 
-function getLearnsetMap(speciesId, datasets) {
-  const direct = datasets.championsVgc?.learnsets?.[speciesId];
-  const species = datasets.pokedex[speciesId];
-  const baseSpeciesId = normalizeName(species?.baseSpecies || "");
-  const championsLearnset = datasets.championsVgc?.learnsets?.[baseSpeciesId] || null;
-  if (direct && championsLearnset) {
-    return {...championsLearnset, ...direct};
-  }
-  if (direct || championsLearnset) {
-    return direct || championsLearnset;
-  }
-  return getStandardLearnsetMap(speciesId, datasets) || null;
-}
-
-export function getLegalMoveIds(speciesId, datasets) {
-  return new Set(Object.keys(getLearnsetMap(speciesId, datasets) || {}));
-}
-
-export function getMoveLegality(moveName, speciesId, datasets) {
+export function getMoveLegality(moveName, speciesId, datasets, options = {}) {
   if (!moveName.trim()) {
     return {status: "empty", move: null};
   }
@@ -144,7 +120,7 @@ export function getMoveLegality(moveName, speciesId, datasets) {
   if (!move) {
     return {status: "unknown", move: null};
   }
-  const learnset = getLearnsetMap(speciesId, datasets);
+  const learnset = getLearnsetMap(speciesId, datasets, options);
   if (!learnset) {
     return {status: "unknown", move};
   }
@@ -181,7 +157,9 @@ export function validateBuilderState(builder, datasets) {
   const legalAbilities = new Set(getAbilityOptions(builder.speciesId, datasets));
   const requiredItem = getRequiredItemForSpecies(builder.speciesId, datasets);
   const itemName = (requiredItem || builder.item).trim();
-  const moveChecks = builder.moves.map((move) => getMoveLegality(move, builder.speciesId, datasets));
+  const moveChecks = builder.moves.map((move) => (
+    getMoveLegality(move, builder.speciesId, datasets, {itemName})
+  ));
   const trimmedMoves = builder.moves
     .map((move) => resolveMoveEntry(move, datasets)?.name || move.trim())
     .filter(Boolean);

@@ -35,6 +35,37 @@
   gap: 6px;
 }
 
+.matchup-filter-panel,
+.matchup-filter-group {
+  display: grid;
+  gap: 8px;
+}
+
+.matchup-filter-panel {
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(244, 247, 251, 0.92);
+}
+
+.matchup-filter-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.matchup-filter-row {
+  margin-top: 0;
+}
+
+.matchup-filter-chip.active {
+  border-color: rgba(47, 92, 77, 0.42);
+  background: rgba(214, 233, 224, 0.92);
+}
+
 .matchup-config-box {
   display: grid;
   gap: 8px;
@@ -134,6 +165,23 @@
 
 .matchup-breakdown-row {
   margin-top: 6px;
+}
+
+.matchup-lead-plan {
+  display: grid;
+  gap: 6px;
+}
+
+.matchup-lead-plan-list {
+  display: grid;
+  gap: 6px;
+}
+
+.matchup-lead-plan-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
 }
 
 .matchup-lead-body {

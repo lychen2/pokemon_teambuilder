@@ -1,6 +1,7 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {spriteMarkup} from "./sprites.js";
+import {normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -17,7 +18,7 @@ function getLocalizedSpeciesName(state, entry) {
 
 function getLocalizedMoveName(state, moveName = "") {
   if (state.language !== "zh") return moveName;
-  return state.localizedMoveNames?.get(String(moveName || "").trim().toLowerCase()) || moveName;
+  return state.localizedMoveNames?.get(normalizeName(moveName)) || moveName;
 }
 
 function formatScore(value) {
@@ -176,10 +177,10 @@ function getLocalizedSourceLabel(source, state, language) {
     return t(language, source.label);
   }
   if (source.kind === "item") {
-    return state.localizedItemNames?.get(String(source.label || "").trim().toLowerCase()) || source.label;
+    return state.localizedItemNames?.get(normalizeName(source.label || "")) || source.label;
   }
   if (source.kind === "ability") {
-    return state.localizedAbilityNames?.get(String(source.label || "").trim().toLowerCase()) || source.label;
+    return state.localizedAbilityNames?.get(normalizeName(source.label || "")) || source.label;
   }
   return source.label;
 }

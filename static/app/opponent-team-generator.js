@@ -1,4 +1,22 @@
 import {TYPE_CHART} from "./constants.js";
+import {getMoveEffectiveness} from "./battle-semantics.js";
+import {
+  getBasePower,
+  getConditionalAttackInfo,
+  getConditionalBpInfo,
+  getEffectiveType,
+  getFinalDamageInfo,
+  getHitCount,
+  getItemPowerMultiplier,
+  getOffenseStatKey,
+  getRawMove,
+  getRestrictedReasonIds,
+  getSpreadMultiplier,
+  getStabMultiplier,
+  getStaticAttackMultiplier,
+  getStaticBpMultiplier,
+  isDamagingMove,
+} from "./output-strength-rules.js";
 import {getUtilityRoles} from "./team-roles.js";
 import {getUsageForSpecies, getUsageTeammateShare} from "./usage.js";
 
@@ -17,6 +35,13 @@ const SPEED_EDGE_SLIGHT_FAST_SCORE = 1.5;
 const SPEED_EDGE_SLIGHT_SLOW_SCORE = -1.5;
 const SPEED_EDGE_SLOW_SCORE = -3;
 const SPEED_EDGE_VERY_SLOW_SCORE = -6;
+const LEVEL_DAMAGE_FACTOR = 22;
+const DAMAGE_DIVISOR = 50;
+const DAMAGE_OFFSET = 2;
+const ACCURACY_SCALE = 100;
+const FAST_OHKO_DAMAGE_RATIO = 1;
+const FAST_OHKO_BONUS = 6;
+const FAST_OHKO_BLOCKED_REASON_IDS = new Set(["conditional", "charge", "recharge", "selfdestruct", "ohko"]);
 const SYNERGY_EPSILON = 1e-6;
 const OPPONENT_GEN_WEIGHTS = Object.freeze({
   total: 0.34,
@@ -101,6 +126,86 @@ function getSpeedEdgeScore(attacker = {}, defender = {}) {
   return totalWeight ? weightedScore / totalWeight : 0;
 }
 
+function getReliableConditionalMultiplier(info = {}) {
+  return info.triggerSource ? info.maxMultiplier : info.baseMultiplier;
+}
+
+function getMoveReliability(move = {}) {
+  if (move.accuracy === true) {
+    return 1;
+  }
+  const accuracy = Number(move.accuracy || ACCURACY_SCALE);
+  return Math.max(0, Math.min(1, accuracy / ACCURACY_SCALE));
+}
+
+function isStableOhkoMove(move = {}) {
+  return !getRestrictedReasonIds(move).some((reasonId) => FAST_OHKO_BLOCKED_REASON_IDS.has(reasonId));
+}
+
+function getMoveDamageRatio(attacker = {}, defender = {}, move = {}, datasets) {
+  const rawMove = getRawMove(move, datasets);
+  if (!isDamagingMove(rawMove) || !isStableOhkoMove(rawMove)) {
+    return 0;
+  }
+  const statKey = getOffenseStatKey(rawMove);
+  const defenseKey = rawMove.category === "Physical" ? "def" : "spd";
+  const attackStat = Number(attacker.stats?.[statKey] || 0);
+  const defenseStat = Number(defender.stats?.[defenseKey] || 0);
+  const hpStat = Number(defender.stats?.hp || 0);
+  const basePower = getBasePower(rawMove);
+  const effectiveType = getEffectiveType(rawMove, attacker);
+  const effectiveness = getMoveEffectiveness(rawMove, attacker, defender);
+  if (!attackStat || !defenseStat || !hpStat || !basePower || !effectiveType || !effectiveness) {
+    return 0;
+  }
+  const attackMultiplier = getStaticAttackMultiplier(attacker, statKey, effectiveType)
+    * getReliableConditionalMultiplier(getConditionalAttackInfo(rawMove, attacker, statKey, effectiveType));
+  const bpMultiplier = getStaticBpMultiplier(rawMove, attacker, effectiveType, basePower)
+    * getReliableConditionalMultiplier(getConditionalBpInfo(rawMove, attacker, statKey, effectiveType));
+  const baseDamage = (((LEVEL_DAMAGE_FACTOR * basePower * attackStat * attackMultiplier) / defenseStat) / DAMAGE_DIVISOR) + DAMAGE_OFFSET;
+  const modifier = getHitCount(rawMove, attacker)
+    * getSpreadMultiplier(rawMove)
+    * getStabMultiplier(attacker, effectiveType)
+    * getItemPowerMultiplier(rawMove, attacker, effectiveType)
+    * getFinalDamageInfo(rawMove, attacker, effectiveType).multiplier
+    * bpMultiplier
+    * effectiveness;
+  return (baseDamage * modifier) / hpStat;
+}
+
+function getFastOhkoBonus(attacker = {}, defender = {}, datasets) {
+  if (!datasets) {
+    return 0;
+  }
+  const attackerModes = getSpeedModes(attacker);
+  const defenderModes = getSpeedModes(defender);
+  const bestRatio = (attacker.moves || []).reduce((best, move) => {
+    return Math.max(best, getMoveDamageRatio(attacker, defender, move, datasets));
+  }, 0);
+  if (bestRatio < FAST_OHKO_DAMAGE_RATIO) {
+    return 0;
+  }
+  let fasterWeight = 0;
+  let totalWeight = 0;
+  attackerModes.forEach((attackerMode) => {
+    defenderModes.forEach((defenderMode) => {
+      const weight = attackerMode.weight * defenderMode.weight;
+      if (attackerMode.speed > defenderMode.speed) {
+        fasterWeight += weight;
+      }
+      totalWeight += weight;
+    });
+  });
+  if (!totalWeight || !fasterWeight) {
+    return 0;
+  }
+  const bestMove = (attacker.moves || [])
+    .map((move) => ({move, ratio: getMoveDamageRatio(attacker, defender, move, datasets)}))
+    .filter((entry) => entry.ratio >= FAST_OHKO_DAMAGE_RATIO)
+    .sort((left, right) => right.ratio - left.ratio)[0];
+  return FAST_OHKO_BONUS * (fasterWeight / totalWeight) * getMoveReliability(bestMove?.move);
+}
+
 function getOffenseStat(config = {}) {
   return Math.max(Number(config.stats?.atk || 0), Number(config.stats?.spa || 0));
 }
@@ -116,16 +221,16 @@ function getRolePressureBonus(config = {}, roleCounts = new Map()) {
   }, 0);
 }
 
-function getCounterScore(attacker = {}, defender = {}) {
+export function getCounterScore(attacker = {}, defender = {}, datasets) {
   const outgoing = getBestAttackMultiplier(attacker, defender.types || []);
   const incoming = getBestAttackMultiplier(defender, attacker.types || []);
   const offensePressure = outgoing * 12 + getOffenseStat(attacker) / 18;
   const resistanceBonus = incoming > 0 ? Math.max(0, Math.log2(1 / Math.max(incoming, 0.25))) * 3 : 6;
-  return offensePressure - incoming * 5 + resistanceBonus + getSpeedEdgeScore(attacker, defender);
+  return offensePressure - incoming * 5 + resistanceBonus + getSpeedEdgeScore(attacker, defender) + getFastOhkoBonus(attacker, defender, datasets);
 }
 
 function summarizeConfigPerformance(config = {}, team = [], datasets) {
-  const perTargetScores = team.map((target) => getCounterScore(config, target));
+  const perTargetScores = team.map((target) => getCounterScore(config, target, datasets));
   const totalScore = perTargetScores.reduce((sum, score) => sum + score, 0);
   return {
     config,

@@ -7,8 +7,11 @@ import {
   getFieldFlags,
   getResistanceProfileForConfig,
 } from "./battle-semantics.js";
+import {buildOffensiveGapCards} from "./coverage-potential.js";
+import {evaluatePairSynergy, evaluateTrioSynergy} from "./core-synergy.js";
 import {t} from "./i18n.js";
 import {normalizeRecommendationPreferences} from "./recommendation-preferences.js";
+import {buildLibraryCoreCandidates} from "./core-candidates.js";
 import {
   ATTACK_BIAS_ORDER,
   RECOMMENDATION_ROLE_IDS,
@@ -20,12 +23,16 @@ import {
   getUtilityRoles,
   hasMove,
 } from "./team-roles.js";
-import {getTypeLabel, uniqueStrings} from "./utils.js";
+import {summarizeTeamIdentity} from "./team-identity.js";
+import {getBattleEquivalentSpeciesId, getTypeLabel, uniqueStrings} from "./utils.js";
 
 const TRICK_ROOM_MOVE = "trickroom";
 const SPEED_MODE_STANDARD = "standard";
 const SPEED_MODE_TRICK_ROOM = "trickroom";
 const SPEED_MODE_HYBRID = "hybrid";
+const TRICK_ROOM_SLOW_PERCENTILE = 0.25;
+const TRICK_ROOM_CORE_RATIO = 0.5;
+const TRICK_ROOM_FAST_MEMBER_RATIO = 0.34;
 const SPEED_PREVIEW_LIMIT = 3;
 const THREAT_PREVIEW_LIMIT = 3;
 const SUPER_EFFECTIVE_THRESHOLD = 2;
@@ -35,6 +42,8 @@ const WEAKNESS_AVERAGE_THRESHOLD = 1.15;
 const MAX_SUGGESTED_COVERS = 3;
 const CORE_PREVIEW_LIMIT = 4;
 const CORE_RISK_LIMIT = 3;
+const TRIO_PREVIEW_LIMIT = 3;
+const BLIND_SPOT_PREVIEW_LIMIT = 8;
 const DEFENSIVE_TYPE_PAIRS = buildDefensiveTypePairs();
 const PARTNER_TYPE_COMBOS = buildPartnerTypeCombos();
 
@@ -50,22 +59,51 @@ function getMedianSpeed(speedTiers = []) {
   return speedTiers[0]?.speed || 0;
 }
 
+function getSpeedPercentile(speedTiers = [], percentile = 0.5) {
+  const totalCount = speedTiers.reduce((sum, tier) => sum + tier.totalCount, 0);
+  if (!totalCount) return 0;
+  const target = totalCount * percentile;
+  let seen = 0;
+  for (const tier of [...speedTiers].sort((left, right) => left.speed - right.speed)) {
+    seen += tier.totalCount;
+    if (seen >= target) return tier.speed;
+  }
+  return speedTiers[0]?.speed || 0;
+}
+
 export function getSpeedContext(team = [], speedTiers = [], fieldState = {}) {
+  const teamSize = team.length;
+  if (!teamSize) {
+    return {
+      mode: SPEED_MODE_STANDARD,
+      medianSpeed: getMedianSpeed(speedTiers),
+      setterCount: 0,
+      slowCount: 0,
+      fastCount: 0,
+      speedBoostCount: 0,
+      teamSize: 0,
+      trickRoomCutoff: 0,
+    };
+  }
   const medianSpeed = getMedianSpeed(speedTiers);
+  const trickRoomCutoff = Math.min(medianSpeed || Infinity, getSpeedPercentile(speedTiers, TRICK_ROOM_SLOW_PERCENTILE) || Infinity);
+  const speeds = team.map((config) => getEffectiveSpeed(config, "ally", fieldState));
   const setterCount = team.filter((config) => hasMove(config, TRICK_ROOM_MOVE)).length;
-  const slowCount = team.filter((config) => getEffectiveSpeed(config, "ally", fieldState) <= medianSpeed).length;
-  const fastCount = team.length - slowCount;
+  const slowCount = speeds.filter((speed) => speed > 0 && speed <= trickRoomCutoff).length;
+  const fastCount = speeds.filter((speed) => speed > medianSpeed).length;
   const speedBoostCount = team.filter((config) => {
     const roles = getUtilityRoles(config);
     return roles.includes("tailwind") || roles.includes("speedboostself");
   }).length;
-  if (setterCount && slowCount >= Math.max(2, fastCount) && speedBoostCount === 0) {
-    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize: team.length};
+  const trickRoomCoreSize = Math.max(2, Math.ceil(teamSize * TRICK_ROOM_CORE_RATIO));
+  const fastMemberCap = Math.floor(teamSize * TRICK_ROOM_FAST_MEMBER_RATIO);
+  if (setterCount && slowCount >= trickRoomCoreSize && fastCount <= fastMemberCap && speedBoostCount === 0) {
+    return {mode: SPEED_MODE_TRICK_ROOM, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize, trickRoomCutoff};
   }
   if (setterCount && slowCount >= 2 && fastCount >= 2) {
-    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize: team.length};
+    return {mode: SPEED_MODE_HYBRID, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize, trickRoomCutoff};
   }
-  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize: team.length};
+  return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize, trickRoomCutoff};
 }
 
 export function getResistanceProfile(subject = [], options = {}) {
@@ -253,6 +291,9 @@ function buildSuggestedCoverEntry(candidate, context) {
   );
   return {
     id: candidate.id,
+    speciesId: candidate.speciesId || "",
+    battleEquivalentSpeciesId: getBattleEquivalentSpeciesId(candidate.speciesId, context.datasets),
+    speciesName: candidate.speciesName || candidate.displayName || t(context.language, "common.unknown"),
     displayName: candidate.displayName || candidate.speciesName || t(context.language, "common.unknown"),
     note: candidate.note || "",
     resistance: focusMultiplier,
@@ -263,8 +304,28 @@ function buildSuggestedCoverEntry(candidate, context) {
   };
 }
 
-function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences, fieldState) {
-  const currentSpecies = new Set(team.map((config) => config.speciesId));
+function chooseBestSuggestedCoversBySpecies(entries = []) {
+  const bestBySpecies = new Map();
+  entries.forEach((entry) => {
+    const speciesKey = String(entry.battleEquivalentSpeciesId || entry.speciesId || entry.id || "");
+    const current = bestBySpecies.get(speciesKey);
+    if (!current) {
+      bestBySpecies.set(speciesKey, entry);
+      return;
+    }
+    if (
+      entry.score > current.score
+      || (entry.score === current.score && entry.resistance < current.resistance)
+      || (entry.score === current.score && entry.resistance === current.resistance && entry.duplicateTypes < current.duplicateTypes)
+    ) {
+      bestBySpecies.set(speciesKey, entry);
+    }
+  });
+  return [...bestBySpecies.values()];
+}
+
+function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences, fieldState, datasets) {
+  const currentSpecies = new Set(team.map((config) => getBattleEquivalentSpeciesId(config.speciesId, datasets)));
   const teamTypes = new Set(team.flatMap((config) => config.types || []));
   const teamRoles = new Set(
     team.flatMap((config) => getUtilityRoles(config))
@@ -272,21 +333,22 @@ function buildSuggestedCoversByType(team, weakRows, library, language, speedTier
   );
   const weaknessTypes = weakRows.map((entry) => entry.type);
   return Object.fromEntries(weakRows.map((row) => {
-    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes, fieldState};
+    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes, fieldState, datasets};
     const entries = library
-      .filter((candidate) => !currentSpecies.has(candidate.speciesId))
+      .filter((candidate) => !currentSpecies.has(getBattleEquivalentSpeciesId(candidate.speciesId, datasets)))
       .map((candidate) => buildSuggestedCoverEntry(candidate, context))
       .sort((left, right) => (
         right.score - left.score
         || left.resistance - right.resistance
         || left.duplicateTypes - right.duplicateTypes
       ));
-    const resistEntries = entries.filter((entry) => entry.resistance < 1);
-    return [row.type, (resistEntries.length ? resistEntries : entries).slice(0, MAX_SUGGESTED_COVERS)];
+    const uniqueEntries = chooseBestSuggestedCoversBySpecies(entries);
+    const resistEntries = uniqueEntries.filter((entry) => entry.resistance < 1);
+    return [row.type, (resistEntries.length ? resistEntries : uniqueEntries).slice(0, MAX_SUGGESTED_COVERS)];
   }));
 }
 
-function summarizeCoverage(team, language, library, speedTiers, speedContext, preferences, fieldState) {
+function summarizeCoverage(team, blindSpots, language, library, speedTiers, speedContext, preferences, fieldState, datasets) {
   const defensiveMatrix = summarizeDefensiveMatrix(team, language, fieldState);
   const offensiveMatrix = summarizeOffensiveMatrix(team, language, fieldState);
   const weakRows = defensiveMatrix
@@ -301,17 +363,20 @@ function summarizeCoverage(team, language, library, speedTiers, speedContext, pr
     speedContext,
     preferences,
     fieldState,
+    datasets,
   );
   const defensiveRows = defensiveMatrix.map((entry) => ({
     ...entry,
     suggestedCovers: suggestedCoversByType[entry.type] || [],
   }));
+  const offensiveGapCards = buildOffensiveGapCards(team, blindSpots, datasets, fieldState);
   return {
     rows: offensiveMatrix,
     defensiveMatrix: defensiveRows,
     offensiveMatrix,
     weakRows: defensiveRows.filter((entry) => entry.average > WEAKNESS_AVERAGE_THRESHOLD).slice(0, 6),
     suggestedCoversByType,
+    offensiveGapCards,
     strongCount: offensiveMatrix.filter((entry) => entry.bestEffectiveness >= SUPER_EFFECTIVE_THRESHOLD).length,
   };
 }
@@ -326,6 +391,7 @@ function createTierReference(tier, language) {
     return null;
   }
   return {
+    speciesId: entry.speciesId || "",
     speed: tier.speed,
     label: entry.speciesName || entry.displayName || entry.speciesLabel || t(language, "common.unknown"),
     note: entry.note || "",
@@ -345,6 +411,7 @@ function summarizePressureThreats(config, library = [], selectedSpeciesIds = new
       && !selectedSpeciesIds.has(candidate.speciesId)
     ))
     .map((candidate) => ({
+      speciesId: candidate.speciesId || "",
       label: candidate.speciesName || candidate.displayName || t(language, "common.unknown"),
       note: candidate.note || "",
       speed: getThreatSpeed(candidate, fieldState),
@@ -445,51 +512,61 @@ function summarizeRoles(team, speedContext) {
   };
 }
 
-function getPairEntries(team) {
-  const pairs = [];
-  for (let leftIndex = 0; leftIndex < team.length; leftIndex += 1) {
-    for (let rightIndex = leftIndex + 1; rightIndex < team.length; rightIndex += 1) {
-      pairs.push([team[leftIndex], team[rightIndex]]);
+function getCombinationEntries(team = [], size = 2) {
+  const entries = [];
+  function walk(startIndex, picked) {
+    if (picked.length === size) {
+      entries.push([...picked]);
+      return;
+    }
+    for (let index = startIndex; index < team.length; index += 1) {
+      picked.push(team[index]);
+      walk(index + 1, picked);
+      picked.pop();
     }
   }
-  return pairs;
+  if (team.length < size) {
+    return [];
+  }
+  walk(0, []);
+  return entries;
 }
 
-function countPairPatches(pair, typeList = TYPE_ORDER) {
+function countCorePatches(core, typeList = TYPE_ORDER) {
   return typeList.filter((type) => {
-    const multipliers = pair.map((config) => getResistanceProfile(config)[type] ?? 1);
+    const multipliers = core.map((config) => getResistanceProfile(config)[type] ?? 1);
     return multipliers.some((value) => value > 1) && multipliers.some((value) => value < 1);
   }).length;
 }
 
-function countPairImmunityPatches(pair) {
+function countCoreImmunityPatches(core) {
   return TYPE_ORDER.filter((type) => {
-    const multipliers = pair.map((config) => getResistanceProfile(config)[type] ?? 1);
+    const multipliers = core.map((config) => getResistanceProfile(config)[type] ?? 1);
     return multipliers.some((value) => value > 1) && multipliers.some((value) => value === 0);
   }).length;
 }
 
-function countSharedWeaknesses(pair) {
+function countSharedWeaknesses(core, minimumCount = 2) {
   return TYPE_ORDER.filter((type) => {
-    return pair.every((config) => (getResistanceProfile(config)[type] ?? 1) > 1);
+    return core.filter((config) => (getResistanceProfile(config)[type] ?? 1) > 1).length >= minimumCount;
   }).length;
 }
 
-function countSingleCoverage(pair = []) {
+function countSingleCoverage(core = []) {
   return TYPE_ORDER.filter((defendType) => {
-    return pair.some((config) => getBestMoveEffectivenessAgainstTypes(config, [defendType]) >= SUPER_EFFECTIVE_THRESHOLD);
+    return core.some((config) => getBestMoveEffectivenessAgainstTypes(config, [defendType]) >= SUPER_EFFECTIVE_THRESHOLD);
   }).length;
 }
 
-function countDualCoverage(pair = []) {
+function countDualCoverage(core = []) {
   return DEFENSIVE_TYPE_PAIRS.filter((types) => {
-    return pair.some((config) => getBestMoveEffectivenessAgainstTypes(config, types) >= SUPER_EFFECTIVE_THRESHOLD);
+    return core.some((config) => getBestMoveEffectivenessAgainstTypes(config, types) >= SUPER_EFFECTIVE_THRESHOLD);
   }).length;
 }
 
-function getPairRoles(pair) {
+function getCoreRoles(core) {
   return uniqueStrings(
-    pair.flatMap((config) => getUtilityRoles(config))
+    core.flatMap((config) => getUtilityRoles(config))
       .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)),
   );
 }
@@ -501,6 +578,7 @@ function scoreCoreEntry(entry) {
     + entry.immunityPatches * 1.5
     + entry.singleCoverageCount * 0.45
     + entry.pairCoverageCount * 0.05
+    + entry.comboBonus
     + entry.roles.length * 0.75
     - entry.sharedWeaknesses * 2.2
   );
@@ -554,9 +632,24 @@ function buildPartnerSuggestion(member, team, language) {
   };
 }
 
-function summarizePartnerSuggestions(team, language) {
+function summarizePartnerSuggestions(team, context = {}) {
   const suggestionsById = Object.fromEntries(
-    team.map((member) => [member.id, buildPartnerSuggestion(member, team, language)]),
+    team.map((member) => {
+      const entry = buildPartnerSuggestion(member, team, context.language);
+      return [member.id, {
+        ...entry,
+        libraryCandidates: buildLibraryCoreCandidates({
+          focusMember: member,
+          team,
+          library: context.library,
+          missingRoles: context.missingRoles,
+          weaknesses: context.weaknesses,
+          speedContext: context.speedContext,
+          fieldState: context.fieldState,
+          language: context.language,
+        }),
+      }];
+    }),
   );
   return {
     memberOptions: team.map(createMemberReference),
@@ -564,38 +657,78 @@ function summarizePartnerSuggestions(team, language) {
   };
 }
 
-function buildCoreEntry(pair, weaknessTypes) {
+function getSynergyLabels(reasonIds = [], language = "zh") {
+  return reasonIds.map((id) => t(language, `analysis.coreSynergy.${id}`));
+}
+
+function buildCoreEntry(core, weaknessTypes, language) {
+  const pairSynergy = evaluatePairSynergy(core);
   const entry = {
-    members: pair.map(createMemberReference),
-    roles: getPairRoles(pair),
-    teamWeaknessPatches: countPairPatches(pair, weaknessTypes),
-    patchedWeaknesses: countPairPatches(pair),
-    immunityPatches: countPairImmunityPatches(pair),
-    sharedWeaknesses: countSharedWeaknesses(pair),
-    singleCoverageCount: countSingleCoverage(pair),
-    pairCoverageCount: countDualCoverage(pair),
+    members: core.map(createMemberReference),
+    roles: getCoreRoles(core),
+    teamWeaknessPatches: countCorePatches(core, weaknessTypes),
+    patchedWeaknesses: countCorePatches(core),
+    immunityPatches: countCoreImmunityPatches(core),
+    sharedWeaknesses: countSharedWeaknesses(core, 2),
+    singleCoverageCount: countSingleCoverage(core),
+    pairCoverageCount: countDualCoverage(core),
+    comboBonus: pairSynergy.bonus,
+    synergyReasons: getSynergyLabels(pairSynergy.reasonIds, language),
   };
   return {...entry, score: scoreCoreEntry(entry)};
 }
 
-function summarizeCores(team, weaknesses = [], language = "zh") {
+function buildTrioEntry(trio, weaknessTypes, language) {
+  const pairEntries = getCombinationEntries(trio, 2).map((pair) => buildCoreEntry(pair, weaknessTypes, language));
+  const trioSynergy = evaluateTrioSynergy(trio);
+  const teamWeaknessPatches = Math.max(...pairEntries.map((entry) => entry.teamWeaknessPatches), 0);
+  const patchedWeaknesses = Math.max(...pairEntries.map((entry) => entry.patchedWeaknesses), 0);
+  const immunityPatches = Math.max(...pairEntries.map((entry) => entry.immunityPatches), 0);
+  const entry = {
+    members: trio.map(createMemberReference),
+    roles: getCoreRoles(trio),
+    teamWeaknessPatches,
+    patchedWeaknesses,
+    immunityPatches,
+    sharedWeaknesses: countSharedWeaknesses(trio, 2),
+    singleCoverageCount: countSingleCoverage(trio),
+    pairCoverageCount: countDualCoverage(trio),
+    comboBonus: pairEntries.reduce((sum, item) => sum + Number(item.comboBonus || 0), 0) + trioSynergy.bonus,
+    synergyReasons: uniqueStrings([
+      ...pairEntries.flatMap((entryItem) => entryItem.synergyReasons || []),
+      ...getSynergyLabels(trioSynergy.reasonIds, language),
+    ]),
+  };
+  return {...entry, score: scoreCoreEntry(entry)};
+}
+
+function summarizeCores(team, weaknesses = [], language = "zh", context = {}) {
   if (team.length < 2) {
-    return {bestPairs: [], riskyPairs: [], memberOptions: [], suggestionsById: {}};
+    return {bestPairs: [], bestTrios: [], riskyPairs: [], memberOptions: [], suggestionsById: {}};
   }
 
   const weaknessTypes = weaknesses.map((entry) => entry.type);
-  const pairs = getPairEntries(team).map((pair) => buildCoreEntry(pair, weaknessTypes));
+  const pairs = getCombinationEntries(team, 2).map((pair) => buildCoreEntry(pair, weaknessTypes, language));
+  const trios = getCombinationEntries(team, 3).map((trio) => buildTrioEntry(trio, weaknessTypes, language));
   const bestPairs = [...pairs]
     .sort((left, right) => right.score - left.score || left.sharedWeaknesses - right.sharedWeaknesses)
     .slice(0, CORE_PREVIEW_LIMIT);
+  const bestTrios = [...trios]
+    .sort((left, right) => right.score - left.score || left.sharedWeaknesses - right.sharedWeaknesses)
+    .slice(0, TRIO_PREVIEW_LIMIT);
   const riskyPairs = pairs
     .filter((entry) => entry.sharedWeaknesses > 0)
     .sort((left, right) => right.sharedWeaknesses - left.sharedWeaknesses || left.score - right.score)
     .slice(0, CORE_RISK_LIMIT);
   return {
     bestPairs,
+    bestTrios,
     riskyPairs,
-    ...summarizePartnerSuggestions(team, language),
+    ...summarizePartnerSuggestions(team, {
+      ...context,
+      language,
+      weaknesses,
+    }),
   };
 }
 
@@ -605,6 +738,7 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
   }
 
   const fieldState = options.fieldState || {};
+  const datasets = options.datasets || null;
   const teamWithFlags = team.map((config) => ({
     ...config,
     battleFlags: getFieldFlags(config, "ally", fieldState),
@@ -614,11 +748,23 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
   const offensive = summarizeOffensive(teamWithFlags, language, fieldState);
   const offensivePairs = summarizeOffensivePairs(teamWithFlags, language, fieldState);
   const offensiveSinglesNeutral = summarizeOffensiveSinglesNeutral(offensive);
+  const blindSpots = (offensivePairs.length ? offensivePairs : offensiveSinglesNeutral).slice(0, BLIND_SPOT_PREVIEW_LIMIT);
   const structure = summarizeStructure(teamWithFlags, language);
   const speedContext = getSpeedContext(teamWithFlags, speedTiers, fieldState);
-  const coverage = summarizeCoverage(teamWithFlags, language, library, speedTiers, speedContext, recommendPreferences, fieldState);
+  const coverage = summarizeCoverage(
+    teamWithFlags,
+    blindSpots,
+    language,
+    library,
+    speedTiers,
+    speedContext,
+    recommendPreferences,
+    fieldState,
+    datasets,
+  );
   const weaknesses = coverage.weakRows;
-  const blindSpots = (offensivePairs.length ? offensivePairs : offensiveSinglesNeutral).slice(0, 8);
+  const roles = summarizeRoles(teamWithFlags, speedContext);
+  const identity = summarizeTeamIdentity(teamWithFlags, speedContext, language);
   return {
     fieldState,
     defensive,
@@ -626,11 +772,17 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
     offensivePairs,
     offensiveSinglesNeutral,
     coverage,
-    roles: summarizeRoles(teamWithFlags, speedContext),
-    cores: summarizeCores(teamWithFlags, weaknesses, language),
+    roles,
+    cores: summarizeCores(teamWithFlags, weaknesses, language, {
+      library,
+      missingRoles: roles.missing,
+      speedContext,
+      fieldState,
+    }),
     speed: summarizeSpeed(teamWithFlags, speedTiers, language, speedContext, library, fieldState),
     speedContext,
     structure,
+    identity,
     weaknesses,
     blindSpots,
   };

@@ -1,5 +1,6 @@
 import json
 import re
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -8,6 +9,7 @@ import requests
 ROOT = Path(__file__).resolve().parents[1]
 STATS_DIR = ROOT / "poke_analysis-main" / "stats"
 STATIC_DIR = ROOT / "static"
+LOCALIZATION_BUILD_SCRIPT = ROOT / "tools" / "build-localization-data.mjs"
 CORE_JSON_FILES = {
     "items.json",
     "abilities.json",
@@ -409,6 +411,15 @@ def update_usage_data():
     )
 
 
+def write_localization_data():
+    print("Updating localization data.")
+    subprocess.run(
+        ["node", str(LOCALIZATION_BUILD_SCRIPT)],
+        check=True,
+        cwd=ROOT,
+    )
+
+
 def main():
     print("Starting core data update...")
     ensure_directories()
@@ -421,6 +432,7 @@ def main():
     write_learnsets_data()
     write_champions_vgc_data()
     update_usage_data()
+    write_localization_data()
 
     for source in BINARY_SOURCES:
         write_binary_source(*source)

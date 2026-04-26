@@ -1,7 +1,11 @@
 import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
+import {getUtilityRoles} from "./team-roles.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_OPPONENT_TEAM_SIZE = 6;
+const SPEED_BUCKET_SLOW_MAX = 120;
+const SPEED_BUCKET_MID_MAX = 149;
+const SPEED_BUCKET_FAST_MAX = 169;
 const SEARCH_MATCH_WEIGHTS = Object.freeze({
   species: 0,
   label: 1,
@@ -73,6 +77,17 @@ function getSelectedConfig(configs = [], selectedConfigId = "") {
   return configs.find((config) => config.id === selectedConfigId) || null;
 }
 
+function getSpeedBucket(speed) {
+  if (speed <= SPEED_BUCKET_SLOW_MAX) return "slow";
+  if (speed <= SPEED_BUCKET_MID_MAX) return "mid";
+  if (speed <= SPEED_BUCKET_FAST_MAX) return "fast";
+  return "elite";
+}
+
+function getRoleIds(configs = []) {
+  return uniqueValues(configs.flatMap((config) => getUtilityRoles(config)));
+}
+
 function buildOpponentEntry(species, configs = [], selection = {}) {
   const [firstConfig] = configs;
   if (!firstConfig && !species) {
@@ -85,6 +100,7 @@ function buildOpponentEntry(species, configs = [], selection = {}) {
   const speeds = activeConfigs.map((config) => Number(config.stats?.spe || 0));
   const minSpeed = Math.min(...speeds);
   const maxSpeed = Math.max(...speeds);
+  const roleIds = getRoleIds(configs);
   const speciesId = species?.speciesId || firstConfig?.speciesId || "unknown";
   const speciesName = species?.speciesName || firstConfig?.speciesName || firstConfig?.displayName || "Unknown";
   return {
@@ -101,6 +117,8 @@ function buildOpponentEntry(species, configs = [], selection = {}) {
     moveNames: uniqueValues(configs.flatMap((config) => config.moveNames || [])),
     stats: {spe: Number.isFinite(maxSpeed) ? maxSpeed : 0},
     speedRange: {min: Number.isFinite(minSpeed) ? minSpeed : 0, max: Number.isFinite(maxSpeed) ? maxSpeed : 0},
+    speedBucket: getSpeedBucket(Number.isFinite(maxSpeed) ? maxSpeed : 0),
+    roleIds,
     configs,
     selectedConfigId: validSelectedConfigId,
     selectedConfigLabel: selectedConfig?.displayLabel || selectedConfig?.displayName || "",
@@ -287,14 +305,37 @@ export function buildOpponentLibrary(datasets, library = [], language = "zh") {
   return [...buildOpponentMap(datasets, library, language).values()];
 }
 
-export function filterOpponentLibrary(entries = [], searchText = "") {
+function normalizeMatchupFilters(filters = {}) {
+  return {
+    types: Array.isArray(filters.types) ? filters.types.filter(Boolean) : [],
+    speedBucket: String(filters.speedBucket || ""),
+    roles: Array.isArray(filters.roles) ? filters.roles.filter(Boolean) : [],
+  };
+}
+
+function matchesFilters(entry, filters = {}) {
+  const normalized = normalizeMatchupFilters(filters);
+  if (normalized.types.length && !normalized.types.some((type) => (entry.types || []).includes(type))) {
+    return false;
+  }
+  if (normalized.speedBucket && entry.speedBucket !== normalized.speedBucket) {
+    return false;
+  }
+  if (normalized.roles.length && !normalized.roles.some((roleId) => (entry.roleIds || []).includes(roleId))) {
+    return false;
+  }
+  return true;
+}
+
+export function filterOpponentLibrary(entries = [], searchText = "", filters = {}) {
   const rawQuery = String(searchText || "").trim();
   const searchToken = normalizeLookupText(searchText);
+  const filteredEntries = entries.filter((entry) => matchesFilters(entry, filters));
   if (!searchToken) {
-    return entries;
+    return filteredEntries;
   }
 
-  return entries
+  return filteredEntries
     .map((entry, index) => ({
       entry,
       index,

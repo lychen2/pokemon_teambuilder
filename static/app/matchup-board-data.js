@@ -1,5 +1,6 @@
 import {TYPE_CHART} from "./constants.js";
 import {getSpeedVariants} from "./battle-semantics.js";
+import {getLearnsetMap} from "./learnsets.js";
 import {getAttackBias} from "./team-roles.js";
 import {getUsageMoveEntries} from "./usage.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
@@ -175,20 +176,8 @@ function isConfiguredDamagingMove(move) {
     && move.category !== "Status"
     && Number(move.basePower || 0) > 0;
 }
-function getStandardLearnset(speciesId, datasets) {
-  const direct = datasets.learnsets?.[speciesId]?.learnset;
-  if (direct) return direct;
-  const baseSpeciesId = normalizeName(datasets.pokedex?.[speciesId]?.baseSpecies || "");
-  return datasets.learnsets?.[baseSpeciesId]?.learnset || null;
-}
-function getLearnset(speciesId, datasets) {
-  const direct = datasets.championsVgc?.learnsets?.[speciesId];
-  if (direct) return direct;
-  const baseSpeciesId = normalizeName(datasets.pokedex?.[speciesId]?.baseSpecies || "");
-  return datasets.championsVgc?.learnsets?.[baseSpeciesId] || getStandardLearnset(speciesId, datasets);
-}
 function getLegalMoves(entry, datasets) {
-  const learnset = getLearnset(getStableSpeciesId(entry), datasets);
+  const learnset = getLearnsetMap(getStableSpeciesId(entry), datasets, {itemName: entry?.item});
   if (!learnset) return [];
   return dedupeMoves(Object.keys(learnset).map((moveId) => datasets.moves?.[moveId]).filter(isDisplayableMove));
 }

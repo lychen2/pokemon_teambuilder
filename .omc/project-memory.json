@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1776511506710,
+  "lastScanned": 1777107582978,
   "projectRoot": "/home/zonazcy/Projects/poke-type",
   "techStack": {
     "languages": [],
@@ -35,24 +35,11 @@
   },
   "customNotes": [],
   "directoryMap": {
-    "NCP-VGC-Damage-Calculator": {
-      "path": "NCP-VGC-Damage-Calculator",
-      "purpose": null,
-      "fileCount": 13,
-      "lastAccessed": 1776511506706,
-      "keyFiles": [
-        "LICENSE",
-        "README.md",
-        "debug.log",
-        "digicalc.html",
-        "index.html"
-      ]
-    },
     "Poke Icons": {
       "path": "Poke Icons",
       "purpose": null,
       "fileCount": 1467,
-      "lastAccessed": 1776511506708,
+      "lastAccessed": 1777107582976,
       "keyFiles": [
         "ui_PokeIcon_01_0003_00_0 #598899.png",
         "ui_PokeIcon_01_0003_00_0.png",
@@ -64,52 +51,62 @@
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
-      "fileCount": 2,
-      "lastAccessed": 1776511506709,
+      "fileCount": 3,
+      "lastAccessed": 1777107582977,
       "keyFiles": [
         "VGC队伍checklist.md",
-        "future-todo-reference.md"
+        "future-todo-reference.md",
+        "optimization-suggestions.md"
       ]
     },
     "poke_analysis-main": {
       "path": "poke_analysis-main",
       "purpose": null,
-      "fileCount": 1,
-      "lastAccessed": 1776511506709,
+      "fileCount": 2,
+      "lastAccessed": 1777107582977,
       "keyFiles": [
+        "build_default_preset.py",
         "update_all_data.py"
       ]
     },
     "static": {
       "path": "static",
       "purpose": "Static files",
-      "fileCount": 4,
-      "lastAccessed": 1776511506709,
+      "fileCount": 5,
+      "lastAccessed": 1777107582977,
       "keyFiles": [
         "itemicons-sheet.png",
         "poke-icons-map.json",
         "pokemonicons-sheet.png",
-        "usage.json"
+        "usage.json",
+        "usage_official.json"
       ]
     },
     "tools": {
       "path": "tools",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1776511506709,
+      "lastAccessed": 1777107582977,
       "keyFiles": [
         "build-poke-icons-map.mjs"
       ]
     },
+    "vendor": {
+      "path": "vendor",
+      "purpose": "Third-party code",
+      "fileCount": 0,
+      "lastAccessed": 1777107582977,
+      "keyFiles": []
+    },
     "static/app": {
       "path": "static/app",
       "purpose": "Application code",
-      "fileCount": 30,
-      "lastAccessed": 1776511506710,
+      "fileCount": 42,
+      "lastAccessed": 1777107582978,
       "keyFiles": [
         "ability-scores.js",
         "analysis.js",
-        "builder-autocomplete.js"
+        "battle-semantics.js"
       ]
     }
   },

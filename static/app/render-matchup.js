@@ -7,6 +7,20 @@ import {spriteMarkup} from "./sprites.js";
 import {getTypeLabel} from "./utils.js";
 
 const CONFIG_PREVIEW_LIMIT = 3;
+const MATCHUP_ROLE_FILTERS = [
+  "tailwind",
+  "trickroom",
+  "fakeout",
+  "redirection",
+  "guard",
+  "pivot",
+  "disruption",
+  "priority",
+  "intimidate",
+  "weather",
+  "terrain",
+];
+const MATCHUP_SPEED_FILTERS = ["slow", "mid", "fast", "elite"];
 
 function escapeHtml(text) {
   return String(text || "")
@@ -94,6 +108,47 @@ function getLocalizedSpeciesName(state, entry) {
   return entry.localizedSpeciesName || state.localizedSpeciesNames?.get(entry.speciesId) || entry.speciesName;
 }
 
+function getLocalizedMoveName(state, moveName = "") {
+  if (state.language !== "zh") {
+    return moveName;
+  }
+  return state.localizedMoveNames?.get(String(moveName || "").toLowerCase().replace(/[^a-z0-9]+/g, "")) || moveName;
+}
+
+function getPlanTargetLabel(action, state, language) {
+  if (action.targetLabelKey) {
+    return t(language, action.targetLabelKey);
+  }
+  if (action.targetSpeciesId) {
+    return getLocalizedSpeciesName(state, {
+      speciesId: action.targetSpeciesId,
+      speciesName: action.targetName,
+    });
+  }
+  return action.targetName || t(language, "common.none");
+}
+
+function leadPlanMarkup(entry, language, state) {
+  if (!entry.turnOnePlan?.length) {
+    return "";
+  }
+  return `
+    <div class="matchup-lead-plan">
+      <div class="analysis-label">${t(language, "matchup.turnOnePlanTitle")}</div>
+      <div class="matchup-lead-plan-list">
+        ${entry.turnOnePlan.map((action) => `
+          <div class="matchup-lead-plan-row">
+            <strong>${escapeHtml(getLocalizedSpeciesName(state, entry.members.find((member) => member.id === action.actorId) || {}))}</strong>
+            <span>${escapeHtml(getLocalizedMoveName(state, action.moveName))}</span>
+            <span class="muted">→ ${escapeHtml(getPlanTargetLabel(action, state, language))}</span>
+            <span class="mini-pill">${t(language, action.reasonKey)}</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
 function quickPickSpriteMarkup(entry, state) {
   const language = state.language;
   const selected = state.opponentTeam.some((member) => member.speciesId === entry.speciesId);
@@ -128,7 +183,10 @@ function quickPickSpriteMarkup(entry, state) {
 }
 
 function configOptionMarkup(entry, config, language, isSelected) {
-  const label = config?.displayLabel || config?.displayName || config?.speciesName || t(language, "common.unknown");
+  const speciesLabel = language === "zh"
+    ? config?.localizedSpeciesName || config?.speciesName || entry?.localizedSpeciesName || entry?.speciesName || ""
+    : config?.speciesName || entry?.speciesName || "";
+  const label = config?.note ? `${speciesLabel}（${config.note}）` : (speciesLabel || config?.displayLabel || config?.displayName || t(language, "common.unknown"));
   return `
     <button
       type="button"
@@ -262,6 +320,7 @@ function leadCardMarkup(entry, language, state) {
         ${entry.breakdown.helpingHand ? `<span class="mini-pill analysis-good-pill">${t(language, "matchup.breakdown.helpingHand", {value: entry.breakdown.helpingHand.toFixed(1)})}</span>` : ""}
         ${entry.breakdown.protect ? `<span class="mini-pill analysis-good-pill">${t(language, "matchup.breakdown.protect", {value: entry.breakdown.protect.toFixed(1)})}</span>` : ""}
       </div>
+      ${leadPlanMarkup(entry, language, state)}
       ${entry.roles.length ? `<div class="analysis-inline-pills">${rolePillsMarkup(entry.roles, language)}</div>` : ""}
     </article>
   `;
@@ -287,9 +346,97 @@ function speedLineCardMarkup(tier, language, state) {
   `;
 }
 
+function renderFilterButton({label, dataKey, value, active}) {
+  return `
+    <button
+      type="button"
+      class="ghost-button mini-action matchup-filter-chip ${active ? "active" : ""}"
+      data-${dataKey}="${escapeHtml(value)}"
+      aria-pressed="${active ? "true" : "false"}"
+    >
+      ${escapeHtml(label)}
+    </button>
+  `;
+}
+
+function matchupFiltersMarkup(state) {
+  const language = state.language;
+  const filters = state.matchupFilters || {types: [], speedBucket: "", roles: []};
+  const summary = [];
+  if (filters.types.length) summary.push(t(language, "matchup.filterTypeCount", {count: filters.types.length}));
+  if (filters.speedBucket) summary.push(t(language, `matchup.speedBucket.${filters.speedBucket}`));
+  if (filters.roles.length) summary.push(t(language, "matchup.filterRoleCount", {count: filters.roles.length}));
+  const typeButtons = [
+    renderFilterButton({
+      label: t(language, "matchup.filterAllTypes"),
+      dataKey: "matchup-clear-filter-group",
+      value: "types",
+      active: !filters.types.length,
+    }),
+    ...["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"]
+      .map((type) => renderFilterButton({
+        label: getTypeLabel(type, language),
+        dataKey: "matchup-type-filter",
+        value: type,
+        active: filters.types.includes(type),
+      })),
+  ].join("");
+  const speedButtons = [
+    renderFilterButton({
+      label: t(language, "matchup.filterAllSpeed"),
+      dataKey: "matchup-speed-filter",
+      value: "",
+      active: !filters.speedBucket,
+    }),
+    ...MATCHUP_SPEED_FILTERS.map((bucket) => renderFilterButton({
+      label: t(language, `matchup.speedBucket.${bucket}`),
+      dataKey: "matchup-speed-filter",
+      value: bucket,
+      active: filters.speedBucket === bucket,
+    })),
+  ].join("");
+  const roleButtons = [
+    renderFilterButton({
+      label: t(language, "matchup.filterAllRoles"),
+      dataKey: "matchup-clear-filter-group",
+      value: "roles",
+      active: !filters.roles.length,
+    }),
+    ...MATCHUP_ROLE_FILTERS.map((roleId) => renderFilterButton({
+      label: t(language, `analysis.role.${roleId}`),
+      dataKey: "matchup-role-filter",
+      value: roleId,
+      active: filters.roles.includes(roleId),
+    })),
+  ].join("");
+  return `
+    <div class="matchup-filter-panel">
+      <div class="matchup-filter-summary-row">
+        <span class="analysis-label">${t(language, "matchup.filterTitle")}</span>
+        <div class="analysis-inline-pills">
+          <span class="mini-pill">${t(language, "matchup.filterSummary", {summary: summary.join(" / ") || t(language, "common.none")})}</span>
+          <button type="button" class="ghost-button mini-action" data-clear-matchup-filters="true">${t(language, "matchup.filterClearAll")}</button>
+        </div>
+      </div>
+      <div class="matchup-filter-group">
+        <div class="analysis-label">${t(language, "matchup.filterTypeLabel")}</div>
+        <div class="analysis-inline-pills matchup-filter-row">${typeButtons}</div>
+      </div>
+      <div class="matchup-filter-group">
+        <div class="analysis-label">${t(language, "matchup.filterSpeedLabel")}</div>
+        <div class="analysis-inline-pills matchup-filter-row">${speedButtons}</div>
+      </div>
+      <div class="matchup-filter-group">
+        <div class="analysis-label">${t(language, "matchup.filterRoleLabel")}</div>
+        <div class="analysis-inline-pills matchup-filter-row">${roleButtons}</div>
+      </div>
+    </div>
+  `;
+}
+
 function renderBuilder(state) {
   const language = state.language;
-  const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch);
+  const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch, state.matchupFilters);
   const searching = Boolean(String(state.matchupSearch || "").trim());
   setInnerHTMLIfChanged(
     document.getElementById("opponent-team-list"),
@@ -311,8 +458,8 @@ function renderBuilder(state) {
   setInnerHTMLIfChanged(
     document.getElementById("matchup-library-list"),
     filtered.length
-      ? `<div class="species-browser-grid ${searching ? "searching" : ""}">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
-      : `<p class="empty-state">${t(language, "library.empty")}</p>`,
+      ? `${matchupFiltersMarkup(state)}<div class="species-browser-grid ${searching ? "searching" : ""}">${filtered.map((entry) => quickPickSpriteMarkup(entry, state)).join("")}</div>`
+      : `${matchupFiltersMarkup(state)}<p class="empty-state">${t(language, "matchup.filterEmpty")}</p>`,
   );
 }
 

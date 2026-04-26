@@ -1,4 +1,4 @@
-const CACHE_VERSION = "poke-type-v8-20260421";
+const CACHE_VERSION = "poke-type-v15-20260426";
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 const IMAGE_CACHE = `${CACHE_VERSION}-image`;
@@ -20,15 +20,20 @@ const SHELL_ASSETS = [
 const APP_MODULES = [
   "ability-scores.js", "analysis.js", "battle-semantics.js",
   "builder-autocomplete.js", "champions-vgc.js", "command-palette.js",
+  "core-candidates.js", "core-synergy.js", "coverage-potential.js",
   "constants.js", "damage-i18n.js", "damage-workspace.js", "data.js",
+  "damage-scan-view.js",
   "history.js", "i18n.js", "keybindings.js", "library-builder.js", "main.js",
+  "lead-turn-plan.js",
+  "learnsets.js",
   "matchup-analysis.js", "matchup-board-data.js", "matchup-selection.js",
-  "opponent-team-generator.js", "persistence.js", "pschina-translation.js",
+  "opponent-team-generator.js", "persistence.js",
   "recommendation-preferences.js", "recommendations.js",
   "render-analysis.js", "render-cache.js", "render-command-palette.js",
+  "render-library-compare.js",
   "render-damage.js", "render-matchup-board.js", "render-matchup.js",
   "render-recommendations.js", "render.js", "showdown.js", "speed.js",
-  "sprites.js", "team-config.js", "team-roles.js", "toast.js", "usage.js",
+  "sprites.js", "team-config.js", "team-identity.js", "team-roles.js", "toast.js", "usage.js",
   "utils.js",
 ];
 
@@ -63,7 +68,10 @@ const IMAGE_ASSETS = [
 
 const DATA_ASSETS = [
   "./static/poke-icons-map.json",
+  "./static/localization-data.json",
   "./static/usage.json",
+  "./static/usage_official.json",
+  "./static/paste_sets_champions_ma.json",
   "./config-default.txt",
   "./poke_analysis-main/stats/abilities.json",
   "./poke_analysis-main/stats/champions_vgc.json",
