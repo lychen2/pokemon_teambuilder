@@ -1,6 +1,8 @@
 .codex
 .codex/
 .serena/
+.omc/
+poke_analysis-main/.omc/
 __pycache__/
 *.pyc
 pokepast-archive-*.json
