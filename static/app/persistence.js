@@ -33,7 +33,10 @@ function buildStatePayload(state) {
     recommendPreferences: state.recommendPreferences,
     recommendWeights: state.recommendWeights,
     recommendBiasAuto: state.recommendBiasAuto,
+    recommendMegaOnly: Boolean(state.recommendMegaOnly),
+    quickStartDismissed: Boolean(state.quickStartDismissed),
     dismissedRecommendationKeys: state.dismissedRecommendationKeys,
+    recommendCompareIds: state.recommendCompareIds,
     savedTeams: state.savedTeams,
     savedOpponentTeams: state.savedOpponentTeams,
     language: state.language,
@@ -42,7 +45,11 @@ function buildStatePayload(state) {
       defenderId: state.damage.defenderId,
       focusSide: state.damage.focusSide,
       scanMode: state.damage.scanMode,
+      scanFilter: state.damage.scanFilter,
       field: state.damage.field,
+    },
+    usage: {
+      source: state.usage?.source || "smogon",
     },
   };
 }

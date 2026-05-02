@@ -1,0 +1,58 @@
+.view-panel.active,
+.analysis-detail-panel.active,
+.team-card:not(.empty-slot),
+.entry-card,
+.analysis-list-card,
+.recommend-card,
+.matchup-lead-card,
+.damage-result-card {
+  animation: fade-in-up var(--motion-enter) var(--ease-standard) both;
+}
+
+.stack-list > *:nth-child(2),
+.analysis-detail-panel.active > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.stack-list > *:nth-child(3),
+.analysis-detail-panel.active > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+.stack-list > *:nth-child(4),
+.analysis-detail-panel.active > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: var(--ease-standard);
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+
+  button:active {
+    transform: none;
+  }
+}

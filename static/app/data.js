@@ -1,12 +1,52 @@
 import {DATA_PATHS} from "./constants.js";
 import {getSpeedVariants} from "./battle-semantics.js";
 import {buildGlobalItemUsageCounts, buildGlobalMoveUsageCounts, buildUsageLookup} from "./usage.js";
+
+function buildPasteSpeciesCounts(pasteTeams) {
+  if (!pasteTeams) return {};
+  const teams = Array.isArray(pasteTeams) ? pasteTeams : pasteTeams?.teams || [];
+  const counts = {};
+  teams.forEach((team) => {
+    const memberIds = team?.memberSpeciesIds || [];
+    const configsByIndex = Array.isArray(team?.configs) ? team.configs : [];
+    memberIds.forEach((rawId, index) => {
+      const speciesId = String(rawId || "").toLowerCase();
+      if (!speciesId) return;
+      if (!counts[speciesId]) counts[speciesId] = {count: 0, profile: null};
+      counts[speciesId].count += 1;
+      const config = configsByIndex[index];
+      if (config && !counts[speciesId].profile) {
+        counts[speciesId].profile = config;
+      }
+    });
+  });
+  return counts;
+}
 import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
 const ALWAYS_ACTIVE_MOVE_OVERRIDES = Object.freeze({
   weatherball: {basePower: 100},
 });
+// Manual overrides for known UI-vs-move name conflicts in PSChina translations.
+// E.g., "Disable" defaults to "不开启" (UI sense); the move should be "定身法".
+// Applied to mergedMoves entries (so render.js / lookups all see corrected name)
+// AND to the localizedMoveNames Map.
+const MOVE_LOCALIZED_NAME_OVERRIDES = Object.freeze({
+  disable: "定身法",
+});
+
+function applyMoveLocalizedNameOverrides(mergedMoves = {}) {
+  for (const [overrideKey, overrideName] of Object.entries(MOVE_LOCALIZED_NAME_OVERRIDES)) {
+    for (const [entryKey, entry] of Object.entries(mergedMoves)) {
+      if (!entry) continue;
+      const entryId = normalizeName(entry.id || entry.name || entryKey);
+      if (entryId !== overrideKey) continue;
+      mergedMoves[entryKey] = {...entry, localizedName: overrideName};
+    }
+  }
+  return mergedMoves;
+}
 const CUSTOM_MEGA_STONE_DESC_PATTERN = /^If held by (.+), this item allows it to Mega Evolve in battle\.$/;
 
 function translateNameList(localization, value) {
@@ -162,7 +202,7 @@ export async function loadDatasets() {
     return datasetCache.value;
   }
 
-  const [pokeIconMap, localizationData, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc, usage] = await Promise.all([
+  const [pokeIconMap, localizationData, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc, usage, pasteTeams] = await Promise.all([
     fetchJson(DATA_PATHS.pokeIconMap),
     fetchJson(DATA_PATHS.localizationData),
     fetchJson(DATA_PATHS.pokedex),
@@ -173,16 +213,23 @@ export async function loadDatasets() {
     fetchJson(DATA_PATHS.items),
     fetchJson(DATA_PATHS.championsVgc),
     fetchJson(DATA_PATHS.usage),
+    fetchJson(DATA_PATHS.pasteTeams).catch((error) => {
+      console.warn("paste_teams_champions_ma.json missing", error);
+      return null;
+    }),
   ]);
+  // Official usage source is disabled until a reliable upstream is identified.
+  // Keeping the variable null preserves the rest of the data layer's null-guards.
+  const usageOfficial = null;
 
   const mergedPokedex = localizeDexEntries(
     mergeDexEntries(pokedex, championsVgc.overrideSpeciesData),
     localizationData,
   );
-  const mergedMoves = localizeDexEntries(
+  const mergedMoves = applyMoveLocalizedNameOverrides(localizeDexEntries(
     normalizeMoveEntries(mergeDexEntries(moves, championsVgc.overrideMoveData)),
     localizationData,
-  );
+  ));
   const mergedAbilities = localizeDexEntries(
     mergeDexEntries(abilities, championsVgc.overrideAbilityData),
     localizationData,
@@ -220,6 +267,7 @@ export async function loadDatasets() {
     items: mergedItems,
     championsVgc,
     usage,
+    usageOfficial,
     usageLookup: buildUsageLookup(usage),
     globalMoveUsageCounts: buildGlobalMoveUsageCounts(usage, moveLookup),
     globalItemUsageCounts: buildGlobalItemUsageCounts(usage, itemLookup),
@@ -236,6 +284,7 @@ export async function loadDatasets() {
     abilitySearchLookup,
     itemLookup,
     itemSearchLookup,
+    pasteSpeciesCounts: buildPasteSpeciesCounts(pasteTeams),
   };
   return datasetCache.value;
 }

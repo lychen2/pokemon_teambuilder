@@ -183,10 +183,11 @@ export function scoreSpeed(candidate, speedTiers, analysis, preferences, weights
   );
 }
 
-export function scoreSynergy(team, candidate, analysis, preferences, weights) {
+export function scoreSynergy(team, candidate, analysis, preferences, weights, roleContext) {
   const teamTypes = new Set(team.flatMap((member) => member.types || []));
-  const teamRoles = new Set(team.flatMap((member) => getUtilityRoles(member)).filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)));
-  const candidateRoles = getUtilityRoles(candidate).filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId));
+  const roleOptions = {roleContext};
+  const teamRoles = new Set(team.flatMap((member) => getUtilityRoles(member, roleOptions)).filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)));
+  const candidateRoles = getUtilityRoles(candidate, roleOptions).filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId));
   const candidateBias = getAttackBias(candidate);
   const needsSpecial = analysis.structure.physical > analysis.structure.special + 2;
   const needsPhysical = analysis.structure.special > analysis.structure.physical + 2;

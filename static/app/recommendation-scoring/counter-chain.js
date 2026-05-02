@@ -48,6 +48,7 @@ function getCounterChainTargets(candidate = {}, threats = [], datasets) {
     .filter((threat) => threat.speciesId !== candidate.speciesId)
     .map((threat) => ({
       label: threat.label,
+      localizedLabel: datasets?.localizedSpeciesNames?.get(threat.speciesId) || threat.label,
       score: getCounterScore(candidate, threat.config, datasets),
       threatScore: threat.score,
     }))

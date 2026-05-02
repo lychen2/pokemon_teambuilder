@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1777107582978,
+  "lastScanned": 1777701330960,
   "projectRoot": "/home/zonazcy/Projects/poke-type",
   "techStack": {
     "languages": [],
@@ -39,7 +39,7 @@
       "path": "Poke Icons",
       "purpose": null,
       "fileCount": 1467,
-      "lastAccessed": 1777107582976,
+      "lastAccessed": 1777701330957,
       "keyFiles": [
         "ui_PokeIcon_01_0003_00_0 #598899.png",
         "ui_PokeIcon_01_0003_00_0.png",
@@ -52,7 +52,7 @@
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 3,
-      "lastAccessed": 1777107582977,
+      "lastAccessed": 1777701330958,
       "keyFiles": [
         "VGC队伍checklist.md",
         "future-todo-reference.md",
@@ -63,7 +63,7 @@
       "path": "poke_analysis-main",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1777107582977,
+      "lastAccessed": 1777701330958,
       "keyFiles": [
         "build_default_preset.py",
         "update_all_data.py"
@@ -72,22 +72,23 @@
     "static": {
       "path": "static",
       "purpose": "Static files",
-      "fileCount": 5,
-      "lastAccessed": 1777107582977,
+      "fileCount": 9,
+      "lastAccessed": 1777701330958,
       "keyFiles": [
+        "VGCPastes Repository - Champions M-A.csv",
         "itemicons-sheet.png",
-        "poke-icons-map.json",
-        "pokemonicons-sheet.png",
-        "usage.json",
-        "usage_official.json"
+        "localization-data.json",
+        "paste_sets_champions_ma.json",
+        "paste_teams_champions_ma.json"
       ]
     },
     "tools": {
       "path": "tools",
       "purpose": null,
-      "fileCount": 1,
-      "lastAccessed": 1777107582977,
+      "fileCount": 2,
+      "lastAccessed": 1777701330958,
       "keyFiles": [
+        "build-localization-data.mjs",
         "build-poke-icons-map.mjs"
       ]
     },
@@ -95,14 +96,14 @@
       "path": "vendor",
       "purpose": "Third-party code",
       "fileCount": 0,
-      "lastAccessed": 1777107582977,
+      "lastAccessed": 1777701330958,
       "keyFiles": []
     },
     "static/app": {
       "path": "static/app",
       "purpose": "Application code",
-      "fileCount": 42,
-      "lastAccessed": 1777107582978,
+      "fileCount": 71,
+      "lastAccessed": 1777701330960,
       "keyFiles": [
         "ability-scores.js",
         "analysis.js",
@@ -110,6 +111,247 @@
       ]
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "static/app/team-role-i18n.js",
+      "accessCount": 25,
+      "lastAccessed": 1777715706786,
+      "type": "file"
+    },
+    {
+      "path": "static/app/main.js",
+      "accessCount": 12,
+      "lastAccessed": 1777714768398,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-rules.js",
+      "accessCount": 12,
+      "lastAccessed": 1777715695733,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-primary.js",
+      "accessCount": 11,
+      "lastAccessed": 1777720308402,
+      "type": "file"
+    },
+    {
+      "path": "static/app/i18n.js",
+      "accessCount": 8,
+      "lastAccessed": 1777715466277,
+      "type": "file"
+    },
+    {
+      "path": "static/app/render-matchup-board.js",
+      "accessCount": 7,
+      "lastAccessed": 1777703892365,
+      "type": "file"
+    },
+    {
+      "path": "static/app/analysis.js",
+      "accessCount": 6,
+      "lastAccessed": 1777716612834,
+      "type": "file"
+    },
+    {
+      "path": "static/app/render-usage.js",
+      "accessCount": 5,
+      "lastAccessed": 1777705523551,
+      "type": "file"
+    },
+    {
+      "path": "static/app/recommendation-scoring/entry.js",
+      "accessCount": 5,
+      "lastAccessed": 1777713755932,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-extra.js",
+      "accessCount": 4,
+      "lastAccessed": 1777712434361,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-analysis.js",
+      "accessCount": 4,
+      "lastAccessed": 1777712871572,
+      "type": "file"
+    },
+    {
+      "path": "static/app/data.js",
+      "accessCount": 4,
+      "lastAccessed": 1777713314913,
+      "type": "file"
+    },
+    {
+      "path": "static/app/usage-stats.js",
+      "accessCount": 3,
+      "lastAccessed": 1777704197393,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-deterministic-i18n.js",
+      "accessCount": 3,
+      "lastAccessed": 1777712480546,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-deterministic.js",
+      "accessCount": 3,
+      "lastAccessed": 1777712869090,
+      "type": "file"
+    },
+    {
+      "path": "docs/future-todo-reference.md",
+      "accessCount": 3,
+      "lastAccessed": 1777719629874,
+      "type": "file"
+    },
+    {
+      "path": "static/app/persistence.js",
+      "accessCount": 2,
+      "lastAccessed": 1777704083565,
+      "type": "file"
+    },
+    {
+      "path": "poke_analysis-main/data_update/pipeline.py",
+      "accessCount": 2,
+      "lastAccessed": 1777704647905,
+      "type": "file"
+    },
+    {
+      "path": "static/app/usage.js",
+      "accessCount": 2,
+      "lastAccessed": 1777707427968,
+      "type": "file"
+    },
+    {
+      "path": "static/app/constants.js",
+      "accessCount": 2,
+      "lastAccessed": 1777713199829,
+      "type": "file"
+    },
+    {
+      "path": "static/app/recommendations.js",
+      "accessCount": 2,
+      "lastAccessed": 1777713706974,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-roles.js",
+      "accessCount": 2,
+      "lastAccessed": 1777714453545,
+      "type": "file"
+    },
+    {
+      "path": "sw.js",
+      "accessCount": 2,
+      "lastAccessed": 1777719627723,
+      "type": "file"
+    },
+    {
+      "path": "static/app/matchup-board-data.js",
+      "accessCount": 1,
+      "lastAccessed": 1777701573150,
+      "type": "file"
+    },
+    {
+      "path": "docs/plans/2026-05-02-usage-official-and-matchup-i18n-design.md",
+      "accessCount": 1,
+      "lastAccessed": 1777703549737,
+      "type": "file"
+    },
+    {
+      "path": "docs/plans/2026-05-02-usage-official-and-matchup-i18n.md",
+      "accessCount": 1,
+      "lastAccessed": 1777703773791,
+      "type": "file"
+    },
+    {
+      "path": "poke_analysis-main/data_update/pokechamp_usage.py",
+      "accessCount": 1,
+      "lastAccessed": 1777704646948,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-config-only.js",
+      "accessCount": 1,
+      "lastAccessed": 1777706231993,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-metrics.js",
+      "accessCount": 1,
+      "lastAccessed": 1777706254523,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-proxy.js",
+      "accessCount": 1,
+      "lastAccessed": 1777706255152,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-explanations.js",
+      "accessCount": 1,
+      "lastAccessed": 1777706255153,
+      "type": "file"
+    },
+    {
+      "path": "static/app/damage-workspace.js",
+      "accessCount": 1,
+      "lastAccessed": 1777707150135,
+      "type": "file"
+    },
+    {
+      "path": "docs/plans/2026-05-02-team-roles-completion-design.md",
+      "accessCount": 1,
+      "lastAccessed": 1777711751572,
+      "type": "file"
+    },
+    {
+      "path": "docs/plans/2026-05-02-team-roles-completion.md",
+      "accessCount": 1,
+      "lastAccessed": 1777712051626,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-meta.js",
+      "accessCount": 1,
+      "lastAccessed": 1777712929482,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-damage-cache.js",
+      "accessCount": 1,
+      "lastAccessed": 1777713807963,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-damage.js",
+      "accessCount": 1,
+      "lastAccessed": 1777713881992,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-damage-i18n.js",
+      "accessCount": 1,
+      "lastAccessed": 1777713941602,
+      "type": "file"
+    },
+    {
+      "path": "static/app/render-analysis.js",
+      "accessCount": 1,
+      "lastAccessed": 1777714241931,
+      "type": "file"
+    },
+    {
+      "path": "static/app/team-role-primary-pools.js",
+      "accessCount": 1,
+      "lastAccessed": 1777715766203,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

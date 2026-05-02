@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-19T05:53:56.115066+00:00",
+  "generatedAt": "2026-05-02T12:49:52.405276+00:00",
   "format": {
     "name": "[Gen 9 Champions] VGC 2026 Reg M-A",
     "mod": "champions",
@@ -12,12 +12,56 @@
     "restricted": [],
     "banlist": []
   },
+  "usage": {
+    "status": "available",
+    "expectedMetagame": "gen9championsvgc2026regma",
+    "month": "2026-04",
+    "rating": 1500,
+    "sourceUrl": "https://www.smogon.com/stats/2026-04/chaos/gen9championsvgc2026regma-1500.json",
+    "reason": "",
+    "updatedAt": "2026-05-02T12:52:47.921717+00:00"
+  },
   "usableSpeciesIds": [
+    "aegislash",
+    "araquanid",
+    "archaludon",
+    "ceruledge",
+    "clefable",
+    "corviknight",
+    "delphoxmega",
+    "ditto",
+    "dragapult",
+    "dragonite",
+    "excadrill",
+    "floettemega",
+    "garchomp",
+    "glimmora",
+    "hatterene",
+    "hydreigon",
+    "kingambit",
+    "lopunnymega",
+    "meganiummega",
+    "meowscarada",
+    "pelipper",
+    "primarina",
+    "quaquaval",
+    "rotomwash",
+    "samurotthisui",
+    "scizor",
+    "slowkinggalar",
+    "sneasler",
+    "toxapex",
+    "volcarona",
+    "clefablemega",
+    "dragonitemega",
+    "excadrillmega",
+    "garchompmega",
+    "glimmoramega",
+    "scizormega",
     "abomasnow",
     "abomasnowmega",
     "absol",
     "absolmega",
-    "aegislash",
     "aerodactyl",
     "aerodactylmega",
     "aggron",
@@ -30,11 +74,9 @@
     "ampharos",
     "ampharosmega",
     "appletun",
-    "araquanid",
     "arbok",
     "arcanine",
     "arcaninehisui",
-    "archaludon",
     "ariados",
     "armarouge",
     "aromatisse",
@@ -54,11 +96,9 @@
     "beedrillmega",
     "bellibolt",
     "blastoise",
-    "blastoisemega",
     "camerupt",
     "cameruptmega",
     "castform",
-    "ceruledge",
     "chandelure",
     "chandeluremega",
     "charizard",
@@ -69,23 +109,15 @@
     "chimecho",
     "chimechomega",
     "clawitzer",
-    "clefable",
-    "clefablemega",
     "cofagrigus",
     "conkeldurr",
-    "corviknight",
     "crabominable",
     "crabominablemega",
     "decidueye",
     "decidueyehisui",
     "dedenne",
     "delphox",
-    "delphoxmega",
     "diggersby",
-    "ditto",
-    "dragapult",
-    "dragonite",
-    "dragonitemega",
     "drampa",
     "drampamega",
     "emboar",
@@ -94,15 +126,12 @@
     "empoleon",
     "espathra",
     "espeon",
-    "excadrill",
-    "excadrillmega",
     "farigiraf",
     "feraligatr",
     "feraligatrmega",
     "flapple",
     "flareon",
     "floetteeternal",
-    "floettemega",
     "florges",
     "forretress",
     "froslass",
@@ -111,8 +140,6 @@
     "gallade",
     "gallademega",
     "garbodor",
-    "garchomp",
-    "garchompmega",
     "gardevoir",
     "gardevoirmega",
     "garganacl",
@@ -120,8 +147,6 @@
     "glaceon",
     "glalie",
     "glaliemega",
-    "glimmora",
-    "glimmoramega",
     "gliscor",
     "golurk",
     "golurkmega",
@@ -135,7 +160,6 @@
     "greninjamega",
     "gyarados",
     "gyaradosmega",
-    "hatterene",
     "hawlucha",
     "hawluchamega",
     "heliolisk",
@@ -145,13 +169,11 @@
     "houndoom",
     "houndoommega",
     "hydrapple",
-    "hydreigon",
     "incineroar",
     "infernape",
     "jolteon",
     "kangaskhan",
     "kangaskhanmega",
-    "kingambit",
     "kleavor",
     "klefki",
     "kommoo",
@@ -159,9 +181,7 @@
     "leafeon",
     "liepard",
     "lopunny",
-    "lopunnymega",
     "lucario",
-    "lucariomega",
     "luxray",
     "lycanroc",
     "lycanrocdusk",
@@ -175,8 +195,6 @@
     "medicham",
     "medichammega",
     "meganium",
-    "meganiummega",
-    "meowscarada",
     "meowstic",
     "meowsticf",
     "meowsticfmega",
@@ -191,11 +209,8 @@
     "noivern",
     "oranguru",
     "orthworm",
-    "palafin",
-    "palafinhero",
     "pangoro",
     "passimian",
-    "pelipper",
     "pidgeot",
     "pidgeotmega",
     "pinsir",
@@ -203,8 +218,6 @@
     "politoed",
     "polteageist",
     "polteageistantique",
-    "primarina",
-    "quaquaval",
     "raichu",
     "raichualola",
     "rampardos",
@@ -216,16 +229,12 @@
     "rotomfrost",
     "rotomheat",
     "rotommow",
-    "rotomwash",
     "runerigus",
     "sableye",
     "sableyemega",
     "salazzle",
     "samurott",
-    "samurotthisui",
     "sandaconda",
-    "scizor",
-    "scizormega",
     "scovillain",
     "scovillainmega",
     "serperior",
@@ -243,13 +252,10 @@
     "slowbrogalar",
     "slowbromega",
     "slowking",
-    "slowkinggalar",
     "slurpuff",
-    "sneasler",
     "snorlax",
     "spiritomb",
     "starmie",
-    "starmiemega",
     "steelix",
     "steelixmega",
     "stunfisk",
@@ -264,7 +270,6 @@
     "torkoal",
     "torterra",
     "toucannon",
-    "toxapex",
     "toxicroak",
     "trevenant",
     "tsareena",
@@ -283,19 +288,21 @@
     "vivillon",
     "vivillonfancy",
     "vivillonpokeball",
-    "volcarona",
     "watchog",
     "weavile",
     "whimsicott",
     "wyrdeer",
     "zoroark",
     "zoroarkhisui",
-    "gengarmega"
+    "blastoisemega",
+    "gengarmega",
+    "starmiemega",
+    "lucariomega"
   ],
   "selectionWindow": {
     "sliceStartTier": "OU",
-    "sliceStartIndex": 85,
-    "sliceEndIndex": 363
+    "sliceStartIndex": 90,
+    "sliceEndIndex": 365
   },
   "learnsets": {
     "venusaur": {
@@ -16506,6 +16513,10 @@
     "strength": {
       "isNonstandard": "Past"
     },
+    "stuffcheeks": {
+      "desc": "Fails if the user is not holding a Berry. The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room.",
+      "shortDesc": "Fails unless the user has a berry. User eats Berry, Def +2."
+    },
     "sunsteelstrike": {
       "isNonstandard": "Past"
     },
@@ -16787,10 +16798,6 @@
     "piercingdrill": {
       "isNonstandard": null
     },
-    "shedskin": {
-      "desc": "This Pokemon has a 30% chance to have its non-volatile status condition cured at the end of each turn.",
-      "shortDesc": "This Pokemon has a 30% chance to have its status cured at the end of each turn."
-    },
     "spicyspray": {
       "isNonstandard": null
     },
@@ -16909,9 +16916,7 @@
       "isNonstandard": null
     },
     "chimechite": {
-      "isNonstandard": null,
-      "desc": "If held by Chimecho, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Chimecho, this item allows it to Mega Evolve in battle."
+      "isNonstandard": null
     },
     "chippedpot": {
       "isNonstandard": "Past"
@@ -16938,9 +16943,7 @@
       "isNonstandard": "Past"
     },
     "crabominite": {
-      "isNonstandard": null,
-      "desc": "If held by Crabominable, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Crabominable, this item allows it to Mega Evolve in battle."
+      "isNonstandard": null
     },
     "crackedpot": {
       "isNonstandard": "Past"
@@ -16952,9 +16955,7 @@
       "isNonstandard": "Past"
     },
     "darkranite": {
-      "isNonstandard": "Past",
-      "desc": "If held by Darkrai, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Darkrai, this item allows it to Mega Evolve in battle."
+      "isNonstandard": "Past"
     },
     "dawnstone": {
       "isNonstandard": "Past"
@@ -17095,22 +17096,16 @@
       "isNonstandard": null
     },
     "glimmoranite": {
-      "isNonstandard": null,
-      "desc": "If held by Glimmora, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Glimmora, this item allows it to Mega Evolve in battle."
+      "isNonstandard": null
     },
     "goldbottlecap": {
       "isNonstandard": "Past"
     },
     "golisopite": {
-      "isNonstandard": "Past",
-      "desc": "If held by Golisopod, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Golisopod, this item allows it to Mega Evolve in battle."
+      "isNonstandard": "Past"
     },
     "golurkite": {
-      "isNonstandard": null,
-      "desc": "If held by Golurk, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Golurk, this item allows it to Mega Evolve in battle."
+      "isNonstandard": null
     },
     "grassyseed": {
       "isNonstandard": "Past"
@@ -17146,9 +17141,7 @@
       "isNonstandard": "Past"
     },
     "heatranite": {
-      "isNonstandard": "Past",
-      "desc": "If held by Heatran, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Heatran, this item allows it to Mega Evolve in battle."
+      "isNonstandard": "Past"
     },
     "heatrock": {
       "isNonstandard": "Past"
@@ -17283,9 +17276,7 @@
       "isNonstandard": null
     },
     "meowsticite": {
-      "isNonstandard": null,
-      "desc": "If held by Meowstic or Meowstic-F, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Meowstic or Meowstic-F, this item allows it to Mega Evolve in battle."
+      "isNonstandard": null
     },
     "metalalloy": {
       "isNonstandard": "Past"
@@ -17450,9 +17441,7 @@
       "isNonstandard": null
     },
     "scovillainite": {
-      "isNonstandard": null,
-      "desc": "If held by Scovillain, this item allows it to Mega Evolve in battle.",
-      "shortDesc": "If held by Scovillain, this item allows it to Mega Evolve in battle."
+      "isNonstandard": null
     },
     "sharpedonite": {
       "isNonstandard": null
@@ -17470,7 +17459,9 @@
       "isNonstandard": "Past"
     },
     "slowbronite": {
-      "isNonstandard": null
+      "desc": "",
+      "isNonstandard": null,
+      "shortDesc": "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve."
     },
     "smoothrock": {
       "isNonstandard": "Past"

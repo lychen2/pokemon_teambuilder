@@ -1,5 +1,6 @@
 import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
-import {getUtilityRoles} from "./team-roles.js";
+import {compareSearchMatches, resolveSearchMatch} from "./search-utils.js";
+import {createRoleContext, getRoleSummaryIds, getUtilityRoles} from "./team-roles.js";
 import {normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_OPPONENT_TEAM_SIZE = 6;
@@ -84,11 +85,15 @@ function getSpeedBucket(speed) {
   return "elite";
 }
 
-function getRoleIds(configs = []) {
-  return uniqueValues(configs.flatMap((config) => getUtilityRoles(config)));
+function getRoleIds(configs = [], roleContext) {
+  const roleOptions = {roleContext};
+  return uniqueValues(configs.flatMap((config) => [
+    ...getRoleSummaryIds(config, 8, roleOptions),
+    ...getUtilityRoles(config, roleOptions),
+  ]));
 }
 
-function buildOpponentEntry(species, configs = [], selection = {}) {
+function buildOpponentEntry(species, configs = [], selection = {}, roleContext) {
   const [firstConfig] = configs;
   if (!firstConfig && !species) {
     return null;
@@ -100,7 +105,7 @@ function buildOpponentEntry(species, configs = [], selection = {}) {
   const speeds = activeConfigs.map((config) => Number(config.stats?.spe || 0));
   const minSpeed = Math.min(...speeds);
   const maxSpeed = Math.max(...speeds);
-  const roleIds = getRoleIds(configs);
+  const roleIds = getRoleIds(configs, roleContext);
   const speciesId = species?.speciesId || firstConfig?.speciesId || "unknown";
   const speciesName = species?.speciesName || firstConfig?.speciesName || firstConfig?.displayName || "Unknown";
   return {
@@ -127,6 +132,7 @@ function buildOpponentEntry(species, configs = [], selection = {}) {
 }
 
 function buildOpponentMap(datasets, library = [], language = "zh", selectionMap = new Map()) {
+  const roleContext = createRoleContext(library);
   const groups = new Map();
   const availableSpeciesMap = new Map((datasets.availableSpecies || []).map((species) => [species.speciesId, species]));
   library.forEach((config) => {
@@ -148,7 +154,7 @@ function buildOpponentMap(datasets, library = [], language = "zh", selectionMap 
     const canonicalSpecies = availableSpeciesMap.get(speciesId)
       || buildCanonicalSpecies(datasets, speciesId, species);
     const configs = groups.get(speciesId) || buildSpeciesTemplateConfigs(canonicalSpecies, datasets, language);
-    const entry = buildOpponentEntry(canonicalSpecies, configs, selectionMap.get(speciesId) || {});
+    const entry = buildOpponentEntry(canonicalSpecies, configs, selectionMap.get(speciesId) || {}, roleContext);
     if (entry) {
       opponentMap.set(speciesId, entry);
     }
@@ -211,75 +217,6 @@ function buildSelectionMap(entries = []) {
   }]));
 }
 
-function mergeRanges(ranges = []) {
-  if (!ranges.length) {
-    return [];
-  }
-  const sorted = [...ranges].sort((left, right) => left[0] - right[0]);
-  const merged = [sorted[0]];
-  for (const [start, end] of sorted.slice(1)) {
-    const last = merged[merged.length - 1];
-    if (start <= last[1]) {
-      last[1] = Math.max(last[1], end);
-      continue;
-    }
-    merged.push([start, end]);
-  }
-  return merged;
-}
-
-function buildHighlightRanges(label = "", query = "") {
-  const tokens = String(query || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
-  if (!label || !tokens.length) {
-    return [];
-  }
-  const lowered = String(label).toLowerCase();
-  const ranges = tokens.map((token) => {
-    const index = lowered.indexOf(token);
-    return index >= 0 ? [index, index + token.length] : null;
-  }).filter(Boolean);
-  return mergeRanges(ranges);
-}
-
-function resolveSearchMatch(entry, rawQuery, searchToken) {
-  const candidates = [
-    {kind: "species", texts: [entry.localizedSpeciesName, entry.speciesName]},
-    {kind: "label", texts: entry.labels || []},
-    {kind: "move", texts: entry.moveNames || []},
-  ];
-  let bestMatch = null;
-  candidates.forEach(({kind, texts}) => {
-    texts.filter(Boolean).forEach((label) => {
-      const normalized = normalizeLookupText(label);
-      const matchIndex = normalized.indexOf(searchToken);
-      if (matchIndex < 0) {
-        return;
-      }
-      const candidate = {
-        kind,
-        label,
-        weight: SEARCH_MATCH_WEIGHTS[kind] ?? Number.MAX_SAFE_INTEGER,
-        matchIndex,
-        ranges: buildHighlightRanges(label, rawQuery),
-      };
-      if (!bestMatch) {
-        bestMatch = candidate;
-        return;
-      }
-      if (candidate.weight !== bestMatch.weight) {
-        if (candidate.weight < bestMatch.weight) {
-          bestMatch = candidate;
-        }
-        return;
-      }
-      if (candidate.matchIndex < bestMatch.matchIndex) {
-        bestMatch = candidate;
-      }
-    });
-  });
-  return bestMatch;
-}
-
 function sortSavedOpponentTeams(savedTeams = []) {
   return [...savedTeams].sort((left, right) => {
     const rightOpened = Number(right.lastOpenedAt || 0);
@@ -339,15 +276,17 @@ export function filterOpponentLibrary(entries = [], searchText = "", filters = {
     .map((entry, index) => ({
       entry,
       index,
-      searchMatch: resolveSearchMatch(entry, rawQuery, searchToken),
+      searchMatch: resolveSearchMatch([
+        {kind: "species", texts: [entry.localizedSpeciesName, entry.speciesName], weight: SEARCH_MATCH_WEIGHTS.species},
+        {kind: "label", texts: entry.labels || [], weight: SEARCH_MATCH_WEIGHTS.label},
+        {kind: "move", texts: entry.moveNames || [], weight: SEARCH_MATCH_WEIGHTS.move},
+      ], rawQuery),
     }))
     .filter((entry) => entry.searchMatch)
     .sort((left, right) => {
-      if (left.searchMatch.weight !== right.searchMatch.weight) {
-        return left.searchMatch.weight - right.searchMatch.weight;
-      }
-      if (left.searchMatch.matchIndex !== right.searchMatch.matchIndex) {
-        return left.searchMatch.matchIndex - right.searchMatch.matchIndex;
+      const searchOrder = compareSearchMatches(left.searchMatch, right.searchMatch);
+      if (searchOrder !== 0) {
+        return searchOrder;
       }
       return left.index - right.index;
     })

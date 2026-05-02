@@ -7,16 +7,18 @@ from datetime import datetime, timezone
 import requests
 
 from .common import ROOT, resolve_pokemon
-from .name_resolution import resolve_ability, resolve_item, resolve_move
+from .name_resolution import resolve_ability, resolve_item, resolve_move, resolve_nature
 from .pokechamp_parse import parse_index_page, parse_pokemon_page
 
 BASE_URL = "https://pokechamdb.com"
-INDEX_PATH = "/en"
+INDEX_PATH = "/zh-Hans"
+DETAIL_PATH = "/zh-Hans/pokemon"
 CACHE_PATH = ROOT / "poke_analysis-main" / "stats" / "pokechamp_cache.json"
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 )
+ACCEPT_LANGUAGE = "zh-CN,zh;q=0.9,en;q=0.5"
 REQUEST_DELAY_SECONDS = (0.35, 0.85)
 REQUEST_TIMEOUT_SECONDS = 40
 MAX_FETCH_ATTEMPTS = 3
@@ -37,7 +39,7 @@ class PokeChampClient:
     def __init__(self, refresh=False):
         self.refresh = refresh
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": USER_AGENT, "Accept-Language": "en,ja;q=0.8"})
+        self.session.headers.update({"User-Agent": USER_AGENT, "Accept-Language": ACCEPT_LANGUAGE})
         self.cache = self._load_cache()
 
     def _load_cache(self):
@@ -109,6 +111,7 @@ def canonicalize_usage_official_payload(payload: dict, datasets, strict=False) -
             "Moves": _percent_map(normalized["moves"]),
             "Items": _percent_map(normalized["items"]),
             "Abilities": _percent_map(normalized["abilities"]),
+            "Natures": _percent_map(normalized["natures"]),
             "usageOfficial": normalized,
         }
     info = {**(payload.get("info") or {})}
@@ -125,8 +128,13 @@ def _fetch_ranked_profiles(client, datasets, rankings, season, battle_format):
         print(f"Fetching PokéChamp {index}/{total}: {ranking['name']}")
         html = client.fetch(_detail_url(ranking["slug"], season, battle_format))
         profile = parse_pokemon_page(html, ranking)
+        # Slug is invariant across language variants (always EN), so it's the
+        # safest primary key for resolving the local pokedex entry. Page H1 and
+        # ranking name are localized on zh-Hans and would otherwise need a
+        # reverse-localization round-trip.
         resolved = (
-            resolve_pokemon(profile["name"], datasets.pokedex_lookup)
+            resolve_pokemon(ranking["slug"], datasets.pokedex_lookup)
+            or resolve_pokemon(profile["name"], datasets.pokedex_lookup)
             or resolve_pokemon(ranking["name"], datasets.pokedex_lookup)
         )
         if not resolved:
@@ -185,6 +193,13 @@ def _canonicalize_profile(profile: dict, datasets, strict=True, errors=None) -> 
             errors,
             species,
         ),
+        "natures": _canonicalize_entries(
+            profile.get("natures", []),
+            lambda name: resolve_nature(name, datasets),
+            strict,
+            errors,
+            species,
+        ),
     }
 
 
@@ -212,7 +227,7 @@ def _index_url(season: str, battle_format: str) -> str:
 
 
 def _detail_url(slug: str, season: str, battle_format: str) -> str:
-    return f"{BASE_URL}/en/pokemon/{slug}?format={battle_format}&season={season}"
+    return f"{BASE_URL}{DETAIL_PATH}/{slug}?format={battle_format}&season={season}"
 
 
 def _percent_map(entries):

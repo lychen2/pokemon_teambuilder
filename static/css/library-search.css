@@ -1,0 +1,18 @@
+.library-search-field {
+  width: min(360px, 100%);
+  margin: 0;
+}
+
+.library-search-field span {
+  margin-bottom: var(--space-xs, 4px);
+}
+
+.library-search-field input {
+  min-height: 42px;
+}
+
+@media (max-width: 768px) {
+  .library-search-field {
+    width: 100%;
+  }
+}

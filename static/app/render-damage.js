@@ -5,40 +5,20 @@ import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderDamageScanPanel} from "./damage-scan-view.js";
 import {getTypeLabel, normalizeName} from "./utils.js";
 
-const SIDE_TOGGLE_FIELDS = [
-  "reflect",
-  "lightScreen",
-  "auroraVeil",
-  "protect",
-  "helpingHand",
-  "friendGuard",
-  "tailwind",
-  "battery",
-  "powerSpot",
-  "steelySpirit",
-  "flowerGift",
-  "stealthRock",
-  "foresight",
-  "gMaxField",
-  "saltCure",
-  "swamp",
-  "seaFire",
-  "redItem",
-  "blueItem",
-  "charge",
-];
-const INDEPENDENT_FIELD_KEYS = [
-  "neutralizingGas",
-  "fairyAura",
-  "darkAura",
-  "auraBreak",
-  "tabletsOfRuin",
-  "vesselOfRuin",
-  "swordOfRuin",
-  "beadsOfRuin",
-];
 const BOOST_FIELDS = ["atk", "def", "spa", "spd", "spe"];
 const META_FIELDS = ["dynamax", "terastal", "abilityActive"];
+const BOOST_CHIP_VALUES = [-6, -4, -2, 0, 1, 2, 4, 6];
+const DAMAGE_SIDE_FIELD_GROUPS = Object.freeze([
+  {id: "screens", keys: ["reflect", "lightScreen", "auroraVeil"]},
+  {id: "support", keys: ["protect", "helpingHand", "friendGuard", "tailwind"]},
+  {id: "auras", keys: ["battery", "powerSpot", "steelySpirit", "flowerGift"]},
+  {id: "hazards", keys: ["stealthRock", "foresight", "gMaxField", "saltCure"]},
+  {id: "field", keys: ["swamp", "seaFire", "redItem", "blueItem", "charge"]},
+]);
+const DAMAGE_INDEPENDENT_FIELD_GROUPS = Object.freeze([
+  {id: "global", keys: ["neutralizingGas", "fairyAura", "darkAura", "auraBreak"]},
+  {id: "ruin", keys: ["tabletsOfRuin", "vesselOfRuin", "swordOfRuin", "beadsOfRuin"]},
+]);
 
 const STATUS_IDS = [
   "Healthy",
@@ -175,13 +155,6 @@ function fieldOptions(language, key) {
   return map[key] || [];
 }
 
-function stageOptions() {
-  return [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].map((value) => ({
-    value,
-    label: value > 0 ? `+${value}` : String(value),
-  }));
-}
-
 function teraTypeOptions(language) {
   return TYPE_ORDER.map((type) => ({
     value: type,
@@ -207,14 +180,7 @@ function sideFieldMarkup(side, prefix, language) {
           ${numberSelectMarkup(`${prefix}.spikes`, fieldOptions(language, "spikes"), side.spikes)}
         </label>
       </div>
-      <div class="damage-field-toggles">
-        ${SIDE_TOGGLE_FIELDS.map((key) => toggleMarkup(
-          `${prefix}.${key}`,
-          t(language, `damage.${key}`),
-          side[key],
-          fieldHelp(language, key),
-        )).join("")}
-      </div>
+      ${fieldGroupMarkup(side, prefix, DAMAGE_SIDE_FIELD_GROUPS, language)}
     </div>
   `;
 }
@@ -223,16 +189,26 @@ function independentFieldMarkup(field, language) {
   return `
     <div class="damage-field-side damage-field-side-wide">
       <div class="damage-adjust-card-title">${helpLabelMarkup(t(language, "damage.independentField"), t(language, "damage.help.independentField"), "damage-section-help")}</div>
-      <div class="damage-field-toggles damage-field-toggles-wide">
-        ${INDEPENDENT_FIELD_KEYS.map((key) => toggleMarkup(
-          `independent.${key}`,
+      ${fieldGroupMarkup(field.independent || {}, "independent", DAMAGE_INDEPENDENT_FIELD_GROUPS, language, "damage-field-toggles-wide")}
+    </div>
+  `;
+}
+
+function fieldGroupMarkup(source, prefix, groups, language, className = "") {
+  const pathPrefix = prefix === "independent" ? "independent" : prefix;
+  return groups.map((group, index) => `
+    <details class="damage-field-group" ${index === 0 ? "open" : ""}>
+      <summary>${escapeHtml(t(language, `damage.fieldGroup.${group.id}`))}</summary>
+      <div class="damage-field-toggles ${className}">
+        ${group.keys.map((key) => toggleMarkup(
+          `${pathPrefix}.${key}`,
           t(language, `damage.${key}`),
-          field.independent?.[key],
+          source[key],
           fieldHelp(language, key),
         )).join("")}
       </div>
-    </div>
-  `;
+    </details>
+  `).join("");
 }
 
 function getSummaryName(entry) {
@@ -301,10 +277,9 @@ function speedVerdictMarkup(state, summary, attacker, defender, language) {
     verdict = t(language, "damage.speedVerdictTie", {speed: leftSpeed});
   }
   return `
-    <div class="damage-speed-row">
-      <span class="mini-pill">${escapeHtml(`${leftName} ${t(language, "common.speed")} ${leftSpeed}`)}</span>
-      <span class="mini-pill">${escapeHtml(`${rightName} ${t(language, "common.speed")} ${rightSpeed}`)}</span>
-      <strong>${escapeHtml(verdict)}</strong>
+    <div class="damage-speed-verdict">
+      <strong>${escapeHtml(t(language, "common.speed"))}</strong>
+      <span>${escapeHtml(verdict)}</span>
     </div>
   `;
 }
@@ -373,11 +348,14 @@ function boostGridMarkup(role, boosts, language) {
   return `
     <div class="damage-boost-grid">
       ${BOOST_FIELDS.map((stat) => `
-        <label class="damage-mini-field">
-          ${helpLabelMarkup(statLabel(language, stat), fieldHelp(language, `boost.${stat}`), "damage-mini-label")}
-          ${numberSelectMarkup(`boosts.${role}.${stat}`, stageOptions(), boosts?.[stat] || 0)}
-        </label>
+        ${boostChipGroupMarkup(role, stat, boosts?.[stat] || 0, language)}
       `).join("")}
+    </div>
+    <div class="damage-boost-actions">
+      <button type="button" class="ghost-button mini-action" data-damage-boost-reset="${escapeHtml(role)}">${t(language, "damage.boostReset")}</button>
+      <button type="button" class="ghost-button mini-action" data-damage-boost-preset="${escapeHtml(role)}:atk:2">${t(language, "damage.boostPresetSwords")}</button>
+      <button type="button" class="ghost-button mini-action" data-damage-boost-preset="${escapeHtml(role)}:spa:2">${t(language, "damage.boostPresetSpecial")}</button>
+      <button type="button" class="ghost-button mini-action" data-damage-boost-preset="${escapeHtml(role)}:spe:2">${t(language, "damage.boostPresetSpeed")}</button>
     </div>
   `;
 }
@@ -388,6 +366,28 @@ function findSummaryMoveByName(summaryMoves = [], moveName = "") {
   return summaryMoves.find((entry) => String(entry?.moveName || "").trim().toLowerCase() === target)
     || summaryMoves.find((entry) => String(entry?.moveName || "").trim().toLowerCase().includes(target))
     || null;
+}
+
+function boostChipGroupMarkup(role, stat, value, language) {
+  const label = statLabel(language, stat);
+  return `
+    <div class="damage-boost-chip-field">
+      <div
+        class="damage-mini-label damage-boost-label"
+        title="${escapeHtml(label)}"
+        aria-label="${escapeHtml(`${label}: ${fieldHelp(language, `boost.${stat}`)}`)}"
+      >${escapeHtml(label)}</div>
+      <select
+        class="damage-boost-select"
+        data-damage-boost-select="${escapeHtml(`${role}.${stat}`)}"
+        aria-label="${escapeHtml(label)}"
+      >
+        ${BOOST_CHIP_VALUES.map((stage) => `
+          <option value="${stage}" ${Number(value) === stage ? 'selected="selected"' : ""}>${stage > 0 ? `+${stage}` : stage}</option>
+        `).join("")}
+      </select>
+    </div>
+  `;
 }
 
 function pickerPanelMarkup(side, slotIndex, picker, language) {
@@ -589,6 +589,6 @@ export function renderDamageView(state) {
         <section><div class="analysis-label">${secondaryTitle}</div>${moveSummaryMarkup(secondarySlots, secondaryMoves || [], language, "", secondarySide, picker, state.damage.healthPercent?.[secondarySide === "attacker" ? "defender" : "attacker"])}</section>
       </div>
     ` : ""}
-    ${renderDamageScanPanel(state)}
   `);
+  setInnerHTMLIfChanged(document.getElementById("damage-scan"), renderDamageScanPanel(state));
 }

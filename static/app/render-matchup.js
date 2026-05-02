@@ -3,11 +3,16 @@ import {filterOpponentLibrary, getOpponentVariantCount} from "./matchup-selectio
 import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderMatchupBoard} from "./render-matchup-board.js";
 import {renderRecommendationListOnly} from "./render-recommendations.js";
+import {renderHighlightedText} from "./search-utils.js";
 import {spriteMarkup} from "./sprites.js";
-import {getTypeLabel} from "./utils.js";
+import {getDisplayNote, getTypeLabel} from "./utils.js";
 
 const CONFIG_PREVIEW_LIMIT = 3;
 const MATCHUP_ROLE_FILTERS = [
+  "attacker",
+  "speedcontrol",
+  "support",
+  "tank",
   "tailwind",
   "trickroom",
   "fakeout",
@@ -19,6 +24,7 @@ const MATCHUP_ROLE_FILTERS = [
   "intimidate",
   "weather",
   "terrain",
+  "techcheck",
 ];
 const MATCHUP_SPEED_FILTERS = ["slow", "mid", "fast", "elite"];
 
@@ -29,25 +35,6 @@ function escapeHtml(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
-}
-
-function renderHighlightedText(label = "", ranges = []) {
-  if (!ranges.length) {
-    return escapeHtml(label);
-  }
-  const sorted = [...ranges].sort((left, right) => left[0] - right[0]);
-  let output = "";
-  let cursor = 0;
-  sorted.forEach(([start, end]) => {
-    if (start < cursor) {
-      return;
-    }
-    output += escapeHtml(label.slice(cursor, start));
-    output += `<mark>${escapeHtml(label.slice(start, end))}</mark>`;
-    cursor = end;
-  });
-  output += escapeHtml(label.slice(cursor));
-  return output;
 }
 
 function getTypeClassName(type) {
@@ -186,7 +173,8 @@ function configOptionMarkup(entry, config, language, isSelected) {
   const speciesLabel = language === "zh"
     ? config?.localizedSpeciesName || config?.speciesName || entry?.localizedSpeciesName || entry?.speciesName || ""
     : config?.speciesName || entry?.speciesName || "";
-  const label = config?.note ? `${speciesLabel}（${config.note}）` : (speciesLabel || config?.displayLabel || config?.displayName || t(language, "common.unknown"));
+  const displayNote = getDisplayNote(config?.note);
+  const label = displayNote ? `${speciesLabel}（${displayNote}）` : (speciesLabel || config?.displayLabel || config?.displayName || t(language, "common.unknown"));
   return `
     <button
       type="button"
@@ -420,15 +408,15 @@ function matchupFiltersMarkup(state) {
       </div>
       <div class="matchup-filter-group">
         <div class="analysis-label">${t(language, "matchup.filterTypeLabel")}</div>
-        <div class="analysis-inline-pills matchup-filter-row">${typeButtons}</div>
+        <div class="analysis-inline-pills matchup-filter-row matchup-filter-row-types">${typeButtons}</div>
       </div>
       <div class="matchup-filter-group">
         <div class="analysis-label">${t(language, "matchup.filterSpeedLabel")}</div>
-        <div class="analysis-inline-pills matchup-filter-row">${speedButtons}</div>
+        <div class="analysis-inline-pills matchup-filter-row matchup-filter-row-speed">${speedButtons}</div>
       </div>
       <div class="matchup-filter-group">
         <div class="analysis-label">${t(language, "matchup.filterRoleLabel")}</div>
-        <div class="analysis-inline-pills matchup-filter-row">${roleButtons}</div>
+        <div class="analysis-inline-pills matchup-filter-row matchup-filter-row-roles">${roleButtons}</div>
       </div>
     </div>
   `;

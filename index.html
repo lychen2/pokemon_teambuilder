@@ -6,12 +6,22 @@
     <title>Poke Type Static Builder</title>
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <meta name="theme-color" content="#1b2130">
+    <meta name="theme-color" content="#174a73">
     <link rel="stylesheet" href="./static/css/base.css">
+    <link rel="stylesheet" href="./static/css/theme.css">
     <link rel="stylesheet" href="./static/css/layout.css">
     <link rel="stylesheet" href="./static/css/shell.css">
     <link rel="stylesheet" href="./static/css/analysis.css">
+    <link rel="stylesheet" href="./static/css/role-analysis.css">
     <link rel="stylesheet" href="./static/css/matchup.css">
+    <link rel="stylesheet" href="./static/css/motion.css">
+    <link rel="stylesheet" href="./static/css/damage-scan.css">
+    <link rel="stylesheet" href="./static/css/type-colors.css">
+    <link rel="stylesheet" href="./static/css/damage-workspace.css">
+    <link rel="stylesheet" href="./static/css/library-search.css">
+    <link rel="stylesheet" href="./static/css/matchup-filters.css">
+    <link rel="stylesheet" href="./static/css/usage.css">
+    <link rel="stylesheet" href="./static/css/experience-polish.css">
   </head>
   <body>
     <header class="hero">
@@ -129,6 +139,8 @@
 
       <section class="workspace">
         <section class="panel controls-panel">
+          <div id="quick-start-panel" hidden></div>
+          <div id="vgcpastes-picker"></div>
           <details class="import-panel">
             <summary data-i18n="controls.importSummary">导入自定义配置库</summary>
             <p class="muted" data-i18n="controls.importHelp">
@@ -144,8 +156,13 @@
               <button id="export-library-btn" type="button" class="ghost-button" data-i18n="controls.exportLibrary">导出配置库</button>
               <button id="export-full-state-btn" type="button" class="ghost-button" data-i18n="controls.exportFullState">导出全部状态</button>
               <button id="import-full-state-btn" type="button" class="ghost-button" data-i18n="controls.importFullState">导入全部状态</button>
-              <button id="clear-custom-btn" type="button" class="ghost-button" data-i18n="controls.clearLibrary">清空配置库</button>
             </div>
+            <details class="advanced-actions-panel">
+              <summary data-i18n="controls.advancedSummary">高级操作</summary>
+              <div class="action-row">
+                <button id="clear-custom-btn" type="button" class="ghost-button danger-button" data-i18n="controls.clearLibrary">清空配置库</button>
+              </div>
+            </details>
             <input id="library-file-input" type="file" accept=".txt,.team,.pokelib,text/plain" hidden>
             <input id="full-state-file-input" type="file" accept=".json,.poketype.json,application/json" hidden>
             <p id="import-feedback" class="muted" data-i18n="controls.importEmpty">未导入任何自定义配置。</p>
@@ -159,23 +176,33 @@
             <button type="button" class="view-tab" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
             <button type="button" class="view-tab" data-view="matchup-view" data-i18n="tabs.matchup">对局分析</button>
             <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
+            <button type="button" class="view-tab" data-view="usage-view" data-i18n="tabs.usage">使用率</button>
             <button type="button" class="view-tab" data-view="damage-view" data-i18n="tabs.damage">伤害工作台</button>
             <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
             <button type="button" class="view-tab" data-view="output-view" data-i18n="tabs.output">输出强度</button>
           </nav>
+          <div id="workspace-context-bar" class="workspace-context-bar" aria-live="polite"></div>
 
           <section id="library-view" class="view-panel active">
             <div class="section-head">
-              <h2 data-i18n="views.libraryTitle">配置库</h2>
-              <p id="library-summary" class="muted"></p>
+              <div>
+                <h2 data-i18n="views.libraryTitle">配置库</h2>
+                <p id="library-summary" class="muted"></p>
+              </div>
+              <label class="library-search-field">
+                <span data-i18n="controls.searchLabel">搜索配置库</span>
+                <input id="library-search" type="search" placeholder="搜索宝可梦 / 配置 / 招式" data-i18n-placeholder="controls.searchPlaceholder" autocomplete="off" autocapitalize="none" spellcheck="false">
+              </label>
             </div>
             <div id="library-list" class="stack-list view-list"></div>
           </section>
 
           <section id="analysis-view" class="view-panel">
             <div class="section-head">
-              <h2 data-i18n="views.analysisTitle">队伍分析</h2>
-              <p class="muted" data-i18n="views.analysisCopy">分析基于队伍已选配置的属性、招式和速度数据。</p>
+              <div>
+                <h2 data-i18n="views.analysisTitle">队伍分析</h2>
+                <p class="muted" data-i18n="views.analysisCopy">分析基于队伍已选配置的属性、招式和速度数据。</p>
+              </div>
             </div>
             <div id="analysis-overview" class="analysis-overview"></div>
             <nav id="analysis-tabs" class="analysis-tabs" aria-label="分析维度">
@@ -190,8 +217,10 @@
 
           <section id="matchup-view" class="view-panel">
             <div class="section-head">
-              <h2 data-i18n="views.matchupTitle">对局分析</h2>
-              <p class="muted" data-i18n="views.matchupCopy">快速选择对面六只，保存常见对局，并生成 12 只速度线、首发和四选建议。</p>
+              <div>
+                <h2 data-i18n="views.matchupTitle">对局分析</h2>
+                <p class="muted" data-i18n="views.matchupCopy">快速选择对面六只，保存常见对局，并生成 12 只速度线、首发和四选建议。</p>
+              </div>
             </div>
             <div class="analysis-detail-grid matchup-builder-grid">
               <section class="subpanel matchup-opponent-panel">
@@ -204,6 +233,7 @@
                 </div>
                 <p class="muted" data-i18n="matchup.opponentCopy">从当前配置库里快速勾出对面的 6 只宝可梦。</p>
                 <div id="opponent-team-list" class="team-grid matchup-team-grid"></div>
+                <div id="vgcpastes-suggest" class="vgcpastes-suggest"></div>
                 <div class="saved-team-panel matchup-save-panel">
                   <h3 data-i18n="matchup.saveTitle">保存对面队伍</h3>
                   <div class="saved-team-form">
@@ -236,10 +266,22 @@
             <div id="recommend-list" class="stack-list compact-list view-list"></div>
           </section>
 
+          <section id="usage-view" class="view-panel">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="views.usageTitle">使用率</h2>
+                <p class="muted" data-i18n="views.usageCopy">查看当前 Champions 规则对应的 Smogon usage；新规则缺统计时页面会保留核心功能并明确显示缺数据。</p>
+              </div>
+            </div>
+            <div id="usage-content"></div>
+          </section>
+
           <section id="damage-view" class="view-panel">
             <div class="section-head">
-              <h2 data-i18n="views.damageTitle">伤害工作台</h2>
-              <p class="muted" data-i18n="views.damageCopy">使用内置 Champions 伤害引擎直接做对位计算，不再依赖外部前端页面。</p>
+              <div>
+                <h2 data-i18n="views.damageTitle">伤害工作台</h2>
+                <p class="muted" data-i18n="views.damageCopy">使用内置 Champions 伤害引擎直接做对位计算，不再依赖外部前端页面。</p>
+              </div>
             </div>
             <div class="damage-layout">
               <section class="subpanel">
@@ -252,6 +294,7 @@
                 <div id="damage-summary"></div>
               </section>
             </div>
+            <div id="damage-scan"></div>
           </section>
 
           <section id="speed-view" class="view-panel">

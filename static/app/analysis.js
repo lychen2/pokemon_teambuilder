@@ -18,6 +18,8 @@ import {
   STRUCTURE_ROLE_ORDER,
   SUPPORT_ROLE_ORDER,
   TACTICAL_ROLE_ORDER,
+  analyzePokemonRoles,
+  createRoleContext,
   getAttackBias,
   getStructureRoles,
   getUtilityRoles,
@@ -276,7 +278,8 @@ function getFocusPatchScore(multiplier) {
 
 function buildSuggestedCoverEntry(candidate, context) {
   const profile = getResistanceProfile(candidate, {fieldState: context.fieldState, side: "ally"});
-  const candidateRoles = getUtilityRoles(candidate)
+  const roleOptions = {roleContext: context.roleContext};
+  const candidateRoles = getUtilityRoles(candidate, roleOptions)
     .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId));
   const missingRoles = candidateRoles.filter((roleId) => !context.teamRoles.has(roleId));
   const duplicateTypes = (candidate.types || []).filter((type) => context.teamTypes.has(type)).length;
@@ -324,16 +327,16 @@ function chooseBestSuggestedCoversBySpecies(entries = []) {
   return [...bestBySpecies.values()];
 }
 
-function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences, fieldState, datasets) {
+function buildSuggestedCoversByType(team, weakRows, library, language, speedTiers, speedContext, preferences, fieldState, datasets, roleContext) {
   const currentSpecies = new Set(team.map((config) => getBattleEquivalentSpeciesId(config.speciesId, datasets)));
   const teamTypes = new Set(team.flatMap((config) => config.types || []));
   const teamRoles = new Set(
-    team.flatMap((config) => getUtilityRoles(config))
+    team.flatMap((config) => getUtilityRoles(config, {roleContext}))
       .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)),
   );
   const weaknessTypes = weakRows.map((entry) => entry.type);
   return Object.fromEntries(weakRows.map((row) => {
-    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes, fieldState, datasets};
+    const context = {attackType: row.type, language, preferences, speedContext, speedTiers, teamRoles, teamTypes, weaknessTypes, fieldState, datasets, roleContext};
     const entries = library
       .filter((candidate) => !currentSpecies.has(getBattleEquivalentSpeciesId(candidate.speciesId, datasets)))
       .map((candidate) => buildSuggestedCoverEntry(candidate, context))
@@ -348,7 +351,7 @@ function buildSuggestedCoversByType(team, weakRows, library, language, speedTier
   }));
 }
 
-function summarizeCoverage(team, blindSpots, language, library, speedTiers, speedContext, preferences, fieldState, datasets) {
+function summarizeCoverage(team, blindSpots, language, library, speedTiers, speedContext, preferences, fieldState, datasets, roleContext) {
   const defensiveMatrix = summarizeDefensiveMatrix(team, language, fieldState);
   const offensiveMatrix = summarizeOffensiveMatrix(team, language, fieldState);
   const weakRows = defensiveMatrix
@@ -364,6 +367,7 @@ function summarizeCoverage(team, blindSpots, language, library, speedTiers, spee
     preferences,
     fieldState,
     datasets,
+    roleContext,
   );
   const defensiveRows = defensiveMatrix.map((entry) => ({
     ...entry,
@@ -478,17 +482,24 @@ function summarizeRoleMembers(team, roleId, extractor) {
     .map(createMemberReference);
 }
 
-function summarizeRoles(team, speedContext) {
+function summarizeSingleRoles(team, roleContext) {
+  return team.map((config) => ({
+    member: createMemberReference(config),
+    ...analyzePokemonRoles(config, {roleContext}),
+  }));
+}
+
+function summarizeRoles(team, speedContext, roleContext) {
   const tactical = TACTICAL_ROLE_ORDER.map((roleId) => {
-    const members = summarizeRoleMembers(team, roleId, getUtilityRoles);
+    const members = summarizeRoleMembers(team, roleId, (config) => getUtilityRoles(config, {roleContext}));
     return {id: roleId, count: members.length, members};
   });
   const support = SUPPORT_ROLE_ORDER.map((roleId) => {
-    const members = summarizeRoleMembers(team, roleId, getUtilityRoles);
+    const members = summarizeRoleMembers(team, roleId, (config) => getUtilityRoles(config, {roleContext}));
     return {id: roleId, count: members.length, members};
   });
   const structure = STRUCTURE_ROLE_ORDER.map((roleId) => {
-    const members = summarizeRoleMembers(team, roleId, getStructureRoles);
+    const members = summarizeRoleMembers(team, roleId, (config) => getStructureRoles(config, {roleContext}));
     return {id: roleId, count: members.length, members};
   });
   const attackBiases = ATTACK_BIAS_ORDER.map((roleId) => {
@@ -497,8 +508,8 @@ function summarizeRoles(team, speedContext) {
   });
   const requiredRolesByMode = {
     [SPEED_MODE_STANDARD]: ["speedboostself", "speeddebuff", "fakeout", "pivot", "disruption"],
-    [SPEED_MODE_TRICK_ROOM]: ["trickroom", "fakeout", "redirection", "recovery", "tank"],
-    [SPEED_MODE_HYBRID]: ["speedboostself", "trickroom", "fakeout", "pivot", "disruption"],
+    [SPEED_MODE_TRICK_ROOM]: ["trickroom", "slowattacker", "fakeout", "redirection", "tank"],
+    [SPEED_MODE_HYBRID]: ["speedboostself", "trickroom", "slowattacker", "fakeout", "pivot", "disruption"],
   };
   const allRoleEntries = [...tactical, ...support, ...structure];
   const requiredRoles = requiredRolesByMode[speedContext.mode] || requiredRolesByMode[SPEED_MODE_STANDARD];
@@ -507,6 +518,7 @@ function summarizeRoles(team, speedContext) {
     support,
     structure,
     attackBiases,
+    single: summarizeSingleRoles(team, roleContext),
     missing: allRoleEntries.filter((entry) => requiredRoles.includes(entry.id) && entry.count === 0).map((entry) => entry.id),
     filledUtilityCount: [...tactical, ...support].filter((entry) => entry.count > 0).length,
   };
@@ -564,9 +576,9 @@ function countDualCoverage(core = []) {
   }).length;
 }
 
-function getCoreRoles(core) {
+function getCoreRoles(core, roleContext) {
   return uniqueStrings(
-    core.flatMap((config) => getUtilityRoles(config))
+    core.flatMap((config) => getUtilityRoles(config, {roleContext}))
       .filter((roleId) => RECOMMENDATION_ROLE_IDS.includes(roleId)),
   );
 }
@@ -581,6 +593,7 @@ function scoreCoreEntry(entry) {
     + entry.comboBonus
     + entry.roles.length * 0.75
     - entry.sharedWeaknesses * 2.2
+    - (entry.hasAttacker ? 0 : 3)
   );
 }
 
@@ -647,6 +660,7 @@ function summarizePartnerSuggestions(team, context = {}) {
           speedContext: context.speedContext,
           fieldState: context.fieldState,
           language: context.language,
+          roleContext: context.roleContext,
         }),
       }];
     }),
@@ -661,11 +675,21 @@ function getSynergyLabels(reasonIds = [], language = "zh") {
   return reasonIds.map((id) => t(language, `analysis.coreSynergy.${id}`));
 }
 
-function buildCoreEntry(core, weaknessTypes, language) {
+function hasAttackerPresence(core = []) {
+  return core.some((config) => {
+    const moves = config?.moves || [];
+    const damagingCount = moves.filter((move) => move?.category === "Physical" || move?.category === "Special").length;
+    const points = config?.championPoints || config?.points || {};
+    const offensivePoints = Math.max(Number(points.atk || 0), Number(points.spa || 0));
+    return damagingCount >= 2 && offensivePoints >= 12;
+  });
+}
+
+function buildCoreEntry(core, weaknessTypes, language, roleContext) {
   const pairSynergy = evaluatePairSynergy(core);
   const entry = {
     members: core.map(createMemberReference),
-    roles: getCoreRoles(core),
+    roles: getCoreRoles(core, roleContext),
     teamWeaknessPatches: countCorePatches(core, weaknessTypes),
     patchedWeaknesses: countCorePatches(core),
     immunityPatches: countCoreImmunityPatches(core),
@@ -674,19 +698,21 @@ function buildCoreEntry(core, weaknessTypes, language) {
     pairCoverageCount: countDualCoverage(core),
     comboBonus: pairSynergy.bonus,
     synergyReasons: getSynergyLabels(pairSynergy.reasonIds, language),
+    hasAttacker: hasAttackerPresence(core),
   };
   return {...entry, score: scoreCoreEntry(entry)};
 }
 
-function buildTrioEntry(trio, weaknessTypes, language) {
-  const pairEntries = getCombinationEntries(trio, 2).map((pair) => buildCoreEntry(pair, weaknessTypes, language));
+function buildTrioEntry(trio, weaknessTypes, language, roleContext) {
+  const pairEntries = getCombinationEntries(trio, 2)
+    .map((pair) => buildCoreEntry(pair, weaknessTypes, language, roleContext));
   const trioSynergy = evaluateTrioSynergy(trio);
   const teamWeaknessPatches = Math.max(...pairEntries.map((entry) => entry.teamWeaknessPatches), 0);
   const patchedWeaknesses = Math.max(...pairEntries.map((entry) => entry.patchedWeaknesses), 0);
   const immunityPatches = Math.max(...pairEntries.map((entry) => entry.immunityPatches), 0);
   const entry = {
     members: trio.map(createMemberReference),
-    roles: getCoreRoles(trio),
+    roles: getCoreRoles(trio, roleContext),
     teamWeaknessPatches,
     patchedWeaknesses,
     immunityPatches,
@@ -708,8 +734,11 @@ function summarizeCores(team, weaknesses = [], language = "zh", context = {}) {
   }
 
   const weaknessTypes = weaknesses.map((entry) => entry.type);
-  const pairs = getCombinationEntries(team, 2).map((pair) => buildCoreEntry(pair, weaknessTypes, language));
-  const trios = getCombinationEntries(team, 3).map((trio) => buildTrioEntry(trio, weaknessTypes, language));
+  const roleContext = context.roleContext;
+  const pairs = getCombinationEntries(team, 2)
+    .map((pair) => buildCoreEntry(pair, weaknessTypes, language, roleContext));
+  const trios = getCombinationEntries(team, 3)
+    .map((trio) => buildTrioEntry(trio, weaknessTypes, language, roleContext));
   const bestPairs = [...pairs]
     .sort((left, right) => right.score - left.score || left.sharedWeaknesses - right.sharedWeaknesses)
     .slice(0, CORE_PREVIEW_LIMIT);
@@ -739,6 +768,7 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
 
   const fieldState = options.fieldState || {};
   const datasets = options.datasets || null;
+  const roleContext = options.roleContext || createRoleContext(library);
   const teamWithFlags = team.map((config) => ({
     ...config,
     battleFlags: getFieldFlags(config, "ally", fieldState),
@@ -761,9 +791,10 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
     recommendPreferences,
     fieldState,
     datasets,
+    roleContext,
   );
   const weaknesses = coverage.weakRows;
-  const roles = summarizeRoles(teamWithFlags, speedContext);
+  const roles = summarizeRoles(teamWithFlags, speedContext, roleContext);
   const identity = summarizeTeamIdentity(teamWithFlags, speedContext, language);
   return {
     fieldState,
@@ -778,9 +809,11 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
       missingRoles: roles.missing,
       speedContext,
       fieldState,
+      roleContext,
     }),
     speed: summarizeSpeed(teamWithFlags, speedTiers, language, speedContext, library, fieldState),
     speedContext,
+    roleContext,
     structure,
     identity,
     weaknesses,

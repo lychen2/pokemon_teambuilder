@@ -11,7 +11,7 @@ import {
 import {calculateSpeedLineTiers} from "./data.js";
 import {buildLeadTurnOnePlan} from "./lead-turn-plan.js";
 import {buildMatchupBoard} from "./matchup-board-data.js";
-import {getAttackBias, getUtilityRoles, hasMove} from "./team-roles.js";
+import {getAttackBias, getRoleSummaryIds, getUtilityRoles, hasMove} from "./team-roles.js";
 import {countMegaConfigs} from "./utils.js";
 
 const PREVIEW_LIMIT = 3;
@@ -362,7 +362,10 @@ function summarizeLeadPair(pair, opponentPairs, context) {
     members: pair.map((entry) => buildMemberRef(entry, "ally", context.fieldState)),
     score: averageScore + getLeadUtilityBonus(pair),
     targets: keyTargets,
-    roles: [...new Set(pair.flatMap((config) => getUtilityRoles(config)))],
+    roles: [...new Set(pair.flatMap((config) => [
+      ...getRoleSummaryIds(config, 6),
+      ...getUtilityRoles(config),
+    ]))],
     breakdown: averageBreakdown,
     turnOnePlan: buildLeadTurnOnePlan(pair, context.opponentTeam, context.fieldState),
   };

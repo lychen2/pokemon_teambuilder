@@ -78,7 +78,7 @@ export function getRecommendationPairingPreset(teamSize = 0) {
 export function getRecommendationScoreMix(teamSize = 0, weights = {}, options = {}) {
   const sliderBias = normalizeRecommendationWeights(weights).pairingBias;
   const fallbackPreset = getRecommendationPairingPreset(teamSize);
-  const presetBias = Number.isFinite(Number(options.presetBias))
+  const presetBias = options.presetBias != null && Number.isFinite(Number(options.presetBias))
     ? clamp(Math.round(Number(options.presetBias)), 0, 100)
     : fallbackPreset;
   const pairingBias = sliderBias;

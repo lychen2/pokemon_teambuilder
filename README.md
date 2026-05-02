@@ -8,6 +8,7 @@
 - 覆盖 / 职能 / 核心分析
 - 速度线整理
 - 组队推荐
+- 新手快速开始与 starter 队伍模板
 
 当前规则按项目内的 Champions 设定执行：
 
@@ -30,10 +31,12 @@
 - 支持导出 / 导入 `.poketype.json` 全量状态备份
 - 支持编辑单条配置文本
 - 支持给配置添加备注
+- 空库时提供快速开始入口，清空配置库被收进高级操作并需要确认
 
 ### 2. 当前队伍
 
 - 从配置库中选择最多 6 条配置组成队伍
+- 支持一键套用平衡、雨天、晴天、空间四类 starter 模板
 - 支持拖拽或上下按钮调整队伍顺序
 - 支持导出当前队伍为 Showdown 文本
 - 支持保存 / 读取本地队伍快照
@@ -44,7 +47,7 @@
 分析页拆成三个子页：
 
 - `覆盖`
-  队伍承伤覆盖、输出覆盖、打击盲区
+  队伍承伤覆盖、输出覆盖、打击盲区；Coverage 矩阵会用倍率、色温和文字标记同时表达抗性/弱点
 - `职能`
   控速、转场、Fake Out、引导、Guard、干扰、TR、输出倾向等
 - `核心`
@@ -130,6 +133,10 @@ http://localhost:8000
   主渲染入口
 - `static/app/render-analysis.js`
   分析页子视图渲染
+- `static/app/render-quick-start.js`
+  快速开始与 starter 模板入口渲染
+- `static/app/starter-templates.js`
+  新手 starter 队伍模板定义
 - `static/app/team-roles.js`
   职能识别共享逻辑
 - `static/css/base.css`

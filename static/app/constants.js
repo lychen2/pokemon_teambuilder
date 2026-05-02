@@ -9,6 +9,8 @@ export const DATA_PATHS = {
   pokeIconMap: "./static/poke-icons-map.json",
   localizationData: "./static/localization-data.json",
   usage: "./static/usage.json",
+  usageOfficial: "./static/usage_official.json",
+  pasteTeams: "./static/paste_teams_champions_ma.json",
 };
 
 export const ICON_SCHEMES = {

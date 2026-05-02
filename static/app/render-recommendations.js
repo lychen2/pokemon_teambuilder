@@ -1,7 +1,9 @@
 import {t} from "./i18n.js";
 import {getRecommendationScoreMix, RECOMMENDATION_BIAS_ITEM, RECOMMENDATION_PREFERENCE_ITEMS} from "./recommendation-preferences.js";
+import {compactRoleSummaryMarkup} from "./role-ui.js";
 import {spriteMarkup} from "./sprites.js";
-import {normalizeName} from "./utils.js";
+import {createRoleContext} from "./team-roles.js";
+import {getDisplayNote, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -13,7 +15,8 @@ function escapeHtml(text) {
 }
 
 function noteMarkup(config) {
-  return config.note ? `<span class="mini-pill">${escapeHtml(config.note)}</span>` : "";
+  const note = getDisplayNote(config.note);
+  return note ? `<span class="mini-pill">${escapeHtml(note)}</span>` : "";
 }
 
 function getLocalizedSpeciesName(state, config = {}) {
@@ -93,7 +96,7 @@ function renderRecommendationDetailPills(config, state, language) {
     detailLines.push(`${t(language, "recommend.teammateLabel")}: ${config.teammateMatches.map((entry) => getLocalizedConfigName(state, entry.member)).join(" / ")}`);
   }
   if (config.counterChain?.targets?.length) {
-    detailLines.push(`${t(language, "recommend.counterChainLabel")}: ${config.counterChain.targets.map((entry) => entry.label).join(" / ")}`);
+    detailLines.push(`${t(language, "recommend.counterChainLabel")}: ${config.counterChain.targets.map((entry) => counterTargetLabel(entry, language)).join(" / ")}`);
   }
   if (config.penaltyItems?.length) {
     detailLines.push(`${t(language, "recommend.penaltyLabel")}: ${config.penaltyItems.map((item) => item.label).join(" / ")}`);
@@ -102,6 +105,10 @@ function renderRecommendationDetailPills(config, state, language) {
     t(language, "recommend.details"),
     buildTextTooltipMarkup(detailLines),
   );
+}
+
+function counterTargetLabel(entry, language) {
+  return language === "zh" ? entry.localizedLabel || entry.label : entry.label;
 }
 
 function renderInsightPills(items = [], toneClass = "") {
@@ -113,8 +120,11 @@ function renderInsightPills(items = [], toneClass = "") {
 }
 
 function renderInsightBlock(title, items, emptyLabel, toneClass = "") {
+  const blockClass = toneClass === "recommend-detail-pill-negative"
+    ? "recommend-insight-block recommend-insight-block-negative"
+    : "recommend-insight-block";
   return `
-    <div class="recommend-insight-block">
+    <div class="${blockClass}">
       <div class="analysis-label">${escapeHtml(title)}</div>
       <div class="recommend-insight-list">
         ${items.length ? renderInsightPills(items, toneClass) : `<span class="mini-pill">${escapeHtml(emptyLabel)}</span>`}
@@ -175,6 +185,16 @@ export function renderRecommendationControls(state) {
     renderFocusChip("", t(language, "recommend.focusAll"), !state.recommendFocusType),
     ...weakRows.map((entry) => renderFocusChip(entry.type, entry.label, state.recommendFocusType === entry.type)),
   ].join("");
+  const megaChip = `
+    <button
+      type="button"
+      class="ghost-button mini-action recommend-chip recommend-mega-chip ${state.recommendMegaOnly ? "active" : ""}"
+      data-recommend-mega-only="${state.recommendMegaOnly ? "false" : "true"}"
+      aria-pressed="${state.recommendMegaOnly ? "true" : "false"}"
+    >
+      ${escapeHtml(t(language, "recommend.megaOnly"))}
+    </button>
+  `;
   const toggles = RECOMMENDATION_PREFERENCE_ITEMS.map((item) => `
     <button
       type="button"
@@ -216,7 +236,10 @@ export function renderRecommendationControls(state) {
           <p class="muted">${t(language, "recommend.focusCopy")}</p>
         </div>
       </div>
-      <div class="analysis-inline-pills recommend-chip-row">${chips}</div>
+      <div class="analysis-inline-pills recommend-chip-row">${chips}${megaChip}</div>
+      ${state.recommendFocusSource === "analysis" && state.recommendFocusType
+        ? `<p class="recommend-focus-source">${t(language, "recommend.focusSourceAnalysis")}</p>`
+        : ""}
       <div class="section-head section-head-tight recommend-toggle-head">
         <div>
           <h3>${t(language, "recommend.prefTitle")}</h3>
@@ -270,7 +293,9 @@ export function renderRecommendationControls(state) {
 
 function renderRecommendationCard(config, state) {
   const language = state.language;
+  const roleContext = createRoleContext(state.library);
   const isTemplate = config.recommendationAction === "configure";
+  const isCompared = state.recommendCompareIds?.includes(config.id);
   const focusScoreMarkup = state.recommendFocusType
     ? `<span>${t(language, "recommend.focus", {value: config.breakdown.focus.toFixed(1)})}</span>`
     : "";
@@ -290,6 +315,9 @@ function renderRecommendationCard(config, state) {
           ${isTemplate ? `<span class="source-tag">${t(language, "recommend.templateTag")}</span>` : ""}
           ${focusFallbackMarkup}
           <span class="source-tag score-tag">${t(language, "recommend.score", {value: config.recommendationScore.toFixed(1)})}</span>
+        </div>
+        <div class="entry-tags recommend-detail-row">
+          ${compactRoleSummaryMarkup(config, language, {roleContext})}
         </div>
         ${renderConfigPreview(config, state, language)}
         <div class="score-row">
@@ -324,6 +352,14 @@ function renderRecommendationCard(config, state) {
         ${actionMarkup}
         <button
           type="button"
+          class="ghost-button mini-action ${isCompared ? "active" : ""}"
+          data-toggle-recommend-compare="${config.id}"
+          aria-pressed="${isCompared ? "true" : "false"}"
+        >
+          ${t(language, isCompared ? "recommend.compareRemove" : "recommend.compareAdd")}
+        </button>
+        <button
+          type="button"
           class="ghost-button mini-action recommend-dismiss-button"
           data-dismiss-recommendation="${config.recommendationKey}"
         >
@@ -331,6 +367,62 @@ function renderRecommendationCard(config, state) {
         </button>
       </div>
     </article>
+  `;
+}
+
+function compareMetricRow(label, leftValue, rightValue = "") {
+  return `
+    <div class="recommend-compare-row">
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(leftValue)}</strong>
+      <strong>${escapeHtml(rightValue)}</strong>
+    </div>
+  `;
+}
+
+function renderCompareMember(config, state) {
+  if (!config) return "";
+  return `
+    <div class="recommend-compare-head-card">
+      ${spriteMarkup(config, state)}
+      <strong>${escapeHtml(getLocalizedConfigName(state, config))}</strong>
+      ${noteMarkup(config)}
+      <span class="source-tag score-tag">${t(state.language, "recommend.score", {value: config.recommendationScore.toFixed(1)})}</span>
+    </div>
+  `;
+}
+
+function renderRecommendationComparePanel(state) {
+  const compared = (state.recommendCompareIds || [])
+    .map((id) => state.recommendations.find((entry) => entry.id === id))
+    .filter(Boolean);
+  if (!compared.length) return "";
+  const [left, right] = compared;
+  const language = state.language;
+  const metricRows = [
+    ["recommend.resistance", "resistance"],
+    ["recommend.coverage", "coverage"],
+    ["recommend.speed", "speed"],
+    ["recommend.synergy", "synergy"],
+    ["recommend.teammates", "teammates"],
+    ["recommend.counterChain", "counterChain"],
+    ["recommend.quality", "quality"],
+  ].map(([key, part]) => compareMetricRow(
+    t(language, key, {value: ""}).trim(),
+    left?.breakdown?.[part]?.toFixed(1) || "-",
+    right?.breakdown?.[part]?.toFixed(1) || "-",
+  )).join("");
+  return `
+    <section class="subpanel recommend-compare-panel">
+      <div class="section-head section-head-tight">
+        <div>
+          <h3>${t(language, "recommend.compareTitle")}</h3>
+          <p class="muted">${t(language, "recommend.compareCopy")}</p>
+        </div>
+      </div>
+      <div class="recommend-compare-head">${renderCompareMember(left, state)}${renderCompareMember(right, state)}</div>
+      <div class="recommend-compare-grid">${metricRows}</div>
+    </section>
   `;
 }
 
@@ -348,6 +440,7 @@ export function renderRecommendationsView(state) {
   const cards = renderRecommendationCards(state);
   return `
     ${renderRecommendationControls(state)}
+    ${renderRecommendationComparePanel(state)}
     <div class="stack-list compact-list recommend-list-stack">${cards}</div>
   `;
 }

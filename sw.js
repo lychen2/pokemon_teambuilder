@@ -1,4 +1,4 @@
-const CACHE_VERSION = "poke-type-v15-20260426";
+const CACHE_VERSION = "poke-type-v56-20260502-vgcpastes-picker-stat-fix";
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 const IMAGE_CACHE = `${CACHE_VERSION}-image`;
@@ -10,10 +10,20 @@ const SHELL_ASSETS = [
   "./index.html",
   "./manifest.webmanifest",
   "./static/css/base.css",
+  "./static/css/theme.css",
   "./static/css/layout.css",
   "./static/css/shell.css",
   "./static/css/analysis.css",
+  "./static/css/role-analysis.css",
   "./static/css/matchup.css",
+  "./static/css/motion.css",
+  "./static/css/damage-scan.css",
+  "./static/css/type-colors.css",
+  "./static/css/damage-workspace.css",
+  "./static/css/library-search.css",
+  "./static/css/matchup-filters.css",
+  "./static/css/usage.css",
+  "./static/css/experience-polish.css",
   "./static/workers/damage-core-worker.js",
 ];
 
@@ -30,11 +40,14 @@ const APP_MODULES = [
   "opponent-team-generator.js", "persistence.js",
   "recommendation-preferences.js", "recommendations.js",
   "render-analysis.js", "render-cache.js", "render-command-palette.js",
+  "render-context-bar.js",
+  "render-quick-start.js",
   "render-library-compare.js",
   "render-damage.js", "render-matchup-board.js", "render-matchup.js",
-  "render-recommendations.js", "render.js", "showdown.js", "speed.js",
-  "sprites.js", "team-config.js", "team-identity.js", "team-roles.js", "toast.js", "usage.js",
-  "utils.js",
+  "render-recommendations.js", "render-usage.js", "render-vgcpastes-picker.js", "render-vgcpastes-suggest.js", "render.js", "role-ui.js", "showdown.js", "speed.js",
+  "search-utils.js", "sprites.js", "starter-templates.js", "team-config.js", "team-identity.js", "team-role-analysis.js",
+  "team-role-explanations.js", "team-role-metrics.js", "team-role-primary.js", "team-role-rules.js", "team-roles.js", "toast.js", "usage.js", "usage-stats.js",
+  "utils.js", "vgcpastes-search.js",
 ];
 
 const APP_SUBMODULES = [
@@ -72,6 +85,7 @@ const DATA_ASSETS = [
   "./static/usage.json",
   "./static/usage_official.json",
   "./static/paste_sets_champions_ma.json",
+  "./static/paste_teams_champions_ma.json",
   "./config-default.txt",
   "./poke_analysis-main/stats/abilities.json",
   "./poke_analysis-main/stats/champions_vgc.json",
@@ -117,7 +131,14 @@ self.addEventListener("activate", (event) => {
 
 function routeCacheName(url) {
   const path = url.pathname;
-  if (path.endsWith(".json") || path.endsWith("config-default.txt")) {
+  if (
+    path.endsWith("paste_sets_champions_ma.json")
+    || path.endsWith("paste_teams_champions_ma.json")
+    || path.endsWith("config-default.txt")
+  ) {
+    return {name: DATA_CACHE, mode: "network-first"};
+  }
+  if (path.endsWith(".json")) {
     return {name: DATA_CACHE, mode: "cache-first"};
   }
   if (path.endsWith(".png") || path.endsWith(".webp") || path.endsWith(".svg") || path.endsWith(".jpg")) {

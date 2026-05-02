@@ -8,7 +8,9 @@ import {
 import {countMegaConfigs, getBattleEquivalentSpeciesId, isMegaConfig} from "./utils.js";
 import {buildCounterChainContext} from "./recommendation-scoring/counter-chain.js";
 import {buildRecommendationEntry} from "./recommendation-scoring/entry.js";
+import {createRoleContext} from "./team-roles.js";
 import {
+  MAX_RECOMMENDATION_SCORE,
   annotateRecommendationAxisPercents,
   finalizeRecommendationScores,
   getRecommendationPairingCrossoverBias,
@@ -17,11 +19,13 @@ import {
 const MAX_TEAM_MEGAS = 2;
 
 function buildScoringContext(team, library, speedTiers, language, preferences, weights, options = {}) {
+  const roleContext = options.roleContext || createRoleContext(library);
   const analysis = options.analysis
-    || analyzeTeam(team, speedTiers, language, library, preferences, {fieldState: options.fieldState, datasets: options.datasets});
+    || analyzeTeam(team, speedTiers, language, library, preferences, {fieldState: options.fieldState, datasets: options.datasets, roleContext});
   return {
     team,
     analysis,
+    roleContext,
     speedTiers,
     language,
     preferences,
@@ -30,6 +34,24 @@ function buildScoringContext(team, library, speedTiers, language, preferences, w
     focusType: options.focusType || "",
     counterChain: buildCounterChainContext(library, team, options.datasets),
   };
+}
+
+const SAME_SPECIES_SCORE_TOLERANCE = MAX_RECOMMENDATION_SCORE * 0.05;
+
+function getRoleFitScore(entry = {}) {
+  const breakdown = entry.breakdown || {};
+  return Number(breakdown.synergy || 0) + Number(breakdown.counterChain || 0);
+}
+
+function compareConfigsForSameSpecies(left, right) {
+  const scoreDiff = right.recommendationScore - left.recommendationScore;
+  if (Math.abs(scoreDiff) <= SAME_SPECIES_SCORE_TOLERANCE) {
+    const fitDiff = getRoleFitScore(right) - getRoleFitScore(left);
+    if (fitDiff !== 0) {
+      return fitDiff;
+    }
+  }
+  return scoreDiff || sortRecommendations(left, right);
 }
 
 function chooseBestRecommendationBySpecies(recommendations = []) {
@@ -45,7 +67,7 @@ function chooseBestRecommendationBySpecies(recommendations = []) {
       }
       return;
     }
-    if (!current || sortRecommendations(entry, current) < 0) {
+    if (!current || compareConfigsForSameSpecies(entry, current) < 0) {
       bestBySpecies.set(speciesKey, entry);
     }
   });
@@ -156,22 +178,26 @@ export function recommendConfigs(library, team, speedTiers, language = "zh", opt
       recommendationIgnoresCurrentMega: ignoresCurrentMega,
     };
   };
+  const megaOnly = Boolean(options.megaOnly);
+  const passesMegaOnly = (candidate) => !megaOnly || isMegaConfig(candidate);
   const configuredRecommendations = library
     .filter((candidate) => !currentSpecies.has(getBattleEquivalentSpeciesId(candidate.speciesId, options.datasets)))
+    .filter(passesMegaOnly)
     .filter(shouldAllowMegaCandidate)
     .map((candidate) => buildCandidateRecommendation(candidate, "library"));
   const templateRecommendations = buildTemplateRecommendations(
     library,
     scoringContext,
-  ).filter(shouldAllowMegaCandidate)
+  ).filter(passesMegaOnly)
+    .filter(shouldAllowMegaCandidate)
     .map((candidate) => buildCandidateRecommendation(candidate, "template"));
   const axisAnnotatedRecommendations = annotateRecommendationAxisPercents([
     ...configuredRecommendations,
     ...templateRecommendations,
   ]);
   const autoPresetBias = getRecommendationPairingCrossoverBias(axisAnnotatedRecommendations);
-  const resolvedAutoBias = Number.isFinite(Number(autoPresetBias))
-    ? Number(autoPresetBias)
+  const resolvedAutoBias = autoPresetBias != null && Number.isFinite(autoPresetBias)
+    ? autoPresetBias
     : emptyScoreMix.presetBias;
   const effectiveWeights = options.autoBias
     ? {pairingBias: resolvedAutoBias}

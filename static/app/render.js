@@ -5,8 +5,15 @@ import {renderDamageView} from "./render-damage.js";
 import {compareToggleMarkup, renderLibraryComparePanel} from "./render-library-compare.js";
 import {renderMatchupView} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
+import {renderHighlightedText} from "./search-utils.js";
+import {compactRoleSummaryMarkup} from "./role-ui.js";
 import {spriteMarkup} from "./sprites.js";
-import {formatChampionPoints, formatSpread, formatStatLine, getItemSpritePosition, getLocalizedNatureName, getMoveCategoryLabel, getNatureMultiplier, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
+import {createRoleContext} from "./team-roles.js";
+import {formatChampionPoints, formatSpread, formatStatLine, getDisplayNote, getItemSpritePosition, getLocalizedNatureName, getMoveCategoryLabel, getNatureMultiplier, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
+
+const SOURCE_DATE_RECENT_DAYS = 30;
+const SOURCE_DATE_STALE_DAYS = 60;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function escapeHtml(text) {
   return String(text || "")
@@ -62,6 +69,43 @@ function buildTextTooltipMarkup(detail, language) {
       <div class="tooltip-desc-box">${escapeHtml(detail || t(language, "tooltip.noDetail"))}</div>
     </div>
   `;
+}
+
+function parseSourceDate(value) {
+  if (!value) return null;
+  const normalized = String(value).replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, "$1");
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatSourceDate(date, _language) {
+  if (!date) return "";
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function getSourceTeamId(config = {}) {
+  const sourceTeamId = config.source?.teamId;
+  if (sourceTeamId) return String(sourceTeamId);
+  return String(config.note || "").match(/PC\d+/i)?.[0]?.toUpperCase() || "";
+}
+
+function getSourceAgeClass(date) {
+  if (!date) return "";
+  const ageDays = Math.floor((Date.now() - date.getTime()) / MS_PER_DAY);
+  if (ageDays <= SOURCE_DATE_RECENT_DAYS) return " source-date-recent";
+  if (ageDays >= SOURCE_DATE_STALE_DAYS) return " source-date-stale";
+  return "";
+}
+
+function sourceDatePillMarkup(config, language) {
+  const sourceDate = parseSourceDate(config.source?.dateShared);
+  if (!sourceDate) return "";
+  const teamId = getSourceTeamId(config);
+  const ageClass = getSourceAgeClass(sourceDate);
+  const label = [formatSourceDate(sourceDate, language), teamId].filter(Boolean).join(" ");
+  return `<span class="source-tag source-date-tag${ageClass}">${escapeHtml(label)}</span>`;
 }
 
 function buildValidationTooltipMarkup(validation, language) {
@@ -164,11 +208,12 @@ function buildMetaMarkup(config, language) {
 }
 
 function notePillMarkup(config, language) {
-  if (!config.note) {
+  const note = getDisplayNote(config.note);
+  if (!note) {
     return "";
   }
   return renderInfoPill({
-    label: config.note,
+    label: note,
     tooltipMarkup: buildTextTooltipMarkup(t(language, "tooltip.note"), language),
   });
 }
@@ -239,7 +284,8 @@ function teamHeaderMarkup(config, linkedConfig, language, state) {
   const noteMarkup = notePillMarkup(config, language);
   const validationMarkup = validationPillMarkup(config, language);
   const sourceMarkup = teamSourceTagMarkup(config, linkedConfig, language);
-  const badges = [noteMarkup, validationMarkup, sourceMarkup].filter(Boolean).join("");
+  const dateMarkup = sourceDatePillMarkup(config, language);
+  const badges = [noteMarkup, validationMarkup, sourceMarkup, dateMarkup].filter(Boolean).join("");
   return `
     <div class="team-card-header">
       <div class="entry-title team-title-row">${spriteMarkup(config, state)}<strong>${getLocalizedConfigName(state, config)}</strong></div>
@@ -287,6 +333,7 @@ function renderSpeedSourcePills(state, sources = [], language) {
 
 function speciesBrowserMarkup(state) {
   const language = state.language;
+  const searching = Boolean(String(state.search || "").trim());
   return `
     <section class="library-subsection species-browser-section">
       <div class="section-head section-head-tight">
@@ -295,16 +342,17 @@ function speciesBrowserMarkup(state) {
           <p class="muted">${t(language, "library.browserSummary", {count: state.speciesBrowser.length})}</p>
         </div>
       </div>
-      <div class="species-browser-grid">
+      <div class="species-browser-grid ${searching ? "searching" : ""}">
         ${state.speciesBrowser.map((species) => `
           <button
             type="button"
-            class="species-browser-button ${species.speciesId === state.selectedSpeciesId ? "active" : ""}"
+            class="species-browser-button ${species.speciesId === state.selectedSpeciesId ? "active" : ""} ${searching ? "searching" : ""}"
             data-pick-species="${species.speciesId}"
             title="${escapeHtml(getLocalizedSpeciesName(state, species))}"
           >
             ${spriteMarkup(species, state)}
             ${species.configCount ? `<span class="species-browser-count">${species.configCount}</span>` : ""}
+            ${searching ? `<span class="species-browser-match-copy">${speciesBrowserMatchMarkup(species, state)}</span>` : ""}
           </button>
         `).join("")}
       </div>
@@ -312,7 +360,46 @@ function speciesBrowserMarkup(state) {
   `;
 }
 
+function speciesBrowserMatchMarkup(species, state) {
+  const label = getLocalizedSpeciesName(state, species);
+  const match = species.searchMatch || null;
+  const labelMarkup = match?.kind === "species"
+    ? renderHighlightedText(label, match.ranges)
+    : escapeHtml(label);
+  const detailMarkup = match && match.kind !== "species"
+    ? `<span class="species-browser-match-detail">${renderHighlightedText(match.label, match.ranges)}</span>`
+    : "";
+  return `<span class="species-browser-match-label">${labelMarkup}</span>${detailMarkup}`;
+}
+
+function libraryConfigNameMarkup(config, state) {
+  const label = getLocalizedConfigName(state, config);
+  const match = config.searchMatch || null;
+  if (match?.kind === "species" || match?.label === label || match?.label === config.displayName || match?.label === config.displayLabel) {
+    return renderHighlightedText(label, match.ranges);
+  }
+  return escapeHtml(label);
+}
+
+function librarySearchHitMarkup(config) {
+  const match = config.searchMatch || null;
+  if (!match || match.kind === "species") {
+    return "";
+  }
+  return `<p class="muted library-search-hit">${renderHighlightedText(match.label, match.ranges)}</p>`;
+}
+
 function selectedSpeciesHeader(state) {
+  if (String(state.search || "").trim()) {
+    return `
+      <div class="section-head section-head-tight">
+        <div>
+          <h3>${t(state.language, "library.searchResultsTitle")}</h3>
+          <p class="muted">${t(state.language, "library.searchResultsSummary", {count: state.filteredLibrary.length})}</p>
+        </div>
+      </div>
+    `;
+  }
   if (!state.selectedSpecies) {
     return `<p class="empty-state">${t(state.language, "library.selectSpecies")}</p>`;
   }
@@ -354,7 +441,12 @@ function libraryEmptyMarkup(state, language) {
 export function renderLibrary(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
+  const roleContext = createRoleContext(state.library);
   const selectedCompareIds = state.libraryCompare?.selectedConfigIds || [];
+  const searchInput = document.getElementById("library-search");
+  if (searchInput && searchInput.value !== state.search) {
+    searchInput.value = state.search || "";
+  }
   document.getElementById("library-summary").textContent = t(language, "library.summary", {
     total: state.library.length,
     filtered: activeLibrary.length,
@@ -363,9 +455,11 @@ export function renderLibrary(state) {
     ? `<div class="library-config-grid">${activeLibrary.map((config) => `
         <article class="entry-card library-config-card">
           <div class="entry-main">
-            <div class="entry-title">${spriteMarkup(config, state)}<strong>${getLocalizedConfigName(state, config)}</strong>${notePillMarkup(config, language)}${validationPillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span></div>
+            <div class="entry-title">${spriteMarkup(config, state)}<strong>${libraryConfigNameMarkup(config, state)}</strong>${notePillMarkup(config, language)}${validationPillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span>${sourceDatePillMarkup(config, language)}</div>
+            ${librarySearchHitMarkup(config)}
             <div class="entry-meta">${typePills(config.types, language)}</div>
             <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
+            <div class="entry-line entry-tags">${compactRoleSummaryMarkup(config, language, {roleContext})}</div>
             <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
             <div class="entry-line entry-tags team-move-row">${movesMarkup(config, language, state.datasets?.moveLookup)}</div>
             <p class="muted team-ev-line">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
@@ -381,11 +475,12 @@ export function renderLibrary(state) {
         </article>
       `).join("")}</div>`
     : libraryEmptyMarkup(state, language);
+  const searching = String(state.search || "").trim();
   setInnerHTMLIfChanged(document.getElementById("library-list"), `
-    ${speciesBrowserMarkup(state)}
+      ${speciesBrowserMarkup(state)}
     <section class="library-subsection">
       ${selectedSpeciesHeader(state)}
-      ${renderLibraryComparePanel(state)}
+      ${searching ? "" : renderLibraryComparePanel(state)}
       ${libraryMarkup}
     </section>
   `);
@@ -393,6 +488,7 @@ export function renderLibrary(state) {
 
 export function renderTeam(state) {
   const language = state.language;
+  const roleContext = createRoleContext(state.library);
   const badge = document.getElementById("team-count-badge");
   if (badge) {
     badge.innerHTML = teamProgressBadgeMarkup(state.team.length, language);
@@ -414,6 +510,7 @@ export function renderTeam(state) {
         ${teamHeaderMarkup(config, linkedConfig, language, state)}
         <div class="entry-meta">${typePills(config.types, language)}</div>
         <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
+        <div class="entry-line entry-tags">${compactRoleSummaryMarkup(config, language, {roleContext})}</div>
         <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
         <div class="entry-line entry-tags team-move-row">${movesMarkup(config, language, state.datasets?.moveLookup)}</div>
         <p class="muted team-ev-line">${config.originalSpreadLabel ? `${t(language, "common.evsOriginal")}: ${formatSpread(config.nature, config.evs)}` : t(language, "common.pointsDirect")}</p>
@@ -615,6 +712,36 @@ function buildSpeedVariantIndex(tiers) {
   return map;
 }
 
+const SPEED_BENCHMARKS = Object.freeze([100, 135, 150, 170, 200, 255, 300, 400]);
+const SPEED_GAP_SCALE = 1.15;
+const SPEED_GAP_MIN = 6;
+const SPEED_GAP_MAX = 72;
+
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function getTierGap(tiers, index) {
+  if (index === 0) return 0;
+  const previous = Number(tiers[index - 1]?.speed || 0);
+  const current = Number(tiers[index]?.speed || 0);
+  return clampNumber((previous - current) * SPEED_GAP_SCALE, SPEED_GAP_MIN, SPEED_GAP_MAX);
+}
+
+function speedBenchmarkMarkup(tiers) {
+  const speeds = tiers.map((tier) => Number(tier.speed || 0)).filter(Boolean);
+  if (!speeds.length) return "";
+  const maxSpeed = Math.max(...speeds);
+  const minSpeed = Math.min(...speeds);
+  const range = Math.max(1, maxSpeed - minSpeed);
+  return SPEED_BENCHMARKS
+    .filter((speed) => speed >= minSpeed && speed <= maxSpeed)
+    .map((speed) => {
+      const top = ((maxSpeed - speed) / range) * 100;
+      return `<span class="speed-benchmark-line" style="top:${top}%"><strong>${speed}</strong></span>`;
+    }).join("");
+}
+
 export function renderSpeedTiers(state) {
   const language = state.language;
   document.getElementById("speed-summary").textContent = t(language, "speed.summary", {
@@ -625,8 +752,9 @@ export function renderSpeedTiers(state) {
     const side = tierIndex % 2 === 0 ? "side-left" : "side-right";
     const entriesMarkup = tier.entries.map((entry) => renderSpeedTierEntryPills(entry, state, language, variantIndex)).join("");
     const countPill = `<span class="speed-tier-count">${t(language, "common.countLine", {count: tier.totalCount})}</span>`;
+    const gap = getTierGap(state.speedLineTiers, tierIndex);
     return `
-      <div class="speed-tier-row ${side}">
+      <div class="speed-tier-row ${side}" style="--speed-tier-gap:${gap}px">
         <div class="speed-tier-entries">${entriesMarkup}${countPill}</div>
         <span class="speed-tier-value">${tier.speed}</span>
         <span class="speed-tier-dot" aria-hidden="true"></span>
@@ -634,8 +762,20 @@ export function renderSpeedTiers(state) {
     `;
   }).join("");
   setInnerHTMLIfChanged(document.getElementById("speed-tiers"), `
-    <div class="speed-timeline">${rows}</div>
+    <div class="speed-timeline speed-timeline-scaled">
+      ${speedBenchmarkMarkup(state.speedLineTiers)}
+      ${rows}
+    </div>
   `);
+  scrollTeamSpeedIntoView(state);
+}
+
+function scrollTeamSpeedIntoView(state) {
+  if (state.activeView !== "speed-view") return;
+  const target = document.querySelector(".speed-entry-ally");
+  if (!target || target.dataset.speedAutoScrolled) return;
+  target.dataset.speedAutoScrolled = "true";
+  window.requestAnimationFrame(() => target.scrollIntoView({block: "center"}));
 }
 
 export function renderStatus(message) {

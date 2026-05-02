@@ -1,0 +1,34 @@
+.matchup-filter-row {
+  display: grid;
+  gap: 4px;
+}
+
+.matchup-filter-row-types {
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+}
+
+.matchup-filter-row-speed {
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+}
+
+.matchup-filter-row-roles {
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+}
+
+.matchup-filter-row .matchup-filter-chip {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 6px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .matchup-filter-row-types {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  }
+}

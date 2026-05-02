@@ -1,6 +1,6 @@
 import {t} from "./i18n.js";
 import {spriteMarkup} from "./sprites.js";
-import {getTypeLabel} from "./utils.js";
+import {getTypeLabel, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -13,6 +13,13 @@ function escapeHtml(text) {
 
 function getTypeClassName(type) {
   return `type-${String(type || "").toLowerCase()}`;
+}
+
+function getLocalizedMoveName(state, moveName = "") {
+  if (state?.language !== "zh") {
+    return moveName;
+  }
+  return state.localizedMoveNames?.get(normalizeName(moveName)) || moveName;
 }
 
 function getDisplaySpeciesName(state, speciesId, fallbackName = "", fallbackLabel = "") {
@@ -106,14 +113,14 @@ function getHitClassName(value, side = "ally") {
   return "opponent-strong";
 }
 
-function renderMoveRow(row, language, side = "ally") {
+function renderMoveRow(row, language, side = "ally", state) {
   const typeClass = row.type ? getTypeClassName(row.type) : "type-unknown";
   const typeLabel = row.type ? getTypeLabel(row.type, language) : "";
   return `
     <div class="matchup-board-move-row">
       <div class="matchup-board-move-name">
         ${row.type ? `<span class="matchup-board-move-type ${typeClass}">${escapeHtml(typeLabel)}</span>` : ""}
-        <strong>${escapeHtml(row.name)}</strong>
+        <strong>${escapeHtml(getLocalizedMoveName(state, row.name))}</strong>
       </div>
       <div class="matchup-board-move-hits">
         ${row.multipliers.map((target) => `
@@ -201,7 +208,7 @@ function renderBoardEntry(card, state, language, summaryKey, includeResistance =
       <div class="matchup-board-summary">
         <span class="analysis-label">${t(language, "matchup.boardSupportMoves")}</span>
         <div class="entry-tags">
-          ${card.supportMoves.map((moveName) => `<span class="mini-pill">${escapeHtml(moveName)}</span>`).join("")}
+          ${card.supportMoves.map((moveName) => `<span class="mini-pill">${escapeHtml(getLocalizedMoveName(state, moveName))}</span>`).join("")}
         </div>
       </div>
     `
@@ -218,7 +225,7 @@ function renderBoardEntry(card, state, language, summaryKey, includeResistance =
           <div class="matchup-board-targets">${renderMoveTargets(card.targets, state)}</div>
         </div>
         <div class="matchup-board-move-list">
-          ${card.moveRows.map((row) => renderMoveRow({...row, name: row.isMissing ? t(language, "matchup.boardMoveMissing") : row.name}, language, side)).join("")}
+          ${card.moveRows.map((row) => renderMoveRow({...row, name: row.isMissing ? t(language, "matchup.boardMoveMissing") : row.name}, language, side, state)).join("")}
         </div>
       </div>
       <div class="matchup-board-summary">

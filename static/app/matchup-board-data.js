@@ -116,19 +116,22 @@ function buildEntryFromSpecies(speciesId, datasets, moveNames = []) {
     return null;
   }
   const moves = dedupeMoves(moveNames.map((moveName) => resolveMoveEntry(moveName, datasets)).filter(Boolean));
+  // Don't set `stats: species.baseStats` — getRoleStat would short-circuit on
+  // raw base values and skip the Champions offset / nature math, mislabeling
+  // opponents as "纯辅助" in matchup analysis. Without `stats`, getRoleStat
+  // falls back to baseStats + offset (no points, no nature) which is the
+  // best we can do for a species-only stub.
   return {
     speciesId,
     speciesName: species.name,
     types: species.types || [],
     baseStats: species.baseStats || {},
-    stats: species.baseStats || {},
     moves,
     configs: [{
       speciesId,
       speciesName: species.name,
       types: species.types || [],
       baseStats: species.baseStats || {},
-      stats: species.baseStats || {},
       moves,
       source: "builder",
     }],

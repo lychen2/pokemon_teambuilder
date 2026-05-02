@@ -1,0 +1,111 @@
+.damage-scan-panel {
+  margin-top: var(--space-md, 16px);
+  display: grid;
+  gap: var(--space-md, 16px);
+  padding: var(--space-lg, 24px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow-sm);
+}
+
+.damage-scan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm, 8px);
+  flex-wrap: wrap;
+}
+
+.damage-scan-head .source-tag {
+  flex: 0 0 auto;
+}
+
+.damage-scan-actions,
+.damage-scan-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm, 8px);
+}
+
+.damage-scan-actions button {
+  width: auto;
+}
+
+.damage-scan-filter-row .active {
+  border-color: var(--color-primary, var(--accent));
+  background: var(--color-primary-soft, rgba(47, 110, 163, 0.12));
+  color: var(--color-primary, var(--accent));
+}
+
+.damage-scan-table {
+  display: grid;
+  gap: var(--space-sm, 8px);
+}
+
+.damage-scan-row {
+  display: grid;
+  grid-template-columns: minmax(136px, 168px) minmax(0, 1fr);
+  gap: var(--space-sm, 8px);
+  align-items: stretch;
+  padding: var(--space-sm, 8px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.damage-scan-label {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: var(--space-sm, 8px);
+  align-items: center;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.damage-scan-label strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.damage-scan-cells {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: var(--space-sm, 8px);
+  min-width: 0;
+}
+
+.damage-scan-cells-single {
+  grid-template-columns: minmax(132px, 240px);
+}
+
+.damage-scan-cell {
+  min-width: 0;
+  padding: var(--space-sm, 8px);
+  border-radius: 8px;
+}
+
+.damage-scan-cell strong,
+.damage-scan-cell span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.damage-scan-row-empty {
+  margin: 0;
+  min-height: auto;
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .damage-scan-row {
+    grid-template-columns: 1fr;
+  }
+
+  .damage-scan-cells,
+  .damage-scan-cells-single {
+    grid-template-columns: 1fr;
+  }
+}

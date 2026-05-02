@@ -1,0 +1,48 @@
+const ZH_TEXT = {
+  "analysis.role.wallbreaker": "破盾手",
+  "analysis.roleDesc.wallbreaker": "对高耐久 META 目标的 2HKO 命中率达标，能强行破开高墙。",
+  "analysis.role.revengekiller": "反杀手",
+  "analysis.roleDesc.revengekiller": "通过先制、围巾或高速 OHKO 残血目标，承担反杀位。",
+  "analysis.role.endgamewincondition": "残局胜利点",
+  "analysis.roleDesc.endgamewincondition": "兼具承伤与回复 / 强化 / 高速，适合担任残局收尾。",
+  "analysis.role.utilitypokemon": "工具人",
+  "analysis.roleDesc.utilitypokemon": "≥ 2 个变化招式且 OHKO 率较低，主要价值在于辅助。",
+  "analysis.role.threatcheck": "热门威胁检查",
+  "analysis.roleDesc.threatcheck": "对 META 顶端 8 只热门目标 OHKO 率达标。",
+  "analysis.role.backlinecleaner": "后排收割",
+  "analysis.roleDesc.backlinecleaner": "速度或先制 + 残血 OHKO 率达标，能稳定收尾低血对手。",
+  "analysis.metaSource.usageStats": "使用率统计（{n} 只 META，{month}）",
+  "analysis.metaSource.vgcpastes": "VGCPaste 团队频次（{n} 只 META）",
+  "analysis.metaSource.currentLibrary": "当前配置库（{n} 只）— 缺使用率与 paste 数据",
+  "analysis.metaSource.empty": "无可用 META — damage-aware 职能未参与",
+  "analysis.damageScan.scanning": "扫描中（{done}/{total}）",
+  "analysis.damageScan.ready": "已就绪",
+  "analysis.damageScan.failed": "扫描失败",
+};
+
+const EN_TEXT = {
+  "analysis.role.wallbreaker": "Wallbreaker",
+  "analysis.roleDesc.wallbreaker": "2HKO rate vs high-bulk META targets meets the threshold.",
+  "analysis.role.revengekiller": "Revenge Killer",
+  "analysis.roleDesc.revengekiller": "Uses priority, Choice Scarf, or high Speed to OHKO weakened targets.",
+  "analysis.role.endgamewincondition": "Endgame Win Condition",
+  "analysis.roleDesc.endgamewincondition": "Combines bulk with recovery, setup, or Speed to close out games.",
+  "analysis.role.utilitypokemon": "Utility Pokémon",
+  "analysis.roleDesc.utilitypokemon": "Has ≥ 2 status moves and a low OHKO rate; primary value is support.",
+  "analysis.role.threatcheck": "Threat Check",
+  "analysis.roleDesc.threatcheck": "OHKO rate vs the top-8 META targets meets the threshold.",
+  "analysis.role.backlinecleaner": "Backline Cleaner",
+  "analysis.roleDesc.backlinecleaner": "Combines Speed or priority with high OHKO on weakened opponents.",
+  "analysis.metaSource.usageStats": "Usage stats ({n} META, {month})",
+  "analysis.metaSource.vgcpastes": "VGCPastes team frequency ({n} META)",
+  "analysis.metaSource.currentLibrary": "Current library ({n}) — usage & paste data unavailable",
+  "analysis.metaSource.empty": "No META available — damage-aware roles disabled",
+  "analysis.damageScan.scanning": "Scanning ({done}/{total})",
+  "analysis.damageScan.ready": "Ready",
+  "analysis.damageScan.failed": "Scan failed",
+};
+
+export const DAMAGE_ROLE_TRANSLATIONS = Object.freeze({
+  zh: Object.freeze(ZH_TEXT),
+  en: Object.freeze(EN_TEXT),
+});

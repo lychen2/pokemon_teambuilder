@@ -126,33 +126,39 @@ export function annotateRecommendationAxisPercents(entries = []) {
   return buildAxisAnnotatedEntries(entries);
 }
 
+function getEffectiveScoreAtShare(entry, share) {
+  const team = Number(entry?.recommendationAxes?.teamShapePercent ?? FLAT_AXIS_PERCENT);
+  const pair = Number(entry?.recommendationAxes?.pairingPercent ?? FLAT_AXIS_PERCENT);
+  const floor = Number(entry?.recommendationFloorPenalty ?? 1);
+  return (team * (1 - share) + pair * share) * floor;
+}
+
+function findTopAtShare(entries, share) {
+  let bestEntry = null;
+  let bestScore = -Infinity;
+  for (const entry of entries) {
+    if (!entry) continue;
+    const score = getEffectiveScoreAtShare(entry, share);
+    if (score > bestScore) {
+      bestScore = score;
+      bestEntry = entry;
+    }
+  }
+  return bestEntry;
+}
+
 export function getRecommendationPairingCrossoverBias(entries = []) {
   if (entries.length < 2) {
     return null;
   }
-  const sorted = [...entries].sort((left, right) => sortByPairingShare(left, right, 0));
-  const prioritizedPairs = [
-    [0, 1],
-    [1, 2],
-  ];
-  for (let index = 2; index < sorted.length - 1; index += 1) {
-    prioritizedPairs.push([index, index + 1]);
+  const initialTop = findTopAtShare(entries, 1);
+  if (!initialTop) {
+    return null;
   }
-  for (const [leftIndex, rightIndex] of prioritizedPairs) {
-    const left = sorted[leftIndex];
-    const right = sorted[rightIndex];
-    if (!left || !right) {
-      continue;
-    }
-    if (hasSameRecommendationSpecies(left, right)) {
-      continue;
-    }
-    if (sortByPairingShare(left, right, 1) <= 0) {
-      continue;
-    }
-    const share = getPairingFlipShare(left, right);
-    if (share !== null) {
-      return Math.round(share * 100);
+  for (let bias = 99; bias >= 0; bias -= 1) {
+    const top = findTopAtShare(entries, bias / 100);
+    if (top && top !== initialTop && !hasSameRecommendationSpecies(top, initialTop)) {
+      return bias;
     }
   }
   return null;

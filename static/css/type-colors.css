@@ -1,0 +1,25 @@
+.type-normal { --type-bg: #a8a77a; --type-fg: #13202b; }
+.type-fire { --type-bg: #c94f1d; --type-fg: #ffffff; }
+.type-water { --type-bg: #386fd8; --type-fg: #ffffff; }
+.type-electric { --type-bg: #f7d02c; --type-fg: #13202b; }
+.type-grass { --type-bg: #4f9f34; --type-fg: #ffffff; }
+.type-ice { --type-bg: #96d9d6; --type-fg: #13202b; }
+.type-fighting { --type-bg: #b42318; --type-fg: #ffffff; }
+.type-poison { --type-bg: #8b2d89; --type-fg: #ffffff; }
+.type-ground { --type-bg: #d9ae3f; --type-fg: #13202b; }
+.type-flying { --type-bg: #8e73df; --type-fg: #ffffff; }
+.type-psychic { --type-bg: #d6336c; --type-fg: #ffffff; }
+.type-bug { --type-bg: #7c9014; --type-fg: #ffffff; }
+.type-rock { --type-bg: #8f7b20; --type-fg: #ffffff; }
+.type-ghost { --type-bg: #5e457f; --type-fg: #ffffff; }
+.type-dragon { --type-bg: #5a2bd6; --type-fg: #ffffff; }
+.type-dark { --type-bg: #5f4938; --type-fg: #ffffff; }
+.type-steel { --type-bg: #9a9ab8; --type-fg: #13202b; }
+.type-fairy { --type-bg: #d685ad; --type-fg: #13202b; }
+
+.type-pill,
+.type-chip {
+  border-color: transparent;
+  background: var(--type-bg);
+  color: var(--type-fg);
+}

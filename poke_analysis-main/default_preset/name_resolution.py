@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from .common import normalize_name, resolve_pokemon
+from .localization import normalize_localized_name, strip_annotation
 
 MAX_FUZZY_DISTANCE = 2
 
@@ -21,7 +22,23 @@ class ResolvedName:
     raw: str
 
 
-def resolve_named_value(raw_name: str, lookup: dict, value_kind: str) -> ResolvedName:
+def _localized_lookup_match(raw_name: str, localized_lookup: dict) -> str:
+    """Try to map a localized (zh / jp) name back to a canonical EN name."""
+    if not localized_lookup:
+        return ""
+    for variant in (raw_name, strip_annotation(raw_name)):
+        candidate = localized_lookup.get(normalize_localized_name(variant))
+        if candidate:
+            return candidate
+    return ""
+
+
+def resolve_named_value(
+    raw_name: str,
+    lookup: dict,
+    value_kind: str,
+    localized_lookup: dict | None = None,
+) -> ResolvedName:
     raw = str(raw_name or "").strip()
     if not raw:
         return ResolvedName("", "empty", raw)
@@ -33,6 +50,11 @@ def resolve_named_value(raw_name: str, lookup: dict, value_kind: str) -> Resolve
         direct = lookup.get(normalize_name(alias))
         if direct:
             return ResolvedName(direct, "alias", raw)
+    if localized_lookup:
+        canonical = _localized_lookup_match(raw, localized_lookup)
+        if canonical:
+            direct = lookup.get(normalize_name(canonical)) or canonical
+            return ResolvedName(direct, "localized", raw)
     raise ValueError(f"Unknown {value_kind}: {raw}")
 
 
@@ -43,6 +65,11 @@ def resolve_item(raw_name: str, datasets, species_name: str = "") -> ResolvedNam
     direct = _resolve_item_direct(raw, datasets)
     if direct.name:
         return direct
+    localized_lookup = getattr(datasets, "localized_item_lookup", {}) or {}
+    canonical = _localized_lookup_match(raw, localized_lookup)
+    if canonical:
+        direct_name = datasets.item_lookup.get(normalize_name(canonical)) or canonical
+        return ResolvedName(direct_name, "localized", raw)
     fuzzy = _resolve_item_fuzzy(raw, datasets, species_name)
     if fuzzy.name:
         return fuzzy
@@ -50,11 +77,43 @@ def resolve_item(raw_name: str, datasets, species_name: str = "") -> ResolvedNam
 
 
 def resolve_ability(raw_name: str, datasets) -> ResolvedName:
-    return resolve_named_value(raw_name, datasets.ability_lookup, "ability")
+    return resolve_named_value(
+        raw_name,
+        datasets.ability_lookup,
+        "ability",
+        getattr(datasets, "localized_ability_lookup", {}),
+    )
 
 
 def resolve_move(raw_name: str, datasets) -> ResolvedName:
-    return resolve_named_value(raw_name, datasets.move_lookup, "move")
+    return resolve_named_value(
+        raw_name,
+        datasets.move_lookup,
+        "move",
+        getattr(datasets, "localized_move_lookup", {}),
+    )
+
+
+def resolve_nature(raw_name: str, datasets) -> ResolvedName:
+    """Map a localized nature name (Chinese / annotated) back to canonical EN.
+
+    Nature names are not stored in any local JSON dataset, so we rely entirely
+    on the inverted localization table built into ``datasets``. Pass-through
+    when the input is already a known EN nature name.
+    """
+    raw = str(raw_name or "").strip()
+    if not raw:
+        return ResolvedName("", "empty", raw)
+    from .localization import NATURE_NAMES
+    normalized = normalize_name(raw)
+    for candidate in NATURE_NAMES:
+        if normalize_name(candidate) == normalized:
+            return ResolvedName(candidate, "exact", raw)
+    localized_lookup = getattr(datasets, "localized_nature_lookup", {}) or {}
+    canonical = _localized_lookup_match(raw, localized_lookup)
+    if canonical:
+        return ResolvedName(canonical, "localized", raw)
+    raise ValueError(f"Unknown nature: {raw}")
 
 
 def resolve_species(raw_name: str, datasets) -> dict:

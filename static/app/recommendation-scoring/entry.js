@@ -12,6 +12,10 @@ import {scoreCoverage, scoreFocus, scoreResistance, scoreSpeed, scoreSynergy} fr
 import {buildTeammateUsageSummary} from "./teammates.js";
 const ITEM_CONFLICT_PENALTY = 0.82;
 
+function counterTargetLabel(entry, language) {
+  return language === "zh" ? entry.localizedLabel || entry.label : entry.label;
+}
+
 function getItemConflictMembers(team = [], candidate = {}) {
   const itemId = normalizeName(candidate.item);
   if (!itemId) {
@@ -35,7 +39,15 @@ function sortInsightItems(left, right) {
 }
 
 function buildReasonItems(candidate, breakdown, context = {}) {
-  const {analysis, focusType = "", language = "zh"} = context;
+  const {analysis, focusType = "", language = "zh", datasets} = context;
+  const localizedSpeciesNames = datasets?.localizedSpeciesNames;
+  const localizeMember = (member = {}) => {
+    if (localizedSpeciesNames && member.speciesId) {
+      const localized = localizedSpeciesNames.get(member.speciesId);
+      if (localized) return localized;
+    }
+    return member.displayName || member.speciesName || member.speciesId || "";
+  };
   const coverSummary = getCoverSummary(candidate, analysis);
   const reasons = [];
   if (focusType && breakdown.focus >= 2) {
@@ -95,7 +107,7 @@ function buildReasonItems(candidate, breakdown, context = {}) {
       "teammates",
       breakdown.teammates,
       t(language, "recommend.reason.teammates", {
-        value: candidate.teammateMatches.map((entry) => entry.member.displayName || entry.member.speciesName).join(" / "),
+        value: candidate.teammateMatches.map((entry) => localizeMember(entry.member)).join(" / "),
       }),
       t(language, "recommend.teammates", {value: breakdown.teammates.toFixed(1)}),
     ));
@@ -105,7 +117,7 @@ function buildReasonItems(candidate, breakdown, context = {}) {
       "counterChain",
       breakdown.counterChain,
       t(language, "recommend.reason.counterChain", {
-        value: candidate.counterChain.targets.map((entry) => entry.label).join(" / "),
+        value: candidate.counterChain.targets.map((entry) => counterTargetLabel(entry, language)).join(" / "),
       }),
       t(language, "recommend.counterChain", {value: breakdown.counterChain.toFixed(1)}),
     ));
@@ -183,6 +195,7 @@ export function buildRecommendationEntry(candidate, context = {}) {
     datasets,
     focusType = "",
     counterChain: counterChainContext,
+    roleContext,
   } = context;
   const scoringCandidate = enrichCandidateForScoring(candidate, datasets);
   const qualityBreakdown = buildQualityBreakdown(scoringCandidate);
@@ -193,7 +206,7 @@ export function buildRecommendationEntry(candidate, context = {}) {
     resistance: scoreResistance(scoringCandidate, analysis, preferences, weights),
     coverage: scoreCoverage(scoringCandidate, analysis, preferences, weights, datasets),
     speed: scoreSpeed(scoringCandidate, speedTiers, analysis, preferences, weights),
-    synergy: scoreSynergy(team, scoringCandidate, analysis, preferences, weights),
+    synergy: scoreSynergy(team, scoringCandidate, analysis, preferences, weights, roleContext),
     teammates: clamp(usageTeammates.score, 0, SCORE_WEIGHTS.teammates),
     quality: qualityBreakdown.total,
     focus: scoreFocus(scoringCandidate, focusType),

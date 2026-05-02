@@ -1,6 +1,6 @@
 import {TYPE_ORDER} from "./constants.js";
 import {getEffectiveSpeed, getResistanceProfileForConfig} from "./battle-semantics.js";
-import {getStructureRoles, getUtilityRoles} from "./team-roles.js";
+import {getRoleSummaryIds, getStructureRoles, getUtilityRoles} from "./team-roles.js";
 import {countMegaConfigs, formatConfigName, getTypeLabel, uniqueStrings} from "./utils.js";
 
 const MAX_LIBRARY_CANDIDATES = 6;
@@ -27,10 +27,12 @@ function getCoveredTypes(config, types, fieldState, matcher) {
   return types.filter((type) => matcher(Number(profile[type] || 1)));
 }
 
-function getRolePatchIds(config, missingRoles) {
+function getRolePatchIds(config, missingRoles, roleContext) {
+  const roleOptions = {roleContext};
   const candidateRoles = uniqueStrings([
-    ...getUtilityRoles(config),
-    ...getStructureRoles(config),
+    ...getRoleSummaryIds(config, 8, roleOptions),
+    ...getUtilityRoles(config, roleOptions),
+    ...getStructureRoles(config, roleOptions),
   ]);
   return candidateRoles.filter((roleId) => missingRoles.includes(roleId));
 }
@@ -77,7 +79,7 @@ function buildCandidateEntry(candidate, context) {
   const focusCovered = getCoveredTypes(candidate, context.focusWeaknessTypes, context.fieldState, (value) => value < 1);
   const teamCovered = getCoveredTypes(candidate, context.teamWeaknessTypes, context.fieldState, (value) => value < 1);
   const immunityTypes = getCoveredTypes(candidate, context.focusWeaknessTypes, context.fieldState, (value) => value === 0);
-  const roleIds = getRolePatchIds(candidate, context.missingRoles);
+  const roleIds = getRolePatchIds(candidate, context.missingRoles, context.roleContext);
   const riskLabels = buildRiskLabels(candidate, context.focusWeaknessTypes, context.teamWeaknessTypes, context.fieldState, context.language);
   const entry = {
     configId: candidate.id,
@@ -121,6 +123,7 @@ export function buildLibraryCoreCandidates(options = {}) {
     speedContext = {},
     fieldState = {},
     language = "zh",
+    roleContext,
   } = options;
   if (!focusMember || !library.length) return [];
   const context = {
@@ -132,6 +135,7 @@ export function buildLibraryCoreCandidates(options = {}) {
     speedContext,
     fieldState,
     language,
+    roleContext,
   };
   const teamIds = new Set(team.map((config) => config.id));
   const teamSpeciesIds = new Set(team.map((config) => config.speciesId));

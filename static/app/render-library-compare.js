@@ -1,7 +1,8 @@
 import {t} from "./i18n.js";
+import {compactRoleSummaryMarkup} from "./role-ui.js";
 import {spriteMarkup} from "./sprites.js";
-import {getStructureRoles, getUtilityRoles} from "./team-roles.js";
-import {formatChampionPoints, getLocalizedNatureName, getTypeLabel, normalizeName} from "./utils.js";
+import {createRoleContext} from "./team-roles.js";
+import {formatChampionPoints, getDisplayNote, getLocalizedNatureName, getTypeLabel, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
   return String(text || "")
@@ -36,10 +37,6 @@ function getLocalizedAbilityName(state, config = {}) {
   return config.abilityInfo?.localizedName || state.localizedAbilityNames?.get(normalizeName(config.ability)) || config.ability || "";
 }
 
-function getLocalizedRoleLabel(roleId, language) {
-  return t(language, `analysis.role.${roleId}`);
-}
-
 function renderCompareValue(leftValue, rightValue, className = "") {
   const isDiff = leftValue !== rightValue;
   return {
@@ -50,13 +47,8 @@ function renderCompareValue(leftValue, rightValue, className = "") {
 
 function renderRoleMarkup(config, state) {
   const language = state.language;
-  const roleIds = [...getStructureRoles(config), ...getUtilityRoles(config)];
-  if (!roleIds.length) {
-    return escapeHtml(t(language, "common.none"));
-  }
-  return roleIds
-    .map((roleId) => `<span class="mini-pill">${escapeHtml(getLocalizedRoleLabel(roleId, language))}</span>`)
-    .join("");
+  const roleContext = createRoleContext(state.library);
+  return compactRoleSummaryMarkup(config, language, {roleContext}) || escapeHtml(t(language, "common.none"));
 }
 
 function renderMoveMarkup(config, state) {
@@ -87,7 +79,8 @@ function compareRowMarkup(label, leftValue, rightValue, className = "") {
 
 function compareHeaderCard(config, state, columnKey) {
   const language = state.language;
-  const note = config.note ? `<span class="mini-pill">${escapeHtml(config.note)}</span>` : "";
+  const noteText = getDisplayNote(config.note);
+  const note = noteText ? `<span class="mini-pill">${escapeHtml(noteText)}</span>` : "";
   return `
     <div class="library-compare-head-card">
       <div class="entry-title">

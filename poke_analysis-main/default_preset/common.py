@@ -16,7 +16,9 @@ USAGE_OFFICIAL_PATH = STATIC_DIR / "usage_official.json"
 USAGE_PATH = STATIC_DIR / "usage.json"
 OUTPUT_PATH = ROOT / "config-default.txt"
 PASTE_SETS_PATH = STATIC_DIR / "paste_sets_champions_ma.json"
+PASTE_TEAMS_PATH = STATIC_DIR / "paste_teams_champions_ma.json"
 VGCPASTES_CSV_PATH = STATIC_DIR / "VGCPastes Repository - Champions M-A.csv"
+LOCALIZATION_PATH = STATIC_DIR / "localization-data.json"
 
 DEFAULT_SEASON = "M-1"
 DEFAULT_FORMAT = "double"
@@ -37,6 +39,10 @@ class LocalDatasets:
     ability_lookup: dict
     move_lookup: dict
     mega_stone_lookup: dict
+    localized_move_lookup: dict
+    localized_item_lookup: dict
+    localized_ability_lookup: dict
+    localized_nature_lookup: dict
 
 
 def normalize_name(value: str) -> str:
@@ -138,6 +144,10 @@ def load_local_datasets() -> LocalDatasets:
     items = merge_overrides(items, champions.get("overrideItemData"))
     abilities = merge_overrides(abilities, champions.get("overrideAbilityData"))
     moves = merge_overrides(moves, champions.get("overrideMoveData"))
+    # Local import to avoid module-level circularity (localization.py imports from common).
+    from .localization import build_localized_lookups, load_translations
+    translations = load_translations()
+    localized = build_localized_lookups(translations, moves, items, abilities)
     return LocalDatasets(
         pokedex=pokedex,
         items=items,
@@ -149,6 +159,10 @@ def load_local_datasets() -> LocalDatasets:
         ability_lookup=build_named_lookup(abilities),
         move_lookup=build_named_lookup(moves),
         mega_stone_lookup=build_mega_stone_lookup(items),
+        localized_move_lookup=localized["moves"],
+        localized_item_lookup=localized["items"],
+        localized_ability_lookup=localized["abilities"],
+        localized_nature_lookup=localized["natures"],
     )
 
 

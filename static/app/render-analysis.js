@@ -1,7 +1,14 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {spriteMarkup} from "./sprites.js";
-import {getTypeLabel} from "./utils.js";
+import {getTypeLabel, normalizeName} from "./utils.js";
+
+const MATRIX_MAX_ALPHA = 0.36;
+const MATRIX_MIN_ALPHA = 0.04;
+const MATRIX_RESIST_ALPHA = 0.16;
+const MATRIX_IMMUNE_ALPHA = 0.28;
+const MATRIX_SCALE_STEP = 0.08;
+const MATRIX_MAX_RING_PX = 4;
 
 function escapeHtml(text) {
   return String(text || "")
@@ -268,6 +275,37 @@ function getMultiplierTone(value, type = "defense") {
   return "";
 }
 
+function clampMatrixAlpha(value) {
+  return Math.max(MATRIX_MIN_ALPHA, Math.min(MATRIX_MAX_ALPHA, value));
+}
+
+function matrixCellStyle(value, type = "defense") {
+  const numericValue = Number(value);
+  const ringWidth = Math.min(MATRIX_MAX_RING_PX, Math.max(0, Math.ceil(Math.max(1, numericValue) - 1)));
+  if (type === "defense") {
+    const alpha = numericValue === 0
+      ? MATRIX_IMMUNE_ALPHA
+      : numericValue < 1
+        ? MATRIX_RESIST_ALPHA
+        : clampMatrixAlpha(numericValue * MATRIX_SCALE_STEP);
+    return `--matrix-cell-alpha:${alpha};--matrix-cell-ring:${ringWidth}px;`;
+  }
+  const alpha = clampMatrixAlpha(numericValue * MATRIX_SCALE_STEP);
+  return `--matrix-cell-alpha:${alpha};--matrix-cell-ring:${ringWidth}px;`;
+}
+
+function matrixMarker(value, type, language) {
+  if (type === "defense") {
+    if (value === 0) return t(language, "analysis.matrixImmune");
+    if (value < 1) return t(language, "analysis.matrixResist");
+    if (value > 1) return t(language, "analysis.matrixWeak");
+    return t(language, "analysis.matrixNeutral");
+  }
+  if (value >= 2) return t(language, "analysis.matrixStrong");
+  if (value < 1) return t(language, "analysis.matrixLow");
+  return t(language, "analysis.matrixNeutral");
+}
+
 function matrixHeadersMarkup(members = [], state, language) {
   return members.map((entry) => `
     <div class="analysis-matrix-column-head" title="${escapeHtml(getLocalizedMemberLabel(entry.member, state, language))}">
@@ -313,8 +351,9 @@ function defensiveMatrixRowMarkup(entry, language, state) {
           <span>${t(language, "analysis.weakResistImmune", {weak: entry.weakCount, resist: entry.resistCount, immune: entry.immuneCount})}</span>
         </div>
         ${entry.members.map((cell) => `
-          <div class="analysis-matrix-cell ${getMultiplierTone(cell.multiplier, "defense")}">
+          <div class="analysis-matrix-cell ${getMultiplierTone(cell.multiplier, "defense")}" style="${matrixCellStyle(cell.multiplier, "defense")}">
             <span class="analysis-matrix-cell-name">${escapeHtml(getLocalizedMemberLabel(cell.member, state, language))}</span>
+            <span class="analysis-matrix-marker">${escapeHtml(matrixMarker(cell.multiplier, "defense", language))}</span>
             <strong>${formatMultiplier(cell.multiplier)}x</strong>
           </div>
         `).join("")}
@@ -340,8 +379,9 @@ function offensiveMatrixRowMarkup(entry, language, state) {
           <span>${t(language, "analysis.coverMatrixBest", {value: formatMultiplier(entry.bestEffectiveness)})}</span>
         </div>
         ${entry.members.map((cell) => `
-          <div class="analysis-matrix-cell ${getMultiplierTone(cell.effectiveness, "offense")}">
+          <div class="analysis-matrix-cell ${getMultiplierTone(cell.effectiveness, "offense")}" style="${matrixCellStyle(cell.effectiveness, "offense")}">
             <span class="analysis-matrix-cell-name">${escapeHtml(getLocalizedMemberLabel(cell.member, state, language))}</span>
+            <span class="analysis-matrix-marker">${escapeHtml(matrixMarker(cell.effectiveness, "offense", language))}</span>
             <strong>${formatMultiplier(cell.effectiveness)}x</strong>
           </div>
         `).join("")}
@@ -360,6 +400,87 @@ function roleCardMarkup(entry, language, state) {
       ${entry.members.length
         ? `<div class="analysis-role-members">${memberPillsMarkup(entry.members, state)}</div>`
         : emptyTextMarkup(language, "common.none")}
+    </article>
+  `;
+}
+
+function roleSetMarkup(roleIds = [], language, emptyKey = "common.none") {
+  if (!roleIds.length) {
+    return `<span class="mini-pill">${t(language, emptyKey)}</span>`;
+  }
+  return roleIds.map((roleId) => renderRolePill(roleId, language, "mini-pill")).join("");
+}
+
+function moveRoleLineMarkup(entry, language, state) {
+  const moveName = getLocalizedMoveName(entry.moveName, state);
+  return `
+    <div class="single-role-move-row">
+      <span>${escapeHtml(moveName || t(language, "common.unknown"))}</span>
+      <div class="analysis-inline-pills">${roleSetMarkup(entry.roleIds, language)}</div>
+    </div>
+  `;
+}
+
+function roleReasonMarkup(entry, language) {
+  const reasons = [
+    ...entry.roleReasons.primary,
+    ...Object.values(entry.roleReasons.secondary).flat(),
+  ];
+  if (!reasons.length) return "";
+  return `
+    <div class="single-role-block">
+      <div class="analysis-label">${t(language, "analysis.roleReasonTitle")}</div>
+      <p class="muted role-reason-copy">${escapeHtml(reasons.map((key) => t(language, key)).join(" / "))}</p>
+    </div>
+  `;
+}
+
+function itemRoleSummaryMarkup(entry, language, state) {
+  if (!entry.itemRoleSummary.length) return "";
+  return `
+    <div class="single-role-block">
+      <div class="analysis-label">${t(language, "analysis.itemRoleTitle")}</div>
+      <div class="analysis-inline-pills">
+        ${entry.itemRoleSummary.map((itemEntry) => {
+          const itemName = state.localizedItemNames?.get(normalizeName(itemEntry.item)) || itemEntry.item;
+          return `<span class="mini-pill">${escapeHtml(itemName)} → ${escapeHtml(itemEntry.roleIds.map((roleId) => t(language, `analysis.role.${roleId}`)).join(" / "))}</span>`;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function singleRoleCardMarkup(entry, language, state) {
+  const tierKey = `analysis.compressionTier.${entry.compressionTier}`;
+  return `
+    <article class="analysis-list-card single-role-card">
+      <div class="analysis-list-head">
+        ${memberPillMarkup(entry.member, state)}
+        <div class="analysis-inline-pills">
+          <span class="source-tag score-tag">${t(language, "analysis.compressionScore", {value: entry.compressionScore.toFixed(1)})}</span>
+          <span class="source-tag">${t(language, tierKey)}</span>
+        </div>
+      </div>
+      <div class="single-role-block">
+        <div class="analysis-label">${t(language, "analysis.singlePrimary")}</div>
+        <div class="analysis-inline-pills">${renderRolePill(entry.primary, language, "mini-pill analysis-good-pill")}</div>
+      </div>
+      <div class="single-role-block">
+        <div class="analysis-label">${t(language, "analysis.singleSecondary")}</div>
+        <div class="analysis-inline-pills">${roleSetMarkup(entry.secondary.slice(0, 8), language)}</div>
+      </div>
+      ${roleReasonMarkup(entry, language)}
+      <div class="single-role-block">
+        <div class="analysis-label">${t(language, "analysis.moveSlotTitle")}</div>
+        <p class="muted role-reason-copy">${escapeHtml(t(language, `analysis.moveSlotQuality.${entry.moveSlotQuality}`))}</p>
+      </div>
+      ${itemRoleSummaryMarkup(entry, language, state)}
+      <div class="single-role-block">
+        <div class="analysis-label">${t(language, "analysis.moveRoleTitle")}</div>
+        <div class="single-role-move-list">
+          ${entry.moveRoles.map((moveEntry) => moveRoleLineMarkup(moveEntry, language, state)).join("")}
+        </div>
+      </div>
     </article>
   `;
 }
@@ -466,6 +587,12 @@ function renderCoveragePanel(analysis, language, state) {
 
 function renderRolesPanel(analysis, language, state) {
   return `
+    <section class="subpanel">
+      <h3>${t(language, "analysis.singleRolesTitle")}</h3>
+      <div class="single-role-grid">
+        ${analysis.roles.single.map((entry) => singleRoleCardMarkup(entry, language, state)).join("")}
+      </div>
+    </section>
     <div class="analysis-detail-grid">
       <section class="subpanel">
         <h3>${t(language, "analysis.rolesTacticalTitle")}</h3>

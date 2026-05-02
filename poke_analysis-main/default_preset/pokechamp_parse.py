@@ -9,13 +9,26 @@ BASE_URL = "https://pokechamdb.com"
 PERCENT_RE = re.compile(r"^(?P<name>.+?)(?P<percent>\d+(?:\.\d+)?)%$")
 NUMBER_RE = re.compile(r"^\d+(?:\.\d+)?$")
 
+# zh-Hans section labels: PokéChamp DB renders bilingual headers — the English
+# uppercase tag stays in place while the human label switches to Chinese.
+# We lean on the bilingual sandwich because the EN tag is invariant and the
+# Chinese label disambiguates from any stray plain "MOVES" text on the page.
+LABEL_MOVES = "MOVES 招式"
+LABEL_ITEMS = "ITEMS 道具"
+LABEL_ABILITY = "ABILITY 特性"
+LABEL_NATURE = "NATURE 性格"
+LABEL_PARTNER = "PARTNER 队友"
+LABEL_SPREAD = "能力点 分布排名"
+LABEL_SUPPORT = "SUPPORT"
+
 
 def parse_index_page(html: str, source_url: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     lines = _page_lines(soup)
     return {
         "sourceUrl": source_url,
-        "lastUpdated": _line_value(lines, "Last updated:"),
+        "lastUpdated": _line_value(lines, "最后更新（中国时间）:")
+            or _line_value(lines, "Last updated:"),
         "seasonLabel": _season_label(lines),
         "rankings": _rankings_from_links(soup),
     }
@@ -32,10 +45,10 @@ def parse_pokemon_page(html: str, ranking: dict) -> dict:
         "url": ranking["url"],
         "nationalDex": _national_dex(lines),
         "updated": _detail_updated(lines),
-        "moves": _percent_section(lines, "MOVES Moves", "ITEMS Items"),
-        "items": _percent_section(lines, "ITEMS Items", "ABILITY Abilities"),
-        "abilities": _percent_section(lines, "ABILITY Abilities", "NATURE Natures"),
-        "natures": _percent_section(lines, "NATURE Natures", "PARTNER Partners"),
+        "moves": _percent_section(lines, LABEL_MOVES, LABEL_ITEMS),
+        "items": _percent_section(lines, LABEL_ITEMS, LABEL_ABILITY),
+        "abilities": _percent_section(lines, LABEL_ABILITY, LABEL_NATURE),
+        "natures": _percent_section(lines, LABEL_NATURE, LABEL_PARTNER),
         "partners": _partner_section(lines),
         "spreads": _spread_section(lines),
     }
@@ -103,11 +116,12 @@ def _national_dex(lines):
 
 
 def _detail_updated(lines):
-    line = next((item for item in lines if "· Updated " in item), "")
-    if line:
-        return line.rsplit("Updated ", 1)[-1]
+    for marker in ("· 更新 ", "· Updated "):
+        line = next((item for item in lines if marker in item), "")
+        if line:
+            return line.rsplit(marker.lstrip("· "), 1)[-1]
     for index, value in enumerate(lines):
-        if value == "Updated" and index + 1 < len(lines):
+        if value in ("更新", "Updated") and index + 1 < len(lines):
             return lines[index + 1]
     return ""
 
@@ -147,7 +161,7 @@ def _parse_percent_line(line, pending_name):
 def _partner_section(lines):
     partners = []
     pending_name = ""
-    for line in _section_lines(lines, "PARTNER Partners", "EVs Distribution Ranking"):
+    for line in _section_lines(lines, LABEL_PARTNER, LABEL_SPREAD):
         parsed = _parse_partner_line(line, pending_name)
         if parsed:
             partners.append(parsed)
@@ -168,7 +182,7 @@ def _parse_partner_line(line, pending_name):
 
 def _spread_section(lines):
     spreads = []
-    tokens = _section_lines(lines, "EVs Distribution Ranking", "SUPPORT")
+    tokens = _section_lines(lines, LABEL_SPREAD, LABEL_SUPPORT)
     index = 0
     while index + 7 < len(tokens):
         next_spread = _spread_at(tokens, index)
