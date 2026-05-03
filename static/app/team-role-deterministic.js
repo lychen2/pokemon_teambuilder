@@ -141,6 +141,14 @@ function addCompositeUtilityRoles(config, roles) {
   if (hasTrackedAbility(config, TERRAIN_ABILITIES)) pushRole(roles, "terrainresetpivot");
   if (hasTrackedMove(config, TRAPPING_MOVES) || hasTrackedAbility(config, TRAPPING_ABILITIES)) pushRole(roles, "trapper");
   if (hasTrackedItem(config, CONSISTENCY_ITEMS) || hasTrackedAbility(config, CONSISTENCY_ABILITIES)) pushRole(roles, "consistentaction");
+  if (hasAntiSpeedControl(config)) pushRole(roles, "antispeedcontrol");
+}
+
+function hasAntiSpeedControl(config) {
+  return hasMove(config, TRICK_ROOM_MOVE)
+    || hasMove(config, "imprison")
+    || hasMove(config, "taunt")
+    || hasTrackedMove(config, PRIORITY_MOVES);
 }
 
 function getSingleMoveRoles(moveId) {

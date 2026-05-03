@@ -2,10 +2,17 @@ import {getNormalizedItem, hasTrackedMove} from "./team-role-metrics.js";
 import {PRIORITY_MOVES, RECOVERY_MOVES, SETUP_MOVES} from "./team-role-rules.js";
 import {buildCacheKey, getCached, setCached} from "./team-role-damage-cache.js";
 import {getMetaHash} from "./team-role-meta.js";
+import {normalizeName} from "./utils.js";
+import {computeCounterMetrics, deriveCounterRoles} from "./team-role-counter.js";
 
 const HIGH_BULK_HP_DEF = 10000;
 const CHOICE_SCARF = "choicescarf";
 const TOP_THREAT_COUNT = 8;
+const SURVIVE_THRESHOLD_PERCENT = 50;
+const CORECHECK_RATE_THRESHOLD = 0.4;
+const BAITSINK_OHKD_THRESHOLD = 0.3;
+const TRADEPIECE_OHKO_THRESHOLD = 0.25;
+const TRADEPIECE_OHKD_THRESHOLD = 0.4;
 
 function configHash(config = {}) {
   return JSON.stringify({
@@ -90,7 +97,46 @@ function deriveDamageRoles(metrics, config, options = {}) {
   if ((speedRank >= 0.75 || hasPriority) && metrics.ohkoLowHpRate >= 0.6) {
     roles.push("backlinecleaner");
   }
+  if (metrics.corecheckRate >= CORECHECK_RATE_THRESHOLD) roles.push("corecheck");
+  const hasProtect = (config.moves || []).some((move) => normalizeName(move?.name || "") === "protect");
+  const dualSurvive = (metrics.survivePhysRate || 0) + (metrics.surviveSpRate || 0);
+  if (metrics.ohkdByMetaRate >= BAITSINK_OHKD_THRESHOLD && (hasProtect || dualSurvive >= 1.0)) {
+    roles.push("baitsink");
+  }
+  if (metrics.ohkoRate >= TRADEPIECE_OHKO_THRESHOLD && metrics.ohkdByMetaRate >= TRADEPIECE_OHKD_THRESHOLD) {
+    roles.push("tradepiece");
+  }
+  deriveCounterRoles(metrics).forEach((roleId) => roles.push(roleId));
   return [...new Set(roles)];
+}
+
+function buildSpeciesIndex(meta) {
+  const index = new Map();
+  (meta.entries || []).forEach((entry, i) => {
+    const id = normalizeName(entry?.speciesId || "");
+    if (id && !index.has(id)) index.set(id, i);
+  });
+  return index;
+}
+
+function computeCorecheckRate(meta, attackResults, defendResults) {
+  const cores = meta.cores || [];
+  if (!cores.length) return 0;
+  const indexBySpecies = buildSpeciesIndex(meta);
+  let handled = 0;
+  let total = 0;
+  cores.forEach((core) => {
+    const ai = indexBySpecies.get(core.a);
+    const bi = indexBySpecies.get(core.b);
+    if (ai === undefined || bi === undefined) return;
+    total += 1;
+    const a2hko = is2HKO(attackResults[ai]?.result);
+    const b2hko = is2HKO(attackResults[bi]?.result);
+    const aSurvive = maxDamagePercent(defendResults[ai]?.result) <= SURVIVE_THRESHOLD_PERCENT;
+    const bSurvive = maxDamagePercent(defendResults[bi]?.result) <= SURVIVE_THRESHOLD_PERCENT;
+    if (a2hko && b2hko && (aSurvive || bSurvive)) handled += 1;
+  });
+  return total ? handled / total : 0;
 }
 
 export async function analyzePokemonDamageRoles(config, meta, scanner, options = {}) {
@@ -114,6 +160,7 @@ export async function analyzePokemonDamageRoles(config, meta, scanner, options =
       scanAttacker(scanner, config, lowHpDefenders, options.field),
       scanAttacker(scanner, config, topThreatDefenders, options.field),
     ]);
+    const counterMetrics = computeCounterMetrics(config, meta, attackResults, defendResults);
     const metrics = {
       ohkoRate: rateOver(attackResults, (result) => isOHKO(result)),
       twoHkoRate: rateOver(attackResults, (result) => is2HKO(result)),
@@ -122,9 +169,14 @@ export async function analyzePokemonDamageRoles(config, meta, scanner, options =
         return rateOver(filtered, (result) => is2HKO(result));
       })(),
       ohkoLowHpRate: rateOver(lowHpResults, (result) => isOHKO(result)),
-      survivePhysRate: rateOver(defendResults, (result) => maxDamagePercent(result) <= 50),
-      surviveSpRate: rateOver(defendResults, (result) => maxDamagePercent(result) <= 50),
+      survivePhysRate: rateOver(defendResults, (result) => maxDamagePercent(result) <= SURVIVE_THRESHOLD_PERCENT),
+      surviveSpRate: rateOver(defendResults, (result) => maxDamagePercent(result) <= SURVIVE_THRESHOLD_PERCENT),
       threatTopRate: rateOver(topResults, (result) => isOHKO(result)),
+      ohkdByMetaRate: rateOver(defendResults, (result) => isOHKO(result)),
+      corecheckRate: computeCorecheckRate(meta, attackResults, defendResults),
+      counterRate: counterMetrics.counterRate,
+      pressuredRate: counterMetrics.pressuredRate,
+      counterMode: counterMetrics.trMode ? "trickroom" : "fast",
     };
     const result = {
       damageRoles: deriveDamageRoles(metrics, config, options),

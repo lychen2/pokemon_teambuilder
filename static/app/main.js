@@ -1,4 +1,5 @@
 import {analyzeTeam} from "./analysis.js";
+import {analyzePokemonDamageRoles, buildRoleMeta} from "./team-roles.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
 import {buildSyntheticSpeedEntries, clearSpeciesTemplateCache} from "./champions-vgc.js";
 import {ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
@@ -371,6 +372,9 @@ let activeBuilderAutocomplete = null;
 let damageWorkspace = null;
 let damagePairRequestId = 0;
 let damageScanRequestId = 0;
+let damageRoleScanGeneration = 0;
+const damageRolesByConfigId = new Map();
+let damageRoleScanTimer = 0;
 let damageSliderSyncTimer = 0;
 const POINT_PROMPT_MAP = {
   hp: "hp",
@@ -664,6 +668,11 @@ function buildImportFeedbackPayload(configs = [], feedback = []) {
 }
 
 function handlePersistError(error) {
+  if (error?.code === "QUOTA_EXCEEDED") {
+    persistLimitWarningShown = true;
+    announceStatus("status.persistQuotaExceeded", {}, {toastType: "error"});
+    return;
+  }
   const message = error?.message || t(state.language, "common.unknown");
   announceStatus("status.persistFailed", {message}, {toastType: "error"});
 }
@@ -958,7 +967,7 @@ function refreshBattleState() {
     state.language,
     recommendationPool,
     state.recommendPreferences,
-    {fieldState: state.battleField, datasets: state.datasets},
+    {fieldState: state.battleField, datasets: state.datasets, damageRoles: damageRolesByConfigId},
   );
   state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {
     fieldState: state.battleField,
@@ -968,6 +977,52 @@ function refreshBattleState() {
   }
   refreshRecommendationsState();
   syncDamageSelectionState();
+  scheduleDamageRoleScan();
+}
+
+function scheduleDamageRoleScan() {
+  if (damageRoleScanTimer) {
+    window.clearTimeout(damageRoleScanTimer);
+  }
+  damageRoleScanTimer = window.setTimeout(() => {
+    damageRoleScanTimer = 0;
+    runDamageRoleScan().catch((error) => console.warn("damage-role scan failed", error));
+  }, 250);
+}
+
+async function runDamageRoleScan() {
+  if (!state.team.length || !state.datasets) return;
+  damageRoleScanGeneration += 1;
+  const generation = damageRoleScanGeneration;
+  if (!damageWorkspace) damageWorkspace = createDamageWorkspace();
+  const meta = buildRoleMeta(getRecommendationPool(), state.datasets);
+  if (!meta?.entries?.length) return;
+  for (const config of state.team) {
+    if (generation !== damageRoleScanGeneration) return;
+    if (!config?.id) continue;
+    try {
+      const result = await analyzePokemonDamageRoles(config, meta, damageWorkspace);
+      if (generation !== damageRoleScanGeneration) return;
+      damageRolesByConfigId.set(config.id, result.damageRoles || []);
+      refreshAnalysisAfterDamageScan();
+    } catch (error) {
+      console.warn("damage-role scan failed for", config?.speciesId, error);
+    }
+  }
+}
+
+function refreshAnalysisAfterDamageScan() {
+  if (!state.team.length) return;
+  const recommendationPool = getRecommendationPool();
+  state.analysis = analyzeTeam(
+    state.team,
+    state.speedTiers,
+    state.language,
+    recommendationPool,
+    state.recommendPreferences,
+    {fieldState: state.battleField, datasets: state.datasets, damageRoles: damageRolesByConfigId},
+  );
+  renderCurrentWorkspaceSection();
 }
 
 function buildDamageOptionLabel(config) {
@@ -1435,6 +1490,12 @@ async function syncDamageWorkspace(force = false) {
     }
     state.damage.loading = false;
     state.damage.result = null;
+    if (error?.code === "DAMAGE_WORKER_TIMEOUT") {
+      state.damage.error = t(state.language, "damage.timeoutInline");
+      renderDamageSection();
+      toast(t(state.language, "damage.timeoutToast"), {type: "error"});
+      return;
+    }
     state.damage.error = error instanceof Error ? error.message : String(error);
     renderDamageSection();
     toast(t(state.language, "toast.damageSyncFailed"), {type: "error"});
@@ -1682,6 +1743,53 @@ function announceStatusMessage(message, options = {}) {
   if (options.toastType) {
     toast(message, {type: options.toastType});
   }
+}
+
+let dataLoadBannerRetryHandler = null;
+
+function getDataLoadBannerNodes() {
+  return {
+    banner: document.getElementById("data-load-banner"),
+    message: document.getElementById("data-load-banner-message"),
+    retry: document.getElementById("data-load-banner-retry"),
+  };
+}
+
+function hideDataLoadBanner() {
+  const {banner, retry} = getDataLoadBannerNodes();
+  if (!banner) return;
+  banner.hidden = true;
+  if (retry) {
+    retry.disabled = false;
+    if (dataLoadBannerRetryHandler) {
+      retry.removeEventListener("click", dataLoadBannerRetryHandler);
+      dataLoadBannerRetryHandler = null;
+    }
+  }
+}
+
+function showDataLoadBanner(error) {
+  const {banner, message, retry} = getDataLoadBannerNodes();
+  if (!banner || !message || !retry) return;
+  const detail = error?.message || t(state.language, "common.unknown");
+  message.textContent = t(state.language, "status.dataLoadFailed", {message: detail});
+  retry.textContent = t(state.language, "status.dataLoadRetry");
+  retry.disabled = false;
+  if (dataLoadBannerRetryHandler) {
+    retry.removeEventListener("click", dataLoadBannerRetryHandler);
+  }
+  dataLoadBannerRetryHandler = async () => {
+    retry.disabled = true;
+    setStatus("status.dataLoadRetrying");
+    try {
+      await initialize();
+    } catch (retryError) {
+      console.error(retryError);
+      showDataLoadBanner(retryError);
+    }
+  };
+  retry.addEventListener("click", dataLoadBannerRetryHandler);
+  banner.hidden = false;
 }
 
 function syncLocalizedData() {
@@ -3794,6 +3902,14 @@ function syncTeamWithLibrary() {
 }
 
 function applyImportedLibrary(configs, feedback, mode) {
+  // Hardening: refuse to wipe an existing library when EVERY block failed
+  // to parse. The user almost certainly mis-pasted; clearing the library
+  // would silently delete real work. Surface the feedback instead.
+  if (mode === "replace" && configs.length === 0 && state.library.length > 0) {
+    renderLibraryImportFeedback(buildImportFeedbackPayload(configs, feedback));
+    announceStatus("status.libraryReplaceRefused", {}, {toastType: "error"});
+    return;
+  }
   const baseLibrary = mode === "append" ? state.library : [];
   const usedIds = new Set(baseLibrary.map((config) => config.id));
   const importedConfigs = ensureUniqueConfigIds(configs, usedIds);
@@ -3875,6 +3991,15 @@ function importTeamByCode() {
     });
     if (configs.length > MAX_TEAM_SIZE) {
       throw new Error(t(state.language, "error.teamImportTooLarge", {count: configs.length}));
+    }
+    // Hardening: refuse to clear an existing team when EVERY block failed
+    // to parse. The "Replace Team by Import" button on a malformed paste
+    // must not silently nuke the current team — show the parse errors and
+    // keep the team intact instead.
+    if (configs.length === 0 && state.team.length > 0) {
+      renderCurrentTeamImportFeedback(buildImportFeedbackPayload(configs, feedback));
+      announceStatus("status.teamReplaceRefused", {}, {toastType: "error"});
+      return;
     }
     state.team = configs.map(resolveImportedTeamMember);
     refreshDerivedState();
@@ -5374,7 +5499,15 @@ async function initialize() {
   setLanguage(state.language, false);
   setStatus("status.initializing");
   clearSpeciesTemplateCache();
-  state.datasets = await loadDatasets();
+  try {
+    state.datasets = await loadDatasets();
+  } catch (error) {
+    console.error(error);
+    showDataLoadBanner(error);
+    setStatusMessage(t(state.language, "status.dataLoadFailed", {message: error?.message || ""}));
+    return;
+  }
+  hideDataLoadBanner();
   syncLocalizedData();
   applyPersistedPayload(persisted || {});
   initializeBuilderOptions();

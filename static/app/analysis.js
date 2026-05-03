@@ -21,6 +21,7 @@ import {
   analyzePokemonRoles,
   createRoleContext,
   getAttackBias,
+  getEstimatedRoleMetrics,
   getStructureRoles,
   getUtilityRoles,
   hasMove,
@@ -482,20 +483,33 @@ function summarizeRoleMembers(team, roleId, extractor) {
     .map(createMemberReference);
 }
 
-function summarizeSingleRoles(team, roleContext) {
-  return team.map((config) => ({
-    member: createMemberReference(config),
-    ...analyzePokemonRoles(config, {roleContext}),
-  }));
+function summarizeSingleRoles(team, roleContext, damageRolesByConfigId) {
+  return team.map((config) => {
+    const result = analyzePokemonRoles(config, {roleContext});
+    const damageRoles = damageRolesByConfigId?.get(config.id) || [];
+    return {
+      member: createMemberReference(config),
+      metaPosition: getEstimatedRoleMetrics(config, roleContext),
+      ...result,
+      secondary: [...new Set([...result.secondary, ...damageRoles])],
+      damageRoles,
+    };
+  });
 }
 
-function summarizeRoles(team, speedContext, roleContext) {
+function rolesForConfig(config, roleContext, damageRolesByConfigId) {
+  const utility = getUtilityRoles(config, {roleContext});
+  const damage = damageRolesByConfigId?.get(config.id) || [];
+  return [...new Set([...utility, ...damage])];
+}
+
+function summarizeRoles(team, speedContext, roleContext, damageRolesByConfigId) {
   const tactical = TACTICAL_ROLE_ORDER.map((roleId) => {
-    const members = summarizeRoleMembers(team, roleId, (config) => getUtilityRoles(config, {roleContext}));
+    const members = summarizeRoleMembers(team, roleId, (config) => rolesForConfig(config, roleContext, damageRolesByConfigId));
     return {id: roleId, count: members.length, members};
   });
   const support = SUPPORT_ROLE_ORDER.map((roleId) => {
-    const members = summarizeRoleMembers(team, roleId, (config) => getUtilityRoles(config, {roleContext}));
+    const members = summarizeRoleMembers(team, roleId, (config) => rolesForConfig(config, roleContext, damageRolesByConfigId));
     return {id: roleId, count: members.length, members};
   });
   const structure = STRUCTURE_ROLE_ORDER.map((roleId) => {
@@ -518,7 +532,7 @@ function summarizeRoles(team, speedContext, roleContext) {
     support,
     structure,
     attackBiases,
-    single: summarizeSingleRoles(team, roleContext),
+    single: summarizeSingleRoles(team, roleContext, damageRolesByConfigId),
     missing: allRoleEntries.filter((entry) => requiredRoles.includes(entry.id) && entry.count === 0).map((entry) => entry.id),
     filledUtilityCount: [...tactical, ...support].filter((entry) => entry.count > 0).length,
   };
@@ -794,7 +808,8 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
     roleContext,
   );
   const weaknesses = coverage.weakRows;
-  const roles = summarizeRoles(teamWithFlags, speedContext, roleContext);
+  const damageRolesByConfigId = options.damageRoles instanceof Map ? options.damageRoles : null;
+  const roles = summarizeRoles(teamWithFlags, speedContext, roleContext, damageRolesByConfigId);
   const identity = summarizeTeamIdentity(teamWithFlags, speedContext, language);
   return {
     fieldState,

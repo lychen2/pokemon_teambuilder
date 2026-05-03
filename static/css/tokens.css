@@ -1,0 +1,203 @@
+/* ==========================================================================
+   tokens.css
+   Single source of truth for all design tokens. Replaces the older `:root`
+   blocks in base.css and theme.css. Loaded first; downstream files reference
+   these via `var(--token)` or via the legacy short aliases at the bottom.
+   See DESIGN.md for the canonical token system and naming.
+   ========================================================================== */
+
+/* ==========================================================================
+   Web font: Inter (local-only, optional self-host)
+
+   Local-first by design. This @font-face binds the `Inter` family to
+   whatever Inter is already installed on the user's OS — no network fetch,
+   no 404, no telemetry. To self-host the variable file, drop
+   `Inter.woff2` (the variable axis 100-900 build from rsms.me/inter/) at
+   `./static/fonts/Inter.woff2` and add to the `src:` list:
+
+       , url("../fonts/Inter.woff2") format("woff2-variations")
+
+   The metric-matched "Inter Fallback" below ensures that whenever Inter
+   resolves locally OR loads from disk, FOUT swap doesn't reflow line boxes.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Inter";
+  src: local("InterVariable"), local("Inter Variable"), local("Inter");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Metric-matched local fallback. Arial is on every desktop; the size-adjust
+   and override values were calibrated against Inter's vertical metrics so a
+   FOUT swap doesn't reflow line boxes. Numbers from the standard Fontaine
+   override set for Inter-vs-Arial. */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  size-adjust: 107.4%;
+  ascent-override: 90%;
+  descent-override: 22.4%;
+  line-gap-override: 0%;
+}
+
+:root {
+  /* ----- Brand palette (Material-restraint naming) ----- */
+  --plotter-ink: #174a73;
+  --plotter-ink-deep: #123a5a;
+  --plotter-wash: #dcebf7;
+
+  --pine-slate: #0b6b57;
+  --pine-wash: #dcefe8;
+
+  --burnt-brick: #b64a16;
+  --brick-wash: #f6e4d8;
+
+  --ember: #b42318;
+  --ember-wash: #f7dedb;
+
+  /* ----- Neutrals (cool-tinted toward the brand hue) ----- */
+  --graphite: #13202b;
+  --graphite-wash: #536474;
+  --graphite-mist: #728292;
+
+  --hairline: #d6e0e8;
+  --hairline-soft: #e7edf2;
+  --hairline-strong: #b9c8d4;
+
+  --paper: #ffffff;
+  --paper-cool: #eef3f6;
+  --paper-slate: #e5edf3;
+
+  --birch-cream: #f5f7fa;
+
+  /* ----- Semantic role aliases (modern) ----- */
+  --color-bg: var(--birch-cream);
+  --color-bg-subtle: var(--paper-cool);
+  --color-surface: var(--paper);
+  --color-surface-muted: var(--paper-cool);
+  --color-surface-strong: var(--paper-slate);
+
+  --color-text: var(--graphite);
+  --color-muted: var(--graphite-wash);
+  --color-muted-2: var(--graphite-mist);
+
+  --color-border: var(--hairline);
+  --color-border-strong: var(--hairline-strong);
+
+  --color-primary: var(--plotter-ink);
+  --color-primary-hover: var(--plotter-ink-deep);
+  --color-primary-soft: var(--plotter-wash);
+  --color-secondary: var(--pine-slate);
+  --color-secondary-soft: var(--pine-wash);
+  --color-accent: var(--burnt-brick);
+  --color-accent-soft: var(--brick-wash);
+  --color-danger: var(--ember);
+  --color-danger-soft: var(--ember-wash);
+
+  /* ----- Typography stacks -----
+     Inter is the design aspiration (see DESIGN.md §3). When unavailable,
+     "Inter Fallback" supplies metric-matched Arial so FOUT-on-arrival doesn't
+     reflow; system-ui then covers macOS (San Francisco) and Windows 11
+     (Segoe UI Variable) reliably; Noto Sans SC + the local CN chain handle
+     Chinese glyphs at parity. ui-monospace leads the mono stack so each OS
+     gets its native programming face (SF Mono / Cascadia / Ubuntu Mono)
+     without shipping a webfont. */
+  --title-font: "Inter", "Inter Fallback", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --body-font: "Inter", "Inter Fallback", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mono-font: ui-monospace, "SFMono-Regular", "Cascadia Code", "Fira Code", "Menlo", "Consolas", monospace;
+
+  /* ----- Type scale (1.25 ratio) ----- */
+  --type-h1: 39px;
+  --type-h2: 31px;
+  --type-h3: 25px;
+  --type-h4: 20px;
+  --type-body: 16px;
+  --type-small: 14px;
+  --type-label: 12px;
+  --type-mono: 12px;
+  --type-mono-sm: 11px;
+
+  /* ----- Typography polish -----
+     Single source of truth for tracking values. base.css `.eyebrow`,
+     shell.css `.site-utility-label`, `.sidebar-eyebrow`, and
+     `.control-eyebrow` all consume this so the same uppercase-label role
+     never drifts file-to-file. 0.08em is loose enough for ALL-CAPS at 12px
+     to breathe without reading as 2010s-era wide-tracked. */
+  --font-tracking-eyebrow: 0.08em;
+  --font-tracking-tight: -0.005em;
+
+  /* ----- Spacing scale ----- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* ----- Input padding ----- */
+  --space-input-y: 10px;
+  --space-input-x: 12px;
+  --space-chip-y: 6px;
+  --space-chip-x: 10px;
+
+  /* ----- Radii ----- */
+  --radius-sm: 8px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  /* ----- Shadows ----- */
+  --shadow-sm: 0 6px 16px rgba(19, 32, 43, 0.06);
+  --shadow-md: 0 14px 34px rgba(19, 32, 43, 0.09);
+  --shadow-lg: 0 22px 54px rgba(19, 32, 43, 0.14);
+  --shadow: var(--shadow-md);
+
+  /* ----- Focus ring + translucent surfaces -----
+     Single source of truth for the Plotter-Ink-at-28% focus halo and the
+     "paper at 78% alpha" translucent that DESIGN.md prefers over
+     decorative backdrop blur. Modal overlay reads as Graphite (the brand
+     neutral) at 42% so it sits on the brand palette, not on a one-off
+     blue-gray that drifted from `rgba(29, 42, 47, ...)`. */
+  --color-focus-ring: rgba(23, 74, 115, 0.28);
+  --color-paper-translucent: rgba(255, 255, 255, 0.78);
+  --color-overlay: rgba(19, 32, 43, 0.42);
+  --color-overlay-strong: rgba(19, 32, 43, 0.62);
+
+  /* ----- Motion ----- */
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-enter: 280ms;
+
+  /* ----- Layout caps ----- */
+  --page-max-width: 1680px;
+  --page-gutter: 32px;
+  --page-gutter-sm: 18px;
+
+  /* ----- Legacy short aliases (kept so view CSS keeps working) ----- */
+  --bg: var(--color-bg);
+  --panel: var(--color-surface);
+  --panel-alt: var(--color-surface-muted);
+  --line: var(--color-border);
+  --line-soft: var(--hairline-soft);
+  --ink: var(--color-text);
+  --muted: var(--color-muted);
+  --muted-2: var(--color-muted-2);
+  --accent: var(--color-primary);
+  --accent-soft: var(--color-primary-soft);
+  --good: var(--color-secondary);
+  --bad: var(--color-danger);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --type-h1: 31px;
+    --type-h2: 25px;
+    --type-h3: 20px;
+    --type-h4: 16px;
+    --page-gutter: var(--page-gutter-sm);
+  }
+}

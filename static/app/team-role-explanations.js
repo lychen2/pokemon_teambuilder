@@ -2,6 +2,41 @@ export const HIDDEN_ROLE_IDS = new Set([
   "externalspeed",
   "coverdependent",
   "timingdependent",
+  "stabattacker",
+  "coverageattacker",
+  "singlebreaker",
+]);
+
+const ROLE_IMPLICATIONS = Object.freeze([
+  ["pivot", ["fakeoutpivot", "intimidatepivot", "regeneratorpivot", "partingshot", "uturnpivot", "voltswitchpivot", "flipturnpivot"]],
+  ["fakeout", ["fakeoutpivot"]],
+  ["intimidate", ["intimidatepivot"]],
+  ["redirection", ["followme", "ragepowder"]],
+  ["antiredirection", ["followme", "ragepowder"]],
+  ["powderimmune", ["antipowder"]],
+  ["cleric", ["healingsupport"]],
+  ["speedboostself", ["tailwind"]],
+  ["priority", ["fakeout", "priorityattacker"]],
+  ["focussash", ["consistentaction"]],
+  ["support", ["fakeout", "redirection", "followme", "ragepowder", "helpinghand", "cleric", "healingsupport", "screens", "protectivesupport", "guard", "wideguard", "quickguard"]],
+  ["protectivesupport", ["fakeout", "redirection", "followme", "ragepowder", "wideguard", "quickguard"]],
+  ["disruption", ["taunt", "encore", "disable", "imprison", "sleep", "willowisp", "intimidate", "paralysisspreader", "haze", "clearsmog"]],
+  ["statusspreader", ["sleep", "willowisp", "paralysisspreader"]],
+  ["debuffer", ["snarl", "eerieimpulse", "faketears", "screech", "metalsound", "acidspray", "intimidate", "willowisp", "nobleroar", "tickle", "offensivedebuffer"]],
+  ["lead", ["leadpressure"]],
+  ["tempocontrol", ["fakeout", "partingshot", "willowisp", "sleep", "taunt", "encore", "disable"]],
+  ["attacker", ["nuke", "cleaner", "wallbreaker", "fastattacker", "primaryattacker", "secondaryattacker", "trickroomsweeper", "metacounter"]],
+  ["hazardsetter", ["stealthrocksetter", "spikessetter", "toxicspikessetter", "stickywebsetter"]],
+  ["hazardremoval", ["rapidspin", "defog", "courtchange", "mortalspin", "tidyup"]],
+  ["weathersetter", ["rainsetter", "sunsetter", "sandsetter", "snowsetter"]],
+  ["weather", ["rainsetter", "sunsetter", "sandsetter", "snowsetter", "weathercore"]],
+  ["terrainsetter", ["electricterrainsetter", "psychicterrainsetter", "grassyterrainsetter", "mistyterrainsetter"]],
+  ["terrain", ["electricterrainsetter", "psychicterrainsetter", "grassyterrainsetter", "mistyterrainsetter", "terraincore"]],
+  ["wall", ["mixedwall", "recoverywall"]],
+  ["physicalwall", ["mixedwall"]],
+  ["specialwall", ["mixedwall"]],
+  ["damagesponge", ["mixedwall", "recoverywall"]],
+  ["modeenabler", ["weathersetter", "terrainsetter", "tailwind", "trickroom", "rainsetter", "sunsetter", "sandsetter", "snowsetter", "electricterrainsetter", "psychicterrainsetter", "grassyterrainsetter", "mistyterrainsetter"]],
 ]);
 
 const MOVE_QUALITY_COMPACT_MIN_MAPPED = 4;
@@ -13,8 +48,19 @@ function uniqueRoleIds(values = []) {
   return [...new Set(values.filter(Boolean))];
 }
 
+function dedupeRoleIds(roleIds = []) {
+  const original = new Set(roleIds);
+  const result = new Set(roleIds);
+  ROLE_IMPLICATIONS.forEach(([generic, specifics]) => {
+    if (specifics.some((roleId) => original.has(roleId))) {
+      result.delete(generic);
+    }
+  });
+  return [...result];
+}
+
 export function getVisibleRoleIds(roleIds = []) {
-  return uniqueRoleIds(roleIds).filter((roleId) => !HIDDEN_ROLE_IDS.has(roleId));
+  return dedupeRoleIds(uniqueRoleIds(roleIds).filter((roleId) => !HIDDEN_ROLE_IDS.has(roleId)));
 }
 
 function getMappedMoveCount(moveRoles = []) {

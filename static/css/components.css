@@ -1,0 +1,1139 @@
+/* ==========================================================================
+   components.css
+   Reusable primitives: buttons, pills, panels, inputs, modals, kbd,
+   command palette, tooltips. Tokens come from tokens.css.
+   See DESIGN.md sections 5 and 6 for the canonical component grammar.
+   ========================================================================== */
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+button,
+input,
+select,
+textarea {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  transition:
+    background-color var(--motion-base) var(--ease-standard),
+    border-color var(--motion-base) var(--ease-standard),
+    box-shadow var(--motion-base) var(--ease-standard),
+    color var(--motion-base) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-standard);
+}
+
+/* Default button padding only. Width is intentionally NOT 100% — buttons sit
+   inside flex/grid toolbars, card actions, and bespoke layouts (vgcpastes
+   team-card, matchup-board configs, view-tabs); a blanket width:100% drove
+   misalignment in the matchup board, view-tabs, and species browser. Buttons
+   that genuinely want to fill (sidebar primary action, team-sidebar-tab) opt
+   in explicitly via class. */
+button {
+  padding: var(--space-input-y) var(--space-input-x);
+}
+
+button:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.add-button {
+  width: auto;
+  min-width: 112px;
+  align-self: start;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: 500;
+}
+
+.add-button:hover,
+.add-button:focus-visible {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.ghost-button {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-primary);
+}
+
+.ghost-button:hover,
+.ghost-button:focus-visible {
+  background: var(--color-primary-soft);
+  border-color: rgba(23, 74, 115, 0.34);
+  color: var(--color-primary-hover);
+}
+
+.danger-button {
+  border-color: rgba(180, 35, 24, 0.32);
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.danger-button:hover,
+.danger-button:focus-visible {
+  background: rgba(244, 200, 194, 0.95);
+  border-color: rgba(180, 35, 24, 0.45);
+}
+
+.mini-action {
+  width: auto;
+  min-width: 84px;
+  padding: 9px 12px;
+  font-size: var(--type-small);
+  line-height: 1.25;
+}
+
+/* ==========================================================================
+   Inputs
+   ========================================================================== */
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: var(--space-input-y) var(--space-input-x);
+  color: var(--color-text);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted-2);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 150px;
+  line-height: 1.6;
+  margin: var(--space-sm) 0;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--color-border-strong);
+}
+
+/* ==========================================================================
+   Panels and cards (canonical surface)
+   ========================================================================== */
+
+.panel,
+.subpanel,
+.hero-note,
+.modal-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.panel,
+.hero-note {
+  padding: var(--space-lg);
+}
+
+.subpanel {
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.section-head h2 {
+  font-size: var(--type-h3);
+}
+
+.section-head h3,
+.subpanel h3 {
+  font-size: var(--type-h4);
+}
+
+.section-head-tight {
+  margin-bottom: var(--space-sm);
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ==========================================================================
+   Pills, chips, tags
+   ========================================================================== */
+
+.pill,
+.mini-pill,
+.source-tag,
+.info-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  min-height: 28px;
+  padding: 5px 8px;
+  line-height: 1.2;
+}
+
+.pill {
+  padding: var(--space-chip-y) var(--space-chip-x);
+}
+
+.mini-pill {
+  padding: 4px 8px;
+  font-size: var(--type-mono-sm);
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.info-pill {
+  position: relative;
+  gap: var(--space-xs);
+  padding: 5px 9px;
+  cursor: help;
+  max-width: 100%;
+}
+
+.info-pill-label {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.source-tag {
+  padding: 4px 8px;
+  color: var(--color-muted-2);
+  font-size: var(--type-mono-sm);
+}
+
+.score-tag {
+  color: var(--color-primary);
+  font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 7px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(23, 74, 115, 0.2);
+  background: rgba(23, 74, 115, 0.08);
+  color: var(--color-primary);
+  font-family: var(--mono-font);
+  font-size: var(--type-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Pillbox: language switch (standalone segmented control in the header).
+   `.view-tabs` used to live in this same rule, but it is rendered INSIDE
+   the workspace-stack panel and inherited a redundant border + shadow that
+   stacked against the panel's own border ("double-border" at the top edge).
+   View tabs now read as the rail-section of the panel; their resting fill
+   and border-bottom are owned by shell.css.
+   ========================================================================== */
+
+.language-switch {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper-translucent);
+  box-shadow: var(--shadow-sm);
+}
+
+.view-tab,
+.analysis-tab {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.add-button,
+.view-tab.active,
+.analysis-tab.active,
+.lang-button.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.add-button:hover,
+.view-tab.active:hover,
+.analysis-tab.active:hover,
+.lang-button.active:hover {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+}
+
+.language-switch {
+  display: inline-flex;
+  gap: var(--space-sm);
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+
+.lang-button {
+  width: auto;
+  min-width: 88px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Modals
+   ========================================================================== */
+
+.modal-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+}
+
+.modal-shell[hidden] {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--color-overlay);
+  backdrop-filter: blur(4px);
+}
+
+.modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  padding: var(--space-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-copy {
+  margin-bottom: var(--space-sm);
+}
+
+.modal-close-button {
+  width: auto;
+}
+
+.modal-actions {
+  justify-content: flex-end;
+}
+
+@supports not (backdrop-filter: blur(4px)) {
+  .modal-backdrop {
+    background: var(--color-overlay-strong);
+  }
+}
+
+/* ==========================================================================
+   Tooltip (global, JS-driven)
+
+   `.info-tooltip` / `.info-tooltip-content` are hidden data carriers — the
+   JS in main.js (showTooltip) reads `.info-tooltip-content` from inside
+   `.info-pill`s and copies its HTML into the floating `.global-tooltip`.
+   They MUST stay display:none so the inline payload doesn't render in the
+   pill / card and bloat the layout.
+   ========================================================================== */
+
+.info-tooltip,
+.info-tooltip-content {
+  display: none;
+}
+
+.global-tooltip {
+  position: fixed;
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 320px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-text);
+  font-size: var(--type-label);
+  line-height: 1.5;
+  white-space: pre-line;
+  pointer-events: none;
+}
+
+.global-tooltip.interactive {
+  pointer-events: auto;
+}
+
+.tooltip-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.tooltip-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tooltip-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  border-radius: var(--radius-pill);
+  font-size: var(--type-label);
+}
+
+.tooltip-desc-box {
+  padding: 0;
+  background: transparent;
+  color: var(--color-text);
+}
+
+/* ==========================================================================
+   VGCPastes picker (in-sidebar disclosure with team list + suggestions)
+
+   Restored and re-shaped from the pre-redesign `shell.css`. The team-card
+   was a vertical block (one big card per team); the user reads dozens at
+   a glance, so it now collapses to a single horizontal row of sprites with
+   an ID + description prefix. Per-member details (ability, role tags,
+   moves, stats) live in `.vgcpastes-member-tooltip` on hover/focus.
+   ========================================================================== */
+
+.vgcpastes-picker {
+  display: block;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.85rem;
+}
+
+.vgcpastes-picker > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.92rem;
+  list-style: revert;
+}
+
+.vgcpastes-picker[open] > summary {
+  margin-bottom: 6px;
+}
+
+.vgcpastes-picker-body {
+  display: grid;
+  gap: 8px;
+}
+
+.vgcpastes-picker-copy {
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.vgcpastes-picker-search {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.85rem;
+  background: var(--color-surface);
+}
+
+.vgcpastes-team-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.vgcpastes-team-list > li {
+  margin: 0;
+  padding: 0;
+}
+
+/* ----- Team-card layout: top edge label, member grid below.
+   First attempt was sprite-only horizontal — overflowed and clipped item
+   icons. Second attempt was sprite-strip stacked — too compact, dropped
+   name + ability + item icon. Final shape: ID + description on the top
+   edge, then a 2-column auto-fit member grid; each cell carries sprite
+   (with item icon overflow visible) + name + ability. Owner/date and
+   archetype pills move into the per-member tooltip on hover so the row
+   stays glanceable. ----- */
+
+.vgcpastes-team-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: min-content;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.96);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard);
+}
+
+.vgcpastes-team-card:hover,
+.vgcpastes-team-card:focus-visible {
+  background: var(--color-primary-soft);
+  border-color: rgba(23, 74, 115, 0.34);
+  outline: none;
+}
+
+.vgcpastes-team-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.72rem;
+}
+
+.vgcpastes-team-id {
+  flex: 0 0 auto;
+  font-family: var(--mono-font);
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted-2);
+  white-space: nowrap;
+}
+
+/* Owner / share-date metadata is informational only; in the picker row it
+   would compete with the description for the tight horizontal budget, so
+   we keep it for the tooltip card and hide it on the surface. */
+.vgcpastes-team-meta {
+  display: none;
+}
+
+.vgcpastes-team-name {
+  flex: 1 1 0;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Same reasoning as `.vgcpastes-team-meta` — archetype pills repeat on the
+   tooltip and crowd the row otherwise. */
+.vgcpastes-team-archetypes {
+  display: none;
+}
+
+.vgcpastes-archetype-pill {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+  font-size: 0.66rem;
+  line-height: 1.4;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* 2-column member grid. `auto-fit minmax(120px, 1fr)` collapses to 1 column
+   under ~256px. Sprite cells carry overflow:visible so the item-icon (which
+   protrudes -3px bottom-right) is not clipped by the grid track. */
+.vgcpastes-member-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 3px 6px;
+}
+
+.vgcpastes-member {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 1px 0;
+  overflow: visible;
+}
+
+.vgcpastes-team-card .vgcpastes-member-body {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  font-size: 0.7rem;
+  line-height: 1.18;
+}
+
+.vgcpastes-member-sprite {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 30px;
+  overflow: visible;
+}
+
+.vgcpastes-member-item-icon {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  transform-origin: bottom right;
+  transform: scale(0.7);
+  z-index: 2;
+}
+
+/* ----- Member tags / role pills (used when member rendered standalone) ----- */
+
+.vgcpastes-member-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vgcpastes-member-ability {
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vgcpastes-member-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 4px;
+  margin-top: 2px;
+}
+
+.vgcpastes-role-pill {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  font-size: 0.65rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ----- Team structure block (used outside the horizontal team-card) ----- */
+
+.vgcpastes-team-structure {
+  display: grid;
+  gap: 1px;
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+
+.vgcpastes-structure-row {
+  display: grid;
+  grid-template-columns: minmax(80px, max-content) 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.vgcpastes-structure-label {
+  font-weight: 600;
+}
+
+.vgcpastes-structure-members {
+  font-size: 0.68rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ----- Per-member hover tooltip (full detail card) ----- */
+
+.vgcpastes-member-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  right: auto;
+  top: calc(100% + 4px);
+  min-width: 220px;
+  max-width: 280px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  pointer-events: none;
+  white-space: normal;
+}
+
+.vgcpastes-member:nth-child(n + 4) .vgcpastes-member-tooltip {
+  left: auto;
+  right: 0;
+}
+
+.vgcpastes-member:hover .vgcpastes-member-tooltip,
+.vgcpastes-member:focus-within .vgcpastes-member-tooltip {
+  display: block;
+}
+
+.vgcpastes-tooltip-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.vgcpastes-tooltip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-bottom: 4px;
+}
+
+.vgcpastes-tooltip-roles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 5px;
+  margin-bottom: 4px;
+}
+
+.vgcpastes-tooltip-role {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  font-size: 0.66rem;
+  line-height: 1.45;
+}
+
+.vgcpastes-tooltip-role-desc {
+  margin-bottom: 5px;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+}
+
+.vgcpastes-tooltip-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.vgcpastes-tooltip-stat {
+  display: grid;
+  justify-items: center;
+  font-size: 0.66rem;
+}
+
+.vgcpastes-tooltip-stat strong {
+  font-size: 0.78rem;
+}
+
+.vgcpastes-tooltip-stat strong.nature-plus {
+  color: var(--color-secondary);
+}
+
+.vgcpastes-tooltip-stat strong.nature-minus {
+  color: var(--color-danger);
+}
+
+.vgcpastes-tooltip-moves {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px 8px;
+  font-size: 0.7rem;
+}
+
+/* ----- Suggestion cards (sit alongside team-list when search is active) ----- */
+
+.vgcpastes-suggest {
+  display: contents;
+}
+
+.vgcpastes-suggest:empty {
+  display: none;
+}
+
+.vgcpastes-suggest-head-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+}
+
+.vgcpastes-suggest-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.vgcpastes-suggest-card {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.96);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  font-size: 0.74rem;
+  line-height: 1.25;
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard);
+}
+
+.vgcpastes-suggest-card:hover,
+.vgcpastes-suggest-card:focus-visible {
+  background: var(--color-primary-soft);
+  border-color: rgba(23, 74, 115, 0.34);
+  outline: none;
+}
+
+.vgcpastes-suggest-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.vgcpastes-suggest-overlap {
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.vgcpastes-suggest-name {
+  font-weight: 600;
+}
+
+.vgcpastes-suggest-meta {
+  font-size: 0.7rem;
+}
+
+.vgcpastes-suggest-sprites {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.vgcpastes-suggest-sprite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 22px;
+  transform: scale(0.7);
+  transform-origin: center;
+  opacity: 0.6;
+}
+
+.vgcpastes-suggest-sprite.matched {
+  opacity: 1;
+}
+
+.vgcpastes-suggest-status {
+  font-size: 0.74rem;
+  margin: 4px 0;
+}
+
+/* ==========================================================================
+   Keyboard shortcuts modal
+   ========================================================================== */
+
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: var(--space-sm);
+}
+
+.shortcuts-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  flex-wrap: wrap;
+}
+
+.shortcuts-row kbd,
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  padding: 2px 6px;
+  font-family: var(--mono-font);
+  font-size: var(--type-label);
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.shortcuts-row span {
+  color: var(--color-muted);
+  font-size: var(--type-small);
+  flex: 1;
+  min-width: 160px;
+}
+
+/* ==========================================================================
+   Command palette
+   ========================================================================== */
+
+.command-palette-panel {
+  width: min(640px, calc(100vw - 32px));
+  padding: 0;
+}
+
+.command-palette-header {
+  padding: 14px 16px 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.command-palette-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--type-small);
+}
+
+.command-palette-list {
+  max-height: 420px;
+  overflow: auto;
+  padding: 6px;
+}
+
+.command-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--type-small);
+  color: inherit;
+  border: none;
+  width: 100%;
+  background: transparent;
+  text-align: left;
+}
+
+.command-palette-item.active,
+.command-palette-item:hover {
+  background: var(--color-surface-muted);
+}
+
+.command-palette-item .cmd-label {
+  flex: 1;
+}
+
+.command-palette-item mark {
+  background: rgba(245, 158, 11, 0.24);
+  color: inherit;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+.command-palette-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+/* ==========================================================================
+   Chip cards (used by analysis chip-list)
+   ========================================================================== */
+
+.chip-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.chip-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.chip-card.good {
+  border-color: rgba(11, 107, 87, 0.32);
+}
+
+.chip-card.bad {
+  border-color: rgba(180, 35, 24, 0.32);
+}
+
+/* ==========================================================================
+   Sprites and icons
+   ========================================================================== */
+
+.sprite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 30px;
+  background-image: url("../pokemonicons-sheet.png");
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.sprite-image {
+  background-image: none;
+}
+
+.poke-icon-image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+.sprite-fallback {
+  outline: 1px dashed rgba(191, 91, 61, 0.3);
+  outline-offset: 2px;
+}
+
+.item-sprite {
+  width: 24px;
+  height: 24px;
+  background-image: url("../itemicons-sheet.png");
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Overflow safety — keeps long Pokemon names, English UI strings, and
+   nested zh+en content from blowing out flex containers. PRODUCT.md
+   commits to bilingual parity, which means a German-length button label
+   or a 12-char zh nickname must not push neighbouring controls off-screen.
+   Each rule is scoped tightly: only flex children that have shown overflow
+   in tight viewports (<=375px) or with long content get min-width: 0.
+   ========================================================================== */
+
+/* section-head's two children (left text block, right action/badge) must
+   both be allowed to shrink so neither pushes the other out. */
+.section-head > * {
+  min-width: 0;
+}
+
+.section-head > *:first-child {
+  flex: 1 1 auto;
+}
+
+/* When a section head's heading is long, allow it to wrap rather than
+   clip; the badge keeps its natural width. */
+.section-head h2,
+.section-head h3,
+.section-head p {
+  overflow-wrap: anywhere;
+}
+
+/* action-row buttons may carry long English labels (e.g. "Replace Team
+   by Import"); they should wrap to a new row, never overflow the panel. */
+.action-row > button {
+  min-width: 0;
+}
+
+/* Card-style containers used in flex parents — give them a chance to
+   shrink instead of overflowing the team-grid / stack-list parent. */
+.team-card,
+.entry-card,
+.compact-list > * {
+  min-width: 0;
+}
+
+/* Long item / move / ability names inside info-pills should ellipsize
+   when they would otherwise force the row to wrap awkwardly. */
+.info-pill,
+.mini-pill {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Shortcut rows hold kbd + descriptive text; allow horizontal shrink so
+   long descriptions wrap underneath instead of pushing the kbd out. */
+.shortcuts-row {
+  min-width: 0;
+}
+
+.shortcuts-row > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

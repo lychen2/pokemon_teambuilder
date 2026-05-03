@@ -64,6 +64,7 @@ import {
   getDeterministicMoveRoleIds,
   getDeterministicUtilityRoles,
 } from "./team-role-deterministic.js";
+import {getScoringCategoryCount} from "./team-role-categories.js";
 
 export {
   ATTACK_BIAS_ORDER,
@@ -212,17 +213,24 @@ function getCompressionScore(primary, secondary, conditional, moveRoles, itemRol
   const totalMoveCount = Math.max(moveRoles.length, 1);
   const stablePrimary = primary === "compression" ? 1 : 2;
   const moveCoverage = mappedMoveCount / totalMoveCount * 2;
-  const itemBonus = itemRoles.length ? 0.8 : 0;
-  const conflictPenalty = Math.max(0, secondary.length - mappedMoveCount) * 0.35;
+  const itemBonus = itemRoles.length ? 0.6 : 0;
+  const categoryCount = getScoringCategoryCount(primary, secondary);
+  const categoryDiversityBonus = Math.max(0, categoryCount - 1) * 1.2;
+  const depthBonus = Math.min(secondary.length, 6) * 0.18;
+  const conflictPenalty = Math.max(0, secondary.length - mappedMoveCount - 2) * 0.25;
   const dependencyPenalty = conditional.length * 0.7;
-  return Math.max(0, Math.min(10, stablePrimary + secondary.length * 0.8 + moveCoverage + itemBonus - conflictPenalty - dependencyPenalty));
+  return Math.max(0, Math.min(10,
+    stablePrimary + categoryDiversityBonus + depthBonus + moveCoverage + itemBonus
+    - conflictPenalty - dependencyPenalty,
+  ));
 }
 
-function getCompressionTier(score, secondary, conditional, moveRoles) {
+function getCompressionTier(score, secondary, conditional, moveRoles, primary) {
   const mappedMoveCount = moveRoles.filter((entry) => entry.roleIds.length).length;
-  if (secondary.length >= 4 && mappedMoveCount <= 2) return "fake";
-  if (score >= 7 && secondary.length >= 2 && conditional.length <= 1) return "high";
-  if (score >= 5) return "medium";
+  const categoryCount = getScoringCategoryCount(primary, secondary);
+  if (categoryCount >= 5 && mappedMoveCount <= 2) return "fake";
+  if (score >= 7 && categoryCount >= 3 && conditional.length <= 1) return "high";
+  if (score >= 5 && categoryCount >= 2) return "medium";
   return "low";
 }
 
@@ -246,7 +254,7 @@ export function analyzePokemonRoles(config = {}, options = {}) {
     secondary: visibleSecondary,
     conditional,
     compressionScore,
-    compressionTier: getCompressionTier(compressionScore, secondary, conditional, moveRoles),
+    compressionTier: getCompressionTier(compressionScore, secondary, conditional, moveRoles, primary),
     moveRoles,
     itemInfluences,
     itemRoleSummary: getItemRoleSummary(itemInfluences),
@@ -255,7 +263,7 @@ export function analyzePokemonRoles(config = {}, options = {}) {
     moveSlotConflicts: moveSlotSummary.conflictCount,
     moveSlotSummary,
     oneLineSummaryKey: "analysis.roleOneLine",
-    oneLineSummaryParams: getOneLineSummaryParams(primary, visibleSecondary, getCompressionTier(compressionScore, secondary, conditional, moveRoles)),
+    oneLineSummaryParams: getOneLineSummaryParams(primary, visibleSecondary, getCompressionTier(compressionScore, secondary, conditional, moveRoles, primary)),
     dependencies: conditional,
     roleProxyStatus: getRoleProxyStatus(options.roleContext),
     legacyStructureRole: getLegacyStructureRole(config, metrics, itemRoles),

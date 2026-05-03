@@ -86,7 +86,7 @@ function getAllyTeraEntries(state, language) {
     .map((config) => {
       const type = config.teraType || "";
       if (!type) return null;
-      const localized = state.localizedSpeciesNames?.get(config.speciesId);
+      const localized = language === "zh" ? state.localizedSpeciesNames?.get(config.speciesId) : null;
       const name = localized || config.speciesName || config.displayName || "";
       return {type, name, label: getTypeLabel(type, language)};
     })
@@ -469,6 +469,7 @@ function singleRoleCardMarkup(entry, language, state) {
         <div class="analysis-label">${t(language, "analysis.singleSecondary")}</div>
         <div class="analysis-inline-pills">${roleSetMarkup(entry.secondary.slice(0, 8), language)}</div>
       </div>
+      ${metaPositionMarkup(entry.metaPosition, language)}
       ${roleReasonMarkup(entry, language)}
       <div class="single-role-block">
         <div class="analysis-label">${t(language, "analysis.moveSlotTitle")}</div>
@@ -483,6 +484,31 @@ function singleRoleCardMarkup(entry, language, state) {
       </div>
     </article>
   `;
+}
+
+function metaPositionMarkup(metaPosition, language) {
+  if (!metaPosition?.available) return "";
+  const pills = [
+    metaRankPill("speed", metaPosition.estimatedSpeedRank, language),
+    metaRankPill("atk", metaPosition.estimatedAtkRank, language),
+    metaRankPill("spa", metaPosition.estimatedSpaRank, language),
+    metaRankPill("physBulk", metaPosition.estimatedPhysBulkRank, language),
+    metaRankPill("spBulk", metaPosition.estimatedSpBulkRank, language),
+  ].filter(Boolean).join("");
+  if (!pills) return "";
+  return `
+    <div class="single-role-block">
+      <div class="analysis-label">${t(language, "analysis.metaPositionTitle")}</div>
+      <div class="analysis-inline-pills">${pills}</div>
+    </div>
+  `;
+}
+
+function metaRankPill(key, rank, language) {
+  if (rank == null || !Number.isFinite(Number(rank))) return "";
+  const percent = Math.round(Number(rank) * 100);
+  const tone = percent >= 75 ? "analysis-good-pill" : (percent <= 25 ? "analysis-alert-pill" : "");
+  return `<span class="mini-pill ${tone}" title="${escapeHtml(t(language, `analysis.metaPosition.${key}.desc`))}">${escapeHtml(t(language, `analysis.metaPosition.${key}`))} ${percent}%</span>`;
 }
 
 function speedCardMarkup(entry, language, state) {

@@ -25,6 +25,9 @@ function escapeHtml(text) {
 }
 
 function getLocalizedSpeciesName(state, species) {
+  if (state.language !== "zh") {
+    return species.speciesName || species.localizedSpeciesName || "";
+  }
   return state.localizedSpeciesNames?.get(species.speciesId) || species.localizedSpeciesName || species.speciesName;
 }
 
@@ -733,13 +736,68 @@ function speedBenchmarkMarkup(tiers) {
   if (!speeds.length) return "";
   const maxSpeed = Math.max(...speeds);
   const minSpeed = Math.min(...speeds);
-  const range = Math.max(1, maxSpeed - minSpeed);
+  // Position is computed post-render in `positionSpeedBenchmarks` from the
+  // actual rendered tier-dot coordinates. The inline `top` is a placeholder
+  // that gets overwritten as soon as the timeline mounts; without it the line
+  // would flash at top:0 on first paint. We hide ones outside the team's
+  // speed window so a benchmark above maxSpeed or below minSpeed never draws
+  // a stray line at the timeline edge.
   return SPEED_BENCHMARKS
-    .filter((speed) => speed >= minSpeed && speed <= maxSpeed)
-    .map((speed) => {
-      const top = ((maxSpeed - speed) / range) * 100;
-      return `<span class="speed-benchmark-line" style="top:${top}%"><strong>${speed}</strong></span>`;
-    }).join("");
+    .filter((speed) => speed > minSpeed && speed < maxSpeed)
+    .map((speed) => `<span class="speed-benchmark-line" data-speed-benchmark="${speed}" style="top:0;visibility:hidden"><strong>${speed}</strong></span>`)
+    .join("");
+}
+
+function positionSpeedBenchmarks(host) {
+  if (!host) return;
+  const timeline = host.querySelector(".speed-timeline-scaled");
+  if (!timeline) return;
+  const benchmarks = timeline.querySelectorAll(".speed-benchmark-line");
+  if (!benchmarks.length) return;
+  const tierRows = Array.from(timeline.querySelectorAll(".speed-tier-row"));
+  if (!tierRows.length) return;
+  const timelineRect = timeline.getBoundingClientRect();
+  // Map each tier to its rendered y-center (origin = top of timeline).
+  // Order by speed descending so adjacent-tier lookup is straightforward.
+  const tierData = tierRows.map((row) => {
+    const speed = Number(row.querySelector(".speed-tier-value")?.textContent || 0);
+    const dot = row.querySelector(".speed-tier-dot");
+    const target = dot || row;
+    const rect = target.getBoundingClientRect();
+    return {
+      speed,
+      center: rect.top - timelineRect.top + rect.height / 2,
+    };
+  }).filter((entry) => Number.isFinite(entry.speed) && entry.speed > 0)
+    .sort((a, b) => b.speed - a.speed);
+  if (!tierData.length) return;
+  benchmarks.forEach((line) => {
+    const benchmark = Number(line.dataset.speedBenchmark || 0);
+    if (!benchmark) return;
+    let upper = null;
+    let lower = null;
+    for (const entry of tierData) {
+      if (entry.speed >= benchmark) upper = entry;
+      if (entry.speed <= benchmark && !lower) lower = entry;
+    }
+    if (!upper || !lower) {
+      // Benchmark falls outside the rendered team's speed range — hide it
+      // rather than pin it to the timeline edge.
+      line.style.display = "none";
+      return;
+    }
+    let topPx;
+    if (upper.speed === lower.speed) {
+      topPx = upper.center;
+    } else {
+      const range = upper.speed - lower.speed;
+      const ratio = (upper.speed - benchmark) / range;
+      topPx = upper.center + (lower.center - upper.center) * ratio;
+    }
+    line.style.top = `${topPx}px`;
+    line.style.visibility = "visible";
+    line.style.display = "";
+  });
 }
 
 export function renderSpeedTiers(state) {
@@ -747,6 +805,11 @@ export function renderSpeedTiers(state) {
   document.getElementById("speed-summary").textContent = t(language, "speed.summary", {
     count: state.speedLineTiers.length,
   });
+  const host = document.getElementById("speed-tiers");
+  if (!state.speedLineTiers.length) {
+    setInnerHTMLIfChanged(host, `<p class="empty-state">${t(language, "speed.empty")}</p>`);
+    return;
+  }
   const variantIndex = buildSpeedVariantIndex(state.speedLineTiers);
   const rows = state.speedLineTiers.map((tier, tierIndex) => {
     const side = tierIndex % 2 === 0 ? "side-left" : "side-right";
@@ -761,13 +824,38 @@ export function renderSpeedTiers(state) {
       </div>
     `;
   }).join("");
-  setInnerHTMLIfChanged(document.getElementById("speed-tiers"), `
+  setInnerHTMLIfChanged(host, `
     <div class="speed-timeline speed-timeline-scaled">
       ${speedBenchmarkMarkup(state.speedLineTiers)}
       ${rows}
     </div>
   `);
+  // Anchor benchmark lines to actual tier dot positions. Run on next frame so
+  // the layout has settled (sprites loaded, fonts applied) before we measure.
+  // A second tick handles late layout shifts (e.g. icon sheet still painting).
+  scheduleSpeedBenchmarkAnchor(host);
   scrollTeamSpeedIntoView(state);
+}
+
+let speedBenchmarkAnchorFrame = 0;
+let speedBenchmarkResizeObserver = null;
+
+function scheduleSpeedBenchmarkAnchor(host) {
+  if (!host) return;
+  if (speedBenchmarkAnchorFrame) cancelAnimationFrame(speedBenchmarkAnchorFrame);
+  speedBenchmarkAnchorFrame = requestAnimationFrame(() => {
+    positionSpeedBenchmarks(host);
+    requestAnimationFrame(() => positionSpeedBenchmarks(host));
+  });
+  // Observe the stable `#speed-tiers` host (not its `.speed-timeline-scaled`
+  // child) so the observer survives every renderSpeedTiers re-render — the
+  // child is destroyed each time `setInnerHTMLIfChanged` rewrites markup.
+  if (!speedBenchmarkResizeObserver && typeof ResizeObserver !== "undefined") {
+    speedBenchmarkResizeObserver = new ResizeObserver(() => {
+      positionSpeedBenchmarks(host);
+    });
+    speedBenchmarkResizeObserver.observe(host);
+  }
 }
 
 function scrollTeamSpeedIntoView(state) {

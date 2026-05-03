@@ -1,672 +1,167 @@
-:root {
-  --bg: #eef3f8;
-  --panel: #ffffff;
-  --panel-alt: #f4f7fb;
-  --line: #c9d4e0;
-  --line-soft: #e5ecf3;
-  --ink: #16202b;
-  --muted: #5a6b7c;
-  --muted-2: #8593a3;
-  --accent: #2f6ea3;
-  --accent-soft: #d7e5f4;
-  --good: #2f7d61;
-  --bad: #c05b52;
-  --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 18px 42px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 24px 56px rgba(15, 23, 42, 0.12);
-  --shadow: var(--shadow-md);
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-pill: 999px;
-  --space-input-y: 10px;
-  --space-input-x: 12px;
-  --space-chip-y: 6px;
-  --space-chip-x: 10px;
-  --title-font: Inter, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
-  --body-font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
-  --mono-font: "SFMono-Regular", "Cascadia Code", "Fira Code", monospace;
+/* ==========================================================================
+   base.css
+   Resets, typography baselines, focus styles, link defaults. No components.
+   Components live in components.css. Type colors live in type-colors.css.
+   Tokens come from tokens.css.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-* {
-  box-sizing: border-box;
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top right, rgba(47, 110, 163, 0.08), transparent 32%),
-    radial-gradient(circle at top left, rgba(103, 123, 143, 0.08), transparent 28%),
-    linear-gradient(180deg, #f8fbfe 0%, #edf2f7 100%);
-  color: var(--ink);
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--body-font);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* OpenType polish on the canonical body face. `kern` is on by default in
+     most engines but we make it explicit; `cv11` switches Inter to its
+     single-storey g (less corporate-default), `ss03` enables Inter's curved
+     l/I disambiguation. Harmless on non-Inter fallbacks (unsupported features
+     are silently ignored). `font-optical-sizing: auto` lets variable fonts
+     pick the right optical master. */
+  font-feature-settings: "kern" 1, "cv11" 1, "ss03" 1;
+  font-kerning: normal;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
 }
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+
+/* ----- Headings ----- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-text);
+  font-family: var(--title-font);
+  letter-spacing: var(--font-tracking-tight);
+  /* Heading line-breaking polish: balance line lengths across multi-line
+     headings (h1-h2 hero/title surfaces benefit most). Cheap, no JS, falls
+     back silently on engines without support. */
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--type-h1);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--type-h2);
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: var(--type-h3);
+  line-height: 1.2;
+}
+
+h4 {
+  font-size: var(--type-h4);
+  line-height: 1.25;
+}
+
+/* Reduce orphans and ragged endings in body prose. Applies to muted copy
+   blocks, hero-copy, modal-copy. Harmless where text is single-line (chips,
+   pills, status). */
+p {
+  text-wrap: pretty;
+}
+
+.muted {
+  color: var(--color-muted);
+  overflow-wrap: break-word;
+}
+
+.eyebrow,
+.sidebar-eyebrow,
+.control-eyebrow {
+  color: var(--color-muted);
+  font-size: var(--type-label);
+  font-weight: 600;
+  letter-spacing: var(--font-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+label span {
+  display: block;
+  margin-bottom: var(--space-sm);
+  color: var(--color-muted);
+  font-size: var(--type-label);
+  font-weight: 600;
+}
+
+/* ----- Form element baselines (sized by components.css) ----- */
 
 button,
 input,
 select,
 textarea {
   font: inherit;
-}
-
-button,
-select,
-input,
-textarea {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--panel);
-  color: var(--ink);
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
+  color: var(--color-text);
 }
 
 button {
   cursor: pointer;
 }
+
+/* ----- Focus ----- */
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 3px solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
-h1,
-h2,
-h3,
-p {
-  margin: 0;
-}
-
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
-  gap: 20px;
-  padding: 36px 32px 20px;
-}
-
-.eyebrow {
-  margin-bottom: 10px;
-  color: var(--accent);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.hero h1,
-.panel h2,
-.hero-note h2 {
-  font-family: var(--title-font);
-}
-
-.hero h1 {
-  font-size: clamp(34px, 4vw, 54px);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-}
-
-.hero-copy,
-.muted {
-  color: var(--muted);
-  overflow-wrap: break-word;
-}
-
-.hero-copy {
-  max-width: 72ch;
-  margin-top: 10px;
-  line-height: 1.6;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  margin-top: 18px;
-}
-
-.hero-label {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.hero-select-field {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 232px;
-}
-
-.hero-select-field span {
-  margin-bottom: 0;
-}
-
-.hero-select-field select {
-  min-width: 0;
-  padding: var(--space-input-y) var(--space-input-x);
-  background: var(--panel);
-}
-
-.hero-select-note {
-  width: 100%;
-  flex-basis: 100%;
-  font-size: 13px;
-}
-
-.language-switch {
-  display: inline-flex;
-  gap: 8px;
-  padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  background: var(--panel);
-}
-
-.lang-button {
-  width: auto;
-  min-width: 88px;
-  padding: 9px 14px;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--muted);
-}
-
-.lang-button.active {
-  background: var(--accent);
-  color: white;
-}
-
-.hero-note,
-.panel {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-  box-shadow: var(--shadow-md);
-}
-
-.hero-note {
-  padding: 18px;
-  align-self: start;
-}
-
-.panel {
-  padding: 18px;
-}
-
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.action-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.control-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-}
-
-label span {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-select,
-input,
-textarea,
-button {
-  width: 100%;
-  padding: var(--space-input-y) var(--space-input-x);
-}
-
-textarea {
-  resize: vertical;
-  min-height: 150px;
-  line-height: 1.6;
-  margin: 12px 0;
-}
-
-.ghost-button {
-  border-color: rgba(22, 32, 43, 0.2);
-  background: transparent;
-}
-
-.ghost-button:hover,
-.ghost-button:focus-visible {
-  border-color: rgba(47, 110, 163, 0.3);
-  background: rgba(47, 110, 163, 0.06);
-}
-
-.danger-button {
-  border-color: rgba(182, 77, 69, 0.35);
-  color: var(--bad);
-}
-
-.add-button {
-  width: auto;
-  min-width: 112px;
-  align-self: start;
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-}
-
-.add-button:hover,
-.add-button:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(47, 110, 163, 0.18);
-}
-
-.pill,
-.mini-pill,
-.source-tag,
-.info-pill {
-  display: inline-flex;
-  align-items: center;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: var(--panel);
-}
-
-.pill {
-  padding: var(--space-chip-y) var(--space-chip-x);
-}
-
-.type-pill,
-.type-chip {
-  color: white;
-  border-color: transparent;
-}
-
-.type-normal {
-  background: #a8a77a;
-}
-
-.type-fire {
-  background: #ee8130;
-}
-
-.type-water {
-  background: #6390f0;
-}
-
-.type-electric {
-  background: #f7d02c;
-}
-
-.type-grass {
-  background: #7ac74c;
-}
-
-.type-ice {
-  background: #96d9d6;
-}
-
-.type-fighting {
-  background: #c22e28;
-}
-
-.type-poison {
-  background: #a33ea1;
-}
-
-.type-ground {
-  background: #e2bf65;
-}
-
-.type-flying {
-  background: #a98ff3;
-}
-
-.type-psychic {
-  background: #f95587;
-}
-
-.type-bug {
-  background: #a6b91a;
-}
-
-.type-rock {
-  background: #b6a136;
-}
+/* ----- Links ----- */
 
-.type-ghost {
-  background: #735797;
+a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(23, 74, 115, 0.3);
+  text-underline-offset: 2px;
+  transition: color var(--motion-base) var(--ease-standard);
 }
 
-.type-dragon {
-  background: #6f35fc;
+a:hover,
+a:focus-visible {
+  color: var(--color-primary-hover);
+  text-decoration-color: currentColor;
 }
 
-.type-dark {
-  background: #705746;
-}
-
-.type-steel {
-  background: #b7b7ce;
-}
-
-.type-fairy {
-  background: #d685ad;
-}
-
-.mini-pill {
-  padding: 4px 8px;
-  font-size: 11px;
-  max-width: 100%;
-  overflow-wrap: break-word;
-}
-
-.speed-analysis-name {
-  border: 1px solid var(--line);
-  background: white;
-}
-
-.speed-analysis-speed {
-  background: rgba(29, 42, 47, 0.06);
-  font-family: var(--mono-font);
-}
-
-.speed-analysis-threat {
-  border: 1px solid rgba(182, 77, 69, 0.2);
-  background: rgba(182, 77, 69, 0.08);
-  color: var(--bad);
-  font-family: var(--mono-font);
-}
-
-.info-pill {
-  position: relative;
-  gap: 6px;
-  padding: 5px 9px;
-  cursor: help;
-  max-width: 100%;
-}
-
-.info-pill-label {
-  max-width: 100%;
-  overflow-wrap: break-word;
-}
-
-.info-tooltip,
-.info-tooltip-content {
-  display: none;
-}
-
-.global-tooltip {
-  position: fixed;
-  z-index: 1000;
-  min-width: 200px;
-  max-width: 320px;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line);
-  background: var(--panel);
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(8px);
-  color: var(--ink);
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: pre-line;
-  pointer-events: none;
-}
-
-.global-tooltip.interactive {
-  pointer-events: auto;
-}
-
-.tooltip-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.tooltip-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.tooltip-chip {
-  border: 1px solid var(--line);
-  background: var(--panel-alt);
-  color: var(--ink);
-}
-
-.tooltip-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-}
-
-.tooltip-desc-box {
-  padding: 0;
-  background: transparent;
-  color: var(--ink);
-}
-
-.source-tag {
-  padding: 4px 8px;
-  color: var(--muted-2);
-  font-size: 11px;
-}
-
-.score-tag {
-  color: var(--accent);
-  font-family: var(--mono-font);
-}
-
-.sprite {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 30px;
-  background-image: url("../pokemonicons-sheet.png");
-  background-repeat: no-repeat;
-  flex-shrink: 0;
-  image-rendering: pixelated;
-}
-
-.sprite-image {
-  background-image: none;
-}
-
-.poke-icon-image {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  image-rendering: auto;
-}
-
-.sprite-fallback {
-  outline: 1px dashed rgba(191, 91, 61, 0.3);
-  outline-offset: 2px;
-}
-
-.item-sprite {
-  width: 24px;
-  height: 24px;
-  background-image: url("../itemicons-sheet.png");
-  background-repeat: no-repeat;
-  flex-shrink: 0;
-}
-
-.empty-state {
-  padding: 18px 0;
-  color: var(--muted);
-}
-
-.modal-shell {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.modal-shell[hidden] {
-  display: none;
-}
-
-.modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(29, 42, 47, 0.42);
-  backdrop-filter: blur(4px);
-}
-
-.modal-panel {
-  position: relative;
-  z-index: 1;
-  width: min(760px, calc(100vw - 32px));
-  max-height: calc(100vh - 48px);
-  max-height: calc(100dvh - 48px);
-  overflow: auto;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-  box-shadow: var(--shadow-lg);
-}
-
-.modal-copy {
-  margin-bottom: 12px;
-}
-
-.modal-close-button {
-  width: auto;
-}
-
-.modal-actions {
-  justify-content: flex-end;
-}
-
-@supports not (backdrop-filter: blur(4px)) {
-  .modal-backdrop,
-  .global-tooltip {
-    backdrop-filter: none;
-  }
-}
-
-.shortcuts-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.shortcuts-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md, 8px);
-  background: var(--panel-soft, rgba(255, 255, 255, 0.03));
-  flex-wrap: wrap;
-}
-
-.shortcuts-row kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  padding: 2px 6px;
-  font-family: ui-monospace, monospace;
-  font-size: 12px;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  color: inherit;
-}
-
-.shortcuts-row span {
-  color: var(--muted);
-  font-size: 13px;
-  flex: 1;
-  min-width: 160px;
-}
-
-.command-palette-panel {
-  width: min(640px, calc(100vw - 32px));
-  padding: 0;
-}
-
-.command-palette-header {
-  padding: 14px 16px 8px;
-  border-bottom: 1px solid var(--line);
-}
-
-.command-palette-input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md, 8px);
-  background: rgba(255, 255, 255, 0.04);
-  color: inherit;
-  font-size: 14px;
-}
-
-.command-palette-list {
-  max-height: 420px;
-  overflow: auto;
-  padding: 6px;
-}
-
-.command-palette-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  color: inherit;
-  border: none;
-  width: 100%;
-  background: transparent;
-  text-align: left;
-}
-
-.command-palette-item.active,
-.command-palette-item:hover {
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.command-palette-item .cmd-label {
-  flex: 1;
-}
-
-.command-palette-item mark {
-  background: rgba(255, 230, 128, 0.28);
-  color: inherit;
-  padding: 0 1px;
-  border-radius: 2px;
-}
-
-.command-palette-empty {
-  padding: 16px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-}
+/* ----- Utility ----- */
 
 .visually-hidden {
   position: absolute !important;
@@ -680,34 +175,18 @@ textarea {
   border: 0;
 }
 
-
-.chip-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px;
+/* Numeric atoms: any element whose content IS a measurement (speeds, points,
+   scores, percentages, EV totals, damage rolls). Mono face + tabular-nums
+   means columns line up across rows without per-component overrides. Drop
+   onto inline spans, table cells, badges. Composes with type-mono / mono-sm
+   when a smaller numeric is needed. */
+.numeric {
+  font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "kern" 1;
 }
 
-.chip-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid var(--line);
-}
-
-.chip-card.good {
-  border-color: rgba(47, 125, 97, 0.35);
-}
-
-.chip-card.bad {
-  border-color: rgba(182, 77, 69, 0.35);
-}
-
-@media (max-width: 1100px) {
-  .hero,
-  .control-grid {
-    grid-template-columns: 1fr;
-  }
+.empty-state {
+  padding: var(--space-md) 0;
+  color: var(--color-muted);
 }

@@ -56,7 +56,7 @@ function renderTooltipPill(label, detail, language, className = "mini-pill") {
 
 function memberPillsMarkup(members = [], state) {
   return members.map((member) => {
-    const localized = member.speciesId
+    const localized = member.speciesId && state?.language === "zh"
       ? state?.localizedSpeciesNames?.get(member.speciesId)
       : null;
     const label = localized || member.label || member.speciesName || "";
@@ -92,6 +92,9 @@ function buildSpeedSummary(entry, language) {
 }
 
 function getLocalizedSpeciesName(state, entry) {
+  if (state.language !== "zh") {
+    return entry.speciesName || entry.localizedSpeciesName || "";
+  }
   return entry.localizedSpeciesName || state.localizedSpeciesNames?.get(entry.speciesId) || entry.speciesName;
 }
 

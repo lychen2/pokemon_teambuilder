@@ -22,6 +22,32 @@ function buildPasteSpeciesCounts(pasteTeams) {
   });
   return counts;
 }
+
+function buildPasteCorePairs(pasteTeams, topN = 24) {
+  if (!pasteTeams) return [];
+  const teams = Array.isArray(pasteTeams) ? pasteTeams : pasteTeams?.teams || [];
+  const counts = new Map();
+  teams.forEach((team) => {
+    const ids = (team?.memberSpeciesIds || [])
+      .map((rawId) => String(rawId || "").toLowerCase())
+      .filter(Boolean);
+    const unique = [...new Set(ids)];
+    for (let i = 0; i < unique.length; i += 1) {
+      for (let j = i + 1; j < unique.length; j += 1) {
+        const [a, b] = unique[i] < unique[j] ? [unique[i], unique[j]] : [unique[j], unique[i]];
+        const key = `${a}|${b}`;
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+    }
+  });
+  return [...counts.entries()]
+    .map(([key, count]) => {
+      const [a, b] = key.split("|");
+      return {a, b, count};
+    })
+    .sort((left, right) => right.count - left.count)
+    .slice(0, topN);
+}
 import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
@@ -285,6 +311,7 @@ export async function loadDatasets() {
     itemLookup,
     itemSearchLookup,
     pasteSpeciesCounts: buildPasteSpeciesCounts(pasteTeams),
+    pasteCorePairs: buildPasteCorePairs(pasteTeams),
   };
   return datasetCache.value;
 }

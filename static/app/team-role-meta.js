@@ -1,10 +1,12 @@
 import {normalizeName} from "./utils.js";
 
 const DEFAULT_TOP_N = 24;
+const DEFAULT_CORE_TOP_N = 24;
 
 const EMPTY_META = Object.freeze({
   source: "empty",
   entries: Object.freeze([]),
+  cores: Object.freeze([]),
   weightTotal: 0,
   warnings: Object.freeze(["empty"]),
   month: "",
@@ -132,20 +134,36 @@ function sumWeights(entries) {
   return entries.reduce((sum, entry) => sum + Number(entry.weight || 0), 0);
 }
 
+function buildCores(datasets, topN = DEFAULT_CORE_TOP_N) {
+  const pairs = Array.isArray(datasets?.pasteCorePairs) ? datasets.pasteCorePairs : [];
+  if (!pairs.length) return [];
+  const top = pairs.slice(0, topN);
+  const total = top.reduce((sum, pair) => sum + Number(pair.count || 0), 0) || 1;
+  return top
+    .map((pair) => ({
+      a: normalizeName(pair.a),
+      b: normalizeName(pair.b),
+      weight: Number(pair.count || 0) / total,
+    }))
+    .filter((pair) => pair.a && pair.b && pair.a !== pair.b);
+}
+
 export function buildRoleMeta(library = [], datasets = {}, options = {}) {
   const topN = Math.max(1, Number(options.topN || DEFAULT_TOP_N));
+  const cores = Object.freeze(buildCores(datasets));
   if (datasets?.championsVgc?.usage?.status === "available") {
     const usageMeta = fromUsageStats(datasets, topN);
-    if (usageMeta) return usageMeta;
+    if (usageMeta) return {...usageMeta, cores};
   }
   const pasteMeta = fromPasteCounts(datasets, topN);
-  if (pasteMeta) return pasteMeta;
+  if (pasteMeta) return {...pasteMeta, cores};
   const libraryMeta = fromLibrary(library, topN);
-  if (libraryMeta) return libraryMeta;
+  if (libraryMeta) return {...libraryMeta, cores};
   return EMPTY_META;
 }
 
 export function getMetaHash(meta = {}) {
   const ids = (meta.entries || []).map((entry) => entry.speciesId).join(",");
-  return `${meta.source || "empty"}|${ids}|${meta.entries?.length || 0}`;
+  const coreCount = (meta.cores || []).length;
+  return `${meta.source || "empty"}|${ids}|${meta.entries?.length || 0}|cores=${coreCount}`;
 }

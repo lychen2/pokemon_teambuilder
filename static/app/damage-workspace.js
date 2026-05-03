@@ -2,6 +2,21 @@ let workerInstance = null;
 let requestId = 0;
 const pendingRequests = new Map();
 
+const REQUEST_TIMEOUT_MS = 5000;
+
+function clearPendingTimeout(pending) {
+  if (pending?.timeoutId) {
+    clearTimeout(pending.timeoutId);
+    pending.timeoutId = null;
+  }
+}
+
+function failPending(pending, id, error) {
+  clearPendingTimeout(pending);
+  pendingRequests.delete(id);
+  pending.reject(error);
+}
+
 function getWorker() {
   if (workerInstance) {
     return workerInstance;
@@ -13,15 +28,22 @@ function getWorker() {
     if (!pending) {
       return;
     }
+    clearPendingTimeout(pending);
     pendingRequests.delete(id);
     if (ok) {
       pending.resolve(result);
       return;
     }
-    pending.reject(new Error(error || "伤害计算失败。"));
+    const failure = new Error(error || "伤害计算失败。");
+    failure.code = "DAMAGE_WORKER_ERROR";
+    pending.reject(failure);
   });
   workerInstance.addEventListener("error", (event) => {
-    pendingRequests.forEach(({reject}) => reject(new Error(event.message || "伤害计算 worker 初始化失败。")));
+    pendingRequests.forEach((pending, id) => {
+      const failure = new Error(event.message || "伤害计算 worker 初始化失败。");
+      failure.code = "DAMAGE_WORKER_FATAL";
+      failPending(pending, id, failure);
+    });
     pendingRequests.clear();
     workerInstance = null;
   });
@@ -108,6 +130,7 @@ function cancelPendingRequestsByKind(kind) {
   [...pendingRequests.entries()]
     .filter(([, pending]) => pending.kind === kind)
     .forEach(([id, pending]) => {
+      clearPendingTimeout(pending);
       pendingRequests.delete(id);
       pending.resolve(null);
     });
@@ -126,7 +149,17 @@ function enqueueRequest(payload, options = {}) {
   cancelPendingRequestsByKind(options.cancelKind || "");
   return new Promise((resolve, reject) => {
     const id = ++requestId;
-    pendingRequests.set(id, {resolve, reject, kind: options.kind || "pair"});
+    const pending = {resolve, reject, kind: options.kind || "pair", timeoutId: null};
+    pending.timeoutId = setTimeout(() => {
+      const stale = pendingRequests.get(id);
+      if (!stale) return;
+      pendingRequests.delete(id);
+      stale.timeoutId = null;
+      const failure = new Error("伤害计算超时（5 秒未返回）");
+      failure.code = "DAMAGE_WORKER_TIMEOUT";
+      stale.reject(failure);
+    }, REQUEST_TIMEOUT_MS);
+    pendingRequests.set(id, pending);
     worker.postMessage({id, ...payload});
   });
 }

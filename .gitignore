@@ -8,3 +8,10 @@ __pycache__/
 pokepast-archive-*.json
 poke_analysis-main/stats/pokechamp_cache.json
 poke_analysis-main/stats/pokepaste_cache.json
+
+# Agent-only docs (not for version control)
+DESIGN.md
+DESIGN.json
+PRODUCT.md
+AGENTS.md
+CLAUDE.md

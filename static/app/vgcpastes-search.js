@@ -7,6 +7,7 @@ function lookup(map, key) {
 }
 
 function localizedSpeciesName(state, member = {}) {
+  if (state?.language !== "zh") return "";
   const speciesId = member.speciesId || normalizeName(member.species || "");
   return lookup(state.localizedSpeciesNames, speciesId);
 }

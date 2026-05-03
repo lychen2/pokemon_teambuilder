@@ -69,6 +69,19 @@ function createPersistenceError(code, message, extra = {}) {
   return error;
 }
 
+// Detect quota-exceeded errors across browsers. Chrome/Firefox throw
+// DOMException with name "QuotaExceededError" and code 22; Safari uses
+// name "NS_ERROR_DOM_QUOTA_REACHED" and code 1014; pre-Quirks Edge uses
+// name "QuotaExceededError" with code 22.
+export function isQuotaExceededError(error) {
+  if (!error) return false;
+  if (typeof DOMException !== "undefined" && error instanceof DOMException) {
+    if (error.code === 22 || error.code === 1014) return true;
+  }
+  const name = String(error.name || "");
+  return name === "QuotaExceededError" || name === "NS_ERROR_DOM_QUOTA_REACHED";
+}
+
 function parsePersistedText(raw) {
   try {
     return JSON.parse(raw);
@@ -140,7 +153,10 @@ export function persistState(state, options = {}) {
     options.onPersisted?.(envelope);
     return true;
   } catch (error) {
-    options.onError?.(error);
+    const wrapped = isQuotaExceededError(error)
+      ? createPersistenceError("QUOTA_EXCEEDED", error.message || "Storage quota exceeded.", {cause: error})
+      : error;
+    options.onError?.(wrapped);
     return false;
   }
 }

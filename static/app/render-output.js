@@ -13,6 +13,9 @@ function escapeHtml(text) {
 }
 
 function getLocalizedSpeciesName(state, entry) {
+  if (state.language !== "zh") {
+    return entry.speciesName || entry.displayLabel || entry.displayName || "";
+  }
   return state.localizedSpeciesNames?.get(entry.speciesId) || entry.displayLabel || entry.displayName || entry.speciesName || "";
 }
 

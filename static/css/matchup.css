@@ -45,7 +45,7 @@
   margin-bottom: 12px;
   padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   background: rgba(244, 247, 251, 0.92);
 }
 
@@ -62,8 +62,8 @@
 }
 
 .matchup-filter-chip.active {
-  border-color: rgba(47, 92, 77, 0.42);
-  background: rgba(214, 233, 224, 0.92);
+  border-color: rgba(11, 107, 87, 0.42);
+  background: var(--pine-wash);
 }
 
 .matchup-config-box {
@@ -110,8 +110,8 @@
 
 .matchup-config-option.active,
 .matchup-config-toggle.active {
-  border-color: rgba(47, 92, 77, 0.42);
-  background: rgba(214, 233, 224, 0.92);
+  border-color: rgba(11, 107, 87, 0.42);
+  background: var(--pine-wash);
 }
 
 .matchup-overview {
@@ -246,7 +246,7 @@
   align-items: center;
   justify-content: center;
   min-height: 38px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
 }
 
 .matchup-board-matrix-header,
@@ -260,6 +260,7 @@
   font-family: var(--mono-font);
   font-size: 11px;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .matchup-board-matrix-cell.neutral {
@@ -268,13 +269,13 @@
 }
 
 .matchup-board-matrix-cell.positive {
-  color: #1e5e46;
-  background: rgba(182, 226, 202, calc(0.18 + var(--matchup-cell-strength, 0) * 0.62));
+  color: var(--color-secondary);
+  background: rgba(11, 107, 87, calc(0.18 + var(--matchup-cell-strength, 0) * 0.4));
 }
 
 .matchup-board-matrix-cell.negative {
-  color: #8b3b35;
-  background: rgba(241, 189, 183, calc(0.18 + var(--matchup-cell-strength, 0) * 0.62));
+  color: var(--color-danger);
+  background: rgba(180, 35, 24, calc(0.18 + var(--matchup-cell-strength, 0) * 0.4));
 }
 
 .matchup-board-layout {
@@ -307,9 +308,9 @@
   display: grid;
   gap: 8px;
   padding: 8px;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--color-surface);
 }
 
 .matchup-board-entry-ally {
@@ -339,7 +340,7 @@
   justify-content: center;
   width: 44px;
   min-height: 44px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid rgba(138, 122, 106, 0.16);
   background: rgba(244, 247, 251, 0.96);
 }
@@ -404,7 +405,7 @@
 .matchup-board-move-head,
 .matchup-board-move-row {
   display: grid;
-  grid-template-columns: minmax(92px, 118px) minmax(0, 1fr);
+  grid-template-columns: minmax(92px, 118px) minmax(176px, 1fr);
   gap: 6px;
   align-items: center;
 }
@@ -441,6 +442,7 @@
 .matchup-board-hit {
   font-family: var(--mono-font);
   font-size: 11px;
+  font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
 
@@ -557,7 +559,7 @@
 
 .matchup-board-speed-panel {
   padding: 10px;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: rgba(244, 247, 251, 0.92);
 }
@@ -578,7 +580,7 @@
   gap: 6px;
   align-items: center;
   padding: 6px 4px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid rgba(138, 122, 106, 0.12);
   background: rgba(255, 255, 255, 0.9);
 }
@@ -618,9 +620,10 @@
   justify-content: center;
   min-width: 0;
   padding: 3px 6px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-family: var(--mono-font);
   font-size: 11px;
+  font-variant-numeric: tabular-nums;
   color: #2f6ea3;
   background: rgba(213, 230, 243, 0.92);
   gap: 5px;
@@ -671,6 +674,7 @@
   padding: 4px 8px;
   font-size: 11px;
   font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
 }
 
 .matchup-board-config-box {
@@ -739,5 +743,17 @@
   .matchup-board-targets,
   .matchup-board-move-hits {
     min-width: 260px;
+  }
+}
+
+/* At viewport 1281–1599 the matchup board is in 3-column mode (ally | speed |
+   opponent), so each entry's `side-main` drops to 208–367 px. The inline
+   move-row needs ~274 px (move-name 92–118 + targets/hits min 176), which
+   would otherwise trigger a horizontal scrollbar inside `.matchup-board-table-wrap`.
+   Stack the row instead so the moves table never scrolls in this range. */
+@media (min-width: 769px) and (max-width: 1599px) {
+  .matchup-board-entry .matchup-board-move-head,
+  .matchup-board-entry .matchup-board-move-row {
+    grid-template-columns: 1fr;
   }
 }

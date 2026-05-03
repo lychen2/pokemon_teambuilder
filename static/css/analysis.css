@@ -15,7 +15,7 @@
 .analysis-tab.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: white;
+  color: var(--color-surface);
 }
 
 .analysis-detail-panel {
@@ -63,7 +63,7 @@
   padding: 4px;
   border-radius: 10px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.98);
+  background: var(--color-surface);
   text-align: center;
   box-shadow: inset 0 0 0 var(--matrix-cell-ring, 0) rgba(17, 24, 39, 0.08);
 }
@@ -99,7 +99,7 @@
   justify-content: center;
   gap: 4px;
   padding: 7px 9px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: rgba(244, 247, 251, 0.92);
   font-size: 11px;
@@ -112,15 +112,15 @@
 }
 
 .analysis-matrix-cell.good {
-  border-color: rgba(47, 125, 97, 0.28);
-  background: rgba(47, 125, 97, var(--matrix-cell-alpha, 0.08));
+  border-color: rgba(11, 107, 87, 0.28);
+  background: rgba(11, 107, 87, var(--matrix-cell-alpha, 0.08));
   color: var(--good);
 }
 
 .analysis-matrix-cell.bad,
 .analysis-matrix-row-card.bad .analysis-matrix-label {
-  border-color: rgba(182, 77, 69, 0.25);
-  background: rgba(182, 77, 69, var(--matrix-cell-alpha, 0.08));
+  border-color: rgba(180, 35, 24, 0.25);
+  background: rgba(180, 35, 24, var(--matrix-cell-alpha, 0.08));
   color: var(--bad);
 }
 
@@ -130,8 +130,8 @@
   min-height: 16px;
   margin-bottom: 2px;
   padding: 1px 5px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  border-radius: var(--radius-pill);
+  background: rgba(238, 243, 246, 0.85);
   color: currentColor;
   font-size: 10px;
   font-weight: 700;
@@ -157,9 +157,9 @@
   display: grid;
   gap: 6px;
   padding: 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.98);
+  background: var(--color-surface);
 }
 
 .analysis-gap-grid,
@@ -176,7 +176,7 @@
   display: grid;
   gap: 6px;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: rgba(244, 247, 251, 0.92);
 }
@@ -195,7 +195,7 @@
 .analysis-identity-card,
 .library-compare-panel {
   padding: 12px;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: rgba(244, 247, 251, 0.92);
 }
@@ -215,9 +215,9 @@
   display: grid;
   gap: 8px;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.98);
+  background: var(--color-surface);
 }
 
 .library-compare-row {
@@ -228,9 +228,9 @@
 .library-compare-cell {
   min-width: 0;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.98);
+  background: var(--color-surface);
 }
 
 .library-compare-label {
@@ -239,8 +239,8 @@
 }
 
 .library-compare-cell.is-diff {
-  border-color: rgba(47, 92, 77, 0.26);
-  background: rgba(214, 233, 224, 0.58);
+  border-color: rgba(11, 107, 87, 0.32);
+  background: var(--pine-wash);
 }
 
 .library-compare-pill-cell {
@@ -291,8 +291,8 @@
   gap: 6px;
   padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.98);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
 }
 
 .recommend-slider-field-wide {
@@ -340,8 +340,8 @@
   min-width: 0;
   padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.96);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
 }
 
 .recommend-compare-head-card strong {
@@ -362,13 +362,14 @@
   gap: 8px;
   align-items: center;
   padding: 7px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: rgba(244, 247, 251, 0.92);
   font-size: 12px;
 }
 
 .recommend-compare-row strong {
   font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
   color: var(--accent);
 }
 
@@ -393,35 +394,25 @@
   display: grid;
   gap: 8px;
   padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 247, 251, 0.78));
-  position: relative;
+  border: 1px solid rgba(11, 107, 87, 0.32);
+  border-radius: var(--radius-sm);
+  background: var(--pine-wash);
 }
 
-.recommend-insight-block::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  border-radius: 12px 0 0 12px;
-  background: var(--good, #2f9e60);
-  opacity: 0.7;
-}
-
-.recommend-insight-block.recommend-insight-block-negative::before {
-  background: var(--bad, #c0573e);
+.recommend-insight-block.recommend-insight-block-negative {
+  border-color: rgba(180, 35, 24, 0.32);
+  background: var(--ember-wash);
 }
 
 .recommend-insight-block .analysis-label {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--ink);
+  color: var(--color-secondary);
 }
 
 .recommend-insight-block.recommend-insight-block-negative .analysis-label {
-  color: var(--bad, #b04634);
+  color: var(--color-danger);
 }
 
 .recommend-insight-list {
@@ -433,14 +424,14 @@
 .recommend-insight-list .info-pill {
   font-size: 12px;
   padding: 4px 10px;
-  background: rgba(47, 158, 96, 0.08);
-  border-color: rgba(47, 158, 96, 0.22);
+  background: var(--color-surface);
+  border-color: rgba(11, 107, 87, 0.22);
   color: var(--ink);
 }
 
 .recommend-insight-block.recommend-insight-block-negative .recommend-insight-list .info-pill {
-  background: rgba(192, 87, 62, 0.08);
-  border-color: rgba(192, 87, 62, 0.24);
+  background: var(--color-surface);
+  border-color: rgba(180, 35, 24, 0.24);
 }
 
 .recommend-detail-row {
@@ -452,8 +443,8 @@
 }
 
 .recommend-detail-pill-negative {
-  border-color: rgba(182, 77, 69, 0.2);
-  background: rgba(182, 77, 69, 0.08);
+  border-color: rgba(180, 35, 24, 0.2);
+  background: rgba(180, 35, 24, 0.08);
   color: var(--bad);
 }
 
@@ -479,8 +470,8 @@
 }
 
 .recommend-config-alert {
-  border-color: rgba(182, 77, 69, 0.25);
-  background: rgba(182, 77, 69, 0.08);
+  border-color: rgba(180, 35, 24, 0.25);
+  background: rgba(180, 35, 24, 0.08);
   color: var(--bad);
 }
 
@@ -521,7 +512,7 @@
 .recommend-toggle.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: white;
+  color: var(--color-surface);
 }
 
 .recommend-toggle-head {
@@ -583,19 +574,19 @@
   flex-direction: column;
   gap: 6px;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.98);
+  background: var(--color-surface);
 }
 
 .analysis-list-card.good,
 .analysis-core-card.good {
-  border-color: rgba(47, 125, 97, 0.35);
+  border-color: rgba(11, 107, 87, 0.35);
 }
 
 .analysis-list-card.bad,
 .analysis-core-card.bad {
-  border-color: rgba(182, 77, 69, 0.35);
+  border-color: rgba(180, 35, 24, 0.35);
 }
 
 .analysis-list-head {
@@ -641,14 +632,14 @@
 }
 
 .analysis-alert-pill {
-  border: 1px solid rgba(182, 77, 69, 0.2);
-  background: rgba(182, 77, 69, 0.08);
+  border: 1px solid rgba(180, 35, 24, 0.2);
+  background: rgba(180, 35, 24, 0.08);
   color: var(--bad);
 }
 
 .analysis-good-pill {
-  border: 1px solid rgba(47, 125, 97, 0.2);
-  background: rgba(47, 125, 97, 0.08);
+  border: 1px solid rgba(11, 107, 87, 0.2);
+  background: rgba(11, 107, 87, 0.08);
   color: var(--good);
 }
 
@@ -686,7 +677,7 @@
 
 .analysis-overview .metric-card {
   padding: 12px 14px;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
 }
 
 .analysis-overview .metric-card strong {
@@ -733,6 +724,17 @@
   .analysis-matrix-cell,
   .analysis-matrix-label {
     font-size: 10px;
+  }
+}
+
+/* The coverage matrix has a hard 514 px min-content (label 124 + 6 cells of
+   58 + gaps) which won't fit in the 2-column `.analysis-detail-grid` until
+   the subpanel content area passes ~530 px (viewport ~1600 px+). Below that,
+   force the coverage detail-grid to stack so 承伤 / 输出 occupy full width
+   and never need a horizontal scrollbar. The roles detail-grid is unaffected. */
+@media (max-width: 1599px) {
+  #analysis-coverage-panel .analysis-detail-grid {
+    grid-template-columns: 1fr;
   }
 }
 
