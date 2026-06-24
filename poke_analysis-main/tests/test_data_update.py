@@ -20,9 +20,9 @@ class VgcpastesCsvSourceTests(unittest.TestCase):
 
         rows = vgcpastes.parse_vgcpastes_rows(limit=2)
 
-        self.assertEqual([row.team_id for row in rows], ["MB129", "MB128"])
-        self.assertEqual(rows[0].species_names[:3], ("Floette-Mega", "Pyroar-Mega", "Ninetales"))
-        self.assertEqual(rows[0].owner, "Snorlaxpikachu1")
+        self.assertEqual([row.team_id for row in rows], ["MB259", "MB257"])
+        self.assertEqual(rows[0].species_names[:3], ("Metagross-Mega", "Charizard", "Toxapex"))
+        self.assertEqual(rows[0].owner, "ub_slow")
 
 
 
@@ -103,6 +103,24 @@ class TeamPlannerIconManifestTests(unittest.TestCase):
         self.assertEqual(icon_file(manifest, "raichumegax"), "0026_002_mf_n.png")
         self.assertEqual(icon_file(manifest, "raichumegay"), "0026_003_mf_n.png")
         self.assertEqual(icon_file(manifest, "charizardmegay"), "0006_002_mf_n.png")
+
+    def test_defaults_to_all_pokedex_icons_when_usable_ids_omitted(self):
+        pokedex = {
+            "kyogre": {"num": 382, "name": "Kyogre"},
+            "fluttermane": {"num": 987, "name": "Flutter Mane"},
+            "palafin": {"num": 964, "name": "Palafin"},
+        }
+        files = [
+            {"name": "0382_000_uk_n.png", "sourcePath": "/repo/0382_000_uk_n.png", "sourceUrl": "https://example.test/0382_000_uk_n.png"},
+            {"name": "0987_000_uk_n.png", "sourcePath": "/repo/0987_000_uk_n.png", "sourceUrl": "https://example.test/0987_000_uk_n.png"},
+            {"name": "0964_000_mf_n.png", "sourcePath": "/repo/0964_000_mf_n.png", "sourceUrl": "https://example.test/0964_000_mf_n.png"},
+        ]
+
+        manifest = build_pokemon_manifest(pokedex, {}, None, files, {})
+
+        self.assertEqual(icon_file(manifest, "kyogre"), "0382_000_uk_n.png")
+        self.assertEqual(icon_file(manifest, "fluttermane"), "0987_000_uk_n.png")
+        self.assertEqual(icon_file(manifest, "palafin"), "0964_000_mf_n.png")
 
 
 

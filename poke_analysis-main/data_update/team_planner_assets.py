@@ -26,18 +26,16 @@ def sync_team_planner_assets(champions_payload):
     TEAM_PLANNER_ASSET_DIR.mkdir(parents=True, exist_ok=True)
     pokedex = load_json(STATS_DIR / "pokedex.json")
     forms_index = load_json(STATS_DIR / "forms_index.json")
-    usable_ids = champions_payload.get("usableSpeciesIds") or []
-
     with checkout_team_planner_repo() as repo_root:
         pokemon_files = local_asset_entries(repo_root / POKEMON_DIR, POKEMON_DIR)
         type_files = local_asset_entries(repo_root / TYPE_DIR, TYPE_DIR)
         planner_metadata = parse_team_planner_pokemon_metadata(
             (repo_root / POKEMON_METADATA_PATH).read_text(encoding="utf-8")
         )
-        pokemon_manifest = build_pokemon_manifest(pokedex, forms_index, usable_ids, pokemon_files, planner_metadata)
+        pokemon_manifest = build_pokemon_manifest(pokedex, forms_index, None, pokemon_files, planner_metadata)
         type_manifest = build_type_manifest(type_files)
-        copy_manifest_assets(pokemon_manifest, TEAM_PLANNER_ASSET_DIR / "pokemon")
-        copy_manifest_assets(type_manifest, TEAM_PLANNER_ASSET_DIR / "type")
+        copy_asset_files(pokemon_files, TEAM_PLANNER_ASSET_DIR / "pokemon")
+        copy_asset_files(type_files, TEAM_PLANNER_ASSET_DIR / "type")
         remove_manifest_source_paths(pokemon_manifest)
         remove_manifest_source_paths(type_manifest)
 
@@ -90,7 +88,7 @@ def parse_team_planner_pokemon_metadata(text):
 
 def build_pokemon_manifest(pokedex, forms_index, usable_ids, files, planner_metadata=None):
     by_num = group_pokemon_files(files)
-    species_ids = [species_id for species_id in usable_ids if species_id in pokedex]
+    species_ids = [species_id for species_id in (usable_ids or pokedex.keys()) if species_id in pokedex]
     planner_lookup = build_planner_species_lookup(planner_metadata or {})
     manifest = {}
     for species_id in species_ids:
@@ -230,6 +228,12 @@ def build_type_manifest(files):
 def remove_manifest_source_paths(manifest):
     for entry in manifest.values():
         entry.pop("sourcePath", None)
+
+
+def copy_asset_files(files, destination):
+    destination.mkdir(parents=True, exist_ok=True)
+    for file_entry in files:
+        shutil.copyfile(file_entry["sourcePath"], destination / file_entry["name"])
 
 
 def copy_manifest_assets(manifest, destination):

@@ -7,6 +7,7 @@ const POKEDEX_PATH = path.join(ROOT_DIR, "poke_analysis-main/stats/pokedex.json"
 const OUTPUT_PATH = path.join(ROOT_DIR, "static/poke-icons-map.json");
 const ICON_PREFIX = "./Poke%20Icons/";
 const FORM_FALLBACKS = {
+  kyogre: "kyogreprimal",
   meowsticfmega: "meowsticmmega",
   polteageistantique: "polteageist",
   sinistchamasterpiece: "sinistcha",

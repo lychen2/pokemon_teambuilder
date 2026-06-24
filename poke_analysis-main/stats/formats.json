@@ -1127,6 +1127,16 @@
     ]
   },
   {
+    "name": "[Gen 9 Champions] NatDex Draft",
+    "mod": "champions",
+    "searchShow": false,
+    "itemClauseDefault": true,
+    "ruleset": [
+      "Standard Draft",
+      "NatDex Mod"
+    ]
+  },
+  {
     "name": "[Gen 8] Draft",
     "mod": "gen8",
     "searchShow": false,
@@ -2313,6 +2323,7 @@
       "Arceus",
       "Azumarill",
       "Baxcalibur",
+      "Basculegion-M",
       "Calyrex-Ice",
       "Calyrex-Shadow",
       "Chi-Yu",
@@ -2362,6 +2373,7 @@
       "Solgaleo",
       "Spectrier",
       "Terapagos",
+      "Thundurus-Therian",
       "Ting-Lu",
       "Ursaluna",
       "Ursaluna-Bloodmoon",

@@ -1,11 +1,10 @@
 {
   "productName": "Poke Type",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "com.lychen2.poketype",
   "build": {
     "beforeBuildCommand": "npm run desktop:prepare",
     "beforeDevCommand": "npm run desktop:prepare",
-    "devUrl": "http://localhost:1420",
     "frontendDist": "../dist/desktop"
   },
   "app": {

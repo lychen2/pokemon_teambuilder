@@ -39,8 +39,19 @@ function getPokeIconUrl(config, datasets) {
   return datasets?.pokeIconMap?.[speciesId] || "";
 }
 
+function getSpriteLabel(config, state) {
+  const speciesId = config?.speciesId || config?.spriteSpeciesId || "";
+  if (state?.language === "zh" && speciesId) {
+    const localized = state?.localizedSpeciesNames?.get(speciesId) || state?.datasets?.localizedSpeciesNames?.get(speciesId);
+    if (localized) {
+      return localized;
+    }
+  }
+  return config?.displayName || config?.speciesName || config?.speciesId || "Pokemon";
+}
+
 export function spriteMarkup(config, state) {
-  const label = config?.displayName || config?.speciesName || config?.speciesId || "Pokemon";
+  const label = getSpriteLabel(config, state);
   if (state?.iconScheme === ICON_SCHEMES.POKE_ICONS) {
     const url = getPokeIconUrl(config, state.datasets);
     if (url) {

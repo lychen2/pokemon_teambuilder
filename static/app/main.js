@@ -77,6 +77,7 @@ const MAX_TEAM_SIZE = 6;
 const DEFAULT_CONFIG_LEVEL = 50;
 const DEFAULT_PRESET_PATH = "./config-default.txt";
 const DEFAULT_PRESET_NAME = "Default";
+const DEFAULT_LIBRARY_SOURCE = "default-preset";
 const VGCPASTES_SETS_PATH = "./static/paste_sets_champions_mb.json";
 const IMPORT_FEEDBACK_ERROR = "error";
 const LIBRARY_SEARCH_WEIGHTS = Object.freeze({
@@ -4110,8 +4111,36 @@ async function attachPresetSources(configs, path) {
   const sourceIndex = await loadVgcpastesSourceIndex();
   return configs.map((config) => {
     const source = sourceIndex.get(getVgcpastesSourceKey(config));
-    return source ? {...config, source} : config;
+    return {
+      ...config,
+      librarySource: DEFAULT_LIBRARY_SOURCE,
+      source: source || config.source,
+    };
   });
+}
+
+function isDefaultLibraryConfig(config = {}) {
+  if (config.librarySource === DEFAULT_LIBRARY_SOURCE) {
+    return true;
+  }
+  if (config.source && typeof config.source === "object" && config.source.teamId) {
+    return true;
+  }
+  return /^VGCPastes\s+(?:MB|PC)[0-9A-Z]+/i.test(String(config.note || ""));
+}
+
+function applyDefaultPresetLibrary(configs, feedback) {
+  const customConfigs = state.library.filter((config) => !isDefaultLibraryConfig(config));
+  const usedIds = new Set(customConfigs.map((config) => config.id));
+  const defaultConfigs = ensureUniqueConfigIds(configs, usedIds);
+  const replacedCount = state.library.filter(isDefaultLibraryConfig).length;
+  state.library = [...customConfigs, ...defaultConfigs];
+  syncTeamWithLibrary();
+  refreshDerivedState();
+  renderAll();
+  renderLibraryImportFeedback(buildImportFeedbackPayload(configs, feedback));
+  scheduleStatePersist();
+  return {defaultCount: defaultConfigs.length, customCount: customConfigs.length, replacedCount};
 }
 
 async function loadPresetLibrary(path, name, mode = "replace") {
@@ -4128,6 +4157,11 @@ async function loadPresetLibrary(path, name, mode = "replace") {
       resolveConvertedPoint: promptMissingPoint,
     });
     const configsWithSources = await attachPresetSources(configs, path);
+    if (path === DEFAULT_PRESET_PATH && mode === "replace") {
+      const result = applyDefaultPresetLibrary(configsWithSources, feedback);
+      announceStatus("status.defaultPresetUpdated", result, {toastType: "success"});
+      return configsWithSources;
+    }
     applyImportedLibrary(configsWithSources, feedback, mode);
     announceStatus("status.loadedPreset", {name}, {toastType: "success"});
     return configsWithSources;

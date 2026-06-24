@@ -104,10 +104,7 @@ def format_metadata(active_format):
 
 def get_usable_tier_window(champions_table, active_format):
     format_slices = champions_table.get("formatSlices", {})
-    has_restricted = bool(active_format.get("restricted")) or any(
-        "Restricted" in rule for rule in active_format.get("ruleset", [])
-    )
-    start_key = "Uber" if has_restricted else "OU"
+    start_key = "Uber"
     start_index = int(format_slices.get(start_key, 0))
     end_index = int(format_slices.get("NFE", len(champions_table.get("tiers", []))))
     if end_index <= start_index:

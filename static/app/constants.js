@@ -11,6 +11,7 @@ export const DATA_PATHS = {
   usageOfficial: "./static/usage_official.json",
   pasteTeams: "./static/paste_teams_champions_mb.json",
   teamPlannerAssets: "./static/team-planner-assets.json",
+  pokeIconsMap: "./static/poke-icons-map.json",
 };
 
 export const IS_DESKTOP_RUNTIME = window.__TAURI_INTERNALS__ !== undefined;
@@ -93,10 +94,10 @@ export const NATURE_TRANSLATIONS = Object.freeze({
   Bashful: "害羞",
   Bold: "大胆",
   Brave: "勇敢",
-  Calm: "沉着",
+  Calm: "温和",
   Careful: "慎重",
   Docile: "坦率",
-  Gentle: "温和",
+  Gentle: "温顺",
   Hardy: "勤奋",
   Hasty: "急躁",
   Impish: "淘气",

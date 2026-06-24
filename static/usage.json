@@ -8,18 +8,18 @@
     "activeFormat": "[Gen 9 Champions] VGC 2026 Reg M-B",
     "expectedMetagame": "gen9championsvgc2026regmb",
     "month": "2026-05",
-    "generatedAt": "2026-06-20T12:54:12.649988+00:00",
+    "generatedAt": "2026-06-24T17:45:50.375899+00:00",
     "skippedSpeciesErrors": []
   },
   "data": {
     "Garchomp": {
-      "Raw count": 24428,
+      "Raw count": 28076,
       "usage": 100,
       "rank": 1,
       "usageRankScore": 100,
       "usagePercent": null,
-      "winRate": 53.5,
-      "record": "13063-11353-12",
+      "winRate": 52.625,
+      "record": "14769-13295-12",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Garchomp",
       "Moves": {
         "Dragon Claw": 89.4,
@@ -62,13 +62,13 @@
       }
     },
     "Sinistcha": {
-      "Raw count": 14441,
+      "Raw count": 18484,
       "usage": 99,
       "rank": 2,
       "usageRankScore": 99,
       "usagePercent": null,
-      "winRate": 51.219,
-      "record": "7394-7042-5",
+      "winRate": 50.284,
+      "record": "9291-9186-7",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Sinistcha",
       "Moves": {
         "Rage Powder": 99.2,
@@ -111,13 +111,13 @@
       }
     },
     "Basculegion": {
-      "Raw count": 25642,
+      "Raw count": 28439,
       "usage": 98,
       "rank": 3,
       "usageRankScore": 98,
       "usagePercent": null,
-      "winRate": 54.504,
-      "record": "13971-11661-10",
+      "winRate": 54.286,
+      "record": "15433-12995-11",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Basculegion",
       "Moves": {
         "Last Respects": 100.0,
@@ -161,13 +161,13 @@
       }
     },
     "Whimsicott": {
-      "Raw count": 12862,
+      "Raw count": 15952,
       "usage": 97,
       "rank": 4,
       "usageRankScore": 97,
       "usagePercent": null,
-      "winRate": 53.098,
-      "record": "6826-6029-7",
+      "winRate": 52.482,
+      "record": "8368-7576-8",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Whimsicott",
       "Moves": {
         "Tailwind": 98.5,
@@ -211,13 +211,13 @@
       }
     },
     "Kingambit": {
-      "Raw count": 24474,
+      "Raw count": 26485,
       "usage": 96,
       "rank": 5,
       "usageRankScore": 96,
       "usagePercent": null,
-      "winRate": 55.753,
-      "record": "13640-10824-10",
+      "winRate": 55.49,
+      "record": "14691-11783-11",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Kingambit",
       "Moves": {
         "Sucker Punch": 99.5,
@@ -260,13 +260,13 @@
       }
     },
     "Staraptor": {
-      "Raw count": 914,
+      "Raw count": 3342,
       "usage": 95,
       "rank": 6,
       "usageRankScore": 95,
       "usagePercent": null,
-      "winRate": 46.061,
-      "record": "421-493",
+      "winRate": 43.477,
+      "record": "1453-1889",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Staraptor",
       "Moves": {
         "Close Combat": 98.2,
@@ -306,13 +306,13 @@
       }
     },
     "Incineroar": {
-      "Raw count": 19024,
+      "Raw count": 22351,
       "usage": 94,
       "rank": 7,
       "usageRankScore": 94,
       "usagePercent": null,
-      "winRate": 52.768,
-      "record": "10033-8980-11",
+      "winRate": 52.016,
+      "record": "11619-10718-14",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Incineroar",
       "Moves": {
         "Fake Out": 99.9,
@@ -355,13 +355,13 @@
       }
     },
     "Charizard": {
-      "Raw count": 18187,
+      "Raw count": 20064,
       "usage": 93,
       "rank": 8,
       "usageRankScore": 93,
       "usagePercent": null,
-      "winRate": 54.105,
-      "record": "9835-8342-10",
+      "winRate": 53.952,
+      "record": "10820-9234-10",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Charizard",
       "Moves": {
         "Protect": 98.4,
@@ -400,13 +400,13 @@
       }
     },
     "Raichu": {
-      "Raw count": 766,
+      "Raw count": 2313,
       "usage": 92,
       "rank": 9,
       "usageRankScore": 92,
       "usagePercent": null,
-      "winRate": 38.512,
-      "record": "295-471",
+      "winRate": 43.818,
+      "record": "1013-1299-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Raichu",
       "Moves": {
         "Fake Out": 71.6,
@@ -449,13 +449,13 @@
       }
     },
     "Pelipper": {
-      "Raw count": 6310,
+      "Raw count": 8677,
       "usage": 91,
       "rank": 10,
       "usageRankScore": 91,
       "usagePercent": null,
-      "winRate": 50.46,
-      "record": "3183-3125-2",
+      "winRate": 50.23,
+      "record": "4357-4317-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Pelipper",
       "Moves": {
         "Hurricane": 98.9,
@@ -498,13 +498,13 @@
       }
     },
     "Sneasler": {
-      "Raw count": 19812,
+      "Raw count": 21502,
       "usage": 90,
       "rank": 11,
       "usageRankScore": 90,
       "usagePercent": null,
-      "winRate": 52.183,
-      "record": "10334-9469-9",
+      "winRate": 52.056,
+      "record": "11187-10303-12",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Sneasler",
       "Moves": {
         "Close Combat": 99.3,
@@ -548,13 +548,13 @@
       }
     },
     "Archaludon": {
-      "Raw count": 7989,
+      "Raw count": 9755,
       "usage": 89,
       "rank": 12,
       "usageRankScore": 89,
       "usagePercent": null,
-      "winRate": 51.083,
-      "record": "4079-3906-4",
+      "winRate": 51.235,
+      "record": "4995-4754-6",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Archaludon",
       "Moves": {
         "Electro Shot": 96.7,
@@ -598,13 +598,13 @@
       }
     },
     "Grimmsnarl": {
-      "Raw count": 742,
+      "Raw count": 3188,
       "usage": 88,
       "rank": 13,
       "usageRankScore": 88,
       "usagePercent": null,
-      "winRate": 45.013,
-      "record": "334-408",
+      "winRate": 45.358,
+      "record": "1445-1741-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Grimmsnarl",
       "Moves": {
         "Light Screen": 87.0,
@@ -648,13 +648,13 @@
       }
     },
     "Sylveon": {
-      "Raw count": 7724,
+      "Raw count": 9059,
       "usage": 87,
       "rank": 14,
       "usageRankScore": 87,
       "usagePercent": null,
-      "winRate": 51.56,
-      "record": "3982-3741-1",
+      "winRate": 50.662,
+      "record": "4588-4468-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Sylveon",
       "Moves": {
         "Hyper Voice": 99.9,
@@ -697,13 +697,13 @@
       }
     },
     "Swampert": {
-      "Raw count": 547,
+      "Raw count": 3070,
       "usage": 86,
       "rank": 15,
       "usageRankScore": 86,
       "usagePercent": null,
-      "winRate": 50.64,
-      "record": "277-270",
+      "winRate": 49.919,
+      "record": "1532-1537-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Swampert",
       "Moves": {
         "Protect": 94.2,
@@ -745,13 +745,13 @@
       }
     },
     "Metagross": {
-      "Raw count": 711,
+      "Raw count": 3146,
       "usage": 85,
       "rank": 16,
       "usageRankScore": 85,
       "usagePercent": null,
-      "winRate": 48.945,
-      "record": "348-363",
+      "winRate": 47.616,
+      "record": "1497-1647-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Metagross",
       "Moves": {
         "Protect": 89.8,
@@ -794,13 +794,13 @@
       }
     },
     "Farigiraf": {
-      "Raw count": 7612,
+      "Raw count": 9071,
       "usage": 84,
       "rank": 17,
       "usageRankScore": 84,
       "usagePercent": null,
-      "winRate": 49.672,
-      "record": "3780-3830-2",
+      "winRate": 50.121,
+      "record": "4545-4523-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Farigiraf",
       "Moves": {
         "Trick Room": 95.7,
@@ -844,13 +844,13 @@
       }
     },
     "Floette-Eternal": {
-      "Raw count": 15356,
+      "Raw count": 17770,
       "usage": 83,
       "rank": 18,
       "usageRankScore": 83,
       "usagePercent": null,
-      "winRate": 55.991,
-      "record": "8596-6756-4",
+      "winRate": 55.909,
+      "record": "9931-7831-8",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Floette-Eternal",
       "Moves": {
         "Protect": 99.8,
@@ -887,13 +887,13 @@
       }
     },
     "Gholdengo": {
-      "Raw count": 567,
+      "Raw count": 2584,
       "usage": 82,
       "rank": 19,
       "usageRankScore": 82,
       "usagePercent": null,
-      "winRate": 42.857,
-      "record": "243-324",
+      "winRate": 46.943,
+      "record": "1212-1370-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Gholdengo",
       "Moves": {
         "Make It Rain": 99.0,
@@ -935,13 +935,13 @@
       }
     },
     "Aerodactyl": {
-      "Raw count": 9140,
+      "Raw count": 9859,
       "usage": 81,
       "rank": 20,
       "usageRankScore": 81,
       "usagePercent": null,
-      "winRate": 52.319,
-      "record": "4780-4356-4",
+      "winRate": 50.974,
+      "record": "5024-4832-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Aerodactyl",
       "Moves": {
         "Rock Slide": 99.9,
@@ -985,13 +985,13 @@
       }
     },
     "Maushold": {
-      "Raw count": 3447,
+      "Raw count": 4126,
       "usage": 80,
       "rank": 21,
       "usageRankScore": 80,
       "usagePercent": null,
-      "winRate": 50.508,
-      "record": "1741-1706",
+      "winRate": 50.545,
+      "record": "2085-2040-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Maushold",
       "Moves": {
         "Follow Me": 95.4,
@@ -1035,13 +1035,13 @@
       }
     },
     "Annihilape": {
-      "Raw count": 296,
+      "Raw count": 807,
       "usage": 79,
       "rank": 22,
       "usageRankScore": 79,
       "usagePercent": null,
-      "winRate": 50.676,
-      "record": "150-146",
+      "winRate": 45.973,
+      "record": "371-436",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Annihilape",
       "Moves": {
         "Rage Fist": 93.2,
@@ -1085,13 +1085,13 @@
       }
     },
     "Sableye": {
-      "Raw count": 2712,
+      "Raw count": 3445,
       "usage": 78,
       "rank": 23,
       "usageRankScore": 78,
       "usagePercent": null,
-      "winRate": 45.299,
-      "record": "1228-1483-1",
+      "winRate": 45.617,
+      "record": "1571-1873-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Sableye",
       "Moves": {
         "Rain Dance": 78.8,
@@ -1134,13 +1134,13 @@
       }
     },
     "Mawile": {
-      "Raw count": 209,
+      "Raw count": 1234,
       "usage": 77,
       "rank": 24,
       "usageRankScore": 77,
       "usagePercent": null,
-      "winRate": 48.325,
-      "record": "101-108",
+      "winRate": 49.23,
+      "record": "607-626-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Mawile",
       "Moves": {
         "Play Rough": 97.2,
@@ -1175,13 +1175,13 @@
       }
     },
     "Ninetales-Alola": {
-      "Raw count": 2566,
+      "Raw count": 2975,
       "usage": 76,
       "rank": 25,
       "usageRankScore": 76,
       "usagePercent": null,
-      "winRate": 50.409,
-      "record": "1293-1272-1",
+      "winRate": 50.303,
+      "record": "1496-1478-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Ninetales-Alola",
       "Moves": {
         "Blizzard": 95.2,
@@ -1224,13 +1224,13 @@
       }
     },
     "Torkoal": {
-      "Raw count": 2433,
+      "Raw count": 3080,
       "usage": 75,
       "rank": 26,
       "usageRankScore": 75,
       "usagePercent": null,
-      "winRate": 46.691,
-      "record": "1136-1297",
+      "winRate": 47.987,
+      "record": "1478-1602",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Torkoal",
       "Moves": {
         "Eruption": 97.2,
@@ -1273,13 +1273,13 @@
       }
     },
     "Froslass": {
-      "Raw count": 5818,
+      "Raw count": 6227,
       "usage": 74,
       "rank": 27,
       "usageRankScore": 74,
       "usagePercent": null,
-      "winRate": 55.801,
-      "record": "3245-2570-3",
+      "winRate": 55.749,
+      "record": "3470-2754-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Froslass",
       "Moves": {
         "Blizzard": 98.9,
@@ -1316,13 +1316,13 @@
       }
     },
     "Talonflame": {
-      "Raw count": 3561,
+      "Raw count": 3789,
       "usage": 73,
       "rank": 28,
       "usageRankScore": 73,
       "usagePercent": null,
-      "winRate": 48.357,
-      "record": "1722-1839",
+      "winRate": 47.981,
+      "record": "1818-1971",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Talonflame",
       "Moves": {
         "Tailwind": 97.8,
@@ -1365,13 +1365,13 @@
       }
     },
     "Rotom-Wash": {
-      "Raw count": 5270,
+      "Raw count": 5368,
       "usage": 72,
       "rank": 29,
       "usageRankScore": 72,
       "usagePercent": null,
-      "winRate": 47.6,
-      "record": "2507-2760-3",
+      "winRate": 47.513,
+      "record": "2549-2816-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Rotom-Wash",
       "Moves": {
         "Hydro Pump": 96.4,
@@ -1413,13 +1413,13 @@
       }
     },
     "Glimmora": {
-      "Raw count": 5546,
+      "Raw count": 5161,
       "usage": 71,
       "rank": 30,
       "usageRankScore": 71,
       "usagePercent": null,
-      "winRate": 50.721,
-      "record": "2812-2732-2",
+      "winRate": 50.358,
+      "record": "2598-2561-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Glimmora",
       "Moves": {
         "Power Gem": 99.7,
@@ -1462,13 +1462,13 @@
       }
     },
     "Delphox": {
-      "Raw count": 3511,
+      "Raw count": 4384,
       "usage": 70,
       "rank": 31,
       "usageRankScore": 70,
       "usagePercent": null,
-      "winRate": 51.339,
-      "record": "1801-1707-3",
+      "winRate": 51.608,
+      "record": "2261-2120-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Delphox",
       "Moves": {
         "Protect": 98.6,
@@ -1504,13 +1504,13 @@
       }
     },
     "Dragonite": {
-      "Raw count": 5815,
+      "Raw count": 6065,
       "usage": 69,
       "rank": 32,
       "usageRankScore": 69,
       "usagePercent": null,
-      "winRate": 54.084,
-      "record": "3144-2669-2",
+      "winRate": 53.677,
+      "record": "3254-2808-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Dragonite",
       "Moves": {
         "Protect": 67.6,
@@ -1553,13 +1553,13 @@
       }
     },
     "Tyranitar": {
-      "Raw count": 4692,
+      "Raw count": 4900,
       "usage": 68,
       "rank": 33,
       "usageRankScore": 68,
       "usagePercent": null,
-      "winRate": 48.785,
-      "record": "2288-2402-2",
+      "winRate": 48.745,
+      "record": "2388-2511-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Tyranitar",
       "Moves": {
         "Rock Slide": 98.8,
@@ -1602,13 +1602,13 @@
       }
     },
     "Blastoise": {
-      "Raw count": 2363,
+      "Raw count": 2247,
       "usage": 67,
       "rank": 34,
       "usageRankScore": 67,
       "usagePercent": null,
-      "winRate": 49.556,
-      "record": "1171-1192",
+      "winRate": 49.844,
+      "record": "1120-1127",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Blastoise",
       "Moves": {
         "Water Spout": 93.4,
@@ -1646,13 +1646,13 @@
       }
     },
     "Milotic": {
-      "Raw count": 2765,
+      "Raw count": 2995,
       "usage": 66,
       "rank": 35,
       "usageRankScore": 66,
       "usagePercent": null,
-      "winRate": 45.461,
-      "record": "1257-1508",
+      "winRate": 45.109,
+      "record": "1351-1644",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Milotic",
       "Moves": {
         "Scald": 58.6,
@@ -1696,13 +1696,13 @@
       }
     },
     "Venusaur": {
-      "Raw count": 5752,
+      "Raw count": 6142,
       "usage": 65,
       "rank": 36,
       "usageRankScore": 65,
       "usagePercent": null,
-      "winRate": 49.861,
-      "record": "2866-2882-4",
+      "winRate": 49.463,
+      "record": "3036-3102-4",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Venusaur",
       "Moves": {
         "Sludge Bomb": 95.4,
@@ -1744,14 +1744,62 @@
         "Hardy:2/0/0/32/0/32": 27.2
       }
     },
+    "Hydreigon": {
+      "Raw count": 2808,
+      "usage": 64,
+      "rank": 37,
+      "usageRankScore": 64,
+      "usagePercent": null,
+      "winRate": 50.57,
+      "record": "1420-1388",
+      "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Hydreigon",
+      "Moves": {
+        "Dark Pulse": 96.9,
+        "Draco Meteor": 91.9,
+        "Snarl": 61.1,
+        "Earth Power": 56.4,
+        "Protect": 23.5,
+        "Heat Wave": 20.0,
+        "U-turn": 12.3,
+        "Tailwind": 9.1,
+        "Flamethrower": 7.9,
+        "Dragon Pulse": 7.3
+      },
+      "Abilities": {
+        "Levitate": 100.0
+      },
+      "Items": {
+        "Choice Scarf": 73.3,
+        "Life Orb": 18.2,
+        "Chople Berry": 1.7,
+        "Haban Berry": 1.7,
+        "Black Glasses": 1.3,
+        "Scope Lens": 1.2,
+        "Focus Sash": 1.1,
+        "Roseli Berry": 0.6,
+        "Sitrus Berry": 0.3,
+        "White Herb": 0.1
+      },
+      "Teammates": {
+        "Metagross": 0.0,
+        "Sinistcha": 0.0,
+        "Sneasler": 0.0,
+        "Whimsicott": 0.0,
+        "Incineroar": 0.0,
+        "Pelipper": 0.0
+      },
+      "Spreads": {
+        "Hardy:2/0/0/32/0/32": 57.4
+      }
+    },
     "Politoed": {
-      "Raw count": 2514,
+      "Raw count": 2532,
       "usage": 63,
       "rank": 38,
       "usageRankScore": 63,
       "usagePercent": null,
-      "winRate": 51.75,
-      "record": "1300-1212-2",
+      "winRate": 51.106,
+      "record": "1293-1237-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Politoed",
       "Moves": {
         "Weather Ball": 89.9,
@@ -1794,13 +1842,13 @@
       }
     },
     "Tsareena": {
-      "Raw count": 961,
+      "Raw count": 994,
       "usage": 62,
       "rank": 39,
       "usageRankScore": 62,
       "usagePercent": null,
-      "winRate": 43.496,
-      "record": "418-543",
+      "winRate": 45.02,
+      "record": "447-546-1",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Tsareena",
       "Moves": {
         "Triple Axel": 86.6,
@@ -1843,13 +1891,13 @@
       }
     },
     "Gengar": {
-      "Raw count": 3050,
+      "Raw count": 3137,
       "usage": 61,
       "rank": 40,
       "usageRankScore": 61,
       "usagePercent": null,
-      "winRate": 52.049,
-      "record": "1585-1460-5",
+      "winRate": 50.622,
+      "record": "1587-1548-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Gengar",
       "Moves": {
         "Shadow Ball": 94.4,
@@ -1887,13 +1935,13 @@
       }
     },
     "Kangaskhan": {
-      "Raw count": 2632,
+      "Raw count": 2686,
       "usage": 60,
       "rank": 41,
       "usageRankScore": 60,
       "usagePercent": null,
-      "winRate": 47.492,
-      "record": "1250-1382",
+      "winRate": 48.064,
+      "record": "1291-1395",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Kangaskhan",
       "Moves": {
         "Fake Out": 99.8,
@@ -1936,13 +1984,13 @@
       }
     },
     "Pyroar": {
-      "Raw count": 88,
+      "Raw count": 575,
       "usage": 59,
       "rank": 42,
       "usageRankScore": 59,
       "usagePercent": null,
-      "winRate": 52.273,
-      "record": "46-42",
+      "winRate": 52.87,
+      "record": "303-270-2",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Pyroar",
       "Moves": {
         "Heat Wave": 99.6,
@@ -1977,13 +2025,13 @@
       }
     },
     "Gardevoir": {
-      "Raw count": 2038,
+      "Raw count": 1947,
       "usage": 58,
       "rank": 43,
       "usageRankScore": 58,
       "usagePercent": null,
-      "winRate": 48.626,
-      "record": "991-1047",
+      "winRate": 48.177,
+      "record": "938-1009",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Gardevoir",
       "Moves": {
         "Hyper Voice": 89.6,
@@ -2023,13 +2071,13 @@
       }
     },
     "Corviknight": {
-      "Raw count": 3375,
+      "Raw count": 3287,
       "usage": 57,
       "rank": 44,
       "usageRankScore": 57,
       "usagePercent": null,
-      "winRate": 49.852,
-      "record": "1682-1692-1",
+      "winRate": 49.528,
+      "record": "1628-1659",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Corviknight",
       "Moves": {
         "Brave Bird": 85.4,
@@ -2072,13 +2120,13 @@
       }
     },
     "Scrafty": {
-      "Raw count": 75,
+      "Raw count": 417,
       "usage": 56,
       "rank": 45,
       "usageRankScore": 56,
       "usagePercent": null,
-      "winRate": 42.667,
-      "record": "32-43",
+      "winRate": 44.604,
+      "record": "186-231",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Scrafty",
       "Moves": {
         "Fake Out": 91.1,
@@ -2121,13 +2169,13 @@
       }
     },
     "Vivillon": {
-      "Raw count": 2848,
+      "Raw count": 2697,
       "usage": 55,
       "rank": 46,
       "usageRankScore": 55,
       "usagePercent": null,
-      "winRate": 54.143,
-      "record": "1542-1306",
+      "winRate": 54.06,
+      "record": "1458-1239",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Vivillon",
       "Moves": {
         "Sleep Powder": 92.3,
@@ -2165,13 +2213,13 @@
       }
     },
     "Eelektross": {
-      "Raw count": 132,
+      "Raw count": 419,
       "usage": 54,
       "rank": 47,
       "usageRankScore": 54,
       "usagePercent": null,
-      "winRate": 41.667,
-      "record": "55-77",
+      "winRate": 41.05,
+      "record": "172-247",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Eelektross",
       "Moves": {
         "Protect": 91.8,
@@ -2205,13 +2253,13 @@
       }
     },
     "Scovillain": {
-      "Raw count": 3449,
+      "Raw count": 3579,
       "usage": 53,
       "rank": 48,
       "usageRankScore": 53,
       "usagePercent": null,
-      "winRate": 56.509,
-      "record": "1948-1499-2",
+      "winRate": 57.516,
+      "record": "2057-1519-3",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Scovillain",
       "Moves": {
         "Protect": 98.9,
@@ -2249,13 +2297,13 @@
       }
     },
     "Primarina": {
-      "Raw count": 1064,
+      "Raw count": 1122,
       "usage": 52,
       "rank": 49,
       "usageRankScore": 52,
       "usagePercent": null,
-      "winRate": 42.622,
-      "record": "453-610-1",
+      "winRate": 43.048,
+      "record": "483-639",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Primarina",
       "Moves": {
         "Hyper Voice": 97.1,
@@ -2298,13 +2346,13 @@
       }
     },
     "Ceruledge": {
-      "Raw count": 941,
+      "Raw count": 1144,
       "usage": 51,
       "rank": 50,
       "usageRankScore": 51,
       "usagePercent": null,
-      "winRate": 52.072,
-      "record": "490-451",
+      "winRate": 53.059,
+      "record": "607-537",
       "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Ceruledge",
       "Moves": {
         "Bitter Blade": 100.0,
@@ -2344,54 +2392,6 @@
       },
       "Spreads": {
         "Hardy:31/1/26/0/0/8": 16.4
-      }
-    },
-    "Hydreigon": {
-      "Raw count": 2141,
-      "usage": 64,
-      "rank": 37,
-      "usageRankScore": 64,
-      "usagePercent": null,
-      "winRate": 51.238,
-      "record": "1097-1044",
-      "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3/Hydreigon",
-      "Moves": {
-        "Dark Pulse": 96.9,
-        "Draco Meteor": 91.9,
-        "Snarl": 61.1,
-        "Earth Power": 56.4,
-        "Protect": 23.5,
-        "Heat Wave": 20.0,
-        "U-turn": 12.3,
-        "Tailwind": 9.1,
-        "Flamethrower": 7.9,
-        "Dragon Pulse": 7.3
-      },
-      "Abilities": {
-        "Levitate": 100.0
-      },
-      "Items": {
-        "Choice Scarf": 73.3,
-        "Life Orb": 18.2,
-        "Chople Berry": 1.7,
-        "Haban Berry": 1.7,
-        "Black Glasses": 1.3,
-        "Scope Lens": 1.2,
-        "Focus Sash": 1.1,
-        "Roseli Berry": 0.6,
-        "Sitrus Berry": 0.3,
-        "White Herb": 0.1
-      },
-      "Teammates": {
-        "Metagross": 0.0,
-        "Sinistcha": 0.0,
-        "Sneasler": 0.0,
-        "Whimsicott": 0.0,
-        "Incineroar": 0.0,
-        "Pelipper": 0.0
-      },
-      "Spreads": {
-        "Hardy:2/0/0/32/0/32": 57.4
       }
     }
   }

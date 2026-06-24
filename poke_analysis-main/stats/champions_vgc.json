@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T12:51:26.384544+00:00",
+  "generatedAt": "2026-06-24T17:44:48.514847+00:00",
   "format": {
     "name": "[Gen 9 Champions] VGC 2026 Reg M-B",
     "mod": "champions",
@@ -19,9 +19,15 @@
     "expectedMetagame": "gen9championsvgc2026regmb",
     "month": "2026-05",
     "sourceUrl": "https://www.pikalytics.com/ai/pokedex/battledataregmbs3",
-    "updatedAt": "2026-06-20T12:54:12.654022+00:00"
+    "updatedAt": "2026-06-24T17:45:50.380931+00:00"
   },
   "usableSpeciesIds": [
+    "blastoisemega",
+    "gengarmega",
+    "lucariomega",
+    "palafin",
+    "palafinhero",
+    "starmiemega",
     "aegislash",
     "annihilape",
     "araquanid",
@@ -331,15 +337,11 @@
     "whimsicott",
     "wyrdeer",
     "zoroark",
-    "zoroarkhisui",
-    "blastoisemega",
-    "gengarmega",
-    "starmiemega",
-    "lucariomega"
+    "zoroarkhisui"
   ],
   "selectionWindow": {
-    "sliceStartTier": "OU",
-    "sliceStartIndex": 91,
+    "sliceStartTier": "Uber",
+    "sliceStartIndex": 84,
     "sliceEndIndex": 405
   },
   "learnsets": {
@@ -10092,18 +10094,19 @@
       "endure": "9a",
       "energyball": "9a",
       "expandingforce": "9a",
-      "extrasensory": "9a",
       "facade": "9a",
       "fakeout": "9a",
       "faketears": "9a",
-      "futuresight": "9a",
       "gigaimpact": "9a",
       "gravity": "9a",
       "helpinghand": "9a",
       "hyperbeam": "9a",
+      "imprison": "9a",
       "irontail": "9a",
       "lightscreen": "9a",
       "magicroom": "9a",
+      "meanlook": "9a",
+      "mistyterrain": "9a",
       "nastyplot": "9a",
       "payback": "9a",
       "playrough": "9a",
@@ -10113,6 +10116,7 @@
       "psychicterrain": "9a",
       "psychup": "9a",
       "psyshock": "9a",
+      "quickguard": "9a",
       "raindance": "9a",
       "reflect": "9a",
       "rest": "9a",
@@ -10134,6 +10138,7 @@
       "trailblaze": "9a",
       "trick": "9a",
       "trickroom": "9a",
+      "wish": "9a",
       "wonderroom": "9a",
       "yawn": "9a",
       "zenheadbutt": "9a"
@@ -17627,7 +17632,7 @@
       "pp": 20
     },
     "doubleshock": {
-      "isNonstandard": "Custom"
+      "isNonstandard": "Past"
     },
     "dragonascent": {
       "isNonstandard": "Past"
@@ -18059,7 +18064,7 @@
       "isNonstandard": "Past"
     },
     "revivalblessing": {
-      "isNonstandard": "Custom"
+      "isNonstandard": "Past"
     },
     "roaroftime": {
       "isNonstandard": "Past"
@@ -19255,9 +19260,6 @@
       "isNonstandard": "Past"
     },
     "wikiberry": {
-      "isNonstandard": "Past"
-    },
-    "wiseglasses": {
       "isNonstandard": "Past"
     },
     "zapplate": {

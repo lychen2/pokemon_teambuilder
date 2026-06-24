@@ -49,12 +49,13 @@ function buildPasteCorePairs(pasteTeams, topN = 24) {
     .slice(0, topN);
 }
 
-function buildPokeIconMap(teamPlannerAssets = {}) {
-  return Object.fromEntries(
+function buildPokeIconMap(teamPlannerAssets = {}, standalonePokeIconMap = {}) {
+  const teamPlannerIconMap = Object.fromEntries(
     Object.entries(teamPlannerAssets.pokemon || {})
       .filter(([, entry]) => entry?.file)
       .map(([speciesId, entry]) => [speciesId, `./static/${entry.file}`]),
   );
+  return {...standalonePokeIconMap, ...teamPlannerIconMap};
 }
 
 import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
@@ -279,9 +280,10 @@ export async function loadDatasets() {
   // ensure* functions so VGCPastes and Roles do not steal first-paint time.
   const learnsetsPromise = fetchJson(DATA_PATHS.learnsets);
 
-  const [localizationData, teamPlannerAssets, pokedex, formsIndex, moves, abilities, items, championsVgc] = await Promise.all([
+  const [localizationData, teamPlannerAssets, standalonePokeIconMap, pokedex, formsIndex, moves, abilities, items, championsVgc] = await Promise.all([
     fetchJson(DATA_PATHS.localizationData),
     fetchJson(DATA_PATHS.teamPlannerAssets),
+    fetchJson(DATA_PATHS.pokeIconsMap),
     fetchJson(DATA_PATHS.pokedex),
     fetchJson(DATA_PATHS.formsIndex),
     fetchJson(DATA_PATHS.moves),
@@ -330,7 +332,7 @@ export async function loadDatasets() {
 
   const seasonSpeciesIds = championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || [];
   const seasonSpeciesIdSet = new Set(seasonSpeciesIds);
-  const pokeIconMap = buildPokeIconMap(teamPlannerAssets);
+  const pokeIconMap = buildPokeIconMap(teamPlannerAssets, standalonePokeIconMap);
 
   const selectableSpeciesIds = buildSelectableSpeciesIds(mergedPokedex, seasonSpeciesIds);
   const seasonAvailableSpecies = buildAvailableSpecies(mergedPokedex, formsIndex, seasonSpeciesIds, seasonSpeciesIdSet);
