@@ -2,8 +2,8 @@ import {analyzeTeam} from "./analysis.js";
 import {analyzePokemonDamageRoles, buildRoleMeta} from "./team-roles.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
 import {buildSyntheticSpeedEntries, clearSpeciesTemplateCache} from "./champions-vgc.js";
-import {ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
-import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, loadDatasets} from "./data.js";
+import {DEFAULT_ICON_SCHEME, ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
+import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, ensurePasteTeamMetaData, loadDatasets} from "./data.js";
 import {createDamageWorkspace} from "./damage-workspace.js";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
 import {
@@ -77,7 +77,7 @@ const MAX_TEAM_SIZE = 6;
 const DEFAULT_CONFIG_LEVEL = 50;
 const DEFAULT_PRESET_PATH = "./config-default.txt";
 const DEFAULT_PRESET_NAME = "Default";
-const VGCPASTES_SETS_PATH = "./static/paste_sets_champions_ma.json";
+const VGCPASTES_SETS_PATH = "./static/paste_sets_champions_mb.json";
 const IMPORT_FEEDBACK_ERROR = "error";
 const LIBRARY_SEARCH_WEIGHTS = Object.freeze({
   species: 0,
@@ -189,7 +189,7 @@ const state = {
     source: "smogon",
     selectedSpeciesId: "",
   },
-  iconScheme: ICON_SCHEMES.SHOWDOWN,
+  iconScheme: DEFAULT_ICON_SCHEME,
   activeAnalysisTab: "coverage",
   activeCoreConfigId: null,
   damage: {
@@ -395,7 +395,7 @@ function escapeHtml(text) {
 }
 
 function normalizeIconScheme(iconScheme) {
-  return iconScheme === ICON_SCHEMES.POKE_ICONS ? ICON_SCHEMES.POKE_ICONS : ICON_SCHEMES.SHOWDOWN;
+  return iconScheme === ICON_SCHEMES.SHOWDOWN ? ICON_SCHEMES.SHOWDOWN : ICON_SCHEMES.POKE_ICONS;
 }
 
 function normalizeDamageField(field = {}) {
@@ -1937,6 +1937,17 @@ function handleQuickStartAction(action) {
 
 function setActiveAnalysisTab(tabId, rerender = true) {
   state.activeAnalysisTab = tabId || "coverage";
+  if (state.activeAnalysisTab === "roles") {
+    const pasteMetaReady = ensurePasteTeamMetaData();
+    if (pasteMetaReady) {
+      void pasteMetaReady.then(() => {
+        if (state.activeAnalysisTab === "roles") {
+          refreshDerivedState();
+          renderAnalysisSection();
+        }
+      }).catch((error) => console.warn("paste team meta failed", error));
+    }
+  }
   if (rerender) {
     renderAnalysisSection();
   }
@@ -2132,7 +2143,7 @@ function hydrateSavedTeams(savedTeams = []) {
 
 function applyPersistedPayload(persisted) {
   state.language = normalizeLanguage(persisted?.language || DEFAULT_LANGUAGE);
-  state.iconScheme = normalizeIconScheme(persisted?.iconScheme);
+  state.iconScheme = persisted?.iconScheme ? normalizeIconScheme(persisted.iconScheme) : DEFAULT_ICON_SCHEME;
   state.recommendPreferences = normalizeRecommendationPreferences(persisted?.recommendPreferences);
   state.recommendWeights = normalizeRecommendationWeights(persisted?.recommendWeights);
   state.recommendBiasAuto = typeof persisted?.recommendBiasAuto === "boolean"
@@ -4175,7 +4186,7 @@ async function applyStarterTemplate(templateId) {
   announceStatus("status.starterApplied", {name: t(state.language, template.labelKey)}, {toastType: "success"});
 }
 
-const VGCPASTES_TEAMS_PATH = "./static/paste_teams_champions_ma.json";
+const VGCPASTES_TEAMS_PATH = "./static/paste_teams_champions_mb.json";
 const VGCPASTES_STAT_LABELS = {hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe"};
 const VGCPASTES_STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 
@@ -5553,6 +5564,11 @@ async function initialize() {
     redoStateChange,
     openCommandPalette: showCommandPalette,
   });
+  let loadedDefaultPreset = false;
+  if (!state.library.length) {
+    const loadedConfigs = await loadPresetLibrary(DEFAULT_PRESET_PATH, DEFAULT_PRESET_NAME, "replace");
+    loadedDefaultPreset = Boolean(loadedConfigs?.length);
+  }
   refreshDerivedState();
   renderAll();
   if (!document.getElementById("custom-library-input").value.trim()) {
@@ -5564,7 +5580,9 @@ async function initialize() {
   initializeHistory(stateHistory, snapshotHistoryState(state));
   setActiveView(state.activeView);
   if (state.library.length) {
-    setStatus("status.restored", {count: state.library.length});
+    if (!loadedDefaultPreset) {
+      setStatus("status.restored", {count: state.library.length});
+    }
     return;
   }
   setStatus("status.loadedEmpty");

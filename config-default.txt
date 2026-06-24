@@ -1,84 +1,2389 @@
-Sneasler @ White Herb
-Ability: Unburden
+Garchomp @ Life Orb
+Ability: Rough Skin
 Level: 50
-Note: VGCPastes PC532
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Note: VGCPastes MB115
+Points: 2 HP / 30 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Dragon Claw
+- Earthquake
+- Rock Slide
+- Protect
+
+Garchomp @ Sitrus Berry
+Ability: Rough Skin
+Level: 50
+Note: VGCPastes MB55
+Points: 18 HP / 20 Atk / 0 Def / 0 SpA / 2 SpD / 26 Spe
+Adamant Nature
+- Earthquake
+- Dragon Claw
+- Rock Slide
+- Protect
+
+Garchomp @ Sitrus Berry
+Ability: Rough Skin
+Level: 50
+Note: VGCPastes MB114
+Points: 30 HP / 16 Atk / 15 Def / 0 SpA / 0 SpD / 5 Spe
+Adamant Nature
+- Dragon Claw
+- Stomping Tantrum
+- Rock Tomb
+- Protect
+
+Sinistcha @ Kasib Berry
+Ability: Hospitality
+Level: 50
+Note: VGCPastes MB3
+Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
+Calm Nature
+- Matcha Gotcha
+- Rage Powder
+- Trick Room
+- Protect
+
+Sinistcha-Masterpiece @ Kasib Berry
+Ability: Hospitality
+Level: 50
+Note: VGCPastes MB109
+Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
+Relaxed Nature
+- Matcha Gotcha
+- Rage Powder
+- Protect
+- Trick Room
+
+Sinistcha @ Sitrus Berry
+Ability: Hospitality
+Level: 50
+Note: VGCPastes MB43
+Points: 32 HP / 0 Atk / 13 Def / 0 SpA / 21 SpD / 0 Spe
+Sassy Nature
+- Rage Powder
+- Matcha Gotcha
+- Trick Room
+- Imprison
+
+Sinistcha @ Colbur Berry
+Ability: Hospitality
+Level: 50
+Note: VGCPastes MB7
+Points: 32 HP / 0 Atk / 13 Def / 1 SpA / 20 SpD / 0 Spe
+Modest Nature
+- Matcha Gotcha
+- Protect
+- Rage Powder
+- Shadow Ball
+
+Basculegion @ Life Orb
+Ability: Adaptability
+Level: 50
+Note: VGCPastes MB87
+Points: 4 HP / 32 Atk / 10 Def / 0 SpA / 0 SpD / 20 Spe
 Adamant Nature
 - Protect
-- Fake Out
-- Close Combat
-- Dire Claw
+- Wave Crash
+- Last Respects
+- Aqua Jet
 
-Sneasler @ Focus Sash
-Ability: Poison Touch
+Basculegion-F @ Choice Scarf
+Ability: Adaptability
 Level: 50
-Note: VGCPastes PC118
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Note: VGCPastes MB123
+Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Muddy Water
+- Shadow Ball
+- Ice Beam
+- Flip Turn
+
+Basculegion @ Choice Scarf
+Ability: Adaptability
+Level: 50
+Note: VGCPastes MB42
+Points: 0 HP / 27 Atk / 7 Def / 0 SpA / 0 SpD / 32 Spe
 Jolly Nature
-- Fake Out
-- Close Combat
-- Dire Claw
+- Last Respects
+- Wave Crash
+- Aqua Jet
+- Flip Turn
+
+Basculegion-F @ Life Orb
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB116
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Muddy Water
+- Shadow Ball
+- Ice Beam
 - Protect
 
-Sneasler @ Sitrus Berry
-Ability: Unburden
+Basculegion @ Mystic Water
+Ability: Swift Swim
 Level: 50
-Note: VGCPastes PC463
-Points: 32 HP / 4 Atk / 23 Def / 0 SpA / 1 SpD / 6 Spe
-Impish Nature
-- Dire Claw
+Note: VGCPastes MB111
+Points: 0 HP / 32 Atk / 14 Def / 0 SpA / 0 SpD / 20 Spe
+Adamant Nature
+- Wave Crash
+- Last Respects
+- Aqua Jet
+- Protect
+
+Basculegion-F @ Mystic Water
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB45
+Points: 0 HP / 0 Atk / 14 Def / 32 SpA / 0 SpD / 20 Spe
+Modest Nature
+- Muddy Water
+- Shadow Ball
+- Protect
+- Ice Beam
+
+Whimsicott @ Focus Sash
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB127
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Moonblast
+- Tailwind
+- Encore
+
+Whimsicott @ Occa Berry
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB118
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Moonblast
+- Tailwind
+- Tickle
+- Fake Tears
+
+Whimsicott @ Focus Sash
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB122
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Moonblast
+- Energy Ball
+- Encore
+- Trick Room
+
+Kingambit @ Chople Berry
+Ability: Defiant
+Level: 50
+Note: VGCPastes MB123
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Kowtow Cleave
+- Sucker Punch
+- Iron Head
+- Protect
+
+Kingambit @ Life Orb
+Ability: Defiant
+Level: 50
+Note: VGCPastes MB111
+Points: 32 HP / 30 Atk / 3 Def / 0 SpA / 1 SpD / 0 Spe
+Brave Nature
+- Kowtow Cleave
+- Low Kick
+- Sucker Punch
+- Iron Head
+
+Kingambit @ Black Glasses
+Ability: Defiant
+Level: 50
+Note: VGCPastes MB17
+Points: 2 HP / 32 Atk / 32 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Kowtow Cleave
+- Sucker Punch
+- Low Kick
+- Protect
+
+Staraptor @ Choice Scarf
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB124
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Bashful Nature
+- Brave Bird
 - Close Combat
-- Rock Tomb
-- Fake Out
+- U-turn
+- Final Gambit
+
+Staraptor-Mega @ Staraptite
+Ability: Contrary
+Level: 50
+Note: VGCPastes MB7
+Points: 24 HP / 10 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Brave Bird
+- Roost
+- Protect
+
+Staraptor @ Choice Scarf
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB122
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Final Gambit
+- Brave Bird
+- Close Combat
+- U-turn
+
+Staraptor-Mega @ Staraptite
+Ability: Contrary
+Level: 50
+Note: VGCPastes MB50
+Points: 20 HP / 20 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
+Adamant Nature
+- Close Combat
+- Brave Bird
+- Protect
+- Tailwind
+
+Staraptor @ Choice Scarf
+Ability: Reckless
+Level: 50
+Note: VGCPastes MB111
+Points: 32 HP / 1 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Brave Bird
+- Final Gambit
+- Blaze Kick
+
+Staraptor-Mega @ Staraptite
+Ability: Contrary
+Level: 50
+Note: VGCPastes MB118
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Careful Nature
+- Close Combat
+- Brave Bird
+- Roost
+- Protect
 
 Incineroar @ Sitrus Berry
 Ability: Intimidate
 Level: 50
-Note: VGCPastes PC454
-Points: 32 HP / 0 Atk / 18 Def / 0 SpA / 10 SpD / 6 Spe
+Note: VGCPastes MB65
+Points: 32 HP / 0 Atk / 10 Def / 0 SpA / 16 SpD / 8 Spe
 Careful Nature
 - Parting Shot
 - Throat Chop
 - Flare Blitz
 - Fake Out
 
-Incineroar @ White Herb
+Incineroar @ Leftovers
 Ability: Intimidate
 Level: 50
-Note: VGCPastes PC531
-Points: 32 HP / 25 Atk / 2 Def / 0 SpA / 7 SpD / 0 Spe
-Brave Nature
-- Darkest Lariat
+Note: VGCPastes MB114
+Points: 31 HP / 0 Atk / 30 Def / 0 SpA / 5 SpD / 0 Spe
+Relaxed Nature
+- Fake Out
 - Flare Blitz
+- Parting Shot
+- Protect
+
+Incineroar @ Chople Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB44
+Points: 32 HP / 0 Atk / 12 Def / 0 SpA / 22 SpD / 0 Spe
+Calm Nature
+- Fake Out
+- Snarl
+- Parting Shot
+- Will-O-Wisp
+
+Charizard-Mega-Y @ Charizardite Y
+Ability: Drought
+Level: 50
+Note: VGCPastes MB48
+Points: 23 HP / 0 Atk / 20 Def / 11 SpA / 0 SpD / 12 Spe
+Modest Nature
+- Heat Wave
+- Solar Beam
+- Weather Ball
+- Protect
+
+Charizard-Mega-X @ Charizardite X
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB21
+Points: 22 HP / 20 Atk / 0 Def / 0 SpA / 0 SpD / 24 Spe
+Adamant Nature
+- Dragon Dance
+- Dragon Claw
+- Flare Blitz
+- Protect
+
+Charizard-Mega-Y @ Charizardite Y
+Ability: Drought
+Level: 50
+Note: VGCPastes MB122
+Points: 32 HP / 0 Atk / 31 Def / 3 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Heat Wave
+- Weather Ball
+- Ancient Power
+- Protect
+
+Charizard-Mega-Y @ Charizardite Y
+Ability: Drought
+Level: 50
+Note: VGCPastes MB120
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Heat Wave
+- Solar Beam
+- Sunny Day
+- Protect
+
+Raichu-Mega-Y @ Raichunite Y
+Ability: No Guard
+Level: 50
+Note: VGCPastes MB5
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Zap Cannon
+- Focus Blast
+- Fake Out
+- Protect
+
+Raichu @ Shuca Berry
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes MB82
+Points: 17 HP / 0 Atk / 17 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Fake Out
+- Charm
+- Electroweb
+- Volt Switch
+
+Raichu-Mega-Y @ Raichunite Y
+Ability: No Guard
+Level: 50
+Note: VGCPastes MB127
+Points: 16 HP / 0 Atk / 2 Def / 24 SpA / 0 SpD / 24 Spe
+Modest Nature
+- Protect
+- Zap Cannon
+- Focus Blast
+- Fake Out
+
+Raichu @ Focus Sash
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes MB20
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Volt Switch
+- Fake Out
+- Charm
+- Nuzzle
+
+Raichu-Mega-Y @ Raichunite Y
+Ability: No Guard
+Level: 50
+Note: VGCPastes MB100
+Points: 32 HP / 0 Atk / 1 Def / 10 SpA / 0 SpD / 23 Spe
+Timid Nature
+- Zap Cannon
+- Substitute
+- Focus Blast
+- Protect
+
+Raichu @ Shuca Berry
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes MB1
+Points: 17 HP / 0 Atk / 17 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Fake Out
+- Encore
+- Charm
+- Volt Switch
+
+Pelipper @ Sitrus Berry
+Ability: Drizzle
+Level: 50
+Note: VGCPastes MB2
+Points: 32 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 3 Spe
+Modest Nature
+- Weather Ball
+- Hurricane
+- Tailwind
+- Protect
+
+Pelipper @ Focus Sash
+Ability: Drizzle
+Level: 50
+Note: VGCPastes MB91
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Weather Ball
+- Hurricane
+- Tailwind
+- Protect
+
+Pelipper @ Iron Ball
+Ability: Drizzle
+Level: 50
+Note: VGCPastes MB111
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Hurricane
+- Rain Dance
+- Helping Hand
+- Weather Ball
+
+Sneasler @ White Herb
+Ability: Unburden
+Level: 50
+Note: VGCPastes MB99
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Dire Claw
+- Protect
 - Fake Out
 - Close Combat
 
-Incineroar @ Shuca Berry
-Ability: Intimidate
+Sneasler @ Focus Sash
+Ability: Poison Touch
 Level: 50
-Note: VGCPastes PC248
-Points: 32 HP / 0 Atk / 15 Def / 0 SpA / 19 SpD / 0 Spe
-Bold Nature
-- Snarl
-- Overheat
+Note: VGCPastes MB58
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Dire Claw
+- Close Combat
 - Fake Out
+- Protect
+
+Sneasler @ Iron Ball
+Ability: Unburden
+Level: 50
+Note: VGCPastes MB112
+Points: 32 HP / 30 Atk / 4 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Close Combat
+- Dire Claw
+- Fling
+- Fake Out
+
+Archaludon @ Leftovers
+Ability: Stamina
+Level: 50
+Note: VGCPastes MB109
+Points: 32 HP / 0 Atk / 0 Def / 5 SpA / 23 SpD / 6 Spe
+Modest Nature
+- Protect
+- Dragon Pulse
+- Electro Shot
+- Flash Cannon
+
+Archaludon @ Leftovers
+Ability: Stamina
+Level: 50
+Note: VGCPastes MB91
+Points: 27 HP / 0 Atk / 0 Def / 1 SpA / 12 SpD / 26 Spe
+Timid Nature
+- Draco Meteor
+- Electro Shot
+- Flash Cannon
+- Protect
+
+Archaludon @ White Herb
+Ability: Stamina
+Level: 50
+Note: VGCPastes MB123
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Draco Meteor
+- Flash Cannon
+- Thunderbolt
+- Stealth Rock
+
+Grimmsnarl @ Light Clay
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB109
+Points: 32 HP / 0 Atk / 19 Def / 0 SpA / 15 SpD / 0 Spe
+Careful Nature
+- Light Screen
+- Reflect
+- Spirit Break
 - Parting Shot
 
-Garchomp @ Choice Scarf
-Ability: Rough Skin
+Grimmsnarl @ Light Clay
+Ability: Prankster
 Level: 50
-Note: VGCPastes PC464
-Points: 4 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Note: VGCPastes MB43
+Points: 32 HP / 3 Atk / 16 Def / 0 SpA / 14 SpD / 1 Spe
+Impish Nature
+- Spirit Break
+- Light Screen
+- Parting Shot
+- Scary Face
+
+Grimmsnarl @ Roseli Berry
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB71
+Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
+Calm Nature
+- Light Screen
+- Parting Shot
+- Scary Face
+- Fake Out
+
+Sylveon @ Fairy Feather
+Ability: Pixilate
+Level: 50
+Note: VGCPastes MB20
+Points: 9 HP / 0 Atk / 22 Def / 30 SpA / 0 SpD / 5 Spe
+Modest Nature
+- Detect
+- Quick Attack
+- Hyper Voice
+- Hyper Beam
+
+Sylveon @ Fairy Feather
+Ability: Pixilate
+Level: 50
+Note: VGCPastes MB76
+Points: 10 HP / 0 Atk / 15 Def / 30 SpA / 0 SpD / 11 Spe
+Modest Nature
+- Hyper Voice
+- Moonblast
+- Quick Attack
+- Protect
+
+Sylveon @ Sitrus Berry
+Ability: Pixilate
+Level: 50
+Note: VGCPastes MB119
+Points: 21 HP / 0 Atk / 24 Def / 10 SpA / 0 SpD / 11 Spe
+Modest Nature
+- Hyper Voice
+- Draining Kiss
+- Calm Mind
+- Protect
+
+Swampert-Mega @ Swampertite
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB9
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Wave Crash
+- Earthquake
+- Ice Punch
+- Protect
+
+Swampert-Mega @ Swampertite
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB25
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- High Horsepower
+- Flip Turn
+- Ice Punch
+- Protect
+
+Swampert-Mega @ Swampertite
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB11
+Points: 11 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 23 Spe
+Jolly Nature
+- Protect
+- Earthquake
+- Ice Punch
+- Wave Crash
+
+Metagross-Mega @ Metagrossite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB104
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Iron Head
+- Psychic Fangs
+- Ice Punch
+
+Metagross-Mega @ Metagrossite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB8
+Points: 16 HP / 25 Atk / 0 Def / 0 SpA / 0 SpD / 25 Spe
+Adamant Nature
+- Iron Head
+- Bullet Punch
+- Psychic Fangs
+- Protect
+
+Metagross-Mega @ Metagrossite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB23
+Points: 7 HP / 14 Atk / 13 Def / 0 SpA / 32 SpD / 0 Spe
+Adamant Nature
+- Meteor Mash
+- Stomping Tantrum
+- Psychic Fangs
+- Protect
+
+Farigiraf @ Sitrus Berry
+Ability: Armor Tail
+Level: 50
+Note: VGCPastes MB24
+Points: 20 HP / 0 Atk / 29 Def / 5 SpA / 12 SpD / 0 Spe
+Bold Nature
+- Psychic
+- Trick Room
+- Imprison
+- Protect
+
+Farigiraf @ Sitrus Berry
+Ability: Armor Tail
+Level: 50
+Note: VGCPastes MB126
+Points: 31 HP / 0 Atk / 14 Def / 13 SpA / 8 SpD / 0 Spe
+Quiet Nature
+- Psychic
+- Thunderbolt
+- Trick Room
+- Protect
+
+Farigiraf @ Sitrus Berry
+Ability: Armor Tail
+Level: 50
+Note: VGCPastes MB70
+Points: 9 HP / 0 Atk / 26 Def / 23 SpA / 8 SpD / 0 Spe
+Modest Nature
+- Twin Beam
+- Helping Hand
+- Trick Room
+- Protect
+
+Gholdengo @ Life Orb
+Ability: Good as Gold
+Level: 50
+Note: VGCPastes MB127
+Points: 32 HP / 0 Atk / 2 Def / 10 SpA / 3 SpD / 19 Spe
+Modest Nature
+- Protect
+- Make It Rain
+- Nasty Plot
+- Shadow Ball
+
+Gholdengo @ Choice Scarf
+Ability: Good as Gold
+Level: 50
+Note: VGCPastes MB5
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Modest Nature
+- Shadow Ball
+- Power Gem
+- Make It Rain
+- Trick
+
+Gholdengo @ Life Orb
+Ability: Good as Gold
+Level: 50
+Note: VGCPastes MB19
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Make It Rain
+- Shadow Ball
+- Nasty Plot
+- Protect
+
+Aerodactyl-Mega @ Aerodactylite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB76
+Points: 15 HP / 17 Atk / 0 Def / 0 SpA / 5 SpD / 29 Spe
+Jolly Nature
+- Rock Slide
+- Dual Wingbeat
+- Ice Fang
+- Tailwind
+
+Aerodactyl @ Focus Sash
+Ability: Unnerve
+Level: 50
+Note: VGCPastes MB89
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Dual Wingbeat
+- Wide Guard
+- Tailwind
+
+Aerodactyl-Mega @ Aerodactylite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB57
+Points: 22 HP / 11 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Dual Wingbeat
+- Wide Guard
+- Tailwind
+
+Aerodactyl @ Focus Sash
+Ability: Unnerve
+Level: 50
+Note: VGCPastes MB88
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Dual Wingbeat
+- Tailwind
+- Protect
+
+Aerodactyl-Mega @ Aerodactylite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB117
+Points: 4 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 30 Spe
+Jolly Nature
+- Rock Slide
+- Dual Wingbeat
+- Tailwind
+- Protect
+
+Aerodactyl @ Focus Sash
+Ability: Unnerve
+Level: 50
+Note: VGCPastes MB60
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Wide Guard
+- Tailwind
+- Protect
+
+Maushold @ Wide Lens
+Ability: Technician
+Level: 50
+Note: VGCPastes MB118
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Population Bomb
+- Beat Up
+- Follow Me
+- Protect
+
+Maushold-Four @ Chople Berry
+Ability: Friend Guard
+Level: 50
+Note: VGCPastes MB79
+Points: 32 HP / 0 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Super Fang
+- Follow Me
+- Charm
+- Protect
+
+Maushold @ Focus Sash
+Ability: Friend Guard
+Level: 50
+Note: VGCPastes MB71
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Follow Me
+- Fake Tears
+- Charm
+- Protect
+
+Maushold-Four @ Wide Lens
+Ability: Technician
+Level: 50
+Note: VGCPastes MB70
+Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Population Bomb
+- Beat Up
+- Follow Me
+- Protect
+
+Maushold-Four @ Chople Berry
+Ability: Friend Guard
+Level: 50
+Note: VGCPastes MB81
+Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
+Impish Nature
+- Super Fang
+- Tickle
+- Follow Me
+- Protect
+
+Annihilape @ Leftovers
+Ability: Defiant
+Level: 50
+Note: VGCPastes MB90
+Points: 24 HP / 3 Atk / 6 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Rage Fist
+- Protect
+- Drain Punch
+- Bulk Up
+
+Annihilape @ Focus Sash
+Ability: Defiant
+Level: 50
+Note: VGCPastes MB118
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Rage Fist
+- Stone Edge
+- Taunt
+
+Annihilape @ Choice Scarf
+Ability: Defiant
+Level: 50
+Note: VGCPastes MB24
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Shadow Claw
+- U-turn
+- Coaching
+
+Sableye @ Roseli Berry
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB113
+Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
+Careful Nature
+- Encore
+- Rain Dance
+- Will-O-Wisp
+- Light Screen
+
+Sableye @ Light Clay
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB45
+Points: 32 HP / 0 Atk / 19 Def / 0 SpA / 15 SpD / 0 Spe
+Calm Nature
+- Encore
+- Rain Dance
+- Light Screen
+- Reflect
+
+Sableye @ Roseli Berry
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB13
+Points: 32 HP / 0 Atk / 18 Def / 0 SpA / 16 SpD / 0 Spe
+Calm Nature
+- Quash
+- Foul Play
+- Rain Dance
+- Encore
+
+Mawile-Mega @ Mawilite
+Ability: Huge Power
+Level: 50
+Note: VGCPastes MB124
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Iron Head
+- Play Rough
+- Sucker Punch
+- Protect
+
+Mawile-Mega @ Mawilite
+Ability: Huge Power
+Level: 50
+Note: VGCPastes MB116
+Points: 32 HP / 15 Atk / 0 Def / 0 SpA / 2 SpD / 17 Spe
+Adamant Nature
+- Play Rough
+- Rock Slide
+- Sucker Punch
+- Protect
+
+Mawile-Mega @ Mawilite
+Ability: Huge Power
+Level: 50
+Note: VGCPastes MB92
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Play Rough
+- Iron Head
+- Sucker Punch
+- Protect
+
+Ninetales-Alola @ Never-Melt Ice
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB95
+Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Blizzard
+- Freeze-Dry
+- Encore
+- Protect
+
+Ninetales-Alola @ Light Clay
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB72
+Points: 11 HP / 0 Atk / 3 Def / 20 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Aurora Veil
+- Icy Wind
+- Encore
+- Blizzard
+
+Ninetales-Alola @ Choice Scarf
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB30
+Points: 11 HP / 0 Atk / 1 Def / 25 SpA / 1 SpD / 28 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Icy Wind
+- Moonblast
+
+Torkoal @ Charcoal
+Ability: Drought
+Level: 50
+Note: VGCPastes MB24
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Eruption
+- Weather Ball
+- Helping Hand
+- Protect
+
+Torkoal @ Heat Rock
+Ability: Drought
+Level: 50
+Note: VGCPastes MB84
+Points: 32 HP / 0 Atk / 0 Def / 2 SpA / 32 SpD / 0 Spe
+Relaxed Nature
+- Heat Wave
+- Helping Hand
+- Yawn
+- Protect
+
+Torkoal @ Heat Rock
+Ability: Drought
+Level: 50
+Note: VGCPastes MB120
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Eruption
+- Heat Wave
+- Weather Ball
+- Helping Hand
+
+Froslass-Mega @ Froslassite
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB103
+Points: 32 HP / 0 Atk / 0 Def / 2 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Blizzard
+- Aurora Veil
+- Rain Dance
+- Protect
+
+Froslass-Mega @ Froslassite
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB69
+Points: 24 HP / 0 Atk / 0 Def / 8 SpA / 4 SpD / 30 Spe
+Modest Nature
+- Blizzard
+- Shadow Ball
+- Aurora Veil
+- Protect
+
+Froslass-Mega @ Froslassite
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB62
+Points: 18 HP / 0 Atk / 4 Def / 12 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Blizzard
+- Shadow Ball
+- Aurora Veil
+- Protect
+
+Talonflame @ Sharp Beak
+Ability: Gale Wings
+Level: 50
+Note: VGCPastes MB46
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Dual Wingbeat
+- Taunt
+- Tailwind
+- Protect
+
+Talonflame @ Sharp Beak
+Ability: Gale Wings
+Level: 50
+Note: VGCPastes MB95
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Tailwind
+- Flare Blitz
+- Dual Wingbeat
+- Protect
+
+Talonflame @ Life Orb
+Ability: Gale Wings
+Level: 50
+Note: VGCPastes MB66
+Points: 0 HP / 27 Atk / 0 Def / 21 SpA / 0 SpD / 18 Spe
+Naive Nature
+- Brave Bird
+- Overheat
+- Tailwind
+- Protect
+
+Rotom-Wash @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB66
+Points: 18 HP / 0 Atk / 0 Def / 16 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Hydro Pump
+- Thunderbolt
+- Discharge
+- Will-O-Wisp
+
+Rotom-Wash @ Sitrus Berry
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB77
+Points: 32 HP / 0 Atk / 7 Def / 13 SpA / 12 SpD / 2 Spe
+Calm Nature
+- Helping Hand
+- Thunderbolt
+- Will-O-Wisp
+- Hydro Pump
+
+Rotom-Wash @ Leftovers
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB51
+Points: 31 HP / 0 Atk / 13 Def / 0 SpA / 16 SpD / 6 Spe
+Bold Nature
+- Hydro Pump
+- Thunderbolt
+- Light Screen
+- Will-O-Wisp
+
+Glimmora @ Focus Sash
+Ability: Toxic Debris
+Level: 50
+Note: VGCPastes MB115
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Modest Nature
+- Power Gem
+- Sludge Bomb
+- Earth Power
+- Spiky Shield
+
+Glimmora-Mega @ Glimmoranite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes MB110
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Modest Nature
+- Sludge Bomb
+- Power Gem
+- Spiky Shield
+- Sludge Wave
+
+Glimmora @ Focus Sash
+Ability: Toxic Debris
+Level: 50
+Note: VGCPastes MB4
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Sludge Bomb
+- Power Gem
+- Earth Power
+- Spiky Shield
+
+Glimmora-Mega @ Glimmoranite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes MB82
+Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Power Gem
+- Sludge Bomb
+- Substitute
+- Spiky Shield
+
+Glimmora-Mega @ Glimmoranite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes MB68
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Spiky Shield
+- Power Gem
+- Earth Power
+- Sludge Bomb
+
+Delphox-Mega @ Delphoxite
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB102
+Points: 11 HP / 0 Atk / 4 Def / 19 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Heat Wave
+- Nasty Plot
+- Psyshock
+
+Delphox-Mega @ Delphoxite
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB94
+Points: 16 HP / 0 Atk / 21 Def / 0 SpA / 0 SpD / 29 Spe
+Timid Nature
+- Heat Wave
+- Protect
+- Nasty Plot
+- Psychic
+
+Delphox-Mega @ Delphoxite
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB74
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Heat Wave
+- Psyshock
+- Nasty Plot
+- Protect
+
+Dragonite @ Dragon Fang
+Ability: Multiscale
+Level: 50
+Note: VGCPastes MB114
+Points: 25 HP / 32 Atk / 5 Def / 0 SpA / 4 SpD / 0 Spe
+Adamant Nature
+- Dragon Claw
+- Low Kick
+- Extreme Speed
+- Protect
+
+Dragonite-Mega @ Dragoninite
+Ability: Multiscale
+Level: 50
+Note: VGCPastes MB22
+Points: 19 HP / 0 Atk / 10 Def / 17 SpA / 10 SpD / 10 Spe
+Modest Nature
+- Hurricane
+- Dragon Pulse
+- Ice Beam
+- Protect
+
+Dragonite @ Lum Berry
+Ability: Multiscale
+Level: 50
+Note: VGCPastes MB64
+Points: 5 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 28 Spe
+Adamant Nature
+- Dragon Claw
+- Extreme Speed
+- Dragon Dance
+- Protect
+
+Dragonite-Mega @ Dragoninite
+Ability: Multiscale
+Level: 50
+Note: VGCPastes MB17
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Modest Nature
+- Dragon Pulse
+- Flamethrower
+- Tailwind
+- Protect
+
+Dragonite @ White Herb
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes MB29
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Hurricane
+- Flamethrower
+- Draco Meteor
+- Tailwind
+
+Dragonite-Mega @ Dragoninite
+Ability: Multiscale
+Level: 50
+Note: VGCPastes MB2
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Draco Meteor
+- Hurricane
+- Thunderbolt
+- Protect
+
+Tyranitar-Mega @ Tyranitarite
+Ability: Sand Stream
+Level: 50
+Note: VGCPastes MB99
+Points: 12 HP / 22 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Slide
+- Knock Off
+- Protect
+- Low Kick
+
+Tyranitar @ Choice Scarf
+Ability: Sand Stream
+Level: 50
+Note: VGCPastes MB79
+Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Knock Off
+- Low Kick
+- Ice Punch
+
+Tyranitar-Mega @ Tyranitarite
+Ability: Sand Stream
+Level: 50
+Note: VGCPastes MB1
+Points: 27 HP / 26 Atk / 1 Def / 0 SpA / 0 SpD / 12 Spe
+Adamant Nature
+- Rock Slide
+- Knock Off
+- Low Kick
+- Protect
+
+Tyranitar @ Choice Scarf
+Ability: Sand Stream
+Level: 50
+Note: VGCPastes MB14
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Knock Off
+- Low Kick
+- Ice Punch
+
+Blastoise-Mega @ Blastoisinite
+Ability: Mega Launcher
+Level: 50
+Note: VGCPastes MB111
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Water Spout
+- Dark Pulse
+- Aura Sphere
+- Fake Out
+
+Blastoise-Mega @ Blastoisinite
+Ability: Mega Launcher
+Level: 50
+Note: VGCPastes MB24
+Points: 32 HP / 0 Atk / 2 Def / 25 SpA / 5 SpD / 2 Spe
+Modest Nature
+- Water Spout
+- Dark Pulse
+- Fake Out
+- Protect
+
+Milotic @ Leftovers
+Ability: Competitive
+Level: 50
+Note: VGCPastes MB117
+Points: 32 HP / 0 Atk / 21 Def / 10 SpA / 3 SpD / 0 Spe
+Bold Nature
+- Scald
+- Ice Beam
+- Haze
+- Protect
+
+Milotic @ Bright Powder
+Ability: Competitive
+Level: 50
+Note: VGCPastes MB90
+Points: 32 HP / 0 Atk / 29 Def / 0 SpA / 5 SpD / 0 Spe
+Calm Nature
+- Scald
+- Life Dew
+- Icy Wind
+- Protect
+
+Milotic @ Leftovers
+Ability: Competitive
+Level: 50
+Note: VGCPastes MB29
+Points: 32 HP / 0 Atk / 17 Def / 0 SpA / 17 SpD / 0 Spe
+Relaxed Nature
+- Hydro Pump
+- Triple Axel
+- Life Dew
+- Coil
+
+Venusaur @ Life Orb
+Ability: Chlorophyll
+Level: 50
+Note: VGCPastes MB126
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Energy Ball
+- Sludge Bomb
+- Earth Power
+- Protect
+
+Venusaur-Mega @ Venusaurite
+Ability: Thick Fat
+Level: 50
+Note: VGCPastes MB113
+Points: 20 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 15 Spe
+Modest Nature
+- Protect
+- Giga Drain
+- Sludge Bomb
+- Earth Power
+
+Venusaur @ Focus Sash
+Ability: Chlorophyll
+Level: 50
+Note: VGCPastes MB84
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Leaf Storm
+- Sludge Bomb
+- Sleep Powder
+- Protect
+
+Venusaur-Mega @ Venusaurite
+Ability: Thick Fat
+Level: 50
+Note: VGCPastes MB45
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 1 Spe
+Modest Nature
+- Leech Seed
+- Sludge Bomb
+- Earth Power
+- Protect
+
+Venusaur-Mega @ Venusaurite
+Ability: Thick Fat
+Level: 50
+Note: VGCPastes MB85
+Points: 32 HP / 0 Atk / 19 Def / 0 SpA / 12 SpD / 3 Spe
+Bold Nature
+- Giga Drain
+- Sludge Bomb
+- Earth Power
+- Protect
+
+Hydreigon @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB11
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Draco Meteor
+- Dark Pulse
+- Snarl
+- U-turn
+
+Hydreigon @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB87
+Points: 4 HP / 0 Atk / 0 Def / 30 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Draco Meteor
+- Snarl
+- Earth Power
+- Dark Pulse
+
+Hydreigon @ Focus Sash
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB36
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Draco Meteor
+- Snarl
+- Earth Power
+- Protect
+
+Politoed @ Mystic Water
+Ability: Drizzle
+Level: 50
+Note: VGCPastes MB53
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Weather Ball
+- Ice Beam
+- Rain Dance
+- Protect
+
+Politoed @ Damp Rock
+Ability: Drizzle
+Level: 50
+Note: VGCPastes MB29
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 32 SpD / 2 Spe
+Gentle Nature
+- Weather Ball
+- Icy Wind
+- Haze
+- Earth Power
+
+Tsareena @ Wide Lens
+Ability: Queenly Majesty
+Level: 50
+Note: VGCPastes MB32
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- U-turn
+- Triple Axel
+- Power Whip
+- Low Kick
+
+Gengar-Mega @ Gengarite
+Ability: Shadow Tag
+Level: 50
+Note: VGCPastes MB114
+Points: 32 HP / 0 Atk / 16 Def / 0 SpA / 11 SpD / 7 Spe
+Calm Nature
+- Shadow Ball
+- Sludge Bomb
+- Perish Song
+- Protect
+
+Kangaskhan-Mega @ Kangaskhanite
+Ability: Parental Bond
+Level: 50
+Note: VGCPastes MB128
+Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 10 SpD / 4 Spe
+Adamant Nature
+- Double-Edge
+- Fake Out
+- Low Kick
+- Sucker Punch
+
+Kangaskhan @ Silk Scarf
+Ability: Scrappy
+Level: 50
+Note: VGCPastes MB112
+Points: 29 HP / 32 Atk / 0 Def / 0 SpA / 5 SpD / 0 Spe
+Brave Nature
+- Last Resort
+- Fake Out
+
+Kangaskhan-Mega @ Kangaskhanite
+Ability: Parental Bond
+Level: 50
+Note: VGCPastes MB16
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Double-Edge
+- Sucker Punch
+- Fake Out
+- Hammer Arm
+
+Pyroar-Mega @ Pyroarite
+Ability: Fire Mane
+Level: 50
+Note: VGCPastes MB64
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Overheat
+- Heat Wave
+- Hyper Voice
+- Protect
+
+Pyroar-Mega @ Pyroarite
+Ability: Fire Mane
+Level: 50
+Note: VGCPastes MB126
+Points: 0 HP / 0 Atk / 7 Def / 32 SpA / 0 SpD / 27 Spe
+Timid Nature
+- Heat Wave
+- Overheat
+- Yawn
+- Protect
+
+Pyroar-Mega @ Pyroarite
+Ability: Fire Mane
+Level: 50
+Note: VGCPastes MB84
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Heat Wave
+- Overheat
+- Solar Beam
+- Protect
+
+Gardevoir-Mega @ Gardevoirite
+Ability: Pixilate
+Level: 50
+Note: VGCPastes MB67
+Points: 16 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 16 Spe
+Modest Nature
+- Psychic
+- Hyper Voice
+- Calm Mind
+- Protect
+
+Gardevoir-Mega @ Gardevoirite
+Ability: Pixilate
+Level: 50
+Note: VGCPastes MB3
+Points: 32 HP / 0 Atk / 6 Def / 28 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Protect
+- Psyshock
+- Trick Room
+
+Corviknight @ Sitrus Berry
+Ability: Mirror Armor
+Level: 50
+Note: VGCPastes MB99
+Points: 32 HP / 1 Atk / 1 Def / 0 SpA / 32 SpD / 0 Spe
+Adamant Nature
+- Brave Bird
+- Bulk Up
+- Body Press
+- Tailwind
+
+Corviknight @ Leftovers
+Ability: Mirror Armor
+Level: 50
+Note: VGCPastes MB2
+Points: 32 HP / 0 Atk / 0 Def / 0 SpA / 27 SpD / 7 Spe
+Impish Nature
+- Iron Head
+- Body Press
+- Bulk Up
+- Roost
+
+Scrafty-Mega @ Scraftinite
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB126
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Knock Off
+- Drain Punch
+- Fake Out
+- Ice Punch
+
+Scrafty @ Lum Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB31
+Points: 32 HP / 10 Atk / 0 Def / 0 SpA / 24 SpD / 0 Spe
+Brave Nature
+- Fake Out
+- Drain Punch
+- Knock Off
+- Protect
+
+Scrafty-Mega @ Scraftinite
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB98
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Close Combat
+- Knock Off
+- Fake Out
+- Protect
+
+Scrafty-Mega @ Scraftinite
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB16
+Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 1 Spe
+Adamant Nature
+- Knock Off
+- Low Kick
+- Iron Head
+- Fake Out
+
+Vivillon @ Focus Sash
+Ability: Compound Eyes
+Level: 50
+Note: VGCPastes MB96
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Hurricane
+- Sleep Powder
+- Rage Powder
+- Protect
+
+Eelektross-Mega @ Eelektrossite
+Ability: Eelevate
+Level: 50
+Note: VGCPastes MB104
+Points: 7 HP / 0 Atk / 4 Def / 32 SpA / 0 SpD / 23 Spe
+Modest Nature
+- Giga Drain
+- Thunderbolt
+- Flamethrower
+- Protect
+
+Eelektross-Mega @ Eelektrossite
+Ability: Eelevate
+Level: 50
+Note: VGCPastes MB46
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Thunderbolt
+- Discharge
+- Grass Knot
+- Protect
+
+Eelektross-Mega @ Eelektrossite
+Ability: Eelevate
+Level: 50
+Note: VGCPastes MB30
+Points: 32 HP / 6 Atk / 9 Def / 0 SpA / 0 SpD / 19 Spe
+Adamant Nature
+- Supercell Slam
+- Drain Punch
+- Coil
+- Protect
+
+Scovillain-Mega @ Scovillainite
+Ability: Spicy Spray
+Level: 50
+Note: VGCPastes MB119
+Points: 32 HP / 0 Atk / 19 Def / 0 SpA / 15 SpD / 0 Spe
+Bold Nature
+- Giga Drain
+- Leech Seed
+- Rage Powder
+- Protect
+
+Ceruledge @ Focus Sash
+Ability: Weak Armor
+Level: 50
+Note: VGCPastes MB120
+Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Bitter Blade
+- Shadow Sneak
+- Swords Dance
+- Protect
+
+Ceruledge @ Sitrus Berry
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes MB95
+Points: 18 HP / 15 Atk / 7 Def / 0 SpA / 2 SpD / 24 Spe
+Adamant Nature
+- Bitter Blade
+- Shadow Sneak
+- Bulk Up
+- Protect
+
+Ninetales @ Choice Scarf
+Ability: Drought
+Level: 50
+Note: VGCPastes MB129
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Overheat
+- Heat Wave
+- Solar Beam
+- Fake Tears
+
+Floette-Mega @ Floettite
+Ability: Fairy Aura
+Level: 50
+Note: VGCPastes MB95
+Points: 26 HP / 0 Atk / 0 Def / 8 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Dazzling Gleam
+- Moonblast
+- Light of Ruin
+- Protect
+
+Vileplume @ Focus Sash
+Ability: Chlorophyll
+Level: 50
+Note: VGCPastes MB128
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Sludge Bomb
+- Energy Ball
+- Sleep Powder
+- After You
+
+Kommo-o @ Haban Berry
+Ability: Overcoat
+Level: 50
+Note: VGCPastes MB128
+Points: 5 HP / 0 Atk / 1 Def / 30 SpA / 1 SpD / 29 Spe
+Modest Nature
+- Clanging Scales
+- Aura Sphere
+- Protect
+- Clangorous Soul
+
+Mamoswine @ Focus Sash
+Ability: Oblivious
+Level: 50
+Note: VGCPastes MB126
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- High Horsepower
+- Rock Slide
+- Ice Shard
+- Protect
+
+Blaziken-Mega @ Blazikenite
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes MB125
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Flare Blitz
+- Close Combat
+- Rock Slide
+- Protect
+
+Mimikyu @ Life Orb
+Ability: Disguise
+Level: 50
+Note: VGCPastes MB125
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Play Rough
+- Shadow Sneak
+- Swords Dance
+- Protect
+
+Vanilluxe @ Never-Melt Ice
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB125
+Points: 29 HP / 0 Atk / 0 Def / 10 SpA / 3 SpD / 24 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Ice Shard
+- Protect
+
+Ampharos-Mega @ Ampharosite
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes MB124
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Thunderbolt
+- Dragon Pulse
+- Focus Blast
+- Protect
+
+Barbaracle-Mega @ Barbaracite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB121
+Points: 28 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 8 Spe
+Adamant Nature
+- Rock Slide
+- Close Combat
+- Shell Smash
+- Protect
+
+Weavile @ Focus Sash
+Ability: Pickpocket
+Level: 50
+Note: VGCPastes MB121
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Knock Off
+- Triple Axel
+- Ice Beam
+- Fake Out
+
+Meowscarada @ Choice Scarf
+Ability: Protean
+Level: 50
+Note: VGCPastes MB120
+Points: 4 HP / 32 Atk / 0 Def / 0 SpA / 3 SpD / 27 Spe
+Adamant Nature
+- Flower Trick
+- Knock Off
+- Low Kick
+- Triple Axel
+
+Blaziken @ Focus Sash
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes MB42
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Coaching
+- Heat Wave
+- Aura Sphere
+- Protect
+
+Dragalge-Mega @ Dragalgite
+Ability: Regenerator
+Level: 50
+Note: VGCPastes MB106
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Sludge Bomb
+- Draco Meteor
+- Focus Blast
+- Protect
+
+Sceptile-Mega @ Sceptilite
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes MB89
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Energy Ball
+- Dragon Pulse
+- Earth Power
+- Detect
+
+Rotom-Heat @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB99
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Discharge
+- Thunderbolt
+- Electroweb
+- Overheat
+
+Armarouge @ Life Orb
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes MB98
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Psychic
+- Heat Wave
+- Trick Room
+- Protect
+
+Clefable @ Bright Powder
+Ability: Unaware
+Level: 50
+Note: VGCPastes MB89
+Points: 32 HP / 0 Atk / 24 Def / 0 SpA / 10 SpD / 0 Spe
+Calm Nature
+- Moonblast
+- Follow Me
+- Life Dew
+- Protect
+
+Feraligatr @ Life Orb
+Ability: Sheer Force
+Level: 50
+Note: VGCPastes MB86
+Points: 31 HP / 15 Atk / 3 Def / 0 SpA / 11 SpD / 6 Spe
+Adamant Nature
+- Liquidation
+- Rock Slide
+- Aqua Jet
+- Ice Punch
+
+Florges @ Choice Scarf
+Ability: Flower Veil
+Level: 50
+Note: VGCPastes MB86
+Points: 22 HP / 0 Atk / 1 Def / 11 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Moonblast
+- Dazzling Gleam
+- Energy Ball
+- Trick
+
+Houndoom @ Focus Sash
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes MB86
+Points: 1 HP / 1 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Hasty Nature
+- Sucker Punch
+- Heat Wave
+- Protect
+- Snarl
+
+Excadrill @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Note: VGCPastes MB79
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- High Horsepower
+- Earthquake
+- Iron Head
+- Protect
+
+Zoroark-Hisui @ Focus Sash
+Ability: Illusion
+Level: 50
+Note: VGCPastes MB70
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Hyper Voice
+- Bitter Malice
+- Icy Wind
+- Protect
+
+Overqwil @ Life Orb
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB68
+Points: 9 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 23 Spe
+Adamant Nature
+- Protect
+- Poison Jab
+- Throat Chop
+- Aqua Jet
+
+Typhlosion-Hisui @ Choice Scarf
+Ability: Frisk
+Level: 50
+Note: VGCPastes MB63
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Eruption
+- Heat Wave
+- Burn Up
+- Shadow Ball
+
+Malamar-Mega @ Malamarite
+Ability: Contrary
+Level: 50
+Note: VGCPastes MB58
+Points: 32 HP / 8 Atk / 2 Def / 0 SpA / 22 SpD / 2 Spe
+Adamant Nature
+- Superpower
+- Knock Off
+- Psycho Cut
+- Protect
+
+Hawlucha-Mega @ Hawluchanite
+Ability: No Guard
+Level: 50
+Note: VGCPastes MB44
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Entrainment
+- Cross Chop
+- Dual Wingbeat
+- Detect
+
+Snorlax @ Leftovers
+Ability: Thick Fat
+Level: 50
+Note: VGCPastes MB44
+Points: 22 HP / 0 Atk / 32 Def / 0 SpA / 12 SpD / 0 Spe
+Relaxed Nature
+- Fissure
+- Smack Down
+- Stockpile
+- Protect
+
+Aegislash @ Focus Sash
+Ability: Stance Change
+Level: 50
+Note: VGCPastes MB43
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- King's Shield
+- Shadow Sneak
+- Poltergeist
+- Iron Head
+
+Gyarados @ Leftovers
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB40
+Points: 29 HP / 32 Atk / 3 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Waterfall
+- Power Whip
+- Ice Fang
+- Protect
+
+Azumarill @ Sitrus Berry
+Ability: Huge Power
+Level: 50
+Note: VGCPastes MB29
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Play Rough
+- Superpower
+- Liquidation
+- Trailblaze
+
+Orthworm @ Sitrus Berry
+Ability: Earth Eater
+Level: 50
+Note: VGCPastes MB23
+Points: 32 HP / 0 Atk / 5 Def / 0 SpA / 29 SpD / 0 Spe
+Relaxed Nature
+- Shed Tail
+- Heavy Slam
+- Iron Defense
+- Body Press
+
+Klefki @ Light Clay
+Ability: Prankster
+Level: 50
+Note: VGCPastes MB15
+Points: 32 HP / 0 Atk / 9 Def / 0 SpA / 25 SpD / 0 Spe
+Bold Nature
+- Reflect
+- Light Screen
+- Rain Dance
+- Thunder Wave
+
+Ditto @ Quick Claw
+Ability: Imposter
+Level: 50
+Note: VGCPastes MB5
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Transform
+
+Floette-Mega @ Floettite
+Ability: Fairy Aura
+Level: 50
+Note: VGCPastes MB23
+Points: 1 HP / 0 Atk / 2 Def / 30 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Dazzling Gleam
+- Moonblast
+- Calm Mind
+- Protect
+
+Vileplume @ Focus Sash
+Ability: Chlorophyll
+Level: 50
+Note: VGCPastes MB112
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Sludge Bomb
+- Leaf Storm
+- After You
+- Protect
+
+Blaziken-Mega @ Blazikenite
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes MB117
+Points: 32 HP / 11 Atk / 0 Def / 0 SpA / 6 SpD / 17 Spe
+Adamant Nature
+- Flare Blitz
+- Close Combat
+- Swords Dance
+- Detect
+
+Mimikyu @ Life Orb
+Ability: Disguise
+Level: 50
+Note: VGCPastes MB17
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Play Rough
+- Shadow Sneak
+- Trick Room
+- Swords Dance
+
+Vanilluxe @ Choice Scarf
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB83
+Points: 5 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 29 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Icy Wind
+- Sheer Cold
+
+Barbaracle-Mega @ Barbaracite
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes MB69
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Liquidation
+- Rock Slide
+- Protect
+
+Meowscarada @ Focus Sash
+Ability: Protean
+Level: 50
+Note: VGCPastes MB57
+Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Adamant Nature
+- Flower Trick
+- Knock Off
+- Triple Axel
+- Protect
+
+Blaziken @ Sitrus Berry
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes MB120
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Flare Blitz
+- Upper Hand
+- Feint
+- Protect
+
+Dragalge-Mega @ Dragalgite
+Ability: Regenerator
+Level: 50
+Note: VGCPastes MB62
+Points: 20 HP / 0 Atk / 10 Def / 28 SpA / 8 SpD / 0 Spe
+Relaxed Nature
+- Protect
+- Scald
+- Sludge Bomb
+- Dragon Pulse
+
+Sceptile-Mega @ Sceptilite
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes MB99
+Points: 32 HP / 0 Atk / 0 Def / 2 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Leaf Storm
+- Dragon Pulse
+- Detect
+- Earth Power
+
+Rotom-Heat @ Sitrus Berry
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB32
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Overheat
+- Protect
+- Thunderbolt
+- Will-O-Wisp
+
+Excadrill @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Note: VGCPastes MB14
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- High Horsepower
+- Iron Head
+- Rock Slide
+- Protect
+
+Zoroark-Hisui @ Life Orb
+Ability: Illusion
+Level: 50
+Note: VGCPastes MB64
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Hyper Voice
+- Bitter Malice
+- Icy Wind
+- Protect
+
+Overqwil @ Poison Barb
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB25
+Points: 32 HP / 1 Atk / 7 Def / 0 SpA / 26 SpD / 0 Spe
+Careful Nature
+- Throat Chop
+- Barb Barrage
+- Toxic Spikes
+- Protect
+
+Malamar-Mega @ Malamarite
+Ability: Contrary
+Level: 50
+Note: VGCPastes MB49
+Points: 32 HP / 4 Atk / 0 Def / 0 SpA / 0 SpD / 30 Spe
+Jolly Nature
+- Superpower
+- Throat Chop
+- Psycho Cut
+- Protect
+
+Gyarados @ Focus Sash
+Ability: Intimidate
+Level: 50
+Note: VGCPastes MB29
+Points: 2 HP / 32 Atk / 32 Def / 0 SpA / 0 SpD / 0 Spe
+Impish Nature
+- Waterfall
+- Dragon Cheer
+- Bounce
+- Taunt
+
+Floette-Mega @ Floettite
+Ability: Fairy Aura
+Level: 50
+Note: VGCPastes MB75
+Points: 4 HP / 0 Atk / 25 Def / 5 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Moonblast
+- Draining Kiss
+- Calm Mind
+- Protect
+
+Vileplume @ Big Root
+Ability: Effect Spore
+Level: 50
+Note: VGCPastes MB86
+Points: 31 HP / 0 Atk / 25 Def / 0 SpA / 10 SpD / 0 Spe
+Relaxed Nature
+- Sludge Bomb
+- Giga Drain
+- Strength Sap
+- Leech Seed
+
+Blaziken-Mega @ Blazikenite
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes MB87
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Detect
+- Rock Slide
+- Close Combat
+- Flare Blitz
+
+Vanilluxe @ Focus Sash
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes MB52
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Ice Shard
+- Protect
+
+Blaziken @ Focus Sash
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes MB51
+Points: 0 HP / 32 Atk / 0 Def / 2 SpA / 0 SpD / 32 Spe
+Naive Nature
+- Protect
+- Heat Wave
+- Close Combat
+- Coaching
+
+Dragalge-Mega @ Dragalgite
+Ability: Regenerator
+Level: 50
+Note: VGCPastes MB36
+Points: 32 HP / 0 Atk / 11 Def / 23 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Draco Meteor
+- Sludge Bomb
+- Thunderbolt
+- Protect
+
+Sceptile-Mega @ Sceptilite
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes MB66
+Points: 14 HP / 0 Atk / 1 Def / 26 SpA / 0 SpD / 25 Spe
+Modest Nature
+- Energy Ball
+- Dragon Pulse
+- Earth Power
+- Detect
+
+Rotom-Heat @ Choice Scarf
+Ability: Levitate
+Level: 50
+Note: VGCPastes MB18
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Thunderbolt
+- Overheat
+- Volt Switch
+- Discharge
+
+Excadrill @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Note: VGCPastes MB1
+Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
 Adamant Nature
 - Earthquake
+- Iron Head
 - Rock Slide
-- Dragon Claw
+- Protect
+
+Overqwil @ Life Orb
+Ability: Swift Swim
+Level: 50
+Note: VGCPastes MB22
+Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
+Adamant Nature
+- Gunk Shot
+- Throat Chop
+- Aqua Jet
+- Protect
+
+Malamar-Mega @ Malamarite
+Ability: Contrary
+Level: 50
+Note: VGCPastes MB37
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Knock Off
+- Psycho Cut
+- Superpower
 - Protect
 
 Garchomp-Mega @ Garchompite
 Ability: Sand Force
 Level: 50
-Note: VGCPastes PC288
+Note: VGCPastes fallback PC288
 Points: 24 HP / 20 Atk / 0 Def / 0 SpA / 1 SpD / 21 Spe
 Adamant Nature
 - Earthquake
@@ -86,846 +2391,65 @@ Adamant Nature
 - Protect
 - Rock Slide
 
-Garchomp @ Bright Powder
-Ability: Sand Veil
+Garchomp-Mega @ Garchompite
+Ability: Sand Force
 Level: 50
-Note: VGCPastes PC323
+Note: VGCPastes fallback PC91
 Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Jolly Nature
-- Dragon Claw
 - Earthquake
+- Dragon Claw
+- Rock Slide
 - Protect
-- Stomping Tantrum
 
 Garchomp-Mega @ Garchompite
 Ability: Sand Force
 Level: 50
-Note: VGCPastes PC185
-Points: 10 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
-Adamant Nature
+Note: VGCPastes fallback PC906
+Points: 4 HP / 0 Atk / 0 Def / 30 SpA / 0 SpD / 32 Spe
+Modest Nature
 - Earth Power
-- Dragon Claw
-- Rock Slide
+- Power Gem
+- Flamethrower
 - Protect
 
-Garchomp @ Choice Scarf
-Ability: Sand Veil
+Floette-Eternal @ Fairy Feather
+Ability: Flower Veil
 Level: 50
-Note: VGCPastes PC325
-Points: 12 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 22 Spe
-Adamant Nature
-- Earthquake
-- Rock Slide
-- Stomping Tantrum
-- Iron Head
-
-Garchomp-Mega @ Garchompite
-Ability: Sand Force
-Level: 50
-Note: VGCPastes PC91
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Earthquake
-- Dragon Claw
-- Rock Slide
-- Protect
-
-Sinistcha @ Sitrus Berry
-Ability: Hospitality
-Level: 50
-Note: VGCPastes PC282
-Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
-Bold Nature
-- Matcha Gotcha
-- Life Dew
-- Trick Room
-- Rage Powder
-
-Sinistcha-Masterpiece @ Sitrus Berry
-Ability: Hospitality
-Level: 50
-Note: VGCPastes PC232
-Points: 32 HP / 0 Atk / 8 Def / 0 SpA / 26 SpD / 0 Spe
-Bold Nature
-- Matcha Gotcha
-- Life Dew
-- Rage Powder
-- Trick Room
-
-Sinistcha @ Sitrus Berry
-Ability: Heatproof
-Level: 50
-Note: VGCPastes PC29
-Points: 32 HP / 0 Atk / 4 Def / 0 SpA / 29 SpD / 1 Spe
-Bold Nature
-- Calm Mind
-- Rage Powder
-- Matcha Gotcha
-- Strength Sap
-
-Sinistcha-Masterpiece @ Leftovers
-Ability: Hospitality
-Level: 50
-Note: VGCPastes PC347
-Points: 2 HP / 0 Atk / 32 Def / 0 SpA / 32 SpD / 0 Spe
-Calm Nature
-- Rage Powder
-- Shadow Ball
-- Matcha Gotcha
-- Protect
-
-Sinistcha @ Choice Scarf
-Ability: Hospitality
-Level: 50
-Note: VGCPastes PC314
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Note: VGCPastes fallback PC793
+Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 32 Spe
 Timid Nature
-- Leaf Storm
-- Matcha Gotcha
-- Shadow Ball
-- Strength Sap
-
-Sinistcha-Masterpiece @ Mental Herb
-Ability: Heatproof
-Level: 50
-Note: VGCPastes PC234
-Points: 32 HP / 0 Atk / 6 Def / 0 SpA / 28 SpD / 0 Spe
-Bold Nature
-- Matcha Gotcha
-- Calm Mind
-- Trick Room
-- Strength Sap
-
-Kingambit @ Chople Berry
-Ability: Defiant
-Level: 50
-Note: VGCPastes PC177
-Points: 32 HP / 30 Atk / 2 Def / 0 SpA / 0 SpD / 2 Spe
-Adamant Nature
-- Kowtow Cleave
-- Sucker Punch
-- Iron Head
-- Protect
-
-Kingambit @ Chople Berry
-Ability: Supreme Overlord
-Level: 50
-Note: VGCPastes PC294
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Adamant Nature
-- Protect
-- Kowtow Cleave
-- Low Kick
-- Sucker Punch
-
-Kingambit @ Black Glasses
-Ability: Supreme Overlord
-Level: 50
-Note: VGCPastes PC451
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- Kowtow Cleave
-- Sucker Punch
-- Swords Dance
-- Protect
-
-Basculegion @ Choice Scarf
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC534
-Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Wave Crash
-- Flip Turn
-- Aqua Jet
-- Last Respects
-
-Basculegion-F @ Mystic Water
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC118
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Shadow Ball
-- Muddy Water
-- Aqua Jet
-- Protect
-
-Basculegion @ Focus Sash
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC440
-Points: 4 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Wave Crash
-- Last Respects
-- Aqua Jet
-- Protect
-
-Basculegion-F @ Choice Scarf
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC531
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Flip Turn
-- Hex
-- Shadow Ball
-- Hydro Pump
-
-Basculegion @ Mystic Water
-Ability: Swift Swim
-Level: 50
-Note: VGCPastes PC370
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Protect
-- Wave Crash
-- Last Respects
-- Aqua Jet
-
-Basculegion-F @ Choice Scarf
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC313
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Shadow Ball
-- Muddy Water
-- Hydro Pump
-- Ice Beam
-
-Pelipper @ Focus Sash
-Ability: Drizzle
-Level: 50
-Note: VGCPastes PC541
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Protect
-- Tailwind
-- Weather Ball
-- Hurricane
-
-Pelipper @ Sitrus Berry
-Ability: Drizzle
-Level: 50
-Note: VGCPastes PC437
-Points: 32 HP / 0 Atk / 10 Def / 0 SpA / 14 SpD / 10 Spe
-Bold Nature
-- Protect
-- Hurricane
-- Weather Ball
-- Wide Guard
-
-Pelipper @ Focus Sash
-Ability: Rain Dish
-Level: 50
-Note: VGCPastes PC314
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Muddy Water
-- Hurricane
-- Wide Guard
-- Tailwind
-
-Aerodactyl-Mega @ Aerodactylite
-Ability: Tough Claws
-Level: 50
-Note: VGCPastes PC398
-Points: 5 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 29 Spe
-Jolly Nature
-- Rock Slide
-- Dual Wingbeat
-- Tailwind
-- Protect
-
-Aerodactyl @ Focus Sash
-Ability: Unnerve
-Level: 50
-Note: VGCPastes PC501
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Rock Slide
-- Dual Wingbeat
-- Tailwind
-- Protect
-
-Aerodactyl-Mega @ Aerodactylite
-Ability: Tough Claws
-Level: 50
-Note: VGCPastes PC442
-Points: 32 HP / 8 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
-Jolly Nature
-- Rock Slide
-- Dual Wingbeat
-- Wide Guard
-- Protect
-
-Aerodactyl @ Focus Sash
-Ability: Pressure
-Level: 50
-Note: VGCPastes PC367
-Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Rock Slide
-- Tailwind
-- Wide Guard
-- Protect
-
-Aerodactyl-Mega @ Aerodactylite
-Ability: Tough Claws
-Level: 50
-Note: VGCPastes PC318
-Points: 16 HP / 18 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Rock Slide
-- Dual Wingbeat
-- Tailwind
-- Protect
-
-Aerodactyl @ Focus Sash
-Ability: Unnerve
-Level: 50
-Note: VGCPastes PC243
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Rock Slide
-- Tailwind
-- Dual Wingbeat
-- Protect
-
-Farigiraf @ Sitrus Berry
-Ability: Armor Tail
-Level: 50
-Note: VGCPastes PC60
-Points: 29 HP / 0 Atk / 12 Def / 10 SpA / 15 SpD / 0 Spe
-Modest Nature
-- Psychic
-- Hyper Voice
-- Helping Hand
-- Trick Room
-
-Farigiraf @ Sitrus Berry
-Ability: Armor Tail
-Level: 50
-Note: VGCPastes PC227
-Points: 29 HP / 0 Atk / 20 Def / 2 SpA / 15 SpD / 0 Spe
-Bold Nature
-- Psychic
-- Hyper Voice
-- Helping Hand
-- Trick Room
-
-Farigiraf @ Sitrus Berry
-Ability: Armor Tail
-Level: 50
-Note: VGCPastes PC446
-Points: 19 HP / 0 Atk / 17 Def / 0 SpA / 30 SpD / 0 Spe
-Sassy Nature
-- Psychic
-- Rain Dance
-- Low Kick
-- Trick Room
-
-Milotic @ Leftovers
-Ability: Competitive
-Level: 50
-Note: VGCPastes PC332
-Points: 32 HP / 0 Atk / 21 Def / 10 SpA / 1 SpD / 2 Spe
-Modest Nature
-- Scald
-- Icy Wind
-- Recover
-- Protect
-
-Milotic @ Leftovers
-Ability: Marvel Scale
-Level: 50
-Note: VGCPastes PC353
-Points: 32 HP / 0 Atk / 21 Def / 1 SpA / 0 SpD / 12 Spe
-Bold Nature
-- Protect
-- Scald
-- Icy Wind
-- Recover
-
-Milotic @ Leftovers
-Ability: Cute Charm
-Level: 50
-Note: VGCPastes PC311
-Points: 32 HP / 0 Atk / 11 Def / 1 SpA / 14 SpD / 8 Spe
-Bold Nature
-- Scald
-- Ice Beam
-- Icy Wind
-- Protect
-
-Floette-Mega @ Floettite
-Ability: Fairy Aura
-Level: 50
-Note: VGCPastes PC405
-Points: 31 HP / 0 Atk / 8 Def / 16 SpA / 0 SpD / 11 Spe
-Modest Nature
-- Dazzling Gleam
-- Moonblast
-- Calm Mind
-- Protect
-
-Floette-Mega @ Floettite
-Ability: Fairy Aura
-Level: 50
-Note: VGCPastes PC157
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Moonblast
-- Protect
-- Calm Mind
-- Dazzling Gleam
-
-Floette-Mega @ Floettite
-Ability: Fairy Aura
-Level: 50
-Note: VGCPastes PC235
-Points: 31 HP / 0 Atk / 31 Def / 3 SpA / 0 SpD / 1 Spe
-Bold Nature
-- Dazzling Gleam
-- Calm Mind
-- Protect
-- Moonblast
-
-Archaludon @ Leftovers
-Ability: Stamina
-Level: 50
-Note: VGCPastes PC502
-Points: 32 HP / 0 Atk / 0 Def / 6 SpA / 25 SpD / 3 Spe
-Modest Nature
-- Electro Shot
-- Flash Cannon
-- Dragon Pulse
-- Protect
-
-Archaludon @ White Herb
-Ability: Sturdy
-Level: 50
-Note: VGCPastes PC287
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Electro Shot
-- Draco Meteor
-- Flash Cannon
-- Protect
-
-Archaludon @ Dragon Fang
-Ability: Stalwart
-Level: 50
-Note: VGCPastes PC304
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
-Modest Nature
-- Protect
-- Flash Cannon
-- Steel Beam
-- Draco Meteor
-
-Whimsicott @ Focus Sash
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC94
-Points: 19 HP / 0 Atk / 0 Def / 13 SpA / 1 SpD / 32 Spe
-Timid Nature
-- Tailwind
-- Encore
-- Moonblast
-- Protect
-
-Whimsicott @ Occa Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC281
-Points: 32 HP / 0 Atk / 17 Def / 0 SpA / 17 SpD / 0 Spe
-Relaxed Nature
-- Dazzling Gleam
-- Encore
-- Trick Room
-- Protect
-
-Whimsicott @ Mental Herb
-Ability: Chlorophyll
-Level: 50
-Note: VGCPastes PC200
-Points: 20 HP / 0 Atk / 1 Def / 1 SpA / 15 SpD / 29 Spe
-Timid Nature
-- Moonblast
-- Tailwind
-- Encore
-- Fake Tears
-
-Aegislash @ Spell Tag
-Ability: Stance Change
-Level: 50
-Note: VGCPastes PC492
-Points: 31 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 5 Spe
-Adamant Nature
-- King's Shield
-- Poltergeist
-- Iron Head
-- Shadow Sneak
-
-Aegislash @ Spell Tag
-Ability: Stance Change
-Level: 50
-Note: VGCPastes PC244
-Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
-Modest Nature
-- Flash Cannon
-- Shadow Ball
-- Wide Guard
-- King's Shield
-
-Aegislash @ Leftovers
-Ability: Stance Change
-Level: 50
-Note: VGCPastes PC199
-Points: 32 HP / 0 Atk / 9 Def / 0 SpA / 25 SpD / 0 Spe
-Sassy Nature
-- Shadow Ball
-- Iron Head
-- King's Shield
-- Substitute
-
-Meganium-Mega @ Meganiumite
-Ability: Mega Sol
-Level: 50
-Note: VGCPastes PC298
-Points: 30 HP / 0 Atk / 1 Def / 27 SpA / 1 SpD / 7 Spe
-Modest Nature
-- Solar Beam
-- Dazzling Gleam
-- Weather Ball
-- Protect
-
-Meganium-Mega @ Meganiumite
-Ability: Mega Sol
-Level: 50
-Note: VGCPastes PC87
-Points: 32 HP / 0 Atk / 20 Def / 7 SpA / 7 SpD / 0 Spe
-Modest Nature
-- Protect
-- Solar Beam
-- Weather Ball
-- Synthesis
-
-Meganium-Mega @ Meganiumite
-Ability: Mega Sol
-Level: 50
-Note: VGCPastes PC1
-Points: 21 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 12 Spe
-Modest Nature
-- Solar Beam
-- Earth Power
+- Light of Ruin
 - Dazzling Gleam
 - Protect
-
-Talonflame @ Sharp Beak
-Ability: Gale Wings
-Level: 50
-Note: VGCPastes PC66
-Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Brave Bird
-- Flare Blitz
-- Tailwind
-- Protect
-
-Talonflame @ Charti Berry
-Ability: Gale Wings
-Level: 50
-Note: VGCPastes PC408
-Points: 29 HP / 0 Atk / 0 Def / 5 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Overheat
-- Will-O-Wisp
-- Tailwind
-- Protect
-
-Talonflame @ Sharp Beak
-Ability: Gale Wings
-Level: 50
-Note: VGCPastes PC8
-Points: 0 HP / 32 Atk / 0 Def / 22 SpA / 0 SpD / 11 Spe
-Naughty Nature
-- Brave Bird
-- Overheat
-- Protect
-- Tailwind
-
-Maushold @ Focus Sash
-Ability: Friend Guard
-Level: 50
-Note: VGCPastes PC511
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Super Fang
-- Follow Me
-- Encore
-- Protect
-
-Maushold-Four @ Chople Berry
-Ability: Friend Guard
-Level: 50
-Note: VGCPastes PC178
-Points: 32 HP / 0 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Super Fang
-- Follow Me
-- Taunt
-- Protect
-
-Maushold @ Chople Berry
-Ability: Friend Guard
-Level: 50
-Note: VGCPastes PC502
-Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
-Impish Nature
-- Super Fang
-- Follow Me
-- Feint
-- Protect
-
-Maushold-Four @ Chople Berry
-Ability: Friend Guard
-Level: 50
-Note: VGCPastes PC265
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 1 SpD / 1 Spe
-Impish Nature
-- Super Fang
-- Taunt
-- Follow Me
-- Protect
-
-Maushold @ Chople Berry
-Ability: Friend Guard
-Level: 50
-Note: VGCPastes PC135
-Points: 32 HP / 0 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Super Fang
-- Feint
-- Follow Me
-- Protect
-
-Maushold-Four @ Focus Sash
-Ability: Technician
-Level: 50
-Note: VGCPastes PC1
-Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Population Bomb
-- Bite
-- Follow Me
-- Protect
-
-Corviknight @ Leftovers
-Ability: Mirror Armor
-Level: 50
-Note: VGCPastes PC185
-Points: 32 HP / 0 Atk / 15 Def / 0 SpA / 10 SpD / 9 Spe
-Impish Nature
-- Brave Bird
-- Body Press
-- Roost
-- Tailwind
-
-Corviknight @ Leftovers
-Ability: Mirror Armor
-Level: 50
-Note: VGCPastes PC374
-Points: 32 HP / 13 Atk / 0 Def / 0 SpA / 13 SpD / 8 Spe
-Adamant Nature
-- Brave Bird
-- Iron Head
-- Tailwind
-- Roost
-
-Corviknight @ Leftovers
-Ability: Pressure
-Level: 50
-Note: VGCPastes PC482
-Points: 27 HP / 23 Atk / 0 Def / 0 SpA / 0 SpD / 16 Spe
-Adamant Nature
-- Brave Bird
-- Bulk Up
-- Tailwind
-- Roost
-
-Venusaur @ Focus Sash
-Ability: Chlorophyll
-Level: 50
-Note: VGCPastes PC97
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Protect
-- Sludge Bomb
-- Sleep Powder
-- Leaf Storm
-
-Venusaur-Mega @ Venusaurite
-Ability: Thick Fat
-Level: 50
-Note: VGCPastes PC360
-Points: 32 HP / 0 Atk / 0 Def / 25 SpA / 0 SpD / 9 Spe
-Modest Nature
-- Sludge Bomb
-- Giga Drain
-- Earth Power
-- Protect
-
-Venusaur @ Focus Sash
-Ability: Chlorophyll
-Level: 50
-Note: VGCPastes PC28
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Leaf Storm
-- Sludge Bomb
-- Sleep Powder
-- Protect
-
-Venusaur-Mega @ Venusaurite
-Ability: Thick Fat
-Level: 50
-Note: VGCPastes PC367
-Points: 32 HP / 0 Atk / 7 Def / 16 SpA / 10 SpD / 1 Spe
-Bold Nature
-- Protect
-- Leech Seed
-- Sludge Bomb
-- Giga Drain
-
-Venusaur @ Occa Berry
-Ability: Chlorophyll
-Level: 50
-Note: VGCPastes PC7
-Points: 12 HP / 0 Atk / 1 Def / 20 SpA / 1 SpD / 32 Spe
-Modest Nature
-- Sleep Powder
-- Acid Spray
 - Energy Ball
-- Sludge Bomb
 
-Venusaur-Mega @ Venusaurite
-Ability: Thick Fat
+Floette-Eternal @ Choice Scarf
+Ability: Flower Veil
 Level: 50
-Note: VGCPastes PC98
-Points: 25 HP / 0 Atk / 10 Def / 11 SpA / 1 SpD / 19 Spe
-Calm Nature
-- Protect
-- Sludge Bomb
-- Earth Power
-- Leech Seed
-
-Torkoal @ Charcoal
-Ability: Drought
-Level: 50
-Note: VGCPastes PC515
-Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
-Quiet Nature
-- Weather Ball
-- Eruption
-- Heat Wave
-- Protect
-
-Torkoal @ Sitrus Berry
-Ability: Drought
-Level: 50
-Note: VGCPastes PC459
-Points: 2 HP / 0 Atk / 32 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Eruption
-- Overheat
-- Solar Beam
-- Will-O-Wisp
-
-Torkoal @ Charcoal
-Ability: Drought
-Level: 50
-Note: VGCPastes PC222
-Points: 10 HP / 0 Atk / 0 Def / 32 SpA / 18 SpD / 6 Spe
-Modest Nature
-- Eruption
-- Solar Beam
-- Heat Wave
-- Helping Hand
-
-Primarina @ Mystic Water
-Ability: Liquid Voice
-Level: 50
-Note: VGCPastes PC515
-Points: 30 HP / 0 Atk / 8 Def / 28 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Hyper Voice
+Note: VGCPastes fallback PC720
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Light of Ruin
+- Dazzling Gleam
 - Moonblast
-- Substitute
-- Protect
+- Trick
 
-Primarina @ Leftovers
-Ability: Liquid Voice
+Floette-Eternal @ Fairy Feather
+Ability: Flower Veil
 Level: 50
-Note: VGCPastes PC458
-Points: 16 HP / 0 Atk / 21 Def / 24 SpA / 0 SpD / 5 Spe
-Modest Nature
-- Hyper Voice
+Note: VGCPastes fallback PC633
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
 - Moonblast
-- Hydro Cannon
-- Protect
-
-Primarina @ Mystic Water
-Ability: Liquid Voice
-Level: 50
-Note: VGCPastes PC182
-Points: 32 HP / 0 Atk / 8 Def / 24 SpA / 0 SpD / 2 Spe
-Modest Nature
-- Moonblast
-- Hyper Voice
-- Aqua Jet
-- Protect
-
-Excadrill @ Focus Sash
-Ability: Sand Rush
-Level: 50
-Note: VGCPastes PC252
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- High Horsepower
-- Iron Head
-- Rock Slide
-- Protect
-
-Excadrill @ Choice Scarf
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC122
-Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Adamant Nature
-- Iron Head
-- High Horsepower
-- Earthquake
-- Rock Slide
-
-Excadrill @ Focus Sash
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC14
-Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Fissure
-- Horn Drill
-- Earthquake
+- Dazzling Gleam
+- Light of Ruin
 - Protect
 
 Sableye-Mega @ Sablenite
 Ability: Magic Bounce
 Level: 50
-Note: VGCPastes PC541
+Note: VGCPastes fallback PC541
 Points: 32 HP / 0 Atk / 5 Def / 0 SpA / 29 SpD / 0 Spe
 Relaxed Nature
 - Will-O-Wisp
@@ -933,1183 +2457,87 @@ Relaxed Nature
 - Foul Play
 - Fake Out
 
-Sableye @ Roseli Berry
-Ability: Prankster
+Froslass
+Ability: Snow Cloak
 Level: 50
-Note: VGCPastes PC191
-Points: 32 HP / 0 Atk / 8 Def / 0 SpA / 26 SpD / 0 Spe
-Calm Nature
-- Encore
-- Disable
-- Rain Dance
-- Taunt
-
-Sableye @ Roseli Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC25
-Points: 32 HP / 0 Atk / 9 Def / 0 SpA / 25 SpD / 0 Spe
-Careful Nature
-- Reflect
-- Light Screen
-- Foul Play
-- Encore
-
-Sableye @ Roseli Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC464
-Points: 32 HP / 0 Atk / 15 Def / 0 SpA / 19 SpD / 0 Spe
-Bold Nature
-- Disable
-- Sunny Day
-- Encore
-- Fake Out
-
-Tyranitar-Mega @ Tyranitarite
-Ability: Sand Stream
-Level: 50
-Note: VGCPastes PC538
-Points: 32 HP / 25 Atk / 0 Def / 0 SpA / 0 SpD / 9 Spe
-Adamant Nature
-- Rock Slide
-- Low Kick
-- Knock Off
-- Protect
-
-Tyranitar @ Chople Berry
-Ability: Sand Stream
-Level: 50
-Note: VGCPastes PC274
-Points: 25 HP / 26 Atk / 1 Def / 0 SpA / 0 SpD / 14 Spe
-Adamant Nature
-- Rock Slide
-- Knock Off
-- Protect
-- Low Kick
-
-Tyranitar-Mega @ Tyranitarite
-Ability: Sand Stream
-Level: 50
-Note: VGCPastes PC210
-Points: 12 HP / 20 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Rock Slide
-- Dragon Dance
-- Knock Off
-- Protect
-
-Tyranitar @ Choice Scarf
-Ability: Sand Stream
-Level: 50
-Note: VGCPastes PC138
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Crunch
-- Ice Punch
-- Low Kick
-- Rock Slide
-
-Tyranitar-Mega @ Tyranitarite
-Ability: Sand Stream
-Level: 50
-Note: VGCPastes PC257
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- Rock Slide
-- Knock Off
-- Low Kick
-- Protect
-
-Tyranitar @ Focus Sash
-Ability: Sand Stream
-Level: 50
-Note: VGCPastes PC523
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Rock Slide
-- Knock Off
-- Protect
-- Superpower
-
-Kommo-o @ Leftovers
-Ability: Soundproof
-Level: 50
-Note: VGCPastes PC474
-Points: 10 HP / 0 Atk / 0 Def / 24 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Clanging Scales
-- Aura Sphere
-- Clangorous Soul
-- Protect
-
-Kommo-o @ Dragon Fang
-Ability: Overcoat
-Level: 50
-Note: VGCPastes PC219
-Points: 5 HP / 0 Atk / 1 Def / 30 SpA / 1 SpD / 29 Spe
-Modest Nature
-- Clanging Scales
-- Aura Sphere
-- Clangorous Soul
-- Protect
-
-Kommo-o @ Leftovers
-Ability: Overcoat
-Level: 50
-Note: VGCPastes PC209
-Points: 32 HP / 8 Atk / 9 Def / 0 SpA / 14 SpD / 3 Spe
-Careful Nature
-- Body Press
-- Fire Punch
-- Iron Defense
-- Protect
-
-Sylveon @ Fairy Feather
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC199
-Points: 21 HP / 0 Atk / 20 Def / 20 SpA / 0 SpD / 5 Spe
-Modest Nature
-- Hyper Voice
-- Quick Attack
-- Yawn
-- Detect
-
-Sylveon @ Fairy Feather
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC451
-Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
-Quiet Nature
-- Hyper Voice
-- Moonblast
-- Substitute
-- Protect
-
-Sylveon @ Leftovers
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC211
-Points: 32 HP / 0 Atk / 0 Def / 29 SpA / 0 SpD / 5 Spe
-Modest Nature
-- Hyper Voice
-- Substitute
-- Calm Mind
-- Protect
-
-Politoed @ Leftovers
-Ability: Drizzle
-Level: 50
-Note: VGCPastes PC214
-Points: 32 HP / 0 Atk / 12 Def / 1 SpA / 20 SpD / 1 Spe
-Calm Nature
-- Weather Ball
-- Helping Hand
-- Protect
-- Encore
-
-Politoed @ Leftovers
-Ability: Drizzle
-Level: 50
-Note: VGCPastes PC22
-Points: 32 HP / 0 Atk / 7 Def / 20 SpA / 7 SpD / 0 Spe
-Modest Nature
-- Weather Ball
-- Encore
-- Perish Song
-- Protect
-
-Politoed @ Sitrus Berry
-Ability: Drizzle
-Level: 50
-Note: VGCPastes PC528
-Points: 31 HP / 0 Atk / 2 Def / 32 SpA / 1 SpD / 0 Spe
-Quiet Nature
-- Muddy Water
-- Weather Ball
-- Ice Beam
-- Rain Dance
-
-Dragapult @ Dragon Fang
-Ability: Clear Body
-Level: 50
-Note: VGCPastes PC94
-Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Dragon Darts
-- Protect
-- Phantom Force
-- U-turn
-
-Dragapult @ Lum Berry
-Ability: Infiltrator
-Level: 50
-Note: VGCPastes PC276
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Naive Nature
-- Draco Meteor
+Note: VGCPastes fallback PC149
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Blizzard
+- Nasty Plot
 - Shadow Ball
-- Will-O-Wisp
-- Psychic Fangs
+- Protect
 
-Dragapult @ Focus Sash
+Blastoise @ Leftovers
+Ability: Torrent
+Level: 50
+Note: VGCPastes fallback PC854
+Points: 29 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 5 Spe
+Modest Nature
+- Protect
+- Hydro Cannon
+- Muddy Water
+- Helping Hand
+
+Blastoise @ Leftovers
+Ability: Rain Dish
+Level: 50
+Note: VGCPastes fallback PC639
+Points: 32 HP / 0 Atk / 30 Def / 0 SpA / 4 SpD / 0 Spe
+Impish Nature
+- Flip Turn
+- Fake Out
+- Yawn
+- Protect
+
+Blastoise @ Sitrus Berry
+Ability: Torrent
+Level: 50
+Note: VGCPastes fallback PC594
+Points: 32 HP / 0 Atk / 18 Def / 0 SpA / 15 SpD / 1 Spe
+Sassy Nature
+- Protect
+- Flip Turn
+- Fake Out
+- Yawn
+
+Gengar @ Focus Sash
 Ability: Cursed Body
 Level: 50
-Note: VGCPastes PC286
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Note: VGCPastes fallback PC168
+Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
 Timid Nature
-- Thunder Wave
-- Hex
-- Will-O-Wisp
-- Dragon Pulse
-
-Hydreigon @ Choice Scarf
-Ability: Levitate
-Level: 50
-Note: VGCPastes PC172
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
-Modest Nature
-- Draco Meteor
-- Dark Pulse
-- Snarl
-- Heat Wave
-
-Hydreigon @ Choice Scarf
-Ability: Levitate
-Level: 50
-Note: VGCPastes PC232
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Snarl
-- Dark Pulse
-- Draco Meteor
-- Tailwind
-
-Hydreigon @ Focus Sash
-Ability: Levitate
-Level: 50
-Note: VGCPastes PC345
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Protect
-- Dark Pulse
-- Draco Meteor
-- Tailwind
-
-Dragonite @ Lum Berry
-Ability: Multiscale
-Level: 50
-Note: VGCPastes PC271
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Protect
-- Extreme Speed
-- Scale Shot
-- Tailwind
-
-Dragonite-Mega @ Dragoninite
-Ability: Multiscale
-Level: 50
-Note: VGCPastes PC132
-Points: 4 HP / 0 Atk / 0 Def / 30 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Draco Meteor
-- Tailwind
-- Hurricane
+- Sludge Bomb
+- Shadow Ball
+- Rain Dance
 - Protect
 
-Dragonite @ Choice Scarf
-Ability: Inner Focus
+Gengar @ Focus Sash
+Ability: Cursed Body
 Level: 50
-Note: VGCPastes PC384
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Draco Meteor
-- Hurricane
-- Ice Beam
-- Thunderbolt
-
-Dragonite-Mega @ Dragoninite
-Ability: Multiscale
-Level: 50
-Note: VGCPastes PC347
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Draco Meteor
-- Thunder
-- Ice Beam
-- Protect
-
-Dragonite @ Lum Berry
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC144
-Points: 21 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 13 Spe
-Adamant Nature
-- Dragon Claw
-- Extreme Speed
-- Fire Punch
-- Tailwind
-
-Dragonite-Mega @ Dragoninite
-Ability: Multiscale
-Level: 50
-Note: VGCPastes PC98
-Points: 32 HP / 0 Atk / 4 Def / 24 SpA / 1 SpD / 5 Spe
-Modest Nature
-- Protect
-- Roost
-- Fire Spin
-- Dragon Pulse
-
-Palafin @ Mystic Water
-Ability: Zero to Hero
-Level: 50
-Note: VGCPastes PC527
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
-Adamant Nature
-- Protect
-- Jet Punch
-- Flip Turn
-- Wave Crash
-
-Palafin @ Mystic Water
-Ability: Zero to Hero
-Level: 50
-Note: VGCPastes PC474
-Points: 32 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 3 Spe
-Adamant Nature
-- Flip Turn
-- Jet Punch
-- Drain Punch
-- Protect
-
-Palafin @ Choice Scarf
-Ability: Zero to Hero
-Level: 50
-Note: VGCPastes PC228
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
-Adamant Nature
-- Wave Crash
-- Flip Turn
-- Close Combat
-- Jet Punch
-
-Clefable-Mega @ Clefablite
-Ability: Magic Bounce
-Level: 50
-Note: VGCPastes PC101
-Points: 32 HP / 0 Atk / 0 Def / 22 SpA / 0 SpD / 11 Spe
-Modest Nature
-- Moonblast
-- Follow Me
-- Calm Mind
-- Protect
-
-Clefable @ Sitrus Berry
-Ability: Unaware
-Level: 50
-Note: VGCPastes PC226
-Points: 30 HP / 0 Atk / 27 Def / 1 SpA / 7 SpD / 1 Spe
-Bold Nature
-- Follow Me
-- Helping Hand
-- Moonblast
-- Protect
-
-Clefable-Mega @ Clefablite
-Ability: Magic Bounce
-Level: 50
-Note: VGCPastes PC538
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Relaxed Nature
-- Protect
-- Follow Me
-- Moonblast
-- Encore
-
-Clefable @ Sitrus Berry
-Ability: Magic Guard
-Level: 50
-Note: VGCPastes PC479
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Bold Nature
-- Protect
-- Moonblast
-- Follow Me
-- Helping Hand
-
-Clefable-Mega @ Clefablite
-Ability: Magic Bounce
-Level: 50
-Note: VGCPastes PC256
-Points: 31 HP / 0 Atk / 7 Def / 5 SpA / 20 SpD / 3 Spe
-Calm Nature
-- Moonblast
-- Stored Power
-- Psych Up
-- Moonlight
-
-Clefable @ Focus Sash
-Ability: Unaware
-Level: 50
-Note: VGCPastes PC38
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
-Modest Nature
-- Moonblast
-- Helping Hand
-- Follow Me
-- Charm
-
-Tsareena @ Choice Scarf
-Ability: Queenly Majesty
-Level: 50
-Note: VGCPastes PC477
-Points: 4 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 30 Spe
-Jolly Nature
-- Trop Kick
-- Triple Axel
-- Zen Headbutt
-- U-turn
-
-Tsareena @ Sitrus Berry
-Ability: Queenly Majesty
-Level: 50
-Note: VGCPastes PC458
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Triple Axel
-- Trop Kick
-- Low Kick
-- Protect
-
-Tsareena @ Miracle Seed
-Ability: Queenly Majesty
-Level: 50
-Note: VGCPastes PC478
-Points: 5 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 29 Spe
-Jolly Nature
-- Protect
-- Power Whip
-- Triple Axel
-- Helping Hand
-
-Volcarona @ Leftovers
-Ability: Flame Body
-Level: 50
-Note: VGCPastes PC348
-Points: 32 HP / 0 Atk / 5 Def / 5 SpA / 0 SpD / 24 Spe
-Modest Nature
-- Protect
-- Quiver Dance
-- Giga Drain
-- Heat Wave
-
-Volcarona @ Sitrus Berry
-Ability: Flame Body
-Level: 50
-Note: VGCPastes PC81
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Fiery Dance
-- Quiver Dance
-- Giga Drain
-- Protect
-
-Volcarona @ Charti Berry
-Ability: Flame Body
-Level: 50
-Note: VGCPastes PC48
-Points: 32 HP / 0 Atk / 29 Def / 0 SpA / 0 SpD / 5 Spe
-Bold Nature
-- Overheat
-- Struggle Bug
-- Rage Powder
-- Tailwind
-
-Oranguru @ Mental Herb
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC326
-Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
-Bold Nature
-- Protect
-- Instruct
-- Psychic
-- Trick Room
-
-Oranguru @ Mental Herb
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC359
-Points: 32 HP / 0 Atk / 24 Def / 0 SpA / 10 SpD / 0 Spe
-Sassy Nature
-- Psychic
-- Instruct
-- Encore
-- Trick Room
-
-Oranguru @ Leftovers
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC243
-Points: 32 HP / 0 Atk / 28 Def / 0 SpA / 6 SpD / 0 Spe
-Impish Nature
-- Trick Room
-- Instruct
-- Protect
-- Foul Play
-
-Orthworm @ Sitrus Berry
-Ability: Earth Eater
-Level: 50
-Note: VGCPastes PC69
-Points: 32 HP / 1 Atk / 25 Def / 0 SpA / 8 SpD / 0 Spe
-Impish Nature
-- Heavy Slam
-- Shed Tail
-- Body Press
-- Iron Defense
-
-Orthworm @ Occa Berry
-Ability: Earth Eater
-Level: 50
-Note: VGCPastes PC263
-Points: 31 HP / 0 Atk / 0 Def / 0 SpA / 32 SpD / 3 Spe
-Careful Nature
-- Heavy Slam
-- Helping Hand
-- Body Press
-- Smack Down
-
-Orthworm @ Sitrus Berry
-Ability: Earth Eater
-Level: 50
-Note: VGCPastes PC164
-Points: 32 HP / 0 Atk / 5 Def / 0 SpA / 29 SpD / 0 Spe
-Relaxed Nature
-- Shed Tail
-- Heavy Slam
-- Iron Defense
-- Body Press
-
-Hatterene @ Fairy Feather
-Ability: Magic Bounce
-Level: 50
-Note: VGCPastes PC242
-Points: 28 HP / 0 Atk / 6 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Psychic
-- Dazzling Gleam
-- Trick Room
-- Protect
-
-Hatterene @ Focus Sash
-Ability: Magic Bounce
-Level: 50
-Note: VGCPastes PC432
+Note: VGCPastes fallback PC740
 Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
 Quiet Nature
-- Dazzling Gleam
-- Expanding Force
-- Psychic Terrain
-- Trick Room
-
-Hatterene @ Focus Sash
-Ability: Magic Bounce
-Level: 50
-Note: VGCPastes PC531
-Points: 32 HP / 0 Atk / 9 Def / 24 SpA / 1 SpD / 0 Spe
-Quiet Nature
-- Dazzling Gleam
-- Protect
-- Nuzzle
-- Trick Room
-
-Meowscarada @ Choice Scarf
-Ability: Protean
-Level: 50
-Note: VGCPastes PC469
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Flower Trick
-- Knock Off
-- Low Kick
-- Triple Axel
-
-Meowscarada @ Focus Sash
-Ability: Overgrow
-Level: 50
-Note: VGCPastes PC27
-Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Flower Trick
-- Knock Off
-- Protect
-- Sucker Punch
-
-Meowscarada @ Focus Sash
-Ability: Protean
-Level: 50
-Note: VGCPastes PC66
-Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Flower Trick
-- Knock Off
-- Sucker Punch
-- Protect
-
-Gyarados-Mega @ Gyaradosite
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC538
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Protect
-- Dragon Dance
-- Waterfall
-- Crunch
-
-Gyarados @ Lum Berry
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC26
-Points: 32 HP / 1 Atk / 17 Def / 0 SpA / 10 SpD / 6 Spe
-Careful Nature
-- Protect
-- Waterfall
-- Taunt
-- Thunder Wave
-
-Gyarados-Mega @ Gyaradosite
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC181
-Points: 26 HP / 5 Atk / 3 Def / 0 SpA / 1 SpD / 31 Spe
-Adamant Nature
-- Waterfall
-- Dragon Dance
-- Crunch
-- Protect
-
-Gyarados @ Sitrus Berry
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC321
-Points: 32 HP / 5 Atk / 26 Def / 0 SpA / 1 SpD / 2 Spe
-Adamant Nature
-- Waterfall
-- Thunder Wave
-- Taunt
-- Helping Hand
-
-Gyarados-Mega @ Gyaradosite
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC102
-Points: 9 HP / 31 Atk / 3 Def / 0 SpA / 10 SpD / 13 Spe
-Adamant Nature
-- Waterfall
-- Crunch
-- Protect
-- Dragon Dance
-
-Gyarados @ Choice Scarf
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC294
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Waterfall
-- Power Whip
-- Stone Edge
-- Ice Fang
-
-Mimikyu @ Spell Tag
-Ability: Disguise
-Level: 50
-Note: VGCPastes PC544
-Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Play Rough
-- Shadow Claw
-- Shadow Sneak
-- Trick Room
-
-Mimikyu @ Mental Herb
-Ability: Disguise
-Level: 50
-Note: VGCPastes PC182
-Points: 32 HP / 30 Atk / 0 Def / 0 SpA / 4 SpD / 0 Spe
-Brave Nature
-- Shadow Claw
-- Play Rough
-- Trick Room
-- Protect
-
-Mimikyu @ Mental Herb
-Ability: Disguise
-Level: 50
-Note: VGCPastes PC133
-Points: 32 HP / 18 Atk / 0 Def / 0 SpA / 14 SpD / 0 Spe
-Adamant Nature
-- Trick Room
-- Shadow Sneak
-- Play Rough
-- Will-O-Wisp
-
-Mamoswine @ Focus Sash
-Ability: Oblivious
-Level: 50
-Note: VGCPastes PC106
-Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
-Adamant Nature
-- Earthquake
-- Protect
-- Ice Shard
-- Icicle Crash
-
-Mamoswine @ Choice Scarf
-Ability: Oblivious
-Level: 50
-Note: VGCPastes PC253
-Points: 29 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 5 Spe
-Adamant Nature
-- Earthquake
-- High Horsepower
-- Icicle Crash
-- Ice Shard
-
-Mamoswine @ Soft Sand
-Ability: Oblivious
-Level: 50
-Note: VGCPastes PC107
-Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
-Jolly Nature
-- Earthquake
-- High Horsepower
-- Icicle Crash
-- Protect
-
-Meowstic @ Mental Herb
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC184
-Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 12 SpD / 0 Spe
-Bold Nature
-- Fake Out
-- Light Screen
-- Reflect
-- Yawn
-
-Meowstic @ Colbur Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC340
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Bold Nature
-- Psychic Terrain
-- Expanding Force
-- Fake Out
-- Helping Hand
-
-Meowstic @ Chesto Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC256
-Points: 32 HP / 0 Atk / 23 Def / 1 SpA / 9 SpD / 1 Spe
-Calm Nature
-- Stored Power
-- Charge Beam
-- Psych Up
-- Rest
-
-Gallade @ Scope Lens
-Ability: Sharpness
-Level: 50
-Note: VGCPastes PC173
-Points: 0 HP / 32 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Adamant Nature
-- Sacred Sword
-- Psycho Cut
-- Trick Room
-- Wide Guard
-
-Gallade-Mega @ Galladite
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC293
-Points: 6 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 27 Spe
-Jolly Nature
-- Sacred Sword
-- Thunder Punch
-- Ice Punch
-- Protect
-
-Gallade @ Choice Scarf
-Ability: Sharpness
-Level: 50
-Note: VGCPastes PC369
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Psycho Cut
-- Sacred Sword
-- Ice Punch
-- Stone Edge
-
-Gallade @ Black Belt
-Ability: Sharpness
-Level: 50
-Note: VGCPastes PC300
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Brave Nature
-- Sacred Sword
-- Psycho Cut
-- Trick Room
-- Protect
-
-Tinkaton @ Shuca Berry
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC410
-Points: 32 HP / 1 Atk / 25 Def / 0 SpA / 0 SpD / 8 Spe
-Jolly Nature
-- Gigaton Hammer
-- Fake Out
-- Encore
-- Protect
-
-Tinkaton @ Sitrus Berry
-Ability: Own Tempo
-Level: 50
-Note: VGCPastes PC272
-Points: 31 HP / 15 Atk / 9 Def / 0 SpA / 0 SpD / 11 Spe
-Adamant Nature
-- Gigaton Hammer
-- Play Rough
-- Helping Hand
-- Fake Out
-
-Tinkaton @ Shuca Berry
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC116
-Points: 23 HP / 16 Atk / 14 Def / 0 SpA / 1 SpD / 12 Spe
-Adamant Nature
-- Gigaton Hammer
-- Play Rough
-- Feint
-- Fake Out
-
-Araquanid @ Never-Melt Ice
-Ability: Water Bubble
-Level: 50
-Note: VGCPastes PC142
-Points: 8 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 26 Spe
-Modest Nature
-- Ice Beam
-- Hydro Pump
-- Sticky Web
-- Wide Guard
-
-Araquanid @ Mystic Water
-Ability: Water Bubble
-Level: 50
-Note: VGCPastes PC84
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 0 Spe
-Brave Nature
-- Wide Guard
-- Liquidation
-- Leech Life
-- Protect
-
-Araquanid @ Mystic Water
-Ability: Water Bubble
-Level: 50
-Note: VGCPastes PC59
-Points: 32 HP / 30 Atk / 0 Def / 0 SpA / 4 SpD / 0 Spe
-Brave Nature
-- Liquidation
-- Icy Wind
-- Wide Guard
-- Protect
-
-Empoleon @ Mystic Water
-Ability: Competitive
-Level: 50
-Note: VGCPastes PC362
-Points: 12 HP / 0 Atk / 22 Def / 24 SpA / 8 SpD / 0 Spe
-Modest Nature
-- Water Pulse
-- Icy Wind
-- Flash Cannon
-- Protect
-
-Empoleon @ Leftovers
-Ability: Competitive
-Level: 50
-Note: VGCPastes PC39
-Points: 32 HP / 0 Atk / 0 Def / 19 SpA / 0 SpD / 15 Spe
-Modest Nature
-- Water Pulse
-- Flash Cannon
-- Roar
-- Protect
-
-Scizor-Mega @ Scizorite
-Ability: Technician
-Level: 50
-Note: VGCPastes PC470
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 1 Spe
-Adamant Nature
-- Bullet Punch
-- Protect
-- Bug Bite
-- Swords Dance
-
-Scizor @ Metal Coat
-Ability: Technician
-Level: 50
-Note: VGCPastes PC92
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
-Adamant Nature
-- Bug Bite
-- Bullet Punch
-- Swords Dance
-- Protect
-
-Scizor-Mega @ Scizorite
-Ability: Technician
-Level: 50
-Note: VGCPastes PC542
-Points: 32 HP / 0 Atk / 7 Def / 0 SpA / 27 SpD / 0 Spe
-Impish Nature
-- Sandstorm
-- Bullet Punch
-- Close Combat
-- Protect
-
-Scizor @ White Herb
-Ability: Technician
-Level: 50
-Note: VGCPastes PC142
-Points: 26 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 10 Spe
-Adamant Nature
-- Bullet Punch
-- Swords Dance
-- Close Combat
-- Protect
-
-Scizor-Mega @ Scizorite
-Ability: Technician
-Level: 50
-Note: VGCPastes PC161
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Adamant Nature
-- Bullet Punch
-- U-turn
-- Close Combat
-- Iron Head
-
-Scizor @ Metal Coat
-Ability: Swarm
-Level: 50
-Note: VGCPastes PC51
-Points: 11 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 23 Spe
-Adamant Nature
-- Bullet Punch
-- Swords Dance
-- Knock Off
-- Protect
-
-Heliolisk @ Choice Scarf
-Ability: Dry Skin
-Level: 50
-Note: VGCPastes PC536
-Points: 7 HP / 0 Atk / 4 Def / 32 SpA / 0 SpD / 23 Spe
-Modest Nature
-- Thunderbolt
-- Volt Switch
-- Electroweb
-- Dragon Pulse
-
-Heliolisk @ Focus Sash
-Ability: Dry Skin
-Level: 50
-Note: VGCPastes PC535
-Points: 4 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 29 Spe
-Timid Nature
-- Thunder
-- Glare
-- Volt Switch
-- Protect
-
-Heliolisk @ Magnet
-Ability: Solar Power
-Level: 50
-Note: VGCPastes PC459
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Volt Switch
-- Round
-- Weather Ball
-- Electroweb
-
-Raichu @ Focus Sash
-Ability: Lightning Rod
-Level: 50
-Note: VGCPastes PC46
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Fake Out
-- Nuzzle
-- Thunderbolt
-- Encore
-
-Raichu @ Focus Sash
-Ability: Lightning Rod
-Level: 50
-Note: VGCPastes PC474
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Volt Switch
-- Thunder
-- Encore
-- Fake Out
-
-Raichu @ Focus Sash
-Ability: Lightning Rod
-Level: 50
-Note: VGCPastes PC181
-Points: 32 HP / 0 Atk / 1 Def / 1 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Fake Out
-- Nuzzle
-- Volt Switch
-- Protect
-
-Kangaskhan @ Silk Scarf
-Ability: Scrappy
-Level: 50
-Note: VGCPastes PC533
-Points: 30 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 4 Spe
-Adamant Nature
-- Last Resort
-- Fake Out
-
-Kangaskhan-Mega @ Kangaskhanite
-Ability: Parental Bond
-Level: 50
-Note: VGCPastes PC425
-Points: 29 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 5 Spe
-Adamant Nature
-- Fake Out
-- Double-Edge
-- Sucker Punch
-- Drain Punch
-
-Kangaskhan @ Silk Scarf
-Ability: Scrappy
-Level: 50
-Note: VGCPastes PC537
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- Last Resort
-- Fake Out
-
-Kangaskhan-Mega @ Kangaskhanite
-Ability: Parental Bond
-Level: 50
-Note: VGCPastes PC515
-Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 0 Spe
-Brave Nature
-- Double-Edge
-- Fake Out
-- Hammer Arm
-- Ice Punch
-
-Kangaskhan @ Silk Scarf
-Ability: Scrappy
-Level: 50
-Note: VGCPastes PC432
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Adamant Nature
-- Fake Out
-- Double-Edge
-- Low Kick
-- Disable
-
-Kangaskhan-Mega @ Kangaskhanite
-Ability: Parental Bond
-Level: 50
-Note: VGCPastes PC239
-Points: 27 HP / 32 Atk / 5 Def / 0 SpA / 1 SpD / 1 Spe
-Adamant Nature
-- Drain Punch
-- Rock Slide
-- Crunch
-- Protect
-
-Conkeldurr @ Black Belt
-Ability: Iron Fist
-Level: 50
-Note: VGCPastes PC133
-Points: 31 HP / 31 Atk / 0 Def / 0 SpA / 3 SpD / 0 Spe
-Adamant Nature
-- Protect
-- Ice Punch
-- Mach Punch
-- Drain Punch
-
-Conkeldurr @ Black Belt
-Ability: Guts
-Level: 50
-Note: VGCPastes PC531
-Points: 23 HP / 10 Atk / 1 Def / 0 SpA / 32 SpD / 0 Spe
-Brave Nature
-- Close Combat
-- Knock Off
-- Poison Jab
-- Protect
-
-Conkeldurr @ Black Belt
-Ability: Sheer Force
-Level: 50
-Note: VGCPastes PC243
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Brave Nature
-- Drain Punch
-- Double-Edge
-- Protect
-- Rock Slide
-
-Espathra @ Focus Sash
-Ability: Speed Boost
-Level: 50
-Note: VGCPastes PC174
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Lumina Crash
-- Hypnosis
-- Psychic Terrain
-- Protect
-
-Gardevoir-Mega @ Gardevoirite
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC409
-Points: 30 HP / 0 Atk / 20 Def / 15 SpA / 1 SpD / 0 Spe
-Modest Nature
-- Hyper Voice
+- Shadow Ball
+- Sludge Bomb
 - Psychic
 - Trick Room
+
+Gengar @ Shuca Berry
+Ability: Cursed Body
+Level: 50
+Note: VGCPastes fallback PC660
+Points: 31 HP / 0 Atk / 1 Def / 8 SpA / 0 SpD / 26 Spe
+Timid Nature
+- Sludge Bomb
+- Icy Wind
+- Rain Dance
 - Protect
 
 Gardevoir @ Choice Scarf
 Ability: Telepathy
 Level: 50
-Note: VGCPastes PC51
+Note: VGCPastes fallback PC51
 Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
 Modest Nature
 - Dazzling Gleam
@@ -2117,21 +2545,10 @@ Modest Nature
 - Moonblast
 - Psyshock
 
-Gardevoir-Mega @ Gardevoirite
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC281
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Hyper Voice
-- Psyshock
-- Trick Room
-- Protect
-
 Gardevoir @ Choice Scarf
 Ability: Trace
 Level: 50
-Note: VGCPastes PC329
+Note: VGCPastes fallback PC329
 Points: 8 HP / 0 Atk / 2 Def / 25 SpA / 0 SpD / 31 Spe
 Timid Nature
 - Moonblast
@@ -2139,21 +2556,10 @@ Timid Nature
 - Psychic
 - Trick
 
-Gardevoir-Mega @ Gardevoirite
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC45
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Hyper Voice
-- Psyshock
-- Moonblast
-- Protect
-
 Gardevoir @ Sitrus Berry
 Ability: Telepathy
 Level: 50
-Note: VGCPastes PC47
+Note: VGCPastes fallback PC47
 Points: 24 HP / 0 Atk / 8 Def / 1 SpA / 1 SpD / 32 Spe
 Timid Nature
 - Moonblast
@@ -2161,1508 +2567,23 @@ Timid Nature
 - Calm Mind
 - Imprison
 
-Weavile @ Focus Sash
-Ability: Pressure
-Level: 50
-Note: VGCPastes PC107
-Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Fake Out
-- Triple Axel
-- Knock Off
-- Feint
-
-Weavile @ Focus Sash
-Ability: Pickpocket
-Level: 50
-Note: VGCPastes PC543
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Fake Out
-- Knock Off
-- Icicle Crash
-- Low Kick
-
-Weavile @ White Herb
-Ability: Pressure
-Level: 50
-Note: VGCPastes PC14
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Knock Off
-- Triple Axel
-- Low Kick
-- Fake Out
-
-Ceruledge @ Colbur Berry
-Ability: Flash Fire
-Level: 50
-Note: VGCPastes PC429
-Points: 30 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 4 Spe
-Adamant Nature
-- Bitter Blade
-- Swords Dance
-- Shadow Sneak
-- Protect
-
-Ceruledge @ Focus Sash
-Ability: Weak Armor
-Level: 50
-Note: VGCPastes PC536
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Bitter Blade
-- Poltergeist
-- Swords Dance
-- Shadow Sneak
-
-Ceruledge @ Choice Scarf
-Ability: Flash Fire
-Level: 50
-Note: VGCPastes PC301
-Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Adamant Nature
-- Poltergeist
-- Bitter Blade
-- Close Combat
-- Shadow Claw
-
-Arcanine-Hisui @ White Herb
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC91
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Flare Blitz
-- Rock Slide
-- Extreme Speed
-- Protect
-
-Arcanine @ Black Belt
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC196
-Points: 30 HP / 20 Atk / 0 Def / 0 SpA / 0 SpD / 16 Spe
-Adamant Nature
-- Flare Blitz
-- Close Combat
-- Extreme Speed
-- Protect
-
-Arcanine-Hisui @ Focus Sash
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC373
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Flare Blitz
-- Rock Slide
-- Extreme Speed
-- Protect
-
-Arcanine @ Sitrus Berry
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC130
-Points: 7 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 25 Spe
-Jolly Nature
-- Flare Blitz
-- Will-O-Wisp
-- Protect
-- Extreme Speed
-
-Arcanine-Hisui @ Choice Scarf
-Ability: Rock Head
-Level: 50
-Note: VGCPastes PC286
-Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Adamant Nature
-- Head Smash
-- Flare Blitz
-- Rock Slide
-- Extreme Speed
-
-Arcanine @ Shuca Berry
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC168
-Points: 27 HP / 0 Atk / 10 Def / 3 SpA / 0 SpD / 26 Spe
-Timid Nature
-- Overheat
-- Snarl
-- Howl
-- Will-O-Wisp
-
-Snorlax @ Leftovers
-Ability: Thick Fat
-Level: 50
-Note: VGCPastes PC443
-Points: 21 HP / 1 Atk / 32 Def / 0 SpA / 12 SpD / 0 Spe
-Relaxed Nature
-- Double-Edge
-- High Horsepower
-- Curse
-- Protect
-
-Snorlax @ Chople Berry
-Ability: Thick Fat
-Level: 50
-Note: VGCPastes PC440
-Points: 0 HP / 32 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Adamant Nature
-- Self-Destruct
-- Crunch
-- Yawn
-- Helping Hand
-
-Snorlax @ Leftovers
-Ability: Thick Fat
-Level: 50
-Note: VGCPastes PC57
-Points: 22 HP / 20 Atk / 23 Def / 0 SpA / 1 SpD / 0 Spe
-Adamant Nature
-- Body Slam
-- Rock Slide
-- Belly Drum
-- Protect
-
-Azumarill @ Sitrus Berry
-Ability: Huge Power
-Level: 50
-Note: VGCPastes PC347
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Aqua Jet
-- Belly Drum
-- Play Rough
-- Protect
-
-Azumarill @ Sitrus Berry
-Ability: Huge Power
-Level: 50
-Note: VGCPastes PC312
-Points: 31 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 3 Spe
-Adamant Nature
-- Play Rough
-- Aqua Jet
-- Superpower
-- Belly Drum
-
-Azumarill @ Sitrus Berry
-Ability: Huge Power
-Level: 50
-Note: VGCPastes PC202
-Points: 29 HP / 32 Atk / 0 Def / 0 SpA / 5 SpD / 0 Spe
-Brave Nature
-- Liquidation
-- Play Rough
-- Belly Drum
-- Aqua Jet
-
-Gengar-Mega @ Gengarite
-Ability: Shadow Tag
-Level: 50
-Note: VGCPastes PC140
-Points: 24 HP / 0 Atk / 1 Def / 10 SpA / 1 SpD / 30 Spe
-Timid Nature
-- Shadow Ball
-- Sludge Bomb
-- Protect
-- Disable
-
-Gengar @ Focus Sash
-Ability: Cursed Body
-Level: 50
-Note: VGCPastes PC339
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
-Timid Nature
-- Sludge Bomb
-- Focus Blast
-- Protect
-- Shadow Ball
-
-Gengar-Mega @ Gengarite
-Ability: Shadow Tag
-Level: 50
-Note: VGCPastes PC219
-Points: 18 HP / 0 Atk / 17 Def / 4 SpA / 0 SpD / 27 Spe
-Modest Nature
-- Sludge Bomb
-- Shadow Ball
-- Icy Wind
-- Protect
-
-Gengar @ Focus Sash
-Ability: Cursed Body
-Level: 50
-Note: VGCPastes PC528
-Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
-Quiet Nature
-- Sludge Bomb
-- Shadow Ball
-- Psychic
-- Trick Room
-
-Gengar-Mega @ Gengarite
-Ability: Shadow Tag
-Level: 50
-Note: VGCPastes PC480
-Points: 32 HP / 0 Atk / 10 Def / 0 SpA / 0 SpD / 24 Spe
-Timid Nature
-- Shadow Ball
-- Thunder Wave
-- Protect
-- Icy Wind
-
-Gengar @ Focus Sash
-Ability: Cursed Body
-Level: 50
-Note: VGCPastes PC454
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Protect
-- Sludge Bomb
-- Destiny Bond
-- Shadow Ball
-
-Glimmora-Mega @ Glimmoranite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC378
-Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
-Timid Nature
-- Power Gem
-- Sludge Bomb
-- Earth Power
-- Spiky Shield
-
-Glimmora @ Focus Sash
-Ability: Toxic Debris
-Level: 50
-Note: VGCPastes PC95
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Power Gem
-- Sludge Bomb
-- Earth Power
-- Spiky Shield
-
-Glimmora-Mega @ Glimmoranite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC543
-Points: 27 HP / 0 Atk / 0 Def / 20 SpA / 1 SpD / 18 Spe
-Modest Nature
-- Spiky Shield
-- Power Gem
-- Sludge Bomb
-- Earth Power
-
-Glimmora @ Choice Scarf
-Ability: Toxic Debris
-Level: 50
-Note: VGCPastes PC537
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Acid Armor
-- Earth Power
-- Power Gem
-- Sludge Bomb
-
-Glimmora-Mega @ Glimmoranite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC542
-Points: 27 HP / 0 Atk / 21 Def / 0 SpA / 18 SpD / 0 Spe
-Bold Nature
-- Power Gem
-- Sludge Bomb
-- Mortal Spin
-- Spiky Shield
-
-Glimmora @ Focus Sash
-Ability: Toxic Debris
-Level: 50
-Note: VGCPastes PC294
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Spiky Shield
-- Power Gem
-- Mortal Spin
-- Earth Power
-
-Vivillon @ Focus Sash
+Vivillon-Fancy @ Choice Scarf
 Ability: Compound Eyes
 Level: 50
-Note: VGCPastes PC429
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Note: VGCPastes fallback PC719
+Points: 0 HP / 0 Atk / 24 Def / 0 SpA / 10 SpD / 32 Spe
 Timid Nature
 - Hurricane
 - Sleep Powder
+- Tailwind
 - Rage Powder
-- Protect
-
-Vivillon @ Focus Sash
-Ability: Compound Eyes
-Level: 50
-Note: VGCPastes PC142
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Rage Powder
-- Sleep Powder
-- Hurricane
-- Sunny Day
-
-Vivillon @ Focus Sash
-Ability: Compound Eyes
-Level: 50
-Note: VGCPastes PC11
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Sleep Powder
-- Hurricane
-- Rage Powder
-- Protect
-
-Klefki @ Shuca Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC531
-Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
-Bold Nature
-- Dazzling Gleam
-- Rain Dance
-- Thunder Wave
-- Trick Room
-
-Klefki @ Shuca Berry
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC13
-Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 14 SpD / 0 Spe
-Bold Nature
-- Reflect
-- Light Screen
-- Thunder Wave
-- Dazzling Gleam
-
-Kleavor @ Mental Herb
-Ability: Sharpness
-Level: 50
-Note: VGCPastes PC239
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Tailwind
-- X-Scissor
-- Night Slash
-- Stone Axe
-
-Kleavor @ Choice Scarf
-Ability: Sharpness
-Level: 50
-Note: VGCPastes PC142
-Points: 8 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
-Jolly Nature
-- Stone Axe
-- Aerial Ace
-- U-turn
-- Night Slash
-
-Vanilluxe @ Choice Scarf
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC454
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Aurora Veil
-- Freeze-Dry
-- Blizzard
-- Icy Wind
-
-Vanilluxe @ Choice Scarf
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC500
-Points: 25 HP / 0 Atk / 1 Def / 10 SpA / 2 SpD / 28 Spe
-Modest Nature
-- Blizzard
-- Freeze-Dry
-- Sheer Cold
-- Icy Wind
-
-Vanilluxe @ Choice Scarf
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC104
-Points: 8 HP / 0 Atk / 2 Def / 23 SpA / 1 SpD / 32 Spe
-Timid Nature
-- Blizzard
-- Sheer Cold
-- Icy Wind
-- Freeze-Dry
-
-Armarouge @ Shuca Berry
-Ability: Flash Fire
-Level: 50
-Note: VGCPastes PC379
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Armor Cannon
-- Scorching Sands
-- Protect
-- Trick Room
-
-Armarouge @ Focus Sash
-Ability: Weak Armor
-Level: 50
-Note: VGCPastes PC362
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Armor Cannon
-- Psychic
-- Aura Sphere
-- Wide Guard
-
-Alakazam-Mega @ Alakazite
-Ability: Trace
-Level: 50
-Note: VGCPastes PC340
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Expanding Force
-- Shadow Ball
-- Focus Blast
-- Protect
-
-Alakazam @ Colbur Berry
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC282
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Light Screen
-- Reflect
-- Speed Swap
-- Psychic
-
-Alakazam-Mega @ Alakazite
-Ability: Trace
-Level: 50
-Note: VGCPastes PC57
-Points: 8 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 25 Spe
-Timid Nature
-- Disable
-- Psychic
-- Speed Swap
-- Encore
-
-Slowking @ Colbur Berry
-Ability: Regenerator
-Level: 50
-Note: VGCPastes PC473
-Points: 32 HP / 0 Atk / 16 Def / 10 SpA / 8 SpD / 0 Spe
-Quiet Nature
-- Chilly Reception
-- Scald
-- Psychic
-- Trick Room
-
-Slowking-Galar @ Sitrus Berry
-Ability: Regenerator
-Level: 50
-Note: VGCPastes PC457
-Points: 32 HP / 0 Atk / 28 Def / 0 SpA / 6 SpD / 0 Spe
-Relaxed Nature
-- Sludge Bomb
-- Eerie Spell
-- Heal Pulse
-- Trick Room
-
-Slowking @ Colbur Berry
-Ability: Regenerator
-Level: 50
-Note: VGCPastes PC245
-Points: 32 HP / 0 Atk / 23 Def / 1 SpA / 10 SpD / 0 Spe
-Calm Nature
-- Scald
-- Psychic Noise
-- Trick Room
-- Chilly Reception
-
-Slowking-Galar @ Sitrus Berry
-Ability: Regenerator
-Level: 50
-Note: VGCPastes PC239
-Points: 32 HP / 0 Atk / 17 Def / 2 SpA / 15 SpD / 0 Spe
-Sassy Nature
-- Sludge Bomb
-- Psychic
-- Yawn
-- Chilly Reception
-
-Chandelure-Mega @ Chandelurite
-Ability: Infiltrator
-Level: 50
-Note: VGCPastes PC533
-Points: 32 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 3 Spe
-Modest Nature
-- Protect
-- Trick Room
-- Shadow Ball
-- Heat Wave
-
-Chandelure @ Focus Sash
-Ability: Flash Fire
-Level: 50
-Note: VGCPastes PC449
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Protect
-- Heat Wave
-- Trick Room
-- Shadow Ball
-
-Chandelure-Mega @ Chandelurite
-Ability: Infiltrator
-Level: 50
-Note: VGCPastes PC468
-Points: 24 HP / 0 Atk / 16 Def / 18 SpA / 1 SpD / 7 Spe
-Modest Nature
-- Shadow Ball
-- Heat Wave
-- Trick Room
-- Protect
-
-Chandelure @ Focus Sash
-Ability: Flash Fire
-Level: 50
-Note: VGCPastes PC30
-Points: 32 HP / 0 Atk / 0 Def / 25 SpA / 1 SpD / 8 Spe
-Modest Nature
-- Shadow Ball
-- Trick Room
-- Heat Wave
-- Protect
-
-Blastoise-Mega @ Blastoisinite
-Ability: Mega Launcher
-Level: 50
-Note: VGCPastes PC532
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Water Spout
-- Aura Sphere
-- Shell Smash
-- Protect
-
-Blastoise-Mega @ Blastoisinite
-Ability: Mega Launcher
-Level: 50
-Note: VGCPastes PC460
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Fake Out
-- Water Spout
-- Dark Pulse
-- Aura Sphere
-
-Blastoise-Mega @ Blastoisinite
-Ability: Mega Launcher
-Level: 50
-Note: VGCPastes PC199
-Points: 13 HP / 0 Atk / 1 Def / 19 SpA / 1 SpD / 32 Spe
-Timid Nature
-- Water Spout
-- Dark Pulse
-- Aura Sphere
-- Fake Out
-
-Krookodile @ Choice Scarf
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC535
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Knock Off
-- Earthquake
-- Rock Slide
-- High Horsepower
-
-Krookodile @ Choice Scarf
-Ability: Moxie
-Level: 50
-Note: VGCPastes PC364
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Knock Off
-- High Horsepower
-- Rock Tomb
-- Fissure
-
-Cofagrigus @ Mental Herb
-Ability: Mummy
-Level: 50
-Note: VGCPastes PC345
-Points: 32 HP / 0 Atk / 5 Def / 0 SpA / 29 SpD / 0 Spe
-Relaxed Nature
-- Will-O-Wisp
-- Protect
-- Shadow Ball
-- Trick Room
-
-Lucario-Mega @ Lucarionite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC21
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Close Combat
-- Bullet Punch
-- Extreme Speed
-- Protect
-
-Lucario @ Choice Scarf
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC359
-Points: 32 HP / 8 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
-Jolly Nature
-- Close Combat
-- Meteor Mash
-- Circle Throw
-- Final Gambit
-
-Lucario-Mega @ Lucarionite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC530
-Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Meteor Mash
-- Close Combat
-- Bullet Punch
-- Detect
-
-Lucario-Mega @ Lucarionite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC319
-Points: 24 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 12 Spe
-Adamant Nature
-- Bullet Punch
-- Meteor Mash
-- Close Combat
-- Protect
-
-Jolteon @ Focus Sash
-Ability: Volt Absorb
-Level: 50
-Note: VGCPastes PC343
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Thunderbolt
-- Electroweb
-- Fake Tears
-- Protect
-
-Mudsdale @ Soft Sand
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC449
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- High Horsepower
-- Earthquake
-- Rock Slide
-- Protect
-
-Mudsdale @ Leftovers
-Ability: Stamina
-Level: 50
-Note: VGCPastes PC271
-Points: 32 HP / 12 Atk / 0 Def / 0 SpA / 22 SpD / 0 Spe
-Brave Nature
-- Earthquake
-- Body Press
-- Heavy Slam
-- Protect
-
-Mudsdale @ Soft Sand
-Ability: Inner Focus
-Level: 50
-Note: VGCPastes PC182
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- High Horsepower
-- Close Combat
-- Heavy Slam
-- Rock Slide
-
-Samurott-Hisui @ White Herb
-Ability: Sharpness
-Level: 50
-Note: VGCPastes PC369
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Aqua Jet
-- Protect
-- Razor Shell
-- Night Slash
-
-Banette-Mega @ Banettite
-Ability: Prankster
-Level: 50
-Note: VGCPastes PC369
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Brave Nature
-- Rain Dance
-- Destiny Bond
-- Encore
-- Poltergeist
-
-Rhyperior @ Soft Sand
-Ability: Solid Rock
-Level: 50
-Note: VGCPastes PC524
-Points: 18 HP / 30 Atk / 0 Def / 0 SpA / 18 SpD / 0 Spe
-Brave Nature
-- Earthquake
-- High Horsepower
-- Rock Slide
-- Protect
-
-Rhyperior @ White Herb
-Ability: Solid Rock
-Level: 50
-Note: VGCPastes PC280
-Points: 20 HP / 32 Atk / 0 Def / 0 SpA / 14 SpD / 0 Spe
-Brave Nature
-- Rock Slide
-- High Horsepower
-- Earthquake
-- Protect
-
-Rhyperior @ White Herb
-Ability: Solid Rock
-Level: 50
-Note: VGCPastes PC222
-Points: 3 HP / 32 Atk / 0 Def / 0 SpA / 31 SpD / 0 Spe
-Brave Nature
-- High Horsepower
-- Rock Slide
-- Ice Punch
-- Protect
-
-Hydrapple @ Coba Berry
-Ability: Regenerator
-Level: 50
-Note: VGCPastes PC303
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Modest Nature
-- Fickle Beam
-- Protect
-- Syrup Bomb
-- Earth Power
-
-Beedrill-Mega @ Beedrillite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC311
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Poison Jab
-- U-turn
-- Knock Off
-- Protect
-
-Beedrill-Mega @ Beedrillite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC248
-Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Poison Jab
-- Drill Run
-- U-turn
-- Protect
-
-Beedrill-Mega @ Beedrillite
-Ability: Adaptability
-Level: 50
-Note: VGCPastes PC208
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Poison Jab
-- Drill Run
-- U-turn
-- Protect
-
-Glaceon @ Never-Melt Ice
-Ability: Snow Cloak
-Level: 50
-Note: VGCPastes PC471
-Points: 25 HP / 0 Atk / 1 Def / 30 SpA / 0 SpD / 10 Spe
-Modest Nature
-- Protect
-- Blizzard
-- Freeze-Dry
-- Ice Shard
-
-Glaceon @ Never-Melt Ice
-Ability: Snow Cloak
-Level: 50
-Note: VGCPastes PC101
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 1 Spe
-Modest Nature
-- Blizzard
-- Icy Wind
-- Freeze-Dry
-- Protect
-
-Glaceon @ Never-Melt Ice
-Ability: Snow Cloak
-Level: 50
-Note: VGCPastes PC91
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
-Modest Nature
-- Blizzard
-- Ice Beam
-- Freeze-Dry
-- Detect
-
-Alcremie @ Sitrus Berry
-Ability: Aroma Veil
-Level: 50
-Note: VGCPastes PC151
-Points: 32 HP / 0 Atk / 32 Def / 1 SpA / 0 SpD / 0 Spe
-Bold Nature
-- Decorate
-- Dazzling Gleam
-- Helping Hand
-- Protect
-
-Garganacl @ Leftovers
-Ability: Purifying Salt
-Level: 50
-Note: VGCPastes PC372
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
-Careful Nature
-- Salt Cure
-- Wide Guard
-- Recover
-- Protect
-
-Noivern @ Focus Sash
-Ability: Telepathy
-Level: 50
-Note: VGCPastes PC272
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Draco Meteor
-- Air Slash
-- Tailwind
-- Protect
-
-Drampa-Mega @ Drampanite
-Ability: Berserk
-Level: 50
-Note: VGCPastes PC250
-Points: 32 HP / 0 Atk / 1 Def / 30 SpA / 1 SpD / 0 Spe
-Quiet Nature
-- Hyper Voice
-- Protect
-- Draco Meteor
-- Earth Power
-
-Drampa-Mega @ Drampanite
-Ability: Berserk
-Level: 50
-Note: VGCPastes PC544
-Points: 11 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 22 Spe
-Modest Nature
-- Hyper Beam
-- Heat Wave
-- Dragon Pulse
-- Protect
-
-Drampa-Mega @ Drampanite
-Ability: Berserk
-Level: 50
-Note: VGCPastes PC282
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
-Modest Nature
-- Hyper Voice
-- Calm Mind
-- Protect
-- Earth Power
-
-Altaria @ Haban Berry
-Ability: Cloud Nine
-Level: 50
-Note: VGCPastes PC192
-Points: 26 HP / 0 Atk / 17 Def / 0 SpA / 3 SpD / 20 Spe
-Timid Nature
-- Breaking Swipe
-- Moonblast
-- Tailwind
-- Protect
-
-Altaria-Mega @ Altarianite
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC378
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 0 Spe
-Modest Nature
-- Hyper Voice
-- Tailwind
-- Roost
-- Protect
-
-Altaria @ Sitrus Berry
-Ability: Cloud Nine
-Level: 50
-Note: VGCPastes PC470
-Points: 32 HP / 23 Atk / 1 Def / 0 SpA / 1 SpD / 9 Spe
-Impish Nature
-- Tailwind
-- Will-O-Wisp
-- Brave Bird
-- Protect
-
-Altaria-Mega @ Altarianite
-Ability: Pixilate
-Level: 50
-Note: VGCPastes PC372
-Points: 32 HP / 0 Atk / 13 Def / 20 SpA / 1 SpD / 0 Spe
-Bold Nature
-- Hyper Voice
-- Draco Meteor
-- Roost
-- Protect
-
-Altaria @ Sitrus Berry
-Ability: Cloud Nine
-Level: 50
-Note: VGCPastes PC247
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Tailwind
-- Draco Meteor
-- Protect
-- Hurricane
-
-Greninja-Mega @ Greninjite
-Ability: Protean
-Level: 50
-Note: VGCPastes PC454
-Points: 8 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 26 Spe
-Timid Nature
-- Protect
-- Blizzard
-- Dark Pulse
-- Low Kick
-
-Greninja @ Mystic Water
-Ability: Protean
-Level: 50
-Note: VGCPastes PC58
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Liquidation
-- Ice Punch
-- Rock Slide
-- Protect
-
-Greninja-Mega @ Greninjite
-Ability: Protean
-Level: 50
-Note: VGCPastes PC118
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Dark Pulse
-- Blizzard
-- Flip Turn
-- Protect
-
-Greninja @ Focus Sash
-Ability: Torrent
-Level: 50
-Note: VGCPastes PC21
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Protect
-- Water Pulse
-- Icy Wind
-- Dark Pulse
-
-Greninja-Mega @ Greninjite
-Ability: Protean
-Level: 50
-Note: VGCPastes PC15
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
-Timid Nature
-- Hydro Pump
-- Dark Pulse
-- Sludge Wave
-- Ice Beam
-
-Gliscor @ Lum Berry
-Ability: Hyper Cutter
-Level: 50
-Note: VGCPastes PC439
-Points: 10 HP / 25 Atk / 0 Def / 0 SpA / 0 SpD / 31 Spe
-Adamant Nature
-- Dual Wingbeat
-- High Horsepower
-- Tailwind
-- Protect
-
-Reuniclus @ Sitrus Berry
-Ability: Overcoat
-Level: 50
-Note: VGCPastes PC345
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
-Quiet Nature
-- Psychic
-- Energy Ball
-- Protect
-- Trick Room
-
-Reuniclus @ Mental Herb
-Ability: Overcoat
-Level: 50
-Note: VGCPastes PC259
-Points: 21 HP / 0 Atk / 18 Def / 25 SpA / 2 SpD / 0 Spe
-Quiet Nature
-- Psychic Noise
-- Focus Blast
-- Trick Room
-- Ally Switch
-
-Passimian @ Sitrus Berry
-Ability: Defiant
-Level: 50
-Note: VGCPastes PC480
-Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Close Combat
-- Coaching
-- Rock Slide
-- Protect
-
-Pinsir-Mega @ Pinsirite
-Ability: Aerilate
-Level: 50
-Note: VGCPastes PC290
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Body Slam
-- Close Combat
-- Feint
-- Protect
-
-Pinsir-Mega @ Pinsirite
-Ability: Aerilate
-Level: 50
-Note: VGCPastes PC142
-Points: 31 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 3 Spe
-Adamant Nature
-- Earthquake
-- Body Slam
-- Quick Attack
-- Detect
-
-Pinsir-Mega @ Pinsirite
-Ability: Aerilate
-Level: 50
-Note: VGCPastes PC121
-Points: 19 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 15 Spe
-Adamant Nature
-- Body Slam
-- Feint
-- Close Combat
-- Protect
-
-Machamp @ Sitrus Berry
-Ability: No Guard
-Level: 50
-Note: VGCPastes PC535
-Points: 31 HP / 20 Atk / 1 Def / 0 SpA / 1 SpD / 13 Spe
-Adamant Nature
-- Dynamic Punch
-- Stone Edge
-- Knock Off
-- Wide Guard
-
-Ninetales-Alola @ Focus Sash
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC382
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Protect
-- Blizzard
-- Freeze-Dry
-- Aurora Veil
-
-Ninetales @ Sitrus Berry
-Ability: Drought
-Level: 50
-Note: VGCPastes PC452
-Points: 32 HP / 0 Atk / 6 Def / 19 SpA / 0 SpD / 9 Spe
-Modest Nature
-- Weather Ball
-- Heat Wave
-- Snarl
-- Baby-Doll Eyes
-
-Ninetales-Alola @ Choice Scarf
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC486
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Blizzard
-- Moonblast
-- Freeze-Dry
-- Icy Wind
-
-Ninetales-Alola @ Focus Sash
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC348
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Hasty Nature
-- Protect
-- Blizzard
-- Encore
-- Aurora Veil
-
-Lycanroc @ Focus Sash
-Ability: Sand Rush
-Level: 50
-Note: VGCPastes PC323
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Rock Slide
-- Close Combat
-- Protect
-- Accelerock
-
-Slowbro-Mega @ Slowbronite
-Ability: Shell Armor
-Level: 50
-Note: VGCPastes PC404
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
-Calm Nature
-- Body Press
-- Slack Off
-- Amnesia
-- Iron Defense
-
-Slowbro-Mega @ Slowbronite
-Ability: Shell Armor
-Level: 50
-Note: VGCPastes PC222
-Points: 31 HP / 0 Atk / 3 Def / 0 SpA / 32 SpD / 0 Spe
-Relaxed Nature
-- Ice Beam
-- Body Press
-- Skill Swap
-- Trick Room
-
-Pidgeot-Mega @ Pidgeotite
-Ability: No Guard
-Level: 50
-Note: VGCPastes PC459
-Points: 12 HP / 0 Atk / 21 Def / 5 SpA / 0 SpD / 28 Spe
-Timid Nature
-- Round
-- Heat Wave
-- Protect
-- Hurricane
-
-Torterra @ Sitrus Berry
-Ability: Shell Armor
-Level: 50
-Note: VGCPastes PC542
-Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
-Impish Nature
-- Wood Hammer
-- High Horsepower
-- Leech Seed
-- Protect
-
-Ariados @ Sitrus Berry
-Ability: Insomnia
-Level: 50
-Note: VGCPastes PC540
-Points: 31 HP / 0 Atk / 20 Def / 0 SpA / 15 SpD / 0 Spe
-Impish Nature
-- Knock Off
-- Rage Powder
-- String Shot
-- Protect
-
-Ariados @ Bright Powder
-Ability: Insomnia
-Level: 50
-Note: VGCPastes PC440
-Points: 32 HP / 0 Atk / 30 Def / 0 SpA / 4 SpD / 0 Spe
-Bold Nature
-- Struggle Bug
-- String Shot
-- Toxic Spikes
-- Rage Powder
-
-Ariados @ Silver Powder
-Ability: Insomnia
-Level: 50
-Note: VGCPastes PC312
-Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 0 Spe
-Adamant Nature
-- Shadow Sneak
-- Rage Powder
-- First Impression
-- Poison Jab
-
-Salazzle @ King's Rock
-Ability: Oblivious
-Level: 50
-Note: VGCPastes PC235
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Overheat
-- Sludge Bomb
-- Fake Out
-- Fling
-
-Hawlucha-Mega @ Hawluchanite
-Ability: No Guard
-Level: 50
-Note: VGCPastes PC89
-Points: 6 HP / 28 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Flying Press
-- Brave Bird
-- Entrainment
-- Protect
-
-Hawlucha-Mega @ Hawluchanite
-Ability: No Guard
-Level: 50
-Note: VGCPastes PC278
-Points: 3 HP / 31 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Swords Dance
-- Cross Chop
-- Detect
-- Dual Wingbeat
-
-Hawlucha-Mega @ Hawluchanite
-Ability: No Guard
-Level: 50
-Note: VGCPastes PC14
-Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Close Combat
-- Brave Bird
-- Entrainment
-- Protect
-
-Luxray @ Choice Scarf
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC350
-Points: 32 HP / 1 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
-Jolly Nature
-- Wild Charge
-- Psychic Fangs
-- Volt Switch
-- Electroweb
-
-Sandaconda @ Focus Sash
-Ability: Sand Spit
-Level: 50
-Note: VGCPastes PC297
-Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
-Jolly Nature
-- Endeavor
-- High Horsepower
-- Glare
-- Endure
-
-Abomasnow-Mega @ Abomasite
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC445
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Blizzard
-- Energy Ball
-- Protect
-- Focus Blast
-
-Abomasnow-Mega @ Abomasite
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC359
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
-Quiet Nature
-- Wood Hammer
-- Blizzard
-- Earth Power
-- Protect
-
-Typhlosion-Hisui @ Choice Scarf
-Ability: Blaze
-Level: 50
-Note: VGCPastes PC539
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Eruption
-- Heat Wave
-- Shadow Ball
-- Overheat
-
-Typhlosion @ Charcoal
-Ability: Flash Fire
-Level: 50
-Note: VGCPastes PC183
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Eruption
-- Rock Tomb
-- Flamethrower
-- Protect
-
-Typhlosion-Hisui @ Choice Scarf
-Ability: Frisk
-Level: 50
-Note: VGCPastes PC215
-Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Eruption
-- Shadow Ball
-- Overheat
-- Heat Wave
-
-Typhlosion-Hisui @ Choice Scarf
-Ability: Frisk
-Level: 50
-Note: VGCPastes PC323
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Eruption
-- Flamethrower
-- Blast Burn
-- Shadow Ball
-
-Pikachu @ Light Ball
-Ability: Lightning Rod
-Level: 50
-Note: VGCPastes PC312
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Hasty Nature
-- Thunder
-- Surf
-- Upper Hand
-- Fake Out
-
-Pikachu @ Light Ball
-Ability: Lightning Rod
-Level: 50
-Note: VGCPastes PC239
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Fake Out
-- Upper Hand
-- Thunderbolt
-- Surf
-
-Goodra-Hisui @ Leftovers
-Ability: Shell Armor
-Level: 50
-Note: VGCPastes PC297
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Bold Nature
-- Body Press
-- Muddy Water
-- Shelter
-- Protect
-
-Goodra-Hisui @ Leftovers
-Ability: Gooey
-Level: 50
-Note: VGCPastes PC59
-Points: 32 HP / 0 Atk / 15 Def / 14 SpA / 0 SpD / 5 Spe
-Bold Nature
-- Ice Beam
-- Thunderbolt
-- Body Press
-- Shelter
-
-Chesnaught-Mega @ Chesnaughtite
-Ability: Bulletproof
-Level: 50
-Note: VGCPastes PC42
-Points: 32 HP / 1 Atk / 1 Def / 0 SpA / 30 SpD / 2 Spe
-Impish Nature
-- Body Press
-- Iron Defense
-- Leech Seed
-- Spiky Shield
-
-Chesnaught @ Leftovers
-Ability: Bulletproof
-Level: 50
-Note: VGCPastes PC362
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 0 SpD / 2 Spe
-Impish Nature
-- Body Press
-- Leech Seed
-- Spiky Shield
-- Wood Hammer
-
-Chesnaught-Mega @ Chesnaughtite
-Ability: Bulletproof
-Level: 50
-Note: VGCPastes PC457
-Points: 32 HP / 0 Atk / 8 Def / 0 SpA / 26 SpD / 0 Spe
-Relaxed Nature
-- Spiky Shield
-- Body Press
-- Iron Defense
-- Leech Seed
-
-Chesnaught-Mega @ Chesnaughtite
-Ability: Bulletproof
-Level: 50
-Note: VGCPastes PC129
-Points: 32 HP / 0 Atk / 4 Def / 0 SpA / 30 SpD / 0 Spe
-Impish Nature
-- Body Press
-- Feint
-- Wide Guard
-- Spiky Shield
 
 Scovillain @ Focus Sash
 Ability: Chlorophyll
 Level: 50
-Note: VGCPastes PC537
+Note: VGCPastes fallback PC632
 Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
 Modest Nature
-- Protect
-- Rage Powder
-- Overheat
-- Leaf Storm
-
-Scovillain-Mega @ Scovillainite
-Ability: Spicy Spray
-Level: 50
-Note: VGCPastes PC388
-Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
-Bold Nature
 - Overheat
 - Leaf Storm
 - Rage Powder
@@ -3671,7 +2592,7 @@ Bold Nature
 Scovillain
 Ability: Moody
 Level: 50
-Note: VGCPastes PC149
+Note: VGCPastes fallback PC149
 Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 0 Spe
 Modest Nature
 - Flamethrower
@@ -3679,142 +2600,384 @@ Modest Nature
 - Leaf Storm
 - Protect
 
-Scovillain-Mega @ Scovillainite
-Ability: Spicy Spray
+Primarina @ Mystic Water
+Ability: Liquid Voice
 Level: 50
-Note: VGCPastes PC518
-Points: 31 HP / 0 Atk / 15 Def / 0 SpA / 20 SpD / 0 Spe
-Calm Nature
-- Overheat
-- Leech Seed
-- Rage Powder
+Note: VGCPastes fallback PC182
+Points: 32 HP / 0 Atk / 8 Def / 24 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Moonblast
+- Hyper Voice
+- Aqua Jet
 - Protect
 
-Scovillain-Mega @ Scovillainite
-Ability: Spicy Spray
+Primarina @ Mystic Water
+Ability: Liquid Voice
 Level: 50
-Note: VGCPastes PC380
+Note: VGCPastes fallback PC296
+Points: 27 HP / 0 Atk / 7 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Hyper Voice
+- Moonblast
+- Round
+- Protect
+
+Primarina @ Mystic Water
+Ability: Torrent
+Level: 50
+Note: VGCPastes fallback PC589
+Points: 32 HP / 0 Atk / 12 Def / 22 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Aqua Jet
+- Hyper Voice
+- Moonblast
+- Protect
+
+Lopunny-Mega @ Lopunnite
+Ability: Scrappy
+Level: 50
+Note: VGCPastes fallback PC902
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Giga Impact
+- Fake Out
+- Encore
+
+Meganium-Mega @ Meganiumite
+Ability: Mega Sol
+Level: 50
+Note: VGCPastes fallback PC310
+Points: 30 HP / 0 Atk / 1 Def / 27 SpA / 0 SpD / 8 Spe
+Modest Nature
+- Solar Beam
+- Dazzling Gleam
+- Protect
+- Weather Ball
+
+Lycanroc-Dusk @ Focus Sash
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes fallback PC1103
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Rock Slide
+- Close Combat
+- Accelerock
+- Protect
+
+Samurott-Hisui @ Choice Scarf
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC1103
+Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
+Adamant Nature
+- Sacred Sword
+- Sucker Punch
+- Aqua Cutter
+- Night Slash
+
+Espathra @ Mental Herb
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes fallback PC748
+Points: 24 HP / 0 Atk / 26 Def / 0 SpA / 10 SpD / 6 Spe
+Timid Nature
+- Lumina Crash
+- Calm Mind
+- Baton Pass
+- Protect
+
+Dragapult @ Focus Sash
+Ability: Clear Body
+Level: 50
+Note: VGCPastes fallback PC340
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Dragon Darts
+- Phantom Force
+- Protect
+- Psychic Fangs
+
+Slowking-Galar @ Kasib Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC971
 Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Trick Room
+- Rain Dance
+- Acid Spray
+- Heal Pulse
+
+Medicham-Mega @ Medichamite
+Ability: Pure Power
+Level: 50
+Note: VGCPastes fallback PC1088
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Rock Slide
+- Poison Jab
+- Fake Out
+
+Oranguru @ Mental Herb
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC257
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
+- Psychic
+- Instruct
+- Trick Room
+- Protect
+
+Volcarona @ Leftovers
+Ability: Flame Body
+Level: 50
+Note: VGCPastes fallback PC348
+Points: 32 HP / 0 Atk / 5 Def / 5 SpA / 0 SpD / 24 Spe
+Modest Nature
+- Protect
+- Quiver Dance
+- Giga Drain
+- Heat Wave
+
+Excadrill-Mega @ Excadrite
+Ability: Piercing Drill
+Level: 50
+Note: VGCPastes fallback PC1083
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Iron Head
+- High Horsepower
+- Rock Tomb
+- Protect
+
+Camerupt-Mega @ Cameruptite
+Ability: Sheer Force
+Level: 50
+Note: VGCPastes fallback PC614
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Eruption
+- Earth Power
+- Heat Wave
+- Protect
+
+Kleavor @ Choice Scarf
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC1076
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Stone Axe
+- Close Combat
+- Night Slash
+- X-Scissor
+
+Audino @ Mental Herb
+Ability: Healer
+Level: 50
+Note: VGCPastes fallback PC1070
+Points: 32 HP / 0 Atk / 9 Def / 0 SpA / 25 SpD / 0 Spe
+Sassy Nature
+- Simple Beam
+- Heal Pulse
+- Trick Room
+- Protect
+
+Slowbro-Mega @ Slowbronite
+Ability: Shell Armor
+Level: 50
+Note: VGCPastes fallback PC559
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Sassy Nature
+- Body Press
+- Iron Defense
+- Amnesia
+- Slack Off
+
+Altaria @ Haban Berry
+Ability: Cloud Nine
+Level: 50
+Note: VGCPastes fallback PC1066
+Points: 32 HP / 0 Atk / 30 Def / 0 SpA / 4 SpD / 0 Spe
 Impish Nature
-- Flamethrower
+- Brave Bird
+- Will-O-Wisp
+- Roost
+- Protect
+
+Wyrdeer @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC1066
+Points: 32 HP / 0 Atk / 28 Def / 0 SpA / 6 SpD / 0 Spe
+Relaxed Nature
+- Psychic
+- Skill Swap
+- Trick Room
+- Protect
+
+Tinkaton @ Shuca Berry
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC859
+Points: 23 HP / 8 Atk / 6 Def / 0 SpA / 0 SpD / 29 Spe
+Jolly Nature
+- Fake Out
+- Gigaton Hammer
+- Encore
+- Protect
+
+Scizor-Mega @ Scizorite
+Ability: Technician
+Level: 50
+Note: VGCPastes fallback PC1045
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 1 Spe
+Adamant Nature
+- Bug Bite
+- Bullet Punch
+- Swords Dance
+- Protect
+
+Serperior @ Sitrus Berry
+Ability: Contrary
+Level: 50
+Note: VGCPastes fallback PC1046
+Points: 32 HP / 0 Atk / 5 Def / 1 SpA / 2 SpD / 26 Spe
+Timid Nature
+- Leaf Storm
+- Light Screen
+- Reflect
+- Glare
+
+Abomasnow-Mega @ Abomasite
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes fallback PC1044
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Quiet Nature
 - Energy Ball
-- Rage Powder
-- Protect
+- Blizzard
+- Ice Shard
+- Earth Power
 
-Charizard-Mega-Y @ Charizardite Y
-Ability: Drought
+Gallade @ Focus Sash
+Ability: Sharpness
 Level: 50
-Note: VGCPastes PC28
-Points: 20 HP / 0 Atk / 14 Def / 17 SpA / 0 SpD / 15 Spe
-Modest Nature
-- Heat Wave
-- Weather Ball
-- Solar Beam
-- Protect
-
-Charizard-Mega-X @ Charizardite X
-Ability: Tough Claws
-Level: 50
-Note: VGCPastes PC353
-Points: 18 HP / 16 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Note: VGCPastes fallback PC828
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Adamant Nature
-- Protect
-- Dragon Dance
-- Dragon Claw
-- Flare Blitz
-
-Charizard-Mega-Y @ Charizardite Y
-Ability: Drought
-Level: 50
-Note: VGCPastes PC495
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Heat Wave
-- Weather Ball
-- Solar Beam
+- Sacred Sword
+- Psycho Cut
+- Leaf Blade
 - Protect
 
-Charizard-Mega-X @ Charizardite X
-Ability: Tough Claws
+Arcanine-Hisui @ White Herb
+Ability: Intimidate
 Level: 50
-Note: VGCPastes PC270
-Points: 32 HP / 6 Atk / 1 Def / 0 SpA / 1 SpD / 26 Spe
-Adamant Nature
-- Dragon Claw
-- Flare Blitz
-- Dragon Dance
-- Protect
-
-Charizard-Mega-Y @ Charizardite Y
-Ability: Drought
-Level: 50
-Note: VGCPastes PC494
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Solar Beam
-- Heat Wave
-- Dragon Pulse
-- Protect
-
-Charizard-Mega-X @ Charizardite X
-Ability: Tough Claws
-Level: 50
-Note: VGCPastes PC472
-Points: 22 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 11 Spe
+Note: VGCPastes fallback PC91
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Adamant Nature
 - Flare Blitz
-- Dragon Claw
-- Thunder Punch
+- Rock Slide
+- Extreme Speed
+- Protect
+
+Skarmory-Mega @ Skarmorite
+Ability: Stalwart
+Level: 50
+Note: VGCPastes fallback PC962
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Brave Bird
+- Iron Head
+- Tailwind
+- Protect
+
+Hatterene @ Fairy Feather
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC242
+Points: 28 HP / 0 Atk / 6 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Psychic
+- Dazzling Gleam
+- Trick Room
+- Protect
+
+Hawlucha @ Focus Sash
+Ability: Unburden
+Level: 50
+Note: VGCPastes fallback PC1027
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Coaching
+- Quick Guard
+- Detect
+
+Palafin @ Mystic Water
+Ability: Zero to Hero
+Level: 50
+Note: VGCPastes fallback PC527
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Protect
+- Jet Punch
+- Flip Turn
+- Wave Crash
+
+Gyarados-Mega @ Gyaradosite
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC181
+Points: 26 HP / 5 Atk / 3 Def / 0 SpA / 1 SpD / 31 Spe
+Adamant Nature
+- Waterfall
 - Dragon Dance
-
-Froslass-Mega @ Froslassite
-Ability: Snow Warning
-Level: 50
-Note: VGCPastes PC377
-Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Blizzard
-- Shadow Ball
-- Aurora Veil
+- Crunch
 - Protect
 
-Froslass
-Ability: Snow Cloak
+Crabominable-Mega @ Crabominite
+Ability: Iron Fist
 Level: 50
-Note: VGCPastes PC149
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
-Timid Nature
-- Blizzard
-- Nasty Plot
-- Shadow Ball
+Note: VGCPastes fallback PC783
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
 - Protect
+- Mach Punch
+- Ice Hammer
+- Drain Punch
 
-Froslass-Mega @ Froslassite
-Ability: Snow Warning
+Goodra-Hisui @ Leftovers
+Ability: Shell Armor
 Level: 50
-Note: VGCPastes PC505
-Points: 12 HP / 0 Atk / 1 Def / 20 SpA / 1 SpD / 32 Spe
-Modest Nature
-- Blizzard
-- Shadow Ball
-- Aurora Veil
+Note: VGCPastes fallback PC994
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Bold Nature
 - Protect
+- Shelter
+- Body Press
+- Thunderbolt
 
-Froslass-Mega @ Froslassite
-Ability: Snow Warning
+Steelix-Mega @ Steelixite
+Ability: Sand Force
 Level: 50
-Note: VGCPastes PC393
-Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 32 Spe
-Naive Nature
-- Blizzard
-- Shadow Ball
-- Destiny Bond
+Note: VGCPastes fallback PC991
+Points: 32 HP / 6 Atk / 1 Def / 0 SpA / 27 SpD / 0 Spe
+Brave Nature
+- High Horsepower
+- Heavy Slam
 - Protect
+- Wide Guard
 
 Golurk-Mega @ Golurkite
 Ability: Unseen Fist
 Level: 50
-Note: VGCPastes PC227
+Note: VGCPastes fallback PC227
 Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 0 Spe
 Brave Nature
 - Poltergeist
@@ -3822,373 +2985,10 @@ Brave Nature
 - Ice Punch
 - Protect
 
-Golurk-Mega @ Golurkite
-Ability: Unseen Fist
-Level: 50
-Note: VGCPastes PC326
-Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
-Brave Nature
-- Protect
-- Thunder Punch
-- Headlong Rush
-- Drain Punch
-
-Golurk-Mega @ Golurkite
-Ability: Unseen Fist
-Level: 50
-Note: VGCPastes PC234
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Headlong Rush
-- Protect
-- Close Combat
-- Poltergeist
-
-Audino-Mega @ Audinite
-Ability: Healer
-Level: 50
-Note: VGCPastes PC443
-Points: 32 HP / 0 Atk / 20 Def / 12 SpA / 2 SpD / 0 Spe
-Relaxed Nature
-- Dazzling Gleam
-- Life Dew
-- Calm Mind
-- Trick Room
-
-Audino-Mega @ Audinite
-Ability: Healer
-Level: 50
-Note: VGCPastes PC322
-Points: 32 HP / 0 Atk / 7 Def / 20 SpA / 7 SpD / 0 Spe
-Bold Nature
-- Dazzling Gleam
-- Helping Hand
-- Life Dew
-- Trick Room
-
-Morpeko @ Focus Sash
-Ability: Hunger Switch
-Level: 50
-Note: VGCPastes PC500
-Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
-Jolly Nature
-- Protect
-- Fake Out
-- Aura Wheel
-- Knock Off
-
-Manectric-Mega @ Manectite
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC136
-Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Protect
-- Snarl
-- Overheat
-- Volt Switch
-
-Manectric-Mega @ Manectite
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC211
-Points: 22 HP / 0 Atk / 1 Def / 9 SpA / 2 SpD / 32 Spe
-Timid Nature
-- Thunderbolt
-- Snarl
-- Thunder Wave
-- Protect
-
-Manectric-Mega @ Manectite
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC148
-Points: 15 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 19 Spe
-Modest Nature
-- Thunderbolt
-- Overheat
-- Snarl
-- Volt Switch
-
-Skarmory-Mega @ Skarmorite
-Ability: Stalwart
-Level: 50
-Note: VGCPastes PC523
-Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Brave Bird
-- Iron Head
-- Protect
-- Swords Dance
-
-Skarmory-Mega @ Skarmorite
-Ability: Stalwart
-Level: 50
-Note: VGCPastes PC268
-Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
-Adamant Nature
-- Feint
-- Iron Head
-- Brave Bird
-- Protect
-
-Skarmory-Mega @ Skarmorite
-Ability: Stalwart
-Level: 50
-Note: VGCPastes PC148
-Points: 32 HP / 8 Atk / 0 Def / 0 SpA / 25 SpD / 1 Spe
-Adamant Nature
-- Iron Head
-- Iron Defense
-- Body Press
-- Roost
-
-Starmie-Mega @ Starminite
-Ability: Huge Power
-Level: 50
-Note: VGCPastes PC530
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Liquidation
-- Ice Spinner
-- Zen Headbutt
-- Protect
-
-Starmie @ Leftovers
-Ability: Analytic
-Level: 50
-Note: VGCPastes PC256
-Points: 32 HP / 0 Atk / 8 Def / 0 SpA / 25 SpD / 1 Spe
-Calm Nature
-- Scald
-- Cosmic Power
-- Recover
-- Minimize
-
-Starmie-Mega @ Starminite
-Ability: Huge Power
-Level: 50
-Note: VGCPastes PC314
-Points: 18 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 18 Spe
-Jolly Nature
-- Aqua Jet
-- Liquidation
-- Ice Spinner
-- Protect
-
-Starmie-Mega @ Starminite
-Ability: Huge Power
-Level: 50
-Note: VGCPastes PC221
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Protect
-- Liquidation
-- Skill Swap
-- Zen Headbutt
-
-Aggron-Mega @ Aggronite
-Ability: Filter
-Level: 50
-Note: VGCPastes PC302
-Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 30 SpD / 2 Spe
-Impish Nature
-- Protect
-- Heavy Slam
-- Body Press
-- Iron Defense
-
-Aggron-Mega @ Aggronite
-Ability: Filter
-Level: 50
-Note: VGCPastes PC301
-Points: 32 HP / 2 Atk / 1 Def / 0 SpA / 30 SpD / 1 Spe
-Careful Nature
-- Body Press
-- Heavy Slam
-- Protect
-- Iron Defense
-
-Aggron-Mega @ Aggronite
-Ability: Filter
-Level: 50
-Note: VGCPastes PC232
-Points: 31 HP / 1 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
-Sassy Nature
-- Body Press
-- Iron Defense
-- Heavy Slam
-- Protect
-
-Decidueye-Hisui @ Scope Lens
-Ability: Scrappy
-Level: 50
-Note: VGCPastes PC69
-Points: 28 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 4 Spe
-Adamant Nature
-- Triple Arrows
-- Leaf Blade
-- Protect
-- Brave Bird
-
-Decidueye-Hisui @ Scope Lens
-Ability: Scrappy
-Level: 50
-Note: VGCPastes PC40
-Points: 5 HP / 28 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Triple Arrows
-- Leaf Blade
-- Upper Hand
-- Protect
-
-Sharpedo-Mega @ Sharpedonite
-Ability: Strong Jaw
-Level: 50
-Note: VGCPastes PC500
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Protect
-- Liquidation
-- Crunch
-- Psychic Fangs
-
-Sharpedo @ Focus Sash
-Ability: Speed Boost
-Level: 50
-Note: VGCPastes PC393
-Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
-Adamant Nature
-- Crunch
-- Psychic Fangs
-- Close Combat
-- Protect
-
-Sharpedo @ Focus Sash
-Ability: Speed Boost
-Level: 50
-Note: VGCPastes PC351
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Adamant Nature
-- Crunch
-- Close Combat
-- Psychic Fangs
-- Protect
-
-Zoroark-Hisui @ Choice Scarf
-Ability: Illusion
-Level: 50
-Note: VGCPastes PC89
-Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 32 Spe
-Modest Nature
-- Hyper Voice
-- Shadow Ball
-- Icy Wind
-- Trick
-
-Zoroark-Hisui @ White Herb
-Ability: Illusion
-Level: 50
-Note: VGCPastes PC339
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Protect
-- Taunt
-- Imprison
-- Will-O-Wisp
-
-Zoroark-Hisui @ Focus Sash
-Ability: Illusion
-Level: 50
-Note: VGCPastes PC245
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Bitter Malice
-- Hyper Beam
-- Icy Wind
-- Taunt
-
-Crabominable-Mega @ Crabominite
-Ability: Iron Fist
-Level: 50
-Note: VGCPastes PC202
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- Ice Hammer
-- Close Combat
-- Mach Punch
-- Thunder Punch
-
-Crabominable-Mega @ Crabominite
-Ability: Iron Fist
-Level: 50
-Note: VGCPastes PC473
-Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 0 Spe
-Brave Nature
-- Ice Hammer
-- Drain Punch
-- Mach Punch
-- Protect
-
-Crabominable-Mega @ Crabominite
-Ability: Iron Fist
-Level: 50
-Note: VGCPastes PC245
-Points: 32 HP / 28 Atk / 1 Def / 0 SpA / 5 SpD / 0 Spe
-Brave Nature
-- Ice Hammer
-- Drain Punch
-- Close Combat
-- Protect
-
-Emboar-Mega @ Emboarite
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC432
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Adamant Nature
-- Flare Blitz
-- Close Combat
-- Wild Charge
-- Protect
-
-Emboar-Mega @ Emboarite
-Ability: Mold Breaker
-Level: 50
-Note: VGCPastes PC345
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Brave Nature
-- Flare Blitz
-- Close Combat
-- Protect
-- Sucker Punch
-
 Heracross-Mega @ Heracronite
 Ability: Skill Link
 Level: 50
-Note: VGCPastes PC428
-Points: 22 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 10 Spe
-Adamant Nature
-- Pin Missile
-- Close Combat
-- Rock Blast
-- Protect
-
-Heracross @ Choice Scarf
-Ability: Moxie
-Level: 50
-Note: VGCPastes PC362
-Points: 5 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 29 Spe
-Adamant Nature
-- Close Combat
-- Knock Off
-- Feint
-- Rock Slide
-
-Heracross-Mega @ Heracronite
-Ability: Skill Link
-Level: 50
-Note: VGCPastes PC402
+Note: VGCPastes fallback PC402
 Points: 17 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 17 Spe
 Adamant Nature
 - Pin Missile
@@ -4196,263 +2996,98 @@ Adamant Nature
 - Rock Blast
 - Protect
 
-Simipour @ Mystic Water
-Ability: Torrent
+Morpeko @ Focus Sash
+Ability: Hunger Switch
 Level: 50
-Note: VGCPastes PC298
-Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
-Timid Nature
-- Scald
-- Flip Turn
-- Icy Wind
+Note: VGCPastes fallback PC986
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Aura Wheel
+- Parting Shot
 - Fake Out
 
-Delphox-Mega @ Delphoxite
-Ability: Levitate
+Decidueye-Hisui @ Scope Lens
+Ability: Scrappy
 Level: 50
-Note: VGCPastes PC226
-Points: 3 HP / 0 Atk / 1 Def / 30 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Heat Wave
-- Psychic
-- Substitute
-- Protect
-
-Delphox-Mega @ Delphoxite
-Ability: Levitate
-Level: 50
-Note: VGCPastes PC464
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Protect
-- Heat Wave
-- Nasty Plot
-- Psychic
-
-Delphox-Mega @ Delphoxite
-Ability: Levitate
-Level: 50
-Note: VGCPastes PC247
-Points: 1 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Modest Nature
-- Protect
-- Heat Wave
-- Psyshock
-- Will-O-Wisp
-
-Dedenne @ Sitrus Berry
-Ability: Cheek Pouch
-Level: 50
-Note: VGCPastes PC379
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Bold Nature
-- Thief
-- Protect
-- Helping Hand
-- Electroweb
-
-Dedenne @ Sitrus Berry
-Ability: Cheek Pouch
-Level: 50
-Note: VGCPastes PC378
-Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Dazzling Gleam
-- Super Fang
-- Volt Switch
-- Protect
-
-Dedenne @ Focus Sash
-Ability: Pickup
-Level: 50
-Note: VGCPastes PC137
-Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Thunder
-- Nuzzle
-- Dazzling Gleam
-- Protect
-
-Glalie-Mega @ Glalitite
-Ability: Refrigerate
-Level: 50
-Note: VGCPastes PC337
-Points: 28 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 8 Spe
+Note: VGCPastes fallback PC974
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Adamant Nature
-- Explosion
+- Leaf Blade
+- Triple Arrows
+- Sucker Punch
 - Protect
-- Substitute
-- Sheer Cold
 
-Ampharos-Mega @ Ampharosite
-Ability: Mold Breaker
+Liepard @ Focus Sash
+Ability: Prankster
 Level: 50
-Note: VGCPastes PC527
-Points: 6 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 28 Spe
-Timid Nature
-- Thunderbolt
-- Protect
-- Dragon Pulse
-- Volt Switch
-
-Camerupt-Mega @ Cameruptite
-Ability: Sheer Force
-Level: 50
-Note: VGCPastes PC445
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Heat Wave
-- Earth Power
-- Protect
-- Eruption
-
-Camerupt-Mega @ Cameruptite
-Ability: Sheer Force
-Level: 50
-Note: VGCPastes PC201
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Eruption
-- Flamethrower
-- Solar Beam
-- Earth Power
-
-Camerupt-Mega @ Cameruptite
-Ability: Sheer Force
-Level: 50
-Note: VGCPastes PC84
-Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Flamethrower
-- Earth Power
-- Heat Wave
-- Eruption
-
-Simisage @ King's Rock
-Ability: Overgrow
-Level: 50
-Note: VGCPastes PC277
+Note: VGCPastes fallback PC974
 Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Jolly Nature
-- Solar Blade
+- Knock Off
+- Yawn
+- Encore
 - Fake Out
-- Taunt
-- Bullet Seed
 
-Chimecho-Mega @ Chimechite
-Ability: Levitate
+Aurorus @ Sitrus Berry
+Ability: Snow Warning
 Level: 50
-Note: VGCPastes PC535
-Points: 31 HP / 0 Atk / 15 Def / 15 SpA / 3 SpD / 2 Spe
+Note: VGCPastes fallback PC974
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 18 SpD / 6 Spe
 Modest Nature
-- Psyshock
-- Flash Cannon
-- Trick Room
 - Protect
+- Blizzard
+- Ancient Power
+- Freeze-Dry
 
-Chimecho-Mega @ Chimechite
-Ability: Levitate
+Banette-Mega @ Banettite
+Ability: Prankster
 Level: 50
-Note: VGCPastes PC449
-Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
-Quiet Nature
-- Boomburst
-- Flash Cannon
-- Helping Hand
-- Trick Room
-
-Victreebel-Mega @ Victreebelite
-Ability: Innards Out
-Level: 50
-Note: VGCPastes PC253
-Points: 25 HP / 0 Atk / 9 Def / 32 SpA / 0 SpD / 0 Spe
-Modest Nature
-- Strength Sap
-- Sludge Bomb
-- Protect
-- Energy Ball
-
-Tauros-Paldea-Aqua @ White Herb
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC363
-Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Note: VGCPastes fallback PC924
+Points: 32 HP / 10 Atk / 16 Def / 0 SpA / 8 SpD / 0 Spe
 Adamant Nature
-- Wave Crash
-- Close Combat
-- Aqua Jet
-- Protect
-
-Tauros-Paldea-Blaze @ White Herb
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC496
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Close Combat
-- Flare Blitz
+- Poltergeist
 - Will-O-Wisp
-- Protect
+- Destiny Bond
+- Encore
 
-Tauros-Paldea-Aqua @ White Herb
-Ability: Intimidate
+Lucario @ Choice Scarf
+Ability: Inner Focus
 Level: 50
-Note: VGCPastes PC307
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Adamant Nature
-- Wave Crash
-- Raging Bull
-- Close Combat
-- Protect
-
-Tauros-Paldea-Blaze @ White Herb
-Ability: Intimidate
-Level: 50
-Note: VGCPastes PC58
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Note: VGCPastes fallback PC929
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Jolly Nature
-- Raging Bull
 - Close Combat
-- Lash Out
-- Protect
+- Final Gambit
+- Coaching
+- Meteor Mash
 
-Tauros-Paldea-Aqua @ Mystic Water
-Ability: Intimidate
+Slowbro-Galar @ Quick Claw
+Ability: Quick Draw
 Level: 50
-Note: VGCPastes PC141
-Points: 31 HP / 6 Atk / 1 Def / 0 SpA / 21 SpD / 7 Spe
-Careful Nature
-- Wave Crash
-- Close Combat
-- Aqua Jet
-- Protect
+Note: VGCPastes fallback PC856
+Points: 23 HP / 0 Atk / 2 Def / 26 SpA / 15 SpD / 0 Spe
+Quiet Nature
+- Psychic
+- Ice Beam
+- Shell Side Arm
+- Power Gem
 
-Feraligatr-Mega @ Feraligite
-Ability: Dragonize
+Hippowdon @ Leftovers
+Ability: Sand Stream
 Level: 50
-Note: VGCPastes PC391
-Points: 32 HP / 20 Atk / 0 Def / 0 SpA / 0 SpD / 14 Spe
-Adamant Nature
-- Protect
-- Liquidation
-- Aqua Jet
-- Double-Edge
-
-Feraligatr-Mega @ Feraligite
-Ability: Dragonize
-Level: 50
-Note: VGCPastes PC531
-Points: 32 HP / 20 Atk / 1 Def / 0 SpA / 13 SpD / 0 Spe
+Note: VGCPastes fallback PC920
+Points: 31 HP / 1 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
 Brave Nature
+- High Horsepower
+- Rock Tomb
+- Yawn
 - Protect
-- Facade
-- Waterfall
-- Swords Dance
 
 Feraligatr-Mega @ Feraligite
 Ability: Dragonize
 Level: 50
-Note: VGCPastes PC168
+Note: VGCPastes fallback PC168
 Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
 Jolly Nature
 - Double-Edge
@@ -4460,43 +3095,648 @@ Jolly Nature
 - Protect
 - Dragon Dance
 
-Rotom-Wash @ Sitrus Berry
-Ability: Levitate
+Lucario-Mega @ Lucarionite
+Ability: Adaptability
 Level: 50
-Note: VGCPastes PC77
-Points: 32 HP / 0 Atk / 0 Def / 18 SpA / 0 SpD / 15 Spe
+Note: VGCPastes fallback PC21
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Bullet Punch
+- Extreme Speed
+- Protect
+
+Drampa-Mega @ Drampanite
+Ability: Berserk
+Level: 50
+Note: VGCPastes fallback PC361
+Points: 32 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Hyper Voice
+- Dragon Pulse
+- Earth Power
+- Protect
+
+Victreebel-Mega @ Victreebelite
+Ability: Innards Out
+Level: 50
+Note: VGCPastes fallback PC566
+Points: 29 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 5 Spe
 Modest Nature
-- Hydro Pump
+- Sludge Bomb
+- Giga Drain
+- Weather Ball
+- Sleep Powder
+
+Infernape @ Shuca Berry
+Ability: Blaze
+Level: 50
+Note: VGCPastes fallback PC908
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Hasty Nature
+- Overheat
+- Aura Sphere
+- Fake Out
+- Coaching
+
+Clefable-Mega @ Clefablite
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC101
+Points: 32 HP / 0 Atk / 0 Def / 22 SpA / 0 SpD / 11 Spe
+Modest Nature
+- Moonblast
+- Follow Me
+- Calm Mind
+- Protect
+
+Bellibolt @ Magnet
+Ability: Electromorphosis
+Level: 50
+Note: VGCPastes fallback PC903
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Volt Switch
+- Soak
+- Parabolic Charge
+- Protect
+
+Greninja @ Focus Sash
+Ability: Protean
+Level: 50
+Note: VGCPastes fallback PC648
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Low Kick
+- Ice Punch
+- Gunk Shot
+
+Glaceon @ Never-Melt Ice
+Ability: Snow Cloak
+Level: 50
+Note: VGCPastes fallback PC897
+Points: 25 HP / 0 Atk / 1 Def / 30 SpA / 0 SpD / 10 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Ice Shard
+- Protect
+
+Tauros-Paldea-Aqua @ Mystic Water
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC539
+Points: 13 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 21 Spe
+Adamant Nature
+- Wave Crash
+- Aqua Jet
+- Close Combat
+- Protect
+
+Starmie-Mega @ Starminite
+Ability: Huge Power
+Level: 50
+Note: VGCPastes fallback PC135
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Liquidation
+- Psycho Cut
+- Ice Spinner
+- Protect
+
+Chesnaught-Mega @ Chesnaughtite
+Ability: Bulletproof
+Level: 50
+Note: VGCPastes fallback PC42
+Points: 32 HP / 1 Atk / 1 Def / 0 SpA / 30 SpD / 2 Spe
+Impish Nature
+- Body Press
+- Iron Defense
+- Leech Seed
+- Spiky Shield
+
+Pikachu @ Light Ball
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes fallback PC854
+Points: 32 HP / 0 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Fake Out
+- Volt Tackle
+- Quick Attack
+
+Espeon @ Choice Scarf
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC854
+Points: 0 HP / 0 Atk / 9 Def / 32 SpA / 0 SpD / 25 Spe
+Modest Nature
+- Psychic
+- Power Gem
+- Dazzling Gleam
+- Grass Knot
+
+Meowstic @ Mental Herb
+Ability: Prankster
+Level: 50
+Note: VGCPastes fallback PC184
+Points: 32 HP / 0 Atk / 20 Def / 0 SpA / 12 SpD / 0 Spe
+Bold Nature
+- Fake Out
+- Light Screen
+- Reflect
+- Yawn
+
+Scizor @ Metal Coat
+Ability: Technician
+Level: 50
+Note: VGCPastes fallback PC49
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 1 Spe
+Adamant Nature
+- Close Combat
+- Bug Bite
+- Bullet Punch
+- Protect
+
+Camerupt @ Choice Scarf
+Ability: Anger Point
+Level: 50
+Note: VGCPastes fallback PC807
+Points: 0 HP / 32 Atk / 6 Def / 0 SpA / 0 SpD / 28 Spe
+Jolly Nature
+- Earthquake
+- Rock Slide
+- Flame Charge
+- Stomping Tantrum
+
+Garganacl @ Silk Scarf
+Ability: Clear Body
+Level: 50
+Note: VGCPastes fallback PC807
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Explosion
+- Stealth Rock
+- Wide Guard
+- Protect
+
+Pinsir-Mega @ Pinsirite
+Ability: Aerilate
+Level: 50
+Note: VGCPastes fallback PC797
+Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Quick Attack
+- High Horsepower
+- Body Slam
+- Detect
+
+Pidgeot-Mega @ Pidgeotite
+Ability: No Guard
+Level: 50
+Note: VGCPastes fallback PC805
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Hurricane
+- Heat Wave
+- Tailwind
+- Protect
+
+Absol-Mega @ Absolite
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC801
+Points: 0 HP / 27 Atk / 0 Def / 9 SpA / 0 SpD / 30 Spe
+Naive Nature
+- Sucker Punch
+- Close Combat
+- Ice Beam
 - Thunderbolt
+
+Araquanid @ Mystic Water
+Ability: Water Bubble
+Level: 50
+Note: VGCPastes fallback PC84
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 0 Spe
+Brave Nature
+- Wide Guard
+- Liquidation
+- Leech Life
+- Protect
+
+Gliscor @ Passho Berry
+Ability: Hyper Cutter
+Level: 50
+Note: VGCPastes fallback PC785
+Points: 14 HP / 25 Atk / 1 Def / 0 SpA / 5 SpD / 21 Spe
+Adamant Nature
+- High Horsepower
+- Dual Wingbeat
+- Protect
+- Tailwind
+
+Mudsdale @ Soft Sand
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC361
+Points: 30 HP / 25 Atk / 0 Def / 0 SpA / 11 SpD / 0 Spe
+Brave Nature
+- High Horsepower
+- Earthquake
+- Heavy Slam
+- Rock Slide
+
+Chandelure-Mega @ Chandelurite
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC779
+Points: 30 HP / 0 Atk / 13 Def / 15 SpA / 0 SpD / 8 Spe
+Modest Nature
+- Heat Wave
+- Shadow Ball
+- Trick Room
+- Protect
+
+Chandelure @ Focus Sash
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes fallback PC449
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Protect
+- Heat Wave
+- Trick Room
+- Shadow Ball
+
+Gallade-Mega @ Galladite
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC738
+Points: 10 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
+Jolly Nature
+- Drain Punch
+- Throat Chop
+- Rock Slide
+- Protect
+
+Spiritomb @ Roseli Berry
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC738
+Points: 32 HP / 12 Atk / 12 Def / 0 SpA / 10 SpD / 0 Spe
+Sassy Nature
+- Poltergeist
+- Helping Hand
+- Trick Room
+- Skill Swap
+
+Arcanine @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC83
+Points: 30 HP / 10 Atk / 15 Def / 1 SpA / 2 SpD / 7 Spe
+Adamant Nature
+- Flare Blitz
 - Will-O-Wisp
 - Protect
+- Extreme Speed
+
+Conkeldurr @ Black Belt
+Ability: Iron Fist
+Level: 50
+Note: VGCPastes fallback PC133
+Points: 31 HP / 31 Atk / 0 Def / 0 SpA / 3 SpD / 0 Spe
+Adamant Nature
+- Protect
+- Ice Punch
+- Mach Punch
+- Drain Punch
+
+Salazzle @ Focus Sash
+Ability: Oblivious
+Level: 50
+Note: VGCPastes fallback PC700
+Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 32 Spe
+Timid Nature
+- Dragon Cheer
+- Sludge Bomb
+- Encore
+- Fake Out
+
+Luxray @ Leftovers
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC695
+Points: 32 HP / 0 Atk / 13 Def / 5 SpA / 15 SpD / 1 Spe
+Modest Nature
+- Thunder
+- Snarl
+- Baby-Doll Eyes
+- Volt Switch
+
+Toxicroak @ Focus Sash
+Ability: Dry Skin
+Level: 50
+Note: VGCPastes fallback PC694
+Points: 3 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 29 Spe
+Adamant Nature
+- Close Combat
+- Poison Jab
+- Sucker Punch
+- Fake Out
 
 Rotom-Mow @ Choice Scarf
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC503
+Note: VGCPastes fallback PC442
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Leaf Storm
+- Electroweb
+- Thunderbolt
+- Volt Switch
+
+Slowking @ Colbur Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC692
+Points: 31 HP / 0 Atk / 5 Def / 0 SpA / 30 SpD / 0 Spe
+Sassy Nature
+- Psychic
+- Yawn
+- Trick Room
+- Heal Pulse
+
+Heliolisk @ Choice Scarf
+Ability: Solar Power
+Level: 50
+Note: VGCPastes fallback PC690
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Thunderbolt
+- Electroweb
+- Dragon Pulse
+- Volt Switch
+
+Greninja-Mega @ Greninjite
+Ability: Protean
+Level: 50
+Note: VGCPastes fallback PC118
+Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Dark Pulse
+- Blizzard
+- Flip Turn
+- Protect
+
+Ariados @ Sitrus Berry
+Ability: Insomnia
+Level: 50
+Note: VGCPastes fallback PC687
+Points: 31 HP / 0 Atk / 20 Def / 0 SpA / 15 SpD / 0 Spe
+Impish Nature
+- Knock Off
+- Rage Powder
+- String Shot
+- Protect
+
+Starmie @ Focus Sash
+Ability: Natural Cure
+Level: 50
+Note: VGCPastes fallback PC683
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Psychic
+- Ice Beam
+- Scald
+
+Aggron-Mega @ Aggronite
+Ability: Filter
+Level: 50
+Note: VGCPastes fallback PC584
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Sassy Nature
+- Heavy Slam
+- Body Press
+- Iron Defense
+- Protect
+
+Torterra @ Sitrus Berry
+Ability: Shell Armor
+Level: 50
+Note: VGCPastes fallback PC645
+Points: 32 HP / 21 Atk / 1 Def / 0 SpA / 1 SpD / 11 Spe
+Adamant Nature
+- Leech Seed
+- Wood Hammer
+- Headlong Rush
+- Protect
+
+Umbreon @ Roseli Berry
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC639
+Points: 32 HP / 0 Atk / 30 Def / 0 SpA / 4 SpD / 0 Spe
+Relaxed Nature
+- Foul Play
+- Moonlight
+- Yawn
+- Reflect
+
+Jolteon @ Sitrus Berry
+Ability: Volt Absorb
+Level: 50
+Note: VGCPastes fallback PC626
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Discharge
+- Eerie Impulse
+- Yawn
+- Detect
+
+Manectric-Mega @ Manectite
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC621
 Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
 Timid Nature
 - Volt Switch
-- Electroweb
-- Leaf Storm
-- Thunderbolt
+- Snarl
+- Overheat
+- Protect
 
-Rotom-Heat @ Choice Scarf
+Simipour @ Focus Sash
+Ability: Torrent
+Level: 50
+Note: VGCPastes fallback PC609
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Scald
+- Ice Beam
+- Fake Out
+- Icy Wind
+
+Arbok @ Choice Scarf
+Ability: Unnerve
+Level: 50
+Note: VGCPastes fallback PC607
+Points: 24 HP / 15 Atk / 0 Def / 0 SpA / 0 SpD / 27 Spe
+Adamant Nature
+- Gunk Shot
+- Knock Off
+- Haze
+- Switcheroo
+
+Noivern @ Sitrus Berry
+Ability: Frisk
+Level: 50
+Note: VGCPastes fallback PC558
+Points: 18 HP / 0 Atk / 18 Def / 0 SpA / 0 SpD / 30 Spe
+Timid Nature
+- Air Slash
+- Super Fang
+- Tailwind
+- Protect
+
+Runerigus @ Leftovers
+Ability: Wandering Spirit
+Level: 50
+Note: VGCPastes fallback PC548
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Body Press
+- Protect
+- Will-O-Wisp
+- Iron Defense
+
+Chimecho-Mega @ Chimechite
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC374
-Points: 12 HP / 0 Atk / 0 Def / 29 SpA / 0 SpD / 25 Spe
-Timid Nature
-- Thunderbolt
-- Overheat
-- Volt Switch
-- Electroweb
+Note: VGCPastes fallback PC548
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Flash Cannon
+- Psychic
+- Ally Switch
+- Trick Room
+
+Krookodile @ Choice Scarf
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC535
+Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Knock Off
+- Earthquake
+- Rock Slide
+- High Horsepower
+
+Machamp @ Sitrus Berry
+Ability: No Guard
+Level: 50
+Note: VGCPastes fallback PC535
+Points: 31 HP / 20 Atk / 1 Def / 0 SpA / 1 SpD / 13 Spe
+Adamant Nature
+- Dynamic Punch
+- Stone Edge
+- Knock Off
+- Wide Guard
+
+Rhyperior @ Soft Sand
+Ability: Solid Rock
+Level: 50
+Note: VGCPastes fallback PC524
+Points: 18 HP / 30 Atk / 0 Def / 0 SpA / 18 SpD / 0 Spe
+Brave Nature
+- Earthquake
+- High Horsepower
+- Rock Slide
+- Protect
+
+Sharpedo-Mega @ Sharpedonite
+Ability: Strong Jaw
+Level: 50
+Note: VGCPastes fallback PC500
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Protect
+- Liquidation
+- Crunch
+- Psychic Fangs
+
+Tauros-Paldea-Blaze @ White Herb
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC496
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Flare Blitz
+- Will-O-Wisp
+- Protect
+
+Watchog @ Chople Berry
+Ability: Analytic
+Level: 50
+Note: VGCPastes fallback PC494
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Crunch
+- Hypnosis
+- Low Kick
+- Ice Punch
+
+Passimian @ Sitrus Berry
+Ability: Defiant
+Level: 50
+Note: VGCPastes fallback PC480
+Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Close Combat
+- Coaching
+- Rock Slide
+- Protect
+
+Audino-Mega @ Audinite
+Ability: Healer
+Level: 50
+Note: VGCPastes fallback PC443
+Points: 32 HP / 0 Atk / 20 Def / 12 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Dazzling Gleam
+- Life Dew
+- Calm Mind
+- Trick Room
+
+Emboar-Mega @ Emboarite
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC432
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Adamant Nature
+- Flare Blitz
+- Close Combat
+- Wild Charge
+- Protect
+
+Sharpedo @ Focus Sash
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes fallback PC393
+Points: 0 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Adamant Nature
+- Crunch
+- Psychic Fangs
+- Close Combat
+- Protect
 
 Rotom-Frost @ Choice Scarf
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC383
+Note: VGCPastes fallback PC383
 Points: 16 HP / 0 Atk / 0 Def / 24 SpA / 0 SpD / 26 Spe
 Timid Nature
 - Thunderbolt
@@ -4504,21 +3744,923 @@ Timid Nature
 - Electroweb
 - Volt Switch
 
-Rotom-Wash @ Sitrus Berry
-Ability: Levitate
+Dedenne @ Sitrus Berry
+Ability: Cheek Pouch
 Level: 50
-Note: VGCPastes PC482
-Points: 31 HP / 0 Atk / 13 Def / 7 SpA / 5 SpD / 10 Spe
+Note: VGCPastes fallback PC379
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
 Bold Nature
-- Thunderbolt
-- Hydro Pump
+- Thief
+- Protect
+- Helping Hand
+- Electroweb
+
+Altaria-Mega @ Altarianite
+Ability: Pixilate
+Level: 50
+Note: VGCPastes fallback PC378
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Tailwind
+- Roost
+- Protect
+
+Empoleon @ Mystic Water
+Ability: Competitive
+Level: 50
+Note: VGCPastes fallback PC362
+Points: 12 HP / 0 Atk / 22 Def / 24 SpA / 8 SpD / 0 Spe
+Modest Nature
+- Water Pulse
+- Icy Wind
+- Flash Cannon
+- Protect
+
+Chesnaught @ Leftovers
+Ability: Bulletproof
+Level: 50
+Note: VGCPastes fallback PC362
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 0 SpD / 2 Spe
+Impish Nature
+- Body Press
+- Leech Seed
+- Spiky Shield
+- Wood Hammer
+
+Heracross @ Choice Scarf
+Ability: Moxie
+Level: 50
+Note: VGCPastes fallback PC362
+Points: 5 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 29 Spe
+Adamant Nature
+- Close Combat
+- Knock Off
+- Feint
+- Rock Slide
+
+Reuniclus @ Sitrus Berry
+Ability: Overcoat
+Level: 50
+Note: VGCPastes fallback PC345
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Psychic
+- Energy Ball
+- Protect
+- Trick Room
+
+Cofagrigus @ Mental Herb
+Ability: Mummy
+Level: 50
+Note: VGCPastes fallback PC345
+Points: 32 HP / 0 Atk / 5 Def / 0 SpA / 29 SpD / 0 Spe
+Relaxed Nature
 - Will-O-Wisp
 - Protect
+- Shadow Ball
+- Trick Room
+
+Alakazam-Mega @ Alakazite
+Ability: Trace
+Level: 50
+Note: VGCPastes fallback PC340
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Expanding Force
+- Shadow Ball
+- Focus Blast
+- Protect
+
+Glalie-Mega @ Glalitite
+Ability: Refrigerate
+Level: 50
+Note: VGCPastes fallback PC337
+Points: 28 HP / 30 Atk / 0 Def / 0 SpA / 0 SpD / 8 Spe
+Adamant Nature
+- Explosion
+- Protect
+- Substitute
+- Sheer Cold
+
+Lycanroc @ Focus Sash
+Ability: Sand Rush
+Level: 50
+Note: VGCPastes fallback PC323
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Rock Slide
+- Close Combat
+- Protect
+- Accelerock
+
+Beedrill-Mega @ Beedrillite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes fallback PC311
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Poison Jab
+- U-turn
+- Knock Off
+- Protect
+
+Hydrapple @ Coba Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC303
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Fickle Beam
+- Protect
+- Syrup Bomb
+- Earth Power
+
+Sandaconda @ Focus Sash
+Ability: Sand Spit
+Level: 50
+Note: VGCPastes fallback PC297
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Endeavor
+- High Horsepower
+- Glare
+- Endure
+
+Alakazam @ Colbur Berry
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC282
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Light Screen
+- Reflect
+- Speed Swap
+- Psychic
+
+Simisage @ King's Rock
+Ability: Overgrow
+Level: 50
+Note: VGCPastes fallback PC277
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Solar Blade
+- Fake Out
+- Taunt
+- Bullet Seed
+
+Typhlosion @ Charcoal
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes fallback PC183
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Eruption
+- Rock Tomb
+- Flamethrower
+- Protect
+
+Alcremie @ Sitrus Berry
+Ability: Aroma Veil
+Level: 50
+Note: VGCPastes fallback PC151
+Points: 32 HP / 0 Atk / 32 Def / 1 SpA / 0 SpD / 0 Spe
+Bold Nature
+- Decorate
+- Dazzling Gleam
+- Helping Hand
+- Protect
+
+Lopunny-Mega @ Lopunnite
+Ability: Scrappy
+Level: 50
+Note: VGCPastes fallback PC294
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Close Combat
+- Triple Axel
+- Fake Out
+
+Meganium-Mega @ Meganiumite
+Ability: Mega Sol
+Level: 50
+Note: VGCPastes fallback PC87
+Points: 32 HP / 0 Atk / 20 Def / 7 SpA / 7 SpD / 0 Spe
+Modest Nature
+- Protect
+- Solar Beam
+- Weather Ball
+- Synthesis
+
+Lycanroc-Dusk @ Focus Sash
+Ability: Tough Claws
+Level: 50
+Note: VGCPastes fallback PC970
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Accelerock
+- Psychic Fangs
+- Protect
+
+Samurott-Hisui @ Choice Scarf
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC906
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Night Slash
+- Aqua Cutter
+- Sacred Sword
+- Flip Turn
+
+Espathra @ Focus Sash
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes fallback PC902
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Lumina Crash
+- Dazzling Gleam
+- Rain Dance
+- Protect
+
+Dragapult @ Focus Sash
+Ability: Cursed Body
+Level: 50
+Note: VGCPastes fallback PC286
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Thunder Wave
+- Hex
+- Will-O-Wisp
+- Dragon Pulse
+
+Slowking-Galar @ Colbur Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC1090
+Points: 32 HP / 0 Atk / 17 Def / 0 SpA / 17 SpD / 0 Spe
+Sassy Nature
+- Acid Spray
+- Snarl
+- Heal Pulse
+- Trick Room
+
+Medicham-Mega @ Medichamite
+Ability: Pure Power
+Level: 50
+Note: VGCPastes fallback PC930
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Fake Out
+- Poison Jab
+- Close Combat
+- Rock Slide
+
+Oranguru @ Colbur Berry
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC909
+Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
+Calm Nature
+- Trick Room
+- Instruct
+- Foul Play
+- Sunny Day
+
+Volcarona @ Sitrus Berry
+Ability: Flame Body
+Level: 50
+Note: VGCPastes fallback PC588
+Points: 32 HP / 0 Atk / 32 Def / 1 SpA / 0 SpD / 1 Spe
+Bold Nature
+- Heat Wave
+- Tailwind
+- Rage Powder
+- Protect
+
+Excadrill-Mega @ Excadrite
+Ability: Piercing Drill
+Level: 50
+Note: VGCPastes fallback PC893
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Iron Head
+- Rock Slide
+- High Horsepower
+
+Camerupt-Mega @ Cameruptite
+Ability: Sheer Force
+Level: 50
+Note: VGCPastes fallback PC1074
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Earth Power
+- Heat Wave
+- Ancient Power
+- Protect
+
+Kleavor @ Focus Sash
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC858
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Stone Axe
+- Close Combat
+- Feint
+- Protect
+
+Slowbro-Mega @ Slowbronite
+Ability: Shell Armor
+Level: 50
+Note: VGCPastes fallback PC1070
+Points: 31 HP / 0 Atk / 0 Def / 0 SpA / 20 SpD / 15 Spe
+Calm Nature
+- Stored Power
+- Trick Room
+- Psych Up
+- Slack Off
+
+Altaria @ Haban Berry
+Ability: Cloud Nine
+Level: 50
+Note: VGCPastes fallback PC192
+Points: 26 HP / 0 Atk / 17 Def / 0 SpA / 3 SpD / 20 Spe
+Timid Nature
+- Breaking Swipe
+- Moonblast
+- Tailwind
+- Protect
+
+Wyrdeer @ Colbur Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC1046
+Points: 28 HP / 2 Atk / 8 Def / 0 SpA / 21 SpD / 7 Spe
+Adamant Nature
+- Psyshield Bash
+- Gravity
+- Hypnosis
+- Trick Room
+
+Tinkaton @ Occa Berry
+Ability: Own Tempo
+Level: 50
+Note: VGCPastes fallback PC278
+Points: 31 HP / 19 Atk / 7 Def / 0 SpA / 0 SpD / 9 Spe
+Jolly Nature
+- Encore
+- Helping Hand
+- Fake Out
+- Gigaton Hammer
+
+Scizor-Mega @ Scizorite
+Ability: Technician
+Level: 50
+Note: VGCPastes fallback PC751
+Points: 32 HP / 20 Atk / 0 Def / 0 SpA / 14 SpD / 0 Spe
+Adamant Nature
+- U-turn
+- Bullet Punch
+- Knock Off
+- Protect
+
+Abomasnow-Mega @ Abomasite
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes fallback PC738
+Points: 8 HP / 0 Atk / 27 Def / 28 SpA / 3 SpD / 0 Spe
+Modest Nature
+- Blizzard
+- Leaf Storm
+- Ice Shard
+- Earth Power
+
+Gallade @ Focus Sash
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC1039
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Trick Room
+- Wide Guard
+- Psycho Cut
+- Sacred Sword
+
+Arcanine-Hisui @ Focus Sash
+Ability: Rock Head
+Level: 50
+Note: VGCPastes fallback PC990
+Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Head Smash
+- Extreme Speed
+- Flare Blitz
+
+Skarmory-Mega @ Skarmorite
+Ability: Stalwart
+Level: 50
+Note: VGCPastes fallback PC486
+Points: 32 HP / 13 Atk / 10 Def / 0 SpA / 10 SpD / 1 Spe
+Impish Nature
+- Brave Bird
+- Iron Head
+- Swords Dance
+- Protect
+
+Hatterene @ Focus Sash
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC432
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Dazzling Gleam
+- Expanding Force
+- Psychic Terrain
+- Trick Room
+
+Palafin @ Choice Scarf
+Ability: Zero to Hero
+Level: 50
+Note: VGCPastes fallback PC228
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 2 Spe
+Adamant Nature
+- Wave Crash
+- Flip Turn
+- Close Combat
+- Jet Punch
+
+Gyarados-Mega @ Gyaradosite
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC23
+Points: 13 HP / 27 Atk / 0 Def / 0 SpA / 0 SpD / 26 Spe
+Jolly Nature
+- Protect
+- Dragon Dance
+- Crunch
+- Waterfall
+
+Crabominable-Mega @ Crabominite
+Ability: Iron Fist
+Level: 50
+Note: VGCPastes fallback PC202
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Ice Hammer
+- Close Combat
+- Mach Punch
+- Thunder Punch
+
+Goodra-Hisui @ Metal Coat
+Ability: Sap Sipper
+Level: 50
+Note: VGCPastes fallback PC548
+Points: 32 HP / 0 Atk / 6 Def / 18 SpA / 10 SpD / 0 Spe
+Brave Nature
+- Protect
+- Flash Cannon
+- Dragon Pulse
+- Thunderbolt
+
+Steelix-Mega @ Steelixite
+Ability: Sand Force
+Level: 50
+Note: VGCPastes fallback PC969
+Points: 32 HP / 6 Atk / 1 Def / 0 SpA / 27 SpD / 0 Spe
+Brave Nature
+- High Horsepower
+- Heavy Slam
+- Body Press
+- Wide Guard
+
+Golurk-Mega @ Golurkite
+Ability: Unseen Fist
+Level: 50
+Note: VGCPastes fallback PC560
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Brave Nature
+- Protect
+- Headlong Rush
+- Thunder Punch
+- Close Combat
+
+Heracross-Mega @ Heracronite
+Ability: Skill Link
+Level: 50
+Note: VGCPastes fallback PC987
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Close Combat
+- Pin Missile
+- Rock Blast
+- Protect
+
+Morpeko @ Focus Sash
+Ability: Hunger Switch
+Level: 50
+Note: VGCPastes fallback PC500
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Fake Out
+- Aura Wheel
+- Knock Off
+
+Decidueye-Hisui @ Scope Lens
+Ability: Scrappy
+Level: 50
+Note: VGCPastes fallback PC69
+Points: 28 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 4 Spe
+Adamant Nature
+- Triple Arrows
+- Leaf Blade
+- Protect
+- Brave Bird
+
+Liepard @ Focus Sash
+Ability: Prankster
+Level: 50
+Note: VGCPastes fallback PC569
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Knock Off
+- Thunder Wave
+- Encore
+- Fake Out
+
+Banette-Mega @ Banettite
+Ability: Prankster
+Level: 50
+Note: VGCPastes fallback PC734
+Points: 32 HP / 0 Atk / 25 Def / 0 SpA / 3 SpD / 6 Spe
+Impish Nature
+- Poltergeist
+- Encore
+- Will-O-Wisp
+- Disable
+
+Lucario @ Focus Sash
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC855
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Modest Nature
+- Aura Sphere
+- Roar
+- Detect
+- Steel Beam
+
+Slowbro-Galar @ Sitrus Berry
+Ability: Quick Draw
+Level: 50
+Note: VGCPastes fallback PC921
+Points: 32 HP / 0 Atk / 3 Def / 0 SpA / 31 SpD / 0 Spe
+Adamant Nature
+- Shell Side Arm
+- Drain Punch
+- Protect
+- Belly Drum
+
+Hippowdon @ Leftovers
+Ability: Sand Stream
+Level: 50
+Note: VGCPastes fallback PC804
+Points: 32 HP / 1 Atk / 2 Def / 0 SpA / 31 SpD / 0 Spe
+Impish Nature
+- Protect
+- High Horsepower
+- Rock Tomb
+- Yawn
+
+Feraligatr-Mega @ Feraligite
+Ability: Dragonize
+Level: 50
+Note: VGCPastes fallback PC16
+Points: 32 HP / 11 Atk / 1 Def / 0 SpA / 10 SpD / 12 Spe
+Adamant Nature
+- Liquidation
+- Aqua Jet
+- Double-Edge
+- Protect
+
+Lucario-Mega @ Lucarionite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes fallback PC910
+Points: 0 HP / 19 Atk / 0 Def / 22 SpA / 0 SpD / 25 Spe
+Hasty Nature
+- Aura Sphere
+- Meteor Mash
+- Bone Rush
+- Stone Edge
+
+Drampa-Mega @ Drampanite
+Ability: Berserk
+Level: 50
+Note: VGCPastes fallback PC604
+Points: 11 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 22 Spe
+Modest Nature
+- Hyper Beam
+- Heat Wave
+- Dragon Pulse
+- Protect
+
+Victreebel-Mega @ Victreebelite
+Ability: Innards Out
+Level: 50
+Note: VGCPastes fallback PC908
+Points: 0 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 32 Spe
+Modest Nature
+- Sludge Bomb
+- Leaf Storm
+- Acid Spray
+- Protect
+
+Clefable-Mega @ Clefablite
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC538
+Points: 32 HP / 0 Atk / 32 Def / 0 SpA / 2 SpD / 0 Spe
+Relaxed Nature
+- Protect
+- Follow Me
+- Moonblast
+- Encore
+
+Bellibolt @ Leftovers
+Ability: Electromorphosis
+Level: 50
+Note: VGCPastes fallback PC781
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Parabolic Charge
+- Thunderbolt
+- Soak
+- Protect
+
+Greninja @ Choice Scarf
+Ability: Protean
+Level: 50
+Note: VGCPastes fallback PC900
+Points: 13 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 21 Spe
+Modest Nature
+- Hydro Pump
+- Dark Pulse
+- Icy Wind
+- U-turn
+
+Glaceon @ Bright Powder
+Ability: Snow Cloak
+Level: 50
+Note: VGCPastes fallback PC107
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Blizzard
+- Freeze-Dry
+- Icy Wind
+- Protect
+
+Tauros-Paldea-Aqua @ Hard Stone
+Ability: Anger Point
+Level: 50
+Note: VGCPastes fallback PC807
+Points: 1 HP / 32 Atk / 9 Def / 0 SpA / 0 SpD / 24 Spe
+Adamant Nature
+- Earthquake
+- Rock Slide
+- Aqua Jet
+- Protect
+
+Starmie-Mega @ Starminite
+Ability: Huge Power
+Level: 50
+Note: VGCPastes fallback PC491
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Ice Spinner
+- Flip Turn
+- Aqua Jet
+- Protect
+
+Chesnaught-Mega @ Chesnaughtite
+Ability: Bulletproof
+Level: 50
+Note: VGCPastes fallback PC457
+Points: 32 HP / 0 Atk / 8 Def / 0 SpA / 26 SpD / 0 Spe
+Relaxed Nature
+- Spiky Shield
+- Body Press
+- Iron Defense
+- Leech Seed
+
+Pikachu @ Light Ball
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes fallback PC312
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Hasty Nature
+- Thunder
+- Surf
+- Upper Hand
+- Fake Out
+
+Meowstic @ Mental Herb
+Ability: Prankster
+Level: 50
+Note: VGCPastes fallback PC559
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Psychic Terrain
+- Light Screen
+- Reflect
+- Helping Hand
+
+Scizor @ Metal Coat
+Ability: Technician
+Level: 50
+Note: VGCPastes fallback PC666
+Points: 26 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 8 Spe
+Adamant Nature
+- Bullet Punch
+- Close Combat
+- Feint
+- Tailwind
+
+Garganacl @ Leftovers
+Ability: Purifying Salt
+Level: 50
+Note: VGCPastes fallback PC372
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 32 SpD / 0 Spe
+Careful Nature
+- Salt Cure
+- Wide Guard
+- Recover
+- Protect
+
+Pinsir-Mega @ Pinsirite
+Ability: Aerilate
+Level: 50
+Note: VGCPastes fallback PC290
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Body Slam
+- Close Combat
+- Feint
+- Protect
+
+Pidgeot-Mega @ Pidgeotite
+Ability: No Guard
+Level: 50
+Note: VGCPastes fallback PC459
+Points: 12 HP / 0 Atk / 21 Def / 5 SpA / 0 SpD / 28 Spe
+Timid Nature
+- Round
+- Heat Wave
+- Protect
+- Hurricane
+
+Araquanid @ Never-Melt Ice
+Ability: Water Bubble
+Level: 50
+Note: VGCPastes fallback PC797
+Points: 0 HP / 0 Atk / 25 Def / 32 SpA / 8 SpD / 0 Spe
+Modest Nature
+- Protect
+- Hydro Pump
+- Wide Guard
+- Ice Beam
+
+Gliscor @ Lum Berry
+Ability: Hyper Cutter
+Level: 50
+Note: VGCPastes fallback PC439
+Points: 10 HP / 25 Atk / 0 Def / 0 SpA / 0 SpD / 31 Spe
+Adamant Nature
+- Dual Wingbeat
+- High Horsepower
+- Tailwind
+- Protect
+
+Mudsdale @ Sitrus Berry
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC782
+Points: 31 HP / 32 Atk / 0 Def / 0 SpA / 3 SpD / 0 Spe
+Adamant Nature
+- Heavy Slam
+- High Horsepower
+- Rock Slide
+- Fissure
+
+Chandelure-Mega @ Chandelurite
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC703
+Points: 27 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 7 Spe
+Modest Nature
+- Protect
+- Calm Mind
+- Shadow Ball
+- Heat Wave
+
+Chandelure @ Colbur Berry
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes fallback PC743
+Points: 24 HP / 0 Atk / 1 Def / 32 SpA / 1 SpD / 8 Spe
+Modest Nature
+- Heat Wave
+- Shadow Ball
+- Will-O-Wisp
+- Protect
+
+Gallade-Mega @ Galladite
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC737
+Points: 19 HP / 15 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Sacred Sword
+- Psycho Cut
+- Rock Tomb
+- Protect
+
+Spiritomb @ Roseli Berry
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC667
+Points: 32 HP / 12 Atk / 12 Def / 0 SpA / 10 SpD / 0 Spe
+Sassy Nature
+- Poltergeist
+- Sucker Punch
+- Trick Room
+- Skill Swap
+
+Arcanine @ Passho Berry
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes fallback PC724
+Points: 32 HP / 0 Atk / 7 Def / 0 SpA / 0 SpD / 27 Spe
+Timid Nature
+- Flamethrower
+- Snarl
+- Will-O-Wisp
+- Morning Sun
+
+Conkeldurr @ Black Belt
+Ability: Guts
+Level: 50
+Note: VGCPastes fallback PC531
+Points: 23 HP / 10 Atk / 1 Def / 0 SpA / 32 SpD / 0 Spe
+Brave Nature
+- Close Combat
+- Knock Off
+- Poison Jab
+- Protect
+
+Salazzle @ King's Rock
+Ability: Oblivious
+Level: 50
+Note: VGCPastes fallback PC235
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Overheat
+- Sludge Bomb
+- Fake Out
+- Fling
+
+Luxray @ Choice Scarf
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC350
+Points: 32 HP / 1 Atk / 0 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Wild Charge
+- Psychic Fangs
+- Volt Switch
+- Electroweb
+
+Toxicroak @ Focus Sash
+Ability: Dry Skin
+Level: 50
+Note: VGCPastes fallback PC548
+Points: 27 HP / 26 Atk / 0 Def / 0 SpA / 0 SpD / 13 Spe
+Adamant Nature
+- Fake Out
+- Poison Jab
+- Bullet Punch
+- Close Combat
 
 Rotom-Mow @ Choice Scarf
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC272
+Note: VGCPastes fallback PC272
 Points: 18 HP / 0 Atk / 0 Def / 16 SpA / 0 SpD / 32 Spe
 Modest Nature
 - Thunderbolt
@@ -4526,21 +4668,208 @@ Modest Nature
 - Electroweb
 - Will-O-Wisp
 
-Rotom-Heat @ Sitrus Berry
+Slowking @ Colbur Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC473
+Points: 32 HP / 0 Atk / 16 Def / 10 SpA / 8 SpD / 0 Spe
+Quiet Nature
+- Chilly Reception
+- Scald
+- Psychic
+- Trick Room
+
+Heliolisk @ Choice Scarf
+Ability: Dry Skin
+Level: 50
+Note: VGCPastes fallback PC536
+Points: 7 HP / 0 Atk / 4 Def / 32 SpA / 0 SpD / 23 Spe
+Modest Nature
+- Thunderbolt
+- Volt Switch
+- Electroweb
+- Dragon Pulse
+
+Greninja-Mega @ Greninjite
+Ability: Protean
+Level: 50
+Note: VGCPastes fallback PC689
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Liquidation
+- Flip Turn
+- Rock Slide
+- Night Slash
+
+Ariados @ Bright Powder
+Ability: Insomnia
+Level: 50
+Note: VGCPastes fallback PC440
+Points: 32 HP / 0 Atk / 30 Def / 0 SpA / 4 SpD / 0 Spe
+Bold Nature
+- Struggle Bug
+- String Shot
+- Toxic Spikes
+- Rage Powder
+
+Starmie @ Hard Stone
+Ability: Natural Cure
+Level: 50
+Note: VGCPastes fallback PC569
+Points: 0 HP / 0 Atk / 10 Def / 32 SpA / 1 SpD / 23 Spe
+Timid Nature
+- Power Gem
+- Reflect
+- Ice Beam
+- Protect
+
+Aggron-Mega @ Aggronite
+Ability: Filter
+Level: 50
+Note: VGCPastes fallback PC649
+Points: 32 HP / 2 Atk / 0 Def / 0 SpA / 32 SpD / 0 Spe
+Impish Nature
+- Heavy Slam
+- Body Press
+- Iron Defense
+- Protect
+
+Torterra @ Sitrus Berry
+Ability: Shell Armor
+Level: 50
+Note: VGCPastes fallback PC542
+Points: 32 HP / 0 Atk / 14 Def / 0 SpA / 20 SpD / 0 Spe
+Impish Nature
+- Wood Hammer
+- High Horsepower
+- Leech Seed
+- Protect
+
+Jolteon @ Focus Sash
+Ability: Volt Absorb
+Level: 50
+Note: VGCPastes fallback PC343
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Thunderbolt
+- Electroweb
+- Fake Tears
+- Protect
+
+Manectric-Mega @ Manectite
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC211
+Points: 22 HP / 0 Atk / 1 Def / 9 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Thunderbolt
+- Snarl
+- Thunder Wave
+- Protect
+
+Simipour @ Mystic Water
+Ability: Torrent
+Level: 50
+Note: VGCPastes fallback PC298
+Points: 0 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 32 Spe
+Timid Nature
+- Scald
+- Flip Turn
+- Icy Wind
+- Fake Out
+
+Noivern @ Sitrus Berry
+Ability: Telepathy
+Level: 50
+Note: VGCPastes fallback PC557
+Points: 18 HP / 0 Atk / 18 Def / 0 SpA / 0 SpD / 30 Spe
+Timid Nature
+- Air Slash
+- Super Fang
+- Tailwind
+- Protect
+
+Chimecho-Mega @ Chimechite
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC346
-Points: 27 HP / 0 Atk / 1 Def / 15 SpA / 4 SpD / 19 Spe
+Note: VGCPastes fallback PC535
+Points: 31 HP / 0 Atk / 15 Def / 15 SpA / 3 SpD / 2 Spe
 Modest Nature
-- Overheat
-- Thunderbolt
-- Will-O-Wisp
+- Psyshock
+- Flash Cannon
+- Trick Room
+- Protect
+
+Krookodile @ Choice Scarf
+Ability: Moxie
+Level: 50
+Note: VGCPastes fallback PC364
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Knock Off
+- High Horsepower
+- Rock Tomb
+- Fissure
+
+Rhyperior @ White Herb
+Ability: Solid Rock
+Level: 50
+Note: VGCPastes fallback PC280
+Points: 20 HP / 32 Atk / 0 Def / 0 SpA / 14 SpD / 0 Spe
+Brave Nature
+- Rock Slide
+- High Horsepower
+- Earthquake
+- Protect
+
+Tauros-Paldea-Blaze @ White Herb
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC58
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Raging Bull
+- Close Combat
+- Lash Out
+- Protect
+
+Audino-Mega @ Audinite
+Ability: Healer
+Level: 50
+Note: VGCPastes fallback PC322
+Points: 32 HP / 0 Atk / 7 Def / 20 SpA / 7 SpD / 0 Spe
+Bold Nature
+- Dazzling Gleam
+- Helping Hand
+- Life Dew
+- Trick Room
+
+Emboar-Mega @ Emboarite
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC345
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Flare Blitz
+- Close Combat
+- Protect
+- Sucker Punch
+
+Sharpedo @ Focus Sash
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes fallback PC351
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Crunch
+- Close Combat
+- Psychic Fangs
 - Protect
 
 Rotom-Frost @ Never-Melt Ice
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC164
+Note: VGCPastes fallback PC164
 Points: 32 HP / 0 Atk / 9 Def / 25 SpA / 0 SpD / 0 Spe
 Modest Nature
 - Blizzard
@@ -4548,21 +4877,681 @@ Modest Nature
 - Protect
 - Helping Hand
 
-Rotom-Wash @ Choice Scarf
-Ability: Levitate
+Dedenne @ Sitrus Berry
+Ability: Cheek Pouch
 Level: 50
-Note: VGCPastes PC387
-Points: 15 HP / 0 Atk / 0 Def / 25 SpA / 0 SpD / 26 Spe
+Note: VGCPastes fallback PC378
+Points: 32 HP / 0 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
 Timid Nature
-- Thunderbolt
-- Hydro Pump
+- Dazzling Gleam
+- Super Fang
 - Volt Switch
-- Electroweb
+- Protect
+
+Altaria-Mega @ Altarianite
+Ability: Pixilate
+Level: 50
+Note: VGCPastes fallback PC372
+Points: 32 HP / 0 Atk / 13 Def / 20 SpA / 1 SpD / 0 Spe
+Bold Nature
+- Hyper Voice
+- Draco Meteor
+- Roost
+- Protect
+
+Empoleon @ Leftovers
+Ability: Competitive
+Level: 50
+Note: VGCPastes fallback PC39
+Points: 32 HP / 0 Atk / 0 Def / 19 SpA / 0 SpD / 15 Spe
+Modest Nature
+- Water Pulse
+- Flash Cannon
+- Roar
+- Protect
+
+Reuniclus @ Mental Herb
+Ability: Overcoat
+Level: 50
+Note: VGCPastes fallback PC259
+Points: 21 HP / 0 Atk / 18 Def / 25 SpA / 2 SpD / 0 Spe
+Quiet Nature
+- Psychic Noise
+- Focus Blast
+- Trick Room
+- Ally Switch
+
+Alakazam-Mega @ Alakazite
+Ability: Trace
+Level: 50
+Note: VGCPastes fallback PC57
+Points: 8 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 25 Spe
+Timid Nature
+- Disable
+- Psychic
+- Speed Swap
+- Encore
+
+Beedrill-Mega @ Beedrillite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes fallback PC248
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Poison Jab
+- Drill Run
+- U-turn
+- Protect
+
+Lopunny-Mega @ Lopunnite
+Ability: Scrappy
+Level: 50
+Note: VGCPastes fallback PC1104
+Points: 0 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Triple Axel
+- Fake Out
+- Protect
+
+Meganium-Mega @ Meganiumite
+Ability: Mega Sol
+Level: 50
+Note: VGCPastes fallback PC15
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 1 SpD / 1 Spe
+Modest Nature
+- Solar Beam
+- Dazzling Gleam
+- Weather Ball
+- Synthesis
+
+Samurott-Hisui @ White Herb
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC369
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Aqua Jet
+- Protect
+- Razor Shell
+- Night Slash
+
+Espathra @ Sitrus Berry
+Ability: Speed Boost
+Level: 50
+Note: VGCPastes fallback PC617
+Points: 27 HP / 0 Atk / 30 Def / 0 SpA / 9 SpD / 0 Spe
+Bold Nature
+- Stored Power
+- Protect
+- Calm Mind
+- Baton Pass
+
+Dragapult @ Lum Berry
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC276
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Naive Nature
+- Draco Meteor
+- Shadow Ball
+- Will-O-Wisp
+- Psychic Fangs
+
+Slowking-Galar @ Sitrus Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC239
+Points: 32 HP / 0 Atk / 17 Def / 2 SpA / 15 SpD / 0 Spe
+Sassy Nature
+- Sludge Bomb
+- Psychic
+- Yawn
+- Chilly Reception
+
+Oranguru @ Leftovers
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC243
+Points: 32 HP / 0 Atk / 28 Def / 0 SpA / 6 SpD / 0 Spe
+Impish Nature
+- Trick Room
+- Instruct
+- Protect
+- Foul Play
+
+Volcarona @ Focus Sash
+Ability: Flame Body
+Level: 50
+Note: VGCPastes fallback PC233
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Heat Wave
+- Fiery Dance
+- Protect
+- Bug Buzz
+
+Excadrill-Mega @ Excadrite
+Ability: Piercing Drill
+Level: 50
+Note: VGCPastes fallback PC1027
+Points: 0 HP / 19 Atk / 0 Def / 0 SpA / 15 SpD / 32 Spe
+Jolly Nature
+- Iron Head
+- Earthquake
+- Rock Slide
+- Protect
+
+Camerupt-Mega @ Cameruptite
+Ability: Sheer Force
+Level: 50
+Note: VGCPastes fallback PC201
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Eruption
+- Flamethrower
+- Solar Beam
+- Earth Power
+
+Kleavor @ Choice Scarf
+Ability: Sharpness
+Level: 50
+Note: VGCPastes fallback PC797
+Points: 1 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- X-Scissor
+- Close Combat
+- Stone Axe
+- Night Slash
+
+Slowbro-Mega @ Slowbronite
+Ability: Shell Armor
+Level: 50
+Note: VGCPastes fallback PC222
+Points: 31 HP / 0 Atk / 3 Def / 0 SpA / 32 SpD / 0 Spe
+Relaxed Nature
+- Ice Beam
+- Body Press
+- Skill Swap
+- Trick Room
+
+Altaria @ Bright Powder
+Ability: Cloud Nine
+Level: 50
+Note: VGCPastes fallback PC882
+Points: 32 HP / 1 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Brave Bird
+- Helping Hand
+- Will-O-Wisp
+- Tailwind
+
+Wyrdeer @ Sitrus Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC653
+Points: 32 HP / 0 Atk / 18 Def / 0 SpA / 16 SpD / 0 Spe
+Relaxed Nature
+- Protect
+- Psychic
+- Skill Swap
+- Trick Room
+
+Tinkaton @ Shuca Berry
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC116
+Points: 23 HP / 16 Atk / 14 Def / 0 SpA / 1 SpD / 12 Spe
+Adamant Nature
+- Gigaton Hammer
+- Play Rough
+- Feint
+- Fake Out
+
+Scizor-Mega @ Scizorite
+Ability: Technician
+Level: 50
+Note: VGCPastes fallback PC542
+Points: 32 HP / 0 Atk / 7 Def / 0 SpA / 27 SpD / 0 Spe
+Impish Nature
+- Sandstorm
+- Bullet Punch
+- Close Combat
+- Protect
+
+Abomasnow-Mega @ Abomasite
+Ability: Snow Warning
+Level: 50
+Note: VGCPastes fallback PC445
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Blizzard
+- Energy Ball
+- Protect
+- Focus Blast
+
+Gallade @ Choice Scarf
+Ability: Justified
+Level: 50
+Note: VGCPastes fallback PC813
+Points: 32 HP / 15 Atk / 0 Def / 0 SpA / 0 SpD / 19 Spe
+Adamant Nature
+- Sacred Sword
+- Psycho Cut
+- Rock Slide
+- Poison Jab
+
+Arcanine-Hisui @ Silk Scarf
+Ability: Rock Head
+Level: 50
+Note: VGCPastes fallback PC592
+Points: 13 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 21 Spe
+Adamant Nature
+- Rock Slide
+- Flare Blitz
+- Extreme Speed
+- Protect
+
+Skarmory-Mega @ Skarmorite
+Ability: Stalwart
+Level: 50
+Note: VGCPastes fallback PC148
+Points: 32 HP / 8 Atk / 0 Def / 0 SpA / 25 SpD / 1 Spe
+Adamant Nature
+- Iron Head
+- Iron Defense
+- Body Press
+- Roost
+
+Hatterene @ Focus Sash
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC531
+Points: 32 HP / 0 Atk / 9 Def / 24 SpA / 1 SpD / 0 Spe
+Quiet Nature
+- Dazzling Gleam
+- Protect
+- Nuzzle
+- Trick Room
+
+Palafin @ Mystic Water
+Ability: Zero to Hero
+Level: 50
+Note: VGCPastes fallback PC971
+Points: 0 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Wave Crash
+- Flip Turn
+- Jet Punch
+- Protect
+
+Gyarados-Mega @ Gyaradosite
+Ability: Mold Breaker
+Level: 50
+Note: VGCPastes fallback PC645
+Points: 31 HP / 1 Atk / 1 Def / 0 SpA / 1 SpD / 32 Spe
+Jolly Nature
+- Waterfall
+- Crunch
+- Sunny Day
+- Protect
+
+Crabominable-Mega @ Crabominite
+Ability: Iron Fist
+Level: 50
+Note: VGCPastes fallback PC280
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Ice Punch
+- Drain Punch
+- Mach Punch
+- Protect
+
+Goodra-Hisui @ Leftovers
+Ability: Gooey
+Level: 50
+Note: VGCPastes fallback PC59
+Points: 32 HP / 0 Atk / 15 Def / 14 SpA / 0 SpD / 5 Spe
+Bold Nature
+- Ice Beam
+- Thunderbolt
+- Body Press
+- Shelter
+
+Golurk-Mega @ Golurkite
+Ability: Unseen Fist
+Level: 50
+Note: VGCPastes fallback PC234
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Headlong Rush
+- Protect
+- Close Combat
+- Poltergeist
+
+Heracross-Mega @ Heracronite
+Ability: Skill Link
+Level: 50
+Note: VGCPastes fallback PC862
+Points: 20 HP / 15 Atk / 0 Def / 0 SpA / 0 SpD / 31 Spe
+Adamant Nature
+- Close Combat
+- Pin Missile
+- Bullet Seed
+- Detect
+
+Decidueye-Hisui @ Scope Lens
+Ability: Scrappy
+Level: 50
+Note: VGCPastes fallback PC40
+Points: 5 HP / 28 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Triple Arrows
+- Leaf Blade
+- Upper Hand
+- Protect
+
+Banette-Mega @ Banettite
+Ability: Prankster
+Level: 50
+Note: VGCPastes fallback PC585
+Points: 32 HP / 0 Atk / 11 Def / 0 SpA / 23 SpD / 0 Spe
+Careful Nature
+- Shadow Sneak
+- Destiny Bond
+- Encore
+- Disable
+
+Lucario @ Focus Sash
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC602
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Adamant Nature
+- Close Combat
+- Extreme Speed
+- Thunder Punch
+- Protect
+
+Slowbro-Galar @ Quick Claw
+Ability: Quick Draw
+Level: 50
+Note: VGCPastes fallback PC781
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Shell Side Arm
+- Psychic
+- Ice Beam
+- Protect
+
+Hippowdon @ Quick Claw
+Ability: Sand Stream
+Level: 50
+Note: VGCPastes fallback PC565
+Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
+Brave Nature
+- Earthquake
+- Fire Fang
+- High Horsepower
+- Stone Edge
+
+Feraligatr-Mega @ Feraligite
+Ability: Dragonize
+Level: 50
+Note: VGCPastes fallback PC531
+Points: 32 HP / 20 Atk / 1 Def / 0 SpA / 13 SpD / 0 Spe
+Brave Nature
+- Protect
+- Facade
+- Waterfall
+- Swords Dance
+
+Lucario-Mega @ Lucarionite
+Ability: Adaptability
+Level: 50
+Note: VGCPastes fallback PC607
+Points: 6 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 28 Spe
+Timid Nature
+- Steel Beam
+- Aura Sphere
+- Vacuum Wave
+- Detect
+
+Drampa-Mega @ Drampanite
+Ability: Berserk
+Level: 50
+Note: VGCPastes fallback PC282
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 2 SpD / 0 Spe
+Modest Nature
+- Hyper Voice
+- Calm Mind
+- Protect
+- Earth Power
+
+Victreebel-Mega @ Victreebelite
+Ability: Innards Out
+Level: 50
+Note: VGCPastes fallback PC253
+Points: 25 HP / 0 Atk / 9 Def / 32 SpA / 0 SpD / 0 Spe
+Modest Nature
+- Strength Sap
+- Sludge Bomb
+- Protect
+- Energy Ball
+
+Clefable-Mega @ Clefablite
+Ability: Magic Bounce
+Level: 50
+Note: VGCPastes fallback PC256
+Points: 31 HP / 0 Atk / 7 Def / 5 SpA / 20 SpD / 3 Spe
+Calm Nature
+- Moonblast
+- Stored Power
+- Psych Up
+- Moonlight
+
+Bellibolt @ Sitrus Berry
+Ability: Electromorphosis
+Level: 50
+Note: VGCPastes fallback PC737
+Points: 32 HP / 0 Atk / 0 Def / 27 SpA / 7 SpD / 0 Spe
+Quiet Nature
+- Volt Switch
+- Parabolic Charge
+- Sucker Punch
+- Protect
+
+Greninja @ Focus Sash
+Ability: Torrent
+Level: 50
+Note: VGCPastes fallback PC21
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Protect
+- Water Pulse
+- Icy Wind
+- Dark Pulse
+
+Glaceon @ Never-Melt Ice
+Ability: Snow Cloak
+Level: 50
+Note: VGCPastes fallback PC91
+Points: 32 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 2 Spe
+Modest Nature
+- Blizzard
+- Ice Beam
+- Freeze-Dry
+- Detect
+
+Tauros-Paldea-Aqua @ Mystic Water
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC141
+Points: 31 HP / 6 Atk / 1 Def / 0 SpA / 21 SpD / 7 Spe
+Careful Nature
+- Wave Crash
+- Close Combat
+- Aqua Jet
+- Protect
+
+Starmie-Mega @ Starminite
+Ability: Huge Power
+Level: 50
+Note: VGCPastes fallback PC221
+Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Protect
+- Liquidation
+- Skill Swap
+- Zen Headbutt
+
+Chesnaught-Mega @ Chesnaughtite
+Ability: Bulletproof
+Level: 50
+Note: VGCPastes fallback PC861
+Points: 32 HP / 11 Atk / 6 Def / 0 SpA / 17 SpD / 0 Spe
+Adamant Nature
+- Body Press
+- Spiky Shield
+- Iron Defense
+- Wood Hammer
+
+Pikachu @ Light Ball
+Ability: Lightning Rod
+Level: 50
+Note: VGCPastes fallback PC239
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Fake Out
+- Upper Hand
+- Thunderbolt
+- Surf
+
+Meowstic @ Chesto Berry
+Ability: Prankster
+Level: 50
+Note: VGCPastes fallback PC256
+Points: 32 HP / 0 Atk / 23 Def / 1 SpA / 9 SpD / 1 Spe
+Calm Nature
+- Stored Power
+- Charge Beam
+- Psych Up
+- Rest
+
+Scizor @ Metal Coat
+Ability: Swarm
+Level: 50
+Note: VGCPastes fallback PC51
+Points: 11 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 23 Spe
+Adamant Nature
+- Bullet Punch
+- Swords Dance
+- Knock Off
+- Protect
+
+Pinsir-Mega @ Pinsirite
+Ability: Aerilate
+Level: 50
+Note: VGCPastes fallback PC807
+Points: 1 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 32 Spe
+Jolly Nature
+- Storm Throw
+- Feint
+- Giga Impact
+- Protect
+
+Araquanid @ Sitrus Berry
+Ability: Water Bubble
+Level: 50
+Note: VGCPastes fallback PC548
+Points: 20 HP / 12 Atk / 6 Def / 0 SpA / 28 SpD / 0 Spe
+Sassy Nature
+- Liquidation
+- Wide Guard
+- Endeavor
+- Infestation
+
+Mudsdale @ Leftovers
+Ability: Stamina
+Level: 50
+Note: VGCPastes fallback PC271
+Points: 32 HP / 12 Atk / 0 Def / 0 SpA / 22 SpD / 0 Spe
+Brave Nature
+- Earthquake
+- Body Press
+- Heavy Slam
+- Protect
+
+Chandelure-Mega @ Chandelurite
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC533
+Points: 32 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 3 Spe
+Modest Nature
+- Protect
+- Trick Room
+- Shadow Ball
+- Heat Wave
+
+Chandelure @ Leftovers
+Ability: Flash Fire
+Level: 50
+Note: VGCPastes fallback PC645
+Points: 32 HP / 0 Atk / 10 Def / 0 SpA / 1 SpD / 23 Spe
+Timid Nature
+- Heat Wave
+- Minimize
+- Protect
+- Substitute
+
+Gallade-Mega @ Galladite
+Ability: Inner Focus
+Level: 50
+Note: VGCPastes fallback PC293
+Points: 6 HP / 32 Atk / 1 Def / 0 SpA / 0 SpD / 27 Spe
+Jolly Nature
+- Sacred Sword
+- Thunder Punch
+- Ice Punch
+- Protect
+
+Spiritomb @ Roseli Berry
+Ability: Infiltrator
+Level: 50
+Note: VGCPastes fallback PC602
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Adamant Nature
+- Poltergeist
+- Lash Out
+- Sucker Punch
+- Trick Room
+
+Arcanine @ Shuca Berry
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC168
+Points: 27 HP / 0 Atk / 10 Def / 3 SpA / 0 SpD / 26 Spe
+Timid Nature
+- Overheat
+- Snarl
+- Howl
+- Will-O-Wisp
+
+Conkeldurr @ Black Belt
+Ability: Sheer Force
+Level: 50
+Note: VGCPastes fallback PC243
+Points: 32 HP / 32 Atk / 2 Def / 0 SpA / 0 SpD / 0 Spe
+Brave Nature
+- Drain Punch
+- Double-Edge
+- Protect
+- Rock Slide
 
 Rotom-Mow @ Sitrus Berry
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC143
+Note: VGCPastes fallback PC143
 Points: 32 HP / 0 Atk / 11 Def / 10 SpA / 12 SpD / 1 Spe
 Bold Nature
 - Thunderbolt
@@ -4570,21 +5559,120 @@ Bold Nature
 - Leaf Storm
 - Protect
 
-Rotom-Heat @ Sitrus Berry
+Slowking @ Colbur Berry
+Ability: Regenerator
+Level: 50
+Note: VGCPastes fallback PC245
+Points: 32 HP / 0 Atk / 23 Def / 1 SpA / 10 SpD / 0 Spe
+Calm Nature
+- Scald
+- Psychic Noise
+- Trick Room
+- Chilly Reception
+
+Heliolisk @ Focus Sash
+Ability: Dry Skin
+Level: 50
+Note: VGCPastes fallback PC535
+Points: 4 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 29 Spe
+Timid Nature
+- Thunder
+- Glare
+- Volt Switch
+- Protect
+
+Greninja-Mega @ Greninjite
+Ability: Protean
+Level: 50
+Note: VGCPastes fallback PC544
+Points: 8 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 26 Spe
+Naive Nature
+- Blizzard
+- Water Shuriken
+- Dark Pulse
+- Protect
+
+Ariados @ Silver Powder
+Ability: Insomnia
+Level: 50
+Note: VGCPastes fallback PC312
+Points: 32 HP / 32 Atk / 1 Def / 0 SpA / 1 SpD / 0 Spe
+Adamant Nature
+- Shadow Sneak
+- Rage Powder
+- First Impression
+- Poison Jab
+
+Starmie @ Leftovers
+Ability: Analytic
+Level: 50
+Note: VGCPastes fallback PC256
+Points: 32 HP / 0 Atk / 8 Def / 0 SpA / 25 SpD / 1 Spe
+Calm Nature
+- Scald
+- Cosmic Power
+- Recover
+- Minimize
+
+Aggron-Mega @ Aggronite
+Ability: Filter
+Level: 50
+Note: VGCPastes fallback PC301
+Points: 32 HP / 2 Atk / 1 Def / 0 SpA / 30 SpD / 1 Spe
+Careful Nature
+- Body Press
+- Heavy Slam
+- Protect
+- Iron Defense
+
+Manectric-Mega @ Manectite
+Ability: Intimidate
+Level: 50
+Note: VGCPastes fallback PC148
+Points: 15 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 19 Spe
+Modest Nature
+- Thunderbolt
+- Overheat
+- Snarl
+- Volt Switch
+
+Noivern @ Focus Sash
+Ability: Telepathy
+Level: 50
+Note: VGCPastes fallback PC272
+Points: 1 HP / 0 Atk / 1 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Draco Meteor
+- Air Slash
+- Tailwind
+- Protect
+
+Chimecho-Mega @ Chimechite
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC23
-Points: 0 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 32 Spe
-Timid Nature
-- Overheat
-- Reflect
-- Dark Pulse
-- Nasty Plot
+Note: VGCPastes fallback PC449
+Points: 32 HP / 0 Atk / 2 Def / 32 SpA / 0 SpD / 0 Spe
+Quiet Nature
+- Boomburst
+- Flash Cannon
+- Helping Hand
+- Trick Room
+
+Rhyperior @ White Herb
+Ability: Solid Rock
+Level: 50
+Note: VGCPastes fallback PC222
+Points: 3 HP / 32 Atk / 0 Def / 0 SpA / 31 SpD / 0 Spe
+Brave Nature
+- High Horsepower
+- Rock Slide
+- Ice Punch
+- Protect
 
 Rotom-Frost @ Choice Scarf
 Ability: Levitate
 Level: 50
-Note: VGCPastes PC107
+Note: VGCPastes fallback PC107
 Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
 Modest Nature
 - Discharge
@@ -4592,46 +5680,24 @@ Modest Nature
 - Volt Switch
 - Trick
 
-Lopunny-Mega @ Lopunnite
-Ability: Scrappy
+Dedenne @ Focus Sash
+Ability: Pickup
 Level: 50
-Note: VGCPastes PC499
-Points: 6 HP / 24 Atk / 8 Def / 0 SpA / 0 SpD / 28 Spe
-Jolly Nature
-- Fake Out
-- Close Combat
-- Triple Axel
+Note: VGCPastes fallback PC137
+Points: 2 HP / 0 Atk / 0 Def / 32 SpA / 0 SpD / 32 Spe
+Timid Nature
+- Thunder
+- Nuzzle
+- Dazzling Gleam
 - Protect
 
-Lopunny-Mega @ Lopunnite
-Ability: Scrappy
+Beedrill-Mega @ Beedrillite
+Ability: Adaptability
 Level: 50
-Note: VGCPastes PC536
+Note: VGCPastes fallback PC208
 Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
 Jolly Nature
-- Close Combat
-- Fake Out
-- Triple Axel
-- Mach Punch
-
-Lopunny-Mega @ Lopunnite
-Ability: Scrappy
-Level: 50
-Note: VGCPastes PC370
-Points: 2 HP / 32 Atk / 0 Def / 0 SpA / 0 SpD / 32 Spe
-Jolly Nature
-- Fake Out
+- Poison Jab
+- Drill Run
+- U-turn
 - Protect
-- Close Combat
-- Rain Dance
-
-Watchog @ Chople Berry
-Ability: Analytic
-Level: 50
-Note: VGCPastes PC494
-Points: 32 HP / 32 Atk / 0 Def / 0 SpA / 2 SpD / 0 Spe
-Adamant Nature
-- Crunch
-- Hypnosis
-- Low Kick
-- Ice Punch

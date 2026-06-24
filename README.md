@@ -1,16 +1,8 @@
-# Poke Type Static Builder
+# Poke Type Rust + Web UI
 
-一个纯前端、静态部署的宝可梦队伍构建与分析工具。  
-项目以导入的 Pokémon Showdown 配置为核心数据源，结合本地静态图鉴、招式、特性与道具数据，对队伍进行：
+Poke Type 使用原来的网页队伍工作台作为主界面，保留宝可梦选择、常用配置、配置库、导入、对局分析、推荐、使用率、伤害工作台、速度线和输出强度页面。Rust 负责本地启动入口、CLI 与核心迁移模块；默认用户界面不再走 GPUI。
 
-- 配置库浏览
-- 队伍组建
-- 覆盖 / 职能 / 核心分析
-- 速度线整理
-- 组队推荐
-- 新手快速开始与 starter 队伍模板
-
-当前规则按项目内的 Champions 设定执行：
+当前规则按项目内 Champions 设定执行：
 
 - `HP = 种族值 + 75`
 - 其他五维 = `种族值 + 20`
@@ -18,195 +10,149 @@
 - 总点数 `66`
 - 单项上限 `32`
 
-## 功能概览
-
-### 1. 配置库
-
-- 支持直接粘贴 Showdown 队伍文本导入
-- 支持中文种族 / 道具 / 招式 / 特性名导入
-- 导入时会提示未识别行、非法特性、未知道具与非法招式
-- 导入反馈会按段落 / 行号展开明细表，配置卡会保留合法性警示标记
-- 支持覆盖导入与追加导入
-- 支持导出当前配置库
-- 支持导出 / 导入 `.poketype.json` 全量状态备份
-- 支持编辑单条配置文本
-- 支持给配置添加备注
-- 空库时提供快速开始入口，清空配置库被收进高级操作并需要确认
-
-### 2. 当前队伍
-
-- 从配置库中选择最多 6 条配置组成队伍
-- 支持一键套用平衡、雨天、晴天、空间四类 starter 模板
-- 支持拖拽或上下按钮调整队伍顺序
-- 支持导出当前队伍为 Showdown 文本
-- 支持保存 / 读取本地队伍快照
-- 支持 `Ctrl/Cmd+Z`、`Ctrl/Cmd+Shift+Z`、`Ctrl/Cmd+Y` 撤销 / 重做核心状态改动
-
-### 3. 分析
-
-分析页拆成三个子页：
-
-- `覆盖`
-  队伍承伤覆盖、输出覆盖、打击盲区；Coverage 矩阵会用倍率、色温和文字标记同时表达抗性/弱点
-- `职能`
-  控速、转场、Fake Out、引导、Guard、干扰、TR、输出倾向等
-- `核心`
-  最佳双人 core、高重叠风险组合、指定成员的搭档属性建议
-
-### 4. 推荐
-
-- 仅从当前导入的配置库中推荐
-- 优先参考当前队伍的承伤缺口
-- 焦点属性会先做强过滤，不足时再显示“焦点兜底”候选
-- 同时考虑输出覆盖、速度模式、缺失职能与配置质量
-
-### 5. 速度线
-
-- 统计当前配置库中的速度档
-- 支持基础速度、`+1` 速度、`Choice Scarf` 速度线整理
-
-### 6. 对局分析
-
-- 支持对面队伍锁定后自动补全剩余 counter
-- 保存的对面队伍会按最近打开和使用频率自动排序
-- 对战盘新增 6×6 对位热图
-- 速度对比改为 `基础 / +1 / 围巾 / ×2` 分档展示
-
 ## 运行方式
 
-这是一个无构建步骤的静态项目，但由于使用了 ES Modules 和本地 `fetch`，不要直接双击 `index.html` 打开，建议用本地静态服务器。
-
-示例：
+需要 Rust 工具链。仓库使用 Cargo workspace。默认启动本地 Web UI：
 
 ```bash
-python -m http.server 8000
+cargo run -p poke-type-web
 ```
 
-然后访问：
+启动后会监听本机地址并尝试打开浏览器。也可以手动访问终端打印的 `http://127.0.0.1:<port>/`。
+
+CLI 仍保留稳定 JSON 契约：
+
+```bash
+cargo run -p poke-type-cli -- --help
+cargo run -p poke-type-cli -- parse --team team.txt
+cargo run -p poke-type-cli -- export --team team.txt
+cargo run -p poke-type-cli -- validate-team --team team.txt
+cargo run -p poke-type-cli -- analyze --team team.txt
+cargo run -p poke-type-cli -- recommend --team team.txt --limit 10
+cargo run -p poke-type-cli -- matchup --team team.txt --opponent opponent.txt
+cargo run -p poke-type-cli -- damage --attacker attacker.txt --defender defender.txt
+cargo run -p poke-type-cli -- usage --species incineroar
+cargo run -p poke-type-cli -- output --library config-default.txt
+cargo run -p poke-type-cli -- vgcpastes --limit 20
+cargo run -p poke-type-cli -- records --records records.json
+```
+
+命令成功时只向 stdout 输出 JSON 或 Showdown 文本；失败时向 stderr 输出错误并以非 0 退出。
+
+## Web UI
+
+`poke-type-web` 是轻量本地静态服务器，服务仓库根目录下的原网页资源：
+
+- `index.html`
+- `static/app/main.js`
+- `static/css/*.css`
+- `static/usage.json`
+- `static/paste_teams_champions_mb.json`
+- `static/paste_sets_champions_mb.json`
+- `poke_analysis-main/stats/*.json`
+
+这条路径恢复原网页的完整交互模型：配置库搜索、宝可梦选择、常用配置、表单编辑、Showdown 导入导出、VGCPastes 对手选择、伤害工作台、使用率、速度线和输出强度。浏览器负责成熟布局与输入控件，避免 GPUI 在 Wayland 下的错位和控件缺失。
+
+性能策略：
+
+- Rust 服务器只做本地文件服务，无后端状态和遥测。
+- 浏览器继续复用原前端的缓存、增量渲染和 localStorage 状态。
+- 大型 JSON 仍由页面按需读取；不在 Rust 启动阶段预解析全量数据。
+- 后续如果要进一步提速，应把热点计算迁到 `poke-type-core` 并通过 WebAssembly 或本地 API 接入，而不是再重写 UI 壳。
+
+## 功能概览
+
+- `parse`: 解析 Showdown 队伍或配置库文本，返回 `{configs, feedback, errors, warnings}`。
+- `export`: 将解析后的 config 按 Showdown 文本导出。
+- `validate-team`: 校验 6 只上限、4 招上限、66 点总额、单项 32 点上限和 Mega 数量。
+- `analyze`: 返回承伤、输出、覆盖、职能、速度线、弱点、盲点和队伍身份。
+- `recommend`: 基于使用率、当前弱点、当前打点缺口返回补位推荐。
+- `matchup`: 返回双方速度线、逐格对局 board 和 overview。
+- `damage`: 返回双向四招伤害、KO 文本、速度和 16 档 roll 分布。
+- `usage`: 查询 `static/usage.json` 的使用率行或单物种详情。
+- `output`: 计算配置库输出强度分档。
+- `vgcpastes`: 从 `static/paste_teams_champions_mb.json` 生成对手队库。
+- `records`: 创建/校验战绩记录，或计算全局/队伍战绩统计。
+
+## 目录结构
 
 ```text
-http://localhost:8000
+.
+├── Cargo.toml
+├── crates/
+│   ├── poke-type-core/
+│   ├── poke-type-cli/
+│   └── poke-type-web/
+├── index.html
+├── static/
+│   ├── app/
+│   ├── css/
+│   ├── usage.json
+│   ├── paste_teams_champions_mb.json
+│   └── paste_sets_champions_mb.json
+├── poke_analysis-main/stats/
+└── docs/
 ```
+
+## 关键文件
+
+- `index.html`: 原网页 UI 入口。
+- `static/app/main.js`: 原网页主交互，包含配置库、宝可梦选择、常用配置和各功能页 wiring。
+- `static/css/*.css`: 原网页视觉系统。
+- `crates/poke-type-web/src/main.rs`: Rust 本地静态服务器。
+- `crates/poke-type-core/src/showdown/mod.rs`: Showdown 文本解析和导出。
+- `crates/poke-type-core/src/team/mod.rs`: Champions 队伍校验。
+- `crates/poke-type-core/src/analysis/mod.rs`: 队伍分析 JSON 契约。
+- `crates/poke-type-core/src/recommend/mod.rs`: 补位推荐评分。
+- `crates/poke-type-core/src/matchup/mod.rs`: 对手库和对局 board。
+- `crates/poke-type-core/src/damage/mod.rs`: Rust 伤害计算。
+- `crates/poke-type-core/src/usage/mod.rs`: 使用率查询。
+- `crates/poke-type-cli/src/main.rs`: CLI 路由和 JSON 输入输出。
+- `poke_analysis-main/update_all_data.py`: 刷新 Showdown/Champions/usage/localization/default preset 数据。
 
 ## 数据来源
 
-项目依赖仓库内的静态数据文件：
+项目依赖仓库内静态数据：
 
 - `poke_analysis-main/stats/pokedex.json`
 - `poke_analysis-main/stats/moves.json`
 - `poke_analysis-main/stats/abilities.json`
 - `poke_analysis-main/stats/items.json`
 - `poke_analysis-main/stats/forms_index.json`
+- `poke_analysis-main/stats/champions_vgc.json`
+- `static/usage.json`
+- `static/paste_teams_champions_mb.json`
+- `static/paste_sets_champions_mb.json`
 
-这些数据由前端直接读取，不依赖后端服务。
+刷新数据：
 
-## 目录结构
-
-```text
-.
-├── index.html
-├── config-AG.txt
-├── poke_analysis-main/
-│   └── stats/
-├── static/
-│   ├── app/
-│   ├── css/
-│   ├── pokemonicons-sheet.png
-│   └── itemicons-sheet.png
-└── docs/
-    └── future-todo-reference.md
+```bash
+python poke_analysis-main/update_all_data.py
 ```
 
-### 关键文件
+## 桌面发布
 
-- `index.html`
-  页面结构入口
-- `static/app/main.js`
-  应用状态、事件绑定、初始化
-- `static/app/showdown.js`
-  Showdown 文本解析与配置归一化
-- `static/app/analysis.js`
-  队伍分析逻辑
-- `static/app/recommendations.js`
-  推荐算法
-- `static/app/render.js`
-  主渲染入口
-- `static/app/render-analysis.js`
-  分析页子视图渲染
-- `static/app/render-quick-start.js`
-  快速开始与 starter 模板入口渲染
-- `static/app/starter-templates.js`
-  新手 starter 队伍模板定义
-- `static/app/team-roles.js`
-  职能识别共享逻辑
-- `static/css/base.css`
-  基础视觉样式
-- `static/css/layout.css`
-  通用布局
-- `static/css/shell.css`
-  应用壳层布局
-- `static/css/analysis.css`
-  分析页样式
+桌面版使用 Tauri v2 打包现有静态 Web UI。打包前先把运行所需的 HTML、JS、CSS、数据 JSON、伤害核心和本地图标复制到 `dist/desktop/`：
 
-## 本地持久化
+```bash
+npm install
+npm run desktop:prepare
+npm run desktop:build
+```
 
-应用会把以下内容保存到 `localStorage`：
+GitHub Actions 发布流程在 `.github/workflows/release-desktop.yml`。推送 `v*` tag，或手动运行 `release-desktop` workflow，会构建 macOS Apple Silicon、macOS Intel、Linux x64 和 Windows x64 安装包，并创建 draft release。
 
-- 配置库
-- 当前队伍
-- 当前主视图
-- 已保存队伍
-- 语言
-- 伤害工作台基础场况
+自动更新签名已启用。发布 workflow 需要两个仓库 secret：
 
-当前持久化具备：
+- `TAURI_SIGNING_PRIVATE_KEY`: Tauri updater 私钥内容。
+- `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: 生成该私钥时使用的密码。
 
-- `schemaVersion` 迁移能力，可兼容旧版本地状态
-- 4MB 级别的体积预警
-- 导出 / 导入 `.poketype.json` 全量备份
+## 验证
 
-存储键位于：
-
-- `static/app/persistence.js`
-
-## 配置导入说明
-
-支持以下信息：
-
-- `Ability`
-- `Item`
-- `Tera Type`
-- `Nature`
-- `EVs`
-- `Points`
-- `Moves`
-- `Note` / `备注`
-
-其中：
-
-- 如果同时存在 `EVs:` 与 `Points:`，优先读取 `Points:`
-- 如果只提供传统 Showdown `EVs:`，会自动压缩成 Champions 66 点规则
-- `IVs:` 不参与当前规则计算，前端按满 IV 处理
-
-## 当前实现边界
-
-项目当前偏向“配置库驱动的静态分析器”，不是逐只精灵手工编辑器。
-
-未实现或只实现了部分能力：
-
-- 伤害计算器
-- 完整 EV / IV 工作台
-- 随机组队生成器
-- 更完整的 hazard / field role checklist
-- 从 core 建议直接映射到库内真实候选
-
-这些后续方向已整理在：
-
-- `docs/future-todo-reference.md`
-
-## 维护建议
-
-- 分析逻辑、推荐逻辑、渲染逻辑保持分层，不要重新耦合到 `main.js`
-- 新增角色识别时，优先放到 `static/app/team-roles.js`
-- 新增分析子面板时，优先放到 `static/app/render-analysis.js`
-- 不要引入静默 fallback，异常应尽量暴露出来便于排查
+```bash
+cargo fmt --all
+cargo test --workspace
+cargo check -p poke-type-desktop
+node --check static/app/main.js
+python -m py_compile poke_analysis-main/update_all_data.py
+```

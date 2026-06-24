@@ -1,0 +1,2287 @@
+{
+  "info": {
+    "source": "richi3f/pokemon-team-planner",
+    "repo": "https://github.com/richi3f/pokemon-team-planner",
+    "generatedAt": "2026-06-21T15:47:16.499905+00:00",
+    "pokemonCount": 314,
+    "typeIconCount": 19
+  },
+  "pokemon": {
+    "aegislash": {
+      "speciesName": "Aegislash",
+      "dexNumber": 681,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0681_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0681_000_mf_n.png"
+    },
+    "annihilape": {
+      "speciesName": "Annihilape",
+      "dexNumber": 979,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0979_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0979_000_mf_n.png"
+    },
+    "araquanid": {
+      "speciesName": "Araquanid",
+      "dexNumber": 752,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0752_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0752_000_mf_n.png"
+    },
+    "archaludon": {
+      "speciesName": "Archaludon",
+      "dexNumber": 1018,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/1018_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/1018_000_mf_n.png"
+    },
+    "barbaracle": {
+      "speciesName": "Barbaracle",
+      "dexNumber": 689,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0689_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0689_000_mf_n.png"
+    },
+    "barbaraclemega": {
+      "speciesName": "Barbaracle-Mega",
+      "dexNumber": 689,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0689_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0689_001_mf_n.png"
+    },
+    "basculegion": {
+      "speciesName": "Basculegion",
+      "dexNumber": 902,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0902_000_md_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0902_000_md_n.png"
+    },
+    "blaziken": {
+      "speciesName": "Blaziken",
+      "dexNumber": 257,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0257_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0257_000_fd_n.png"
+    },
+    "blazikenmega": {
+      "speciesName": "Blaziken-Mega",
+      "dexNumber": 257,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0257_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0257_001_mf_n.png"
+    },
+    "ceruledge": {
+      "speciesName": "Ceruledge",
+      "dexNumber": 937,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0937_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0937_000_mf_n.png"
+    },
+    "clefable": {
+      "speciesName": "Clefable",
+      "dexNumber": 36,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0036_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0036_000_mf_n.png"
+    },
+    "corviknight": {
+      "speciesName": "Corviknight",
+      "dexNumber": 823,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0823_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0823_000_mf_n.png"
+    },
+    "delphoxmega": {
+      "speciesName": "Delphox-Mega",
+      "dexNumber": 655,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0655_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0655_001_mf_n.png"
+    },
+    "ditto": {
+      "speciesName": "Ditto",
+      "dexNumber": 132,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0132_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0132_000_uk_n.png"
+    },
+    "dragalge": {
+      "speciesName": "Dragalge",
+      "dexNumber": 691,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0691_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0691_000_mf_n.png"
+    },
+    "dragalgemega": {
+      "speciesName": "Dragalge-Mega",
+      "dexNumber": 691,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0691_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0691_001_mf_n.png"
+    },
+    "dragapult": {
+      "speciesName": "Dragapult",
+      "dexNumber": 887,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0887_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0887_000_mf_n.png"
+    },
+    "dragonite": {
+      "speciesName": "Dragonite",
+      "dexNumber": 149,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0149_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0149_000_mf_n.png"
+    },
+    "eelektross": {
+      "speciesName": "Eelektross",
+      "dexNumber": 604,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0604_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0604_000_mf_n.png"
+    },
+    "eelektrossmega": {
+      "speciesName": "Eelektross-Mega",
+      "dexNumber": 604,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0604_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0604_001_mf_n.png"
+    },
+    "excadrill": {
+      "speciesName": "Excadrill",
+      "dexNumber": 530,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0530_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0530_000_mf_n.png"
+    },
+    "falinks": {
+      "speciesName": "Falinks",
+      "dexNumber": 870,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0870_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0870_000_uk_n.png"
+    },
+    "falinksmega": {
+      "speciesName": "Falinks-Mega",
+      "dexNumber": 870,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0870_001_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0870_001_uk_n.png"
+    },
+    "floettemega": {
+      "speciesName": "Floette-Mega",
+      "dexNumber": 670,
+      "formId": 6,
+      "file": "team-planner-assets/pokemon/0670_006_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0670_006_fo_n.png"
+    },
+    "garchomp": {
+      "speciesName": "Garchomp",
+      "dexNumber": 445,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0445_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0445_000_fd_n.png"
+    },
+    "gholdengo": {
+      "speciesName": "Gholdengo",
+      "dexNumber": 1000,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/1000_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/1000_000_uk_n.png"
+    },
+    "glimmora": {
+      "speciesName": "Glimmora",
+      "dexNumber": 970,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0970_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0970_000_mf_n.png"
+    },
+    "glimmoramega": {
+      "speciesName": "Glimmora-Mega",
+      "dexNumber": 970,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0970_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0970_001_mf_n.png"
+    },
+    "grimmsnarl": {
+      "speciesName": "Grimmsnarl",
+      "dexNumber": 861,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0861_000_mo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0861_000_mo_n.png"
+    },
+    "hatterene": {
+      "speciesName": "Hatterene",
+      "dexNumber": 858,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0858_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0858_000_fo_n.png"
+    },
+    "houndstone": {
+      "speciesName": "Houndstone",
+      "dexNumber": 972,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0972_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0972_000_mf_n.png"
+    },
+    "hydreigon": {
+      "speciesName": "Hydreigon",
+      "dexNumber": 635,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0635_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0635_000_mf_n.png"
+    },
+    "kingambit": {
+      "speciesName": "Kingambit",
+      "dexNumber": 983,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0983_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0983_000_mf_n.png"
+    },
+    "lopunnymega": {
+      "speciesName": "Lopunny-Mega",
+      "dexNumber": 428,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0428_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0428_001_mf_n.png"
+    },
+    "malamar": {
+      "speciesName": "Malamar",
+      "dexNumber": 687,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0687_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0687_000_mf_n.png"
+    },
+    "malamarmega": {
+      "speciesName": "Malamar-Mega",
+      "dexNumber": 687,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0687_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0687_001_mf_n.png"
+    },
+    "mawile": {
+      "speciesName": "Mawile",
+      "dexNumber": 303,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0303_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0303_000_mf_n.png"
+    },
+    "mawilemega": {
+      "speciesName": "Mawile-Mega",
+      "dexNumber": 303,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0303_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0303_001_mf_n.png"
+    },
+    "meganiummega": {
+      "speciesName": "Meganium-Mega",
+      "dexNumber": 154,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0154_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0154_001_mf_n.png"
+    },
+    "meowscarada": {
+      "speciesName": "Meowscarada",
+      "dexNumber": 908,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0908_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0908_000_mf_n.png"
+    },
+    "metagross": {
+      "speciesName": "Metagross",
+      "dexNumber": 376,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0376_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0376_000_uk_n.png"
+    },
+    "metagrossmega": {
+      "speciesName": "Metagross-Mega",
+      "dexNumber": 376,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0376_001_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0376_001_uk_n.png"
+    },
+    "musharna": {
+      "speciesName": "Musharna",
+      "dexNumber": 518,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0518_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0518_000_mf_n.png"
+    },
+    "overqwil": {
+      "speciesName": "Overqwil",
+      "dexNumber": 904,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0904_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0904_000_mf_n.png"
+    },
+    "pelipper": {
+      "speciesName": "Pelipper",
+      "dexNumber": 279,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0279_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0279_000_mf_n.png"
+    },
+    "primarina": {
+      "speciesName": "Primarina",
+      "dexNumber": 730,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0730_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0730_000_mf_n.png"
+    },
+    "pyroar": {
+      "speciesName": "Pyroar",
+      "dexNumber": 668,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0668_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0668_000_fd_n.png"
+    },
+    "pyroarmega": {
+      "speciesName": "Pyroar-Mega",
+      "dexNumber": 668,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0668_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0668_001_mf_n.png"
+    },
+    "quaquaval": {
+      "speciesName": "Quaquaval",
+      "dexNumber": 914,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0914_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0914_000_mf_n.png"
+    },
+    "qwilfish": {
+      "speciesName": "Qwilfish",
+      "dexNumber": 211,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0211_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0211_000_mf_n.png"
+    },
+    "raichumegax": {
+      "speciesName": "Raichu-Mega-X",
+      "dexNumber": 26,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0026_002_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0026_002_mf_n.png"
+    },
+    "raichumegay": {
+      "speciesName": "Raichu-Mega-Y",
+      "dexNumber": 26,
+      "formId": 3,
+      "file": "team-planner-assets/pokemon/0026_003_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0026_003_mf_n.png"
+    },
+    "rotomwash": {
+      "speciesName": "Rotom-Wash",
+      "dexNumber": 479,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0479_002_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0479_002_uk_n.png"
+    },
+    "samurotthisui": {
+      "speciesName": "Samurott-Hisui",
+      "dexNumber": 503,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0503_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0503_001_mf_n.png"
+    },
+    "sceptile": {
+      "speciesName": "Sceptile",
+      "dexNumber": 254,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0254_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0254_000_mf_n.png"
+    },
+    "sceptilemega": {
+      "speciesName": "Sceptile-Mega",
+      "dexNumber": 254,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0254_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0254_001_mf_n.png"
+    },
+    "scizor": {
+      "speciesName": "Scizor",
+      "dexNumber": 212,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0212_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0212_000_fd_n.png"
+    },
+    "scizormega": {
+      "speciesName": "Scizor-Mega",
+      "dexNumber": 212,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0212_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0212_001_mf_n.png"
+    },
+    "scolipede": {
+      "speciesName": "Scolipede",
+      "dexNumber": 545,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0545_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0545_000_mf_n.png"
+    },
+    "scolipedemega": {
+      "speciesName": "Scolipede-Mega",
+      "dexNumber": 545,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0545_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0545_001_mf_n.png"
+    },
+    "scrafty": {
+      "speciesName": "Scrafty",
+      "dexNumber": 560,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0560_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0560_000_mf_n.png"
+    },
+    "scraftymega": {
+      "speciesName": "Scrafty-Mega",
+      "dexNumber": 560,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0560_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0560_001_mf_n.png"
+    },
+    "slowkinggalar": {
+      "speciesName": "Slowking-Galar",
+      "dexNumber": 199,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0199_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0199_001_mf_n.png"
+    },
+    "sneasler": {
+      "speciesName": "Sneasler",
+      "dexNumber": 903,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0903_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0903_000_mf_n.png"
+    },
+    "staraptor": {
+      "speciesName": "Staraptor",
+      "dexNumber": 398,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0398_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0398_000_fd_n.png"
+    },
+    "staraptormega": {
+      "speciesName": "Staraptor-Mega",
+      "dexNumber": 398,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0398_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0398_001_mf_n.png"
+    },
+    "swampert": {
+      "speciesName": "Swampert",
+      "dexNumber": 260,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0260_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0260_000_mf_n.png"
+    },
+    "swampertmega": {
+      "speciesName": "Swampert-Mega",
+      "dexNumber": 260,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0260_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0260_001_mf_n.png"
+    },
+    "toxapex": {
+      "speciesName": "Toxapex",
+      "dexNumber": 748,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0748_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0748_000_mf_n.png"
+    },
+    "vileplume": {
+      "speciesName": "Vileplume",
+      "dexNumber": 45,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0045_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0045_000_fd_n.png"
+    },
+    "volcarona": {
+      "speciesName": "Volcarona",
+      "dexNumber": 637,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0637_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0637_000_mf_n.png"
+    },
+    "clefablemega": {
+      "speciesName": "Clefable-Mega",
+      "dexNumber": 36,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0036_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0036_001_mf_n.png"
+    },
+    "dragonitemega": {
+      "speciesName": "Dragonite-Mega",
+      "dexNumber": 149,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0149_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0149_001_mf_n.png"
+    },
+    "excadrillmega": {
+      "speciesName": "Excadrill-Mega",
+      "dexNumber": 530,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0530_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0530_001_mf_n.png"
+    },
+    "garchompmega": {
+      "speciesName": "Garchomp-Mega",
+      "dexNumber": 445,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0445_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0445_001_mf_n.png"
+    },
+    "alakazammega": {
+      "speciesName": "Alakazam-Mega",
+      "dexNumber": 65,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0065_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0065_001_mf_n.png"
+    },
+    "charizardmegax": {
+      "speciesName": "Charizard-Mega-X",
+      "dexNumber": 6,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0006_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0006_001_mf_n.png"
+    },
+    "charizardmegay": {
+      "speciesName": "Charizard-Mega-Y",
+      "dexNumber": 6,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0006_002_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0006_002_mf_n.png"
+    },
+    "espathra": {
+      "speciesName": "Espathra",
+      "dexNumber": 956,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0956_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0956_000_mf_n.png"
+    },
+    "abomasnow": {
+      "speciesName": "Abomasnow",
+      "dexNumber": 460,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0460_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0460_000_fd_n.png"
+    },
+    "abomasnowmega": {
+      "speciesName": "Abomasnow-Mega",
+      "dexNumber": 460,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0460_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0460_001_mf_n.png"
+    },
+    "absol": {
+      "speciesName": "Absol",
+      "dexNumber": 359,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0359_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0359_000_mf_n.png"
+    },
+    "absolmega": {
+      "speciesName": "Absol-Mega",
+      "dexNumber": 359,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0359_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0359_001_mf_n.png"
+    },
+    "aerodactyl": {
+      "speciesName": "Aerodactyl",
+      "dexNumber": 142,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0142_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0142_000_mf_n.png"
+    },
+    "aerodactylmega": {
+      "speciesName": "Aerodactyl-Mega",
+      "dexNumber": 142,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0142_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0142_001_mf_n.png"
+    },
+    "aggron": {
+      "speciesName": "Aggron",
+      "dexNumber": 306,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0306_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0306_000_mf_n.png"
+    },
+    "aggronmega": {
+      "speciesName": "Aggron-Mega",
+      "dexNumber": 306,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0306_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0306_001_mf_n.png"
+    },
+    "alakazam": {
+      "speciesName": "Alakazam",
+      "dexNumber": 65,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0065_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0065_000_fd_n.png"
+    },
+    "alcremie": {
+      "speciesName": "Alcremie",
+      "dexNumber": 869,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0869_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0869_000_fo_n.png"
+    },
+    "altaria": {
+      "speciesName": "Altaria",
+      "dexNumber": 334,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0334_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0334_000_mf_n.png"
+    },
+    "altariamega": {
+      "speciesName": "Altaria-Mega",
+      "dexNumber": 334,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0334_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0334_001_mf_n.png"
+    },
+    "ampharos": {
+      "speciesName": "Ampharos",
+      "dexNumber": 181,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0181_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0181_000_mf_n.png"
+    },
+    "ampharosmega": {
+      "speciesName": "Ampharos-Mega",
+      "dexNumber": 181,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0181_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0181_001_mf_n.png"
+    },
+    "appletun": {
+      "speciesName": "Appletun",
+      "dexNumber": 842,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0842_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0842_000_mf_n.png"
+    },
+    "arbok": {
+      "speciesName": "Arbok",
+      "dexNumber": 24,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0024_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0024_000_mf_n.png"
+    },
+    "arcanine": {
+      "speciesName": "Arcanine",
+      "dexNumber": 59,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0059_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0059_000_mf_n.png"
+    },
+    "arcaninehisui": {
+      "speciesName": "Arcanine-Hisui",
+      "dexNumber": 59,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0059_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0059_001_mf_n.png"
+    },
+    "ariados": {
+      "speciesName": "Ariados",
+      "dexNumber": 168,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0168_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0168_000_mf_n.png"
+    },
+    "armarouge": {
+      "speciesName": "Armarouge",
+      "dexNumber": 936,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0936_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0936_000_mf_n.png"
+    },
+    "aromatisse": {
+      "speciesName": "Aromatisse",
+      "dexNumber": 683,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0683_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0683_000_mf_n.png"
+    },
+    "audino": {
+      "speciesName": "Audino",
+      "dexNumber": 531,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0531_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0531_000_mf_n.png"
+    },
+    "audinomega": {
+      "speciesName": "Audino-Mega",
+      "dexNumber": 531,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0531_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0531_001_mf_n.png"
+    },
+    "aurorus": {
+      "speciesName": "Aurorus",
+      "dexNumber": 699,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0699_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0699_000_mf_n.png"
+    },
+    "avalugg": {
+      "speciesName": "Avalugg",
+      "dexNumber": 713,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0713_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0713_000_mf_n.png"
+    },
+    "avalugghisui": {
+      "speciesName": "Avalugg-Hisui",
+      "dexNumber": 713,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0713_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0713_001_mf_n.png"
+    },
+    "azumarill": {
+      "speciesName": "Azumarill",
+      "dexNumber": 184,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0184_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0184_000_mf_n.png"
+    },
+    "banette": {
+      "speciesName": "Banette",
+      "dexNumber": 354,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0354_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0354_000_mf_n.png"
+    },
+    "banettemega": {
+      "speciesName": "Banette-Mega",
+      "dexNumber": 354,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0354_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0354_001_mf_n.png"
+    },
+    "basculegionf": {
+      "speciesName": "Basculegion-F",
+      "dexNumber": 902,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0902_001_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0902_001_fd_n.png"
+    },
+    "bastiodon": {
+      "speciesName": "Bastiodon",
+      "dexNumber": 411,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0411_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0411_000_mf_n.png"
+    },
+    "beartic": {
+      "speciesName": "Beartic",
+      "dexNumber": 614,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0614_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0614_000_mf_n.png"
+    },
+    "beedrill": {
+      "speciesName": "Beedrill",
+      "dexNumber": 15,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0015_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0015_000_mf_n.png"
+    },
+    "beedrillmega": {
+      "speciesName": "Beedrill-Mega",
+      "dexNumber": 15,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0015_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0015_001_mf_n.png"
+    },
+    "bellibolt": {
+      "speciesName": "Bellibolt",
+      "dexNumber": 939,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0939_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0939_000_mf_n.png"
+    },
+    "blastoise": {
+      "speciesName": "Blastoise",
+      "dexNumber": 9,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0009_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0009_000_mf_n.png"
+    },
+    "camerupt": {
+      "speciesName": "Camerupt",
+      "dexNumber": 323,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0323_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0323_000_fd_n.png"
+    },
+    "cameruptmega": {
+      "speciesName": "Camerupt-Mega",
+      "dexNumber": 323,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0323_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0323_001_mf_n.png"
+    },
+    "castform": {
+      "speciesName": "Castform",
+      "dexNumber": 351,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0351_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0351_000_mf_n.png"
+    },
+    "chandelure": {
+      "speciesName": "Chandelure",
+      "dexNumber": 609,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0609_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0609_000_mf_n.png"
+    },
+    "chandeluremega": {
+      "speciesName": "Chandelure-Mega",
+      "dexNumber": 609,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0609_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0609_001_mf_n.png"
+    },
+    "charizard": {
+      "speciesName": "Charizard",
+      "dexNumber": 6,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0006_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0006_000_mf_n.png"
+    },
+    "chesnaught": {
+      "speciesName": "Chesnaught",
+      "dexNumber": 652,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0652_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0652_000_mf_n.png"
+    },
+    "chesnaughtmega": {
+      "speciesName": "Chesnaught-Mega",
+      "dexNumber": 652,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0652_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0652_001_mf_n.png"
+    },
+    "chimecho": {
+      "speciesName": "Chimecho",
+      "dexNumber": 358,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0358_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0358_000_mf_n.png"
+    },
+    "chimechomega": {
+      "speciesName": "Chimecho-Mega",
+      "dexNumber": 358,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0358_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0358_001_mf_n.png"
+    },
+    "clawitzer": {
+      "speciesName": "Clawitzer",
+      "dexNumber": 693,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0693_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0693_000_mf_n.png"
+    },
+    "cofagrigus": {
+      "speciesName": "Cofagrigus",
+      "dexNumber": 563,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0563_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0563_000_mf_n.png"
+    },
+    "conkeldurr": {
+      "speciesName": "Conkeldurr",
+      "dexNumber": 534,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0534_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0534_000_mf_n.png"
+    },
+    "crabominable": {
+      "speciesName": "Crabominable",
+      "dexNumber": 740,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0740_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0740_000_mf_n.png"
+    },
+    "crabominablemega": {
+      "speciesName": "Crabominable-Mega",
+      "dexNumber": 740,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0740_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0740_001_mf_n.png"
+    },
+    "decidueye": {
+      "speciesName": "Decidueye",
+      "dexNumber": 724,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0724_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0724_000_mf_n.png"
+    },
+    "decidueyehisui": {
+      "speciesName": "Decidueye-Hisui",
+      "dexNumber": 724,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0724_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0724_001_mf_n.png"
+    },
+    "dedenne": {
+      "speciesName": "Dedenne",
+      "dexNumber": 702,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0702_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0702_000_mf_n.png"
+    },
+    "delphox": {
+      "speciesName": "Delphox",
+      "dexNumber": 655,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0655_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0655_000_mf_n.png"
+    },
+    "diggersby": {
+      "speciesName": "Diggersby",
+      "dexNumber": 660,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0660_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0660_000_mf_n.png"
+    },
+    "drampa": {
+      "speciesName": "Drampa",
+      "dexNumber": 780,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0780_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0780_000_mf_n.png"
+    },
+    "drampamega": {
+      "speciesName": "Drampa-Mega",
+      "dexNumber": 780,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0780_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0780_001_mf_n.png"
+    },
+    "emboar": {
+      "speciesName": "Emboar",
+      "dexNumber": 500,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0500_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0500_000_mf_n.png"
+    },
+    "emboarmega": {
+      "speciesName": "Emboar-Mega",
+      "dexNumber": 500,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0500_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0500_001_mf_n.png"
+    },
+    "emolga": {
+      "speciesName": "Emolga",
+      "dexNumber": 587,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0587_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0587_000_mf_n.png"
+    },
+    "empoleon": {
+      "speciesName": "Empoleon",
+      "dexNumber": 395,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0395_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0395_000_mf_n.png"
+    },
+    "espeon": {
+      "speciesName": "Espeon",
+      "dexNumber": 196,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0196_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0196_000_mf_n.png"
+    },
+    "farigiraf": {
+      "speciesName": "Farigiraf",
+      "dexNumber": 981,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0981_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0981_000_mf_n.png"
+    },
+    "feraligatr": {
+      "speciesName": "Feraligatr",
+      "dexNumber": 160,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0160_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0160_000_mf_n.png"
+    },
+    "feraligatrmega": {
+      "speciesName": "Feraligatr-Mega",
+      "dexNumber": 160,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0160_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0160_001_mf_n.png"
+    },
+    "flapple": {
+      "speciesName": "Flapple",
+      "dexNumber": 841,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0841_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0841_000_mf_n.png"
+    },
+    "flareon": {
+      "speciesName": "Flareon",
+      "dexNumber": 136,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0136_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0136_000_mf_n.png"
+    },
+    "floetteeternal": {
+      "speciesName": "Floette-Eternal",
+      "dexNumber": 670,
+      "formId": 5,
+      "file": "team-planner-assets/pokemon/0670_005_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0670_005_fo_n.png"
+    },
+    "florges": {
+      "speciesName": "Florges",
+      "dexNumber": 671,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0671_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0671_000_fo_n.png"
+    },
+    "forretress": {
+      "speciesName": "Forretress",
+      "dexNumber": 205,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0205_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0205_000_mf_n.png"
+    },
+    "froslass": {
+      "speciesName": "Froslass",
+      "dexNumber": 478,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0478_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0478_000_fo_n.png"
+    },
+    "froslassmega": {
+      "speciesName": "Froslass-Mega",
+      "dexNumber": 478,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0478_001_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0478_001_fo_n.png"
+    },
+    "furfrou": {
+      "speciesName": "Furfrou",
+      "dexNumber": 676,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0676_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0676_000_mf_n.png"
+    },
+    "gallade": {
+      "speciesName": "Gallade",
+      "dexNumber": 475,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0475_000_mo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0475_000_mo_n.png"
+    },
+    "gallademega": {
+      "speciesName": "Gallade-Mega",
+      "dexNumber": 475,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0475_001_mo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0475_001_mo_n.png"
+    },
+    "garbodor": {
+      "speciesName": "Garbodor",
+      "dexNumber": 569,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0569_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0569_000_mf_n.png"
+    },
+    "gardevoir": {
+      "speciesName": "Gardevoir",
+      "dexNumber": 282,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0282_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0282_000_mf_n.png"
+    },
+    "gardevoirmega": {
+      "speciesName": "Gardevoir-Mega",
+      "dexNumber": 282,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0282_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0282_001_mf_n.png"
+    },
+    "garganacl": {
+      "speciesName": "Garganacl",
+      "dexNumber": 934,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0934_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0934_000_mf_n.png"
+    },
+    "gengar": {
+      "speciesName": "Gengar",
+      "dexNumber": 94,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0094_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0094_000_mf_n.png"
+    },
+    "glaceon": {
+      "speciesName": "Glaceon",
+      "dexNumber": 471,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0471_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0471_000_mf_n.png"
+    },
+    "glalie": {
+      "speciesName": "Glalie",
+      "dexNumber": 362,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0362_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0362_000_mf_n.png"
+    },
+    "glaliemega": {
+      "speciesName": "Glalie-Mega",
+      "dexNumber": 362,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0362_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0362_001_mf_n.png"
+    },
+    "gliscor": {
+      "speciesName": "Gliscor",
+      "dexNumber": 472,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0472_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0472_000_mf_n.png"
+    },
+    "golurk": {
+      "speciesName": "Golurk",
+      "dexNumber": 623,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0623_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0623_000_uk_n.png"
+    },
+    "golurkmega": {
+      "speciesName": "Golurk-Mega",
+      "dexNumber": 623,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0623_001_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0623_001_uk_n.png"
+    },
+    "goodra": {
+      "speciesName": "Goodra",
+      "dexNumber": 706,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0706_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0706_000_mf_n.png"
+    },
+    "goodrahisui": {
+      "speciesName": "Goodra-Hisui",
+      "dexNumber": 706,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0706_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0706_001_mf_n.png"
+    },
+    "gourgeist": {
+      "speciesName": "Gourgeist",
+      "dexNumber": 711,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0711_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0711_000_mf_n.png"
+    },
+    "gourgeistlarge": {
+      "speciesName": "Gourgeist-Large",
+      "dexNumber": 711,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0711_002_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0711_002_mf_n.png"
+    },
+    "gourgeistsmall": {
+      "speciesName": "Gourgeist-Small",
+      "dexNumber": 711,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0711_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0711_001_mf_n.png"
+    },
+    "gourgeistsuper": {
+      "speciesName": "Gourgeist-Super",
+      "dexNumber": 711,
+      "formId": 3,
+      "file": "team-planner-assets/pokemon/0711_003_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0711_003_mf_n.png"
+    },
+    "greninja": {
+      "speciesName": "Greninja",
+      "dexNumber": 658,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0658_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0658_000_mf_n.png"
+    },
+    "greninjamega": {
+      "speciesName": "Greninja-Mega",
+      "dexNumber": 658,
+      "formId": 3,
+      "file": "team-planner-assets/pokemon/0658_003_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0658_003_mf_n.png"
+    },
+    "gyarados": {
+      "speciesName": "Gyarados",
+      "dexNumber": 130,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0130_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0130_000_fd_n.png"
+    },
+    "gyaradosmega": {
+      "speciesName": "Gyarados-Mega",
+      "dexNumber": 130,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0130_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0130_001_mf_n.png"
+    },
+    "hawlucha": {
+      "speciesName": "Hawlucha",
+      "dexNumber": 701,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0701_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0701_000_mf_n.png"
+    },
+    "hawluchamega": {
+      "speciesName": "Hawlucha-Mega",
+      "dexNumber": 701,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0701_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0701_001_mf_n.png"
+    },
+    "heliolisk": {
+      "speciesName": "Heliolisk",
+      "dexNumber": 695,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0695_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0695_000_mf_n.png"
+    },
+    "heracross": {
+      "speciesName": "Heracross",
+      "dexNumber": 214,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0214_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0214_000_fd_n.png"
+    },
+    "heracrossmega": {
+      "speciesName": "Heracross-Mega",
+      "dexNumber": 214,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0214_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0214_001_mf_n.png"
+    },
+    "hippowdon": {
+      "speciesName": "Hippowdon",
+      "dexNumber": 450,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0450_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0450_000_fd_n.png"
+    },
+    "houndoom": {
+      "speciesName": "Houndoom",
+      "dexNumber": 229,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0229_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0229_000_fd_n.png"
+    },
+    "houndoommega": {
+      "speciesName": "Houndoom-Mega",
+      "dexNumber": 229,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0229_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0229_001_mf_n.png"
+    },
+    "hydrapple": {
+      "speciesName": "Hydrapple",
+      "dexNumber": 1019,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/1019_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/1019_000_mf_n.png"
+    },
+    "incineroar": {
+      "speciesName": "Incineroar",
+      "dexNumber": 727,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0727_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0727_000_mf_n.png"
+    },
+    "infernape": {
+      "speciesName": "Infernape",
+      "dexNumber": 392,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0392_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0392_000_mf_n.png"
+    },
+    "jolteon": {
+      "speciesName": "Jolteon",
+      "dexNumber": 135,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0135_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0135_000_mf_n.png"
+    },
+    "kangaskhan": {
+      "speciesName": "Kangaskhan",
+      "dexNumber": 115,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0115_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0115_000_fo_n.png"
+    },
+    "kangaskhanmega": {
+      "speciesName": "Kangaskhan-Mega",
+      "dexNumber": 115,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0115_001_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0115_001_fo_n.png"
+    },
+    "kleavor": {
+      "speciesName": "Kleavor",
+      "dexNumber": 900,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0900_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0900_000_mf_n.png"
+    },
+    "klefki": {
+      "speciesName": "Klefki",
+      "dexNumber": 707,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0707_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0707_000_mf_n.png"
+    },
+    "kommoo": {
+      "speciesName": "Kommo-o",
+      "dexNumber": 784,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0784_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0784_000_mf_n.png"
+    },
+    "krookodile": {
+      "speciesName": "Krookodile",
+      "dexNumber": 553,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0553_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0553_000_mf_n.png"
+    },
+    "leafeon": {
+      "speciesName": "Leafeon",
+      "dexNumber": 470,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0470_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0470_000_mf_n.png"
+    },
+    "liepard": {
+      "speciesName": "Liepard",
+      "dexNumber": 510,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0510_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0510_000_mf_n.png"
+    },
+    "lopunny": {
+      "speciesName": "Lopunny",
+      "dexNumber": 428,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0428_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0428_000_mf_n.png"
+    },
+    "lucario": {
+      "speciesName": "Lucario",
+      "dexNumber": 448,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0448_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0448_000_mf_n.png"
+    },
+    "luxray": {
+      "speciesName": "Luxray",
+      "dexNumber": 405,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0405_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0405_000_fd_n.png"
+    },
+    "lycanroc": {
+      "speciesName": "Lycanroc",
+      "dexNumber": 745,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0745_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0745_000_mf_n.png"
+    },
+    "lycanrocdusk": {
+      "speciesName": "Lycanroc-Dusk",
+      "dexNumber": 745,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0745_002_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0745_002_mf_n.png"
+    },
+    "lycanrocmidnight": {
+      "speciesName": "Lycanroc-Midnight",
+      "dexNumber": 745,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0745_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0745_001_mf_n.png"
+    },
+    "machamp": {
+      "speciesName": "Machamp",
+      "dexNumber": 68,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0068_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0068_000_mf_n.png"
+    },
+    "mamoswine": {
+      "speciesName": "Mamoswine",
+      "dexNumber": 473,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0473_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0473_000_fd_n.png"
+    },
+    "manectric": {
+      "speciesName": "Manectric",
+      "dexNumber": 310,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0310_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0310_000_mf_n.png"
+    },
+    "manectricmega": {
+      "speciesName": "Manectric-Mega",
+      "dexNumber": 310,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0310_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0310_001_mf_n.png"
+    },
+    "maushold": {
+      "speciesName": "Maushold",
+      "dexNumber": 925,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0925_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0925_000_uk_n.png"
+    },
+    "mausholdfour": {
+      "speciesName": "Maushold-Four",
+      "dexNumber": 925,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0925_001_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0925_001_uk_n.png"
+    },
+    "medicham": {
+      "speciesName": "Medicham",
+      "dexNumber": 308,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0308_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0308_000_fd_n.png"
+    },
+    "medichammega": {
+      "speciesName": "Medicham-Mega",
+      "dexNumber": 308,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0308_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0308_001_mf_n.png"
+    },
+    "meganium": {
+      "speciesName": "Meganium",
+      "dexNumber": 154,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0154_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0154_000_fd_n.png"
+    },
+    "meowstic": {
+      "speciesName": "Meowstic",
+      "dexNumber": 678,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0678_000_mo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0678_000_mo_n.png"
+    },
+    "meowsticf": {
+      "speciesName": "Meowstic-F",
+      "dexNumber": 678,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0678_001_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0678_001_fo_n.png"
+    },
+    "meowsticfmega": {
+      "speciesName": "Meowstic-F-Mega",
+      "dexNumber": 678,
+      "formId": 3,
+      "file": "team-planner-assets/pokemon/0678_003_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0678_003_fo_n.png"
+    },
+    "meowsticmmega": {
+      "speciesName": "Meowstic-M-Mega",
+      "dexNumber": 678,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0678_002_mo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0678_002_mo_n.png"
+    },
+    "milotic": {
+      "speciesName": "Milotic",
+      "dexNumber": 350,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0350_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0350_000_fd_n.png"
+    },
+    "mimikyu": {
+      "speciesName": "Mimikyu",
+      "dexNumber": 778,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0778_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0778_000_mf_n.png"
+    },
+    "morpeko": {
+      "speciesName": "Morpeko",
+      "dexNumber": 877,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0877_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0877_000_mf_n.png"
+    },
+    "mrrime": {
+      "speciesName": "Mr. Rime",
+      "dexNumber": 866,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0866_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0866_000_mf_n.png"
+    },
+    "mudsdale": {
+      "speciesName": "Mudsdale",
+      "dexNumber": 750,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0750_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0750_000_mf_n.png"
+    },
+    "ninetales": {
+      "speciesName": "Ninetales",
+      "dexNumber": 38,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0038_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0038_000_mf_n.png"
+    },
+    "ninetalesalola": {
+      "speciesName": "Ninetales-Alola",
+      "dexNumber": 38,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0038_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0038_001_mf_n.png"
+    },
+    "noivern": {
+      "speciesName": "Noivern",
+      "dexNumber": 715,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0715_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0715_000_mf_n.png"
+    },
+    "oranguru": {
+      "speciesName": "Oranguru",
+      "dexNumber": 765,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0765_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0765_000_mf_n.png"
+    },
+    "orthworm": {
+      "speciesName": "Orthworm",
+      "dexNumber": 968,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0968_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0968_000_mf_n.png"
+    },
+    "pangoro": {
+      "speciesName": "Pangoro",
+      "dexNumber": 675,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0675_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0675_000_mf_n.png"
+    },
+    "passimian": {
+      "speciesName": "Passimian",
+      "dexNumber": 766,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0766_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0766_000_mf_n.png"
+    },
+    "pidgeot": {
+      "speciesName": "Pidgeot",
+      "dexNumber": 18,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0018_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0018_000_mf_n.png"
+    },
+    "pidgeotmega": {
+      "speciesName": "Pidgeot-Mega",
+      "dexNumber": 18,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0018_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0018_001_mf_n.png"
+    },
+    "pinsir": {
+      "speciesName": "Pinsir",
+      "dexNumber": 127,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0127_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0127_000_mf_n.png"
+    },
+    "pinsirmega": {
+      "speciesName": "Pinsir-Mega",
+      "dexNumber": 127,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0127_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0127_001_mf_n.png"
+    },
+    "politoed": {
+      "speciesName": "Politoed",
+      "dexNumber": 186,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0186_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0186_000_fd_n.png"
+    },
+    "polteageist": {
+      "speciesName": "Polteageist",
+      "dexNumber": 855,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0855_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0855_000_uk_n.png"
+    },
+    "polteageistantique": {
+      "speciesName": "Polteageist-Antique",
+      "dexNumber": 855,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0855_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0855_000_uk_n.png"
+    },
+    "raichu": {
+      "speciesName": "Raichu",
+      "dexNumber": 26,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0026_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0026_000_fd_n.png"
+    },
+    "raichualola": {
+      "speciesName": "Raichu-Alola",
+      "dexNumber": 26,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0026_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0026_001_mf_n.png"
+    },
+    "rampardos": {
+      "speciesName": "Rampardos",
+      "dexNumber": 409,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0409_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0409_000_mf_n.png"
+    },
+    "reuniclus": {
+      "speciesName": "Reuniclus",
+      "dexNumber": 579,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0579_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0579_000_mf_n.png"
+    },
+    "rhyperior": {
+      "speciesName": "Rhyperior",
+      "dexNumber": 464,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0464_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0464_000_fd_n.png"
+    },
+    "roserade": {
+      "speciesName": "Roserade",
+      "dexNumber": 407,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0407_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0407_000_fd_n.png"
+    },
+    "rotom": {
+      "speciesName": "Rotom",
+      "dexNumber": 479,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0479_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0479_000_uk_n.png"
+    },
+    "rotomfan": {
+      "speciesName": "Rotom-Fan",
+      "dexNumber": 479,
+      "formId": 4,
+      "file": "team-planner-assets/pokemon/0479_004_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0479_004_uk_n.png"
+    },
+    "rotomfrost": {
+      "speciesName": "Rotom-Frost",
+      "dexNumber": 479,
+      "formId": 3,
+      "file": "team-planner-assets/pokemon/0479_003_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0479_003_uk_n.png"
+    },
+    "rotomheat": {
+      "speciesName": "Rotom-Heat",
+      "dexNumber": 479,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0479_001_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0479_001_uk_n.png"
+    },
+    "rotommow": {
+      "speciesName": "Rotom-Mow",
+      "dexNumber": 479,
+      "formId": 5,
+      "file": "team-planner-assets/pokemon/0479_005_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0479_005_uk_n.png"
+    },
+    "runerigus": {
+      "speciesName": "Runerigus",
+      "dexNumber": 867,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0867_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0867_000_mf_n.png"
+    },
+    "sableye": {
+      "speciesName": "Sableye",
+      "dexNumber": 302,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0302_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0302_000_mf_n.png"
+    },
+    "sableyemega": {
+      "speciesName": "Sableye-Mega",
+      "dexNumber": 302,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0302_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0302_001_mf_n.png"
+    },
+    "salazzle": {
+      "speciesName": "Salazzle",
+      "dexNumber": 758,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0758_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0758_000_fo_n.png"
+    },
+    "samurott": {
+      "speciesName": "Samurott",
+      "dexNumber": 503,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0503_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0503_000_mf_n.png"
+    },
+    "sandaconda": {
+      "speciesName": "Sandaconda",
+      "dexNumber": 844,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0844_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0844_000_mf_n.png"
+    },
+    "scovillain": {
+      "speciesName": "Scovillain",
+      "dexNumber": 952,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0952_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0952_000_mf_n.png"
+    },
+    "scovillainmega": {
+      "speciesName": "Scovillain-Mega",
+      "dexNumber": 952,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0952_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0952_001_mf_n.png"
+    },
+    "serperior": {
+      "speciesName": "Serperior",
+      "dexNumber": 497,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0497_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0497_000_mf_n.png"
+    },
+    "sharpedo": {
+      "speciesName": "Sharpedo",
+      "dexNumber": 319,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0319_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0319_000_mf_n.png"
+    },
+    "sharpedomega": {
+      "speciesName": "Sharpedo-Mega",
+      "dexNumber": 319,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0319_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0319_001_mf_n.png"
+    },
+    "simipour": {
+      "speciesName": "Simipour",
+      "dexNumber": 516,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0516_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0516_000_mf_n.png"
+    },
+    "simisage": {
+      "speciesName": "Simisage",
+      "dexNumber": 512,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0512_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0512_000_mf_n.png"
+    },
+    "simisear": {
+      "speciesName": "Simisear",
+      "dexNumber": 514,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0514_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0514_000_mf_n.png"
+    },
+    "sinistcha": {
+      "speciesName": "Sinistcha",
+      "dexNumber": 1013,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/1013_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/1013_000_uk_n.png"
+    },
+    "sinistchamasterpiece": {
+      "speciesName": "Sinistcha-Masterpiece",
+      "dexNumber": 1013,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/1013_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/1013_000_uk_n.png"
+    },
+    "skarmory": {
+      "speciesName": "Skarmory",
+      "dexNumber": 227,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0227_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0227_000_mf_n.png"
+    },
+    "skarmorymega": {
+      "speciesName": "Skarmory-Mega",
+      "dexNumber": 227,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0227_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0227_001_mf_n.png"
+    },
+    "skeledirge": {
+      "speciesName": "Skeledirge",
+      "dexNumber": 911,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0911_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0911_000_mf_n.png"
+    },
+    "slowbro": {
+      "speciesName": "Slowbro",
+      "dexNumber": 80,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0080_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0080_000_mf_n.png"
+    },
+    "slowbrogalar": {
+      "speciesName": "Slowbro-Galar",
+      "dexNumber": 80,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0080_002_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0080_002_mf_n.png"
+    },
+    "slowbromega": {
+      "speciesName": "Slowbro-Mega",
+      "dexNumber": 80,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0080_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0080_001_mf_n.png"
+    },
+    "slowking": {
+      "speciesName": "Slowking",
+      "dexNumber": 199,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0199_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0199_000_mf_n.png"
+    },
+    "slurpuff": {
+      "speciesName": "Slurpuff",
+      "dexNumber": 685,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0685_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0685_000_mf_n.png"
+    },
+    "snorlax": {
+      "speciesName": "Snorlax",
+      "dexNumber": 143,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0143_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0143_000_mf_n.png"
+    },
+    "spiritomb": {
+      "speciesName": "Spiritomb",
+      "dexNumber": 442,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0442_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0442_000_mf_n.png"
+    },
+    "starmie": {
+      "speciesName": "Starmie",
+      "dexNumber": 121,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0121_000_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0121_000_uk_n.png"
+    },
+    "steelix": {
+      "speciesName": "Steelix",
+      "dexNumber": 208,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0208_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0208_000_fd_n.png"
+    },
+    "steelixmega": {
+      "speciesName": "Steelix-Mega",
+      "dexNumber": 208,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0208_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0208_001_mf_n.png"
+    },
+    "stunfisk": {
+      "speciesName": "Stunfisk",
+      "dexNumber": 618,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0618_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0618_000_mf_n.png"
+    },
+    "stunfiskgalar": {
+      "speciesName": "Stunfisk-Galar",
+      "dexNumber": 618,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0618_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0618_001_mf_n.png"
+    },
+    "sylveon": {
+      "speciesName": "Sylveon",
+      "dexNumber": 700,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0700_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0700_000_mf_n.png"
+    },
+    "talonflame": {
+      "speciesName": "Talonflame",
+      "dexNumber": 663,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0663_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0663_000_mf_n.png"
+    },
+    "tauros": {
+      "speciesName": "Tauros",
+      "dexNumber": 128,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0128_000_mo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0128_000_mo_n.png"
+    },
+    "taurospaldeaaqua": {
+      "speciesName": "Tauros-Paldea-Aqua",
+      "dexNumber": 128,
+      "formId": 3,
+      "file": "team-planner-assets/pokemon/0128_003_md_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0128_003_md_n.png"
+    },
+    "taurospaldeablaze": {
+      "speciesName": "Tauros-Paldea-Blaze",
+      "dexNumber": 128,
+      "formId": 2,
+      "file": "team-planner-assets/pokemon/0128_002_md_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0128_002_md_n.png"
+    },
+    "taurospaldeacombat": {
+      "speciesName": "Tauros-Paldea-Combat",
+      "dexNumber": 128,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0128_001_md_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0128_001_md_n.png"
+    },
+    "tinkaton": {
+      "speciesName": "Tinkaton",
+      "dexNumber": 959,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0959_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0959_000_fd_n.png"
+    },
+    "torkoal": {
+      "speciesName": "Torkoal",
+      "dexNumber": 324,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0324_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0324_000_mf_n.png"
+    },
+    "torterra": {
+      "speciesName": "Torterra",
+      "dexNumber": 389,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0389_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0389_000_mf_n.png"
+    },
+    "toucannon": {
+      "speciesName": "Toucannon",
+      "dexNumber": 733,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0733_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0733_000_mf_n.png"
+    },
+    "toxicroak": {
+      "speciesName": "Toxicroak",
+      "dexNumber": 454,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0454_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0454_000_fd_n.png"
+    },
+    "trevenant": {
+      "speciesName": "Trevenant",
+      "dexNumber": 709,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0709_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0709_000_mf_n.png"
+    },
+    "tsareena": {
+      "speciesName": "Tsareena",
+      "dexNumber": 763,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0763_000_fo_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0763_000_fo_n.png"
+    },
+    "typhlosion": {
+      "speciesName": "Typhlosion",
+      "dexNumber": 157,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0157_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0157_000_mf_n.png"
+    },
+    "typhlosionhisui": {
+      "speciesName": "Typhlosion-Hisui",
+      "dexNumber": 157,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0157_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0157_001_mf_n.png"
+    },
+    "tyranitar": {
+      "speciesName": "Tyranitar",
+      "dexNumber": 248,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0248_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0248_000_mf_n.png"
+    },
+    "tyranitarmega": {
+      "speciesName": "Tyranitar-Mega",
+      "dexNumber": 248,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0248_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0248_001_mf_n.png"
+    },
+    "tyrantrum": {
+      "speciesName": "Tyrantrum",
+      "dexNumber": 697,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0697_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0697_000_mf_n.png"
+    },
+    "umbreon": {
+      "speciesName": "Umbreon",
+      "dexNumber": 197,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0197_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0197_000_mf_n.png"
+    },
+    "vanilluxe": {
+      "speciesName": "Vanilluxe",
+      "dexNumber": 584,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0584_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0584_000_mf_n.png"
+    },
+    "vaporeon": {
+      "speciesName": "Vaporeon",
+      "dexNumber": 134,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0134_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0134_000_mf_n.png"
+    },
+    "venusaur": {
+      "speciesName": "Venusaur",
+      "dexNumber": 3,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0003_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0003_000_fd_n.png"
+    },
+    "venusaurmega": {
+      "speciesName": "Venusaur-Mega",
+      "dexNumber": 3,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0003_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0003_001_mf_n.png"
+    },
+    "victreebel": {
+      "speciesName": "Victreebel",
+      "dexNumber": 71,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0071_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0071_000_mf_n.png"
+    },
+    "victreebelmega": {
+      "speciesName": "Victreebel-Mega",
+      "dexNumber": 71,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0071_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0071_001_mf_n.png"
+    },
+    "vivillon": {
+      "speciesName": "Vivillon",
+      "dexNumber": 666,
+      "formId": 6,
+      "file": "team-planner-assets/pokemon/0666_006_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0666_006_mf_n.png"
+    },
+    "vivillonfancy": {
+      "speciesName": "Vivillon-Fancy",
+      "dexNumber": 666,
+      "formId": 18,
+      "file": "team-planner-assets/pokemon/0666_018_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0666_018_mf_n.png"
+    },
+    "vivillonpokeball": {
+      "speciesName": "Vivillon-Pokeball",
+      "dexNumber": 666,
+      "formId": 19,
+      "file": "team-planner-assets/pokemon/0666_019_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0666_019_mf_n.png"
+    },
+    "watchog": {
+      "speciesName": "Watchog",
+      "dexNumber": 505,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0505_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0505_000_mf_n.png"
+    },
+    "weavile": {
+      "speciesName": "Weavile",
+      "dexNumber": 461,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0461_000_fd_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0461_000_fd_n.png"
+    },
+    "whimsicott": {
+      "speciesName": "Whimsicott",
+      "dexNumber": 547,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0547_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0547_000_mf_n.png"
+    },
+    "wyrdeer": {
+      "speciesName": "Wyrdeer",
+      "dexNumber": 899,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0899_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0899_000_mf_n.png"
+    },
+    "zoroark": {
+      "speciesName": "Zoroark",
+      "dexNumber": 571,
+      "formId": 0,
+      "file": "team-planner-assets/pokemon/0571_000_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0571_000_mf_n.png"
+    },
+    "zoroarkhisui": {
+      "speciesName": "Zoroark-Hisui",
+      "dexNumber": 571,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0571_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0571_001_mf_n.png"
+    },
+    "blastoisemega": {
+      "speciesName": "Blastoise-Mega",
+      "dexNumber": 9,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0009_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0009_001_mf_n.png"
+    },
+    "gengarmega": {
+      "speciesName": "Gengar-Mega",
+      "dexNumber": 94,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0094_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0094_001_mf_n.png"
+    },
+    "starmiemega": {
+      "speciesName": "Starmie-Mega",
+      "dexNumber": 121,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0121_001_uk_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0121_001_uk_n.png"
+    },
+    "lucariomega": {
+      "speciesName": "Lucario-Mega",
+      "dexNumber": 448,
+      "formId": 1,
+      "file": "team-planner-assets/pokemon/0448_001_mf_n.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/pokemon/0448_001_mf_n.png"
+    }
+  },
+  "types": {
+    "bug": {
+      "file": "team-planner-assets/type/bug.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/bug.png"
+    },
+    "dark": {
+      "file": "team-planner-assets/type/dark.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/dark.png"
+    },
+    "dragon": {
+      "file": "team-planner-assets/type/dragon.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/dragon.png"
+    },
+    "electric": {
+      "file": "team-planner-assets/type/electric.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/electric.png"
+    },
+    "fairy": {
+      "file": "team-planner-assets/type/fairy.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/fairy.png"
+    },
+    "fighting": {
+      "file": "team-planner-assets/type/fighting.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/fighting.png"
+    },
+    "fire": {
+      "file": "team-planner-assets/type/fire.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/fire.png"
+    },
+    "flying": {
+      "file": "team-planner-assets/type/flying.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/flying.png"
+    },
+    "ghost": {
+      "file": "team-planner-assets/type/ghost.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/ghost.png"
+    },
+    "grass": {
+      "file": "team-planner-assets/type/grass.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/grass.png"
+    },
+    "ground": {
+      "file": "team-planner-assets/type/ground.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/ground.png"
+    },
+    "ice": {
+      "file": "team-planner-assets/type/ice.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/ice.png"
+    },
+    "normal": {
+      "file": "team-planner-assets/type/normal.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/normal.png"
+    },
+    "poison": {
+      "file": "team-planner-assets/type/poison.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/poison.png"
+    },
+    "psychic": {
+      "file": "team-planner-assets/type/psychic.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/psychic.png"
+    },
+    "rock": {
+      "file": "team-planner-assets/type/rock.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/rock.png"
+    },
+    "steel": {
+      "file": "team-planner-assets/type/steel.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/steel.png"
+    },
+    "tera": {
+      "file": "team-planner-assets/type/tera.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/tera.png"
+    },
+    "water": {
+      "file": "team-planner-assets/type/water.png",
+      "sourceUrl": "https://raw.githubusercontent.com/richi3f/pokemon-team-planner/master/static/img/type/water.png"
+    }
+  }
+}

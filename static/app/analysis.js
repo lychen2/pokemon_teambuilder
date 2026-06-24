@@ -74,7 +74,7 @@ function getSpeedPercentile(speedTiers = [], percentile = 0.5) {
   return speedTiers[0]?.speed || 0;
 }
 
-export function getSpeedContext(team = [], speedTiers = [], fieldState = {}) {
+function getSpeedContext(team = [], speedTiers = [], fieldState = {}) {
   const teamSize = team.length;
   if (!teamSize) {
     return {
@@ -109,12 +109,12 @@ export function getSpeedContext(team = [], speedTiers = [], fieldState = {}) {
   return {mode: SPEED_MODE_STANDARD, medianSpeed, setterCount, slowCount, fastCount, speedBoostCount, teamSize, trickRoomCutoff};
 }
 
-export function getResistanceProfile(subject = [], options = {}) {
+function getResistanceProfile(subject = [], options = {}) {
   const config = Array.isArray(subject) ? {types: subject} : subject;
   return getResistanceProfileForConfig(config, options);
 }
 
-export function getCoverageProfile(subject = [], options = {}) {
+function getCoverageProfile(subject = [], options = {}) {
   const config = Array.isArray(subject)
     ? {moves: subject.map((type) => ({name: type, id: type, type, category: "Special"}))}
     : subject;

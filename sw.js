@@ -86,8 +86,8 @@ const DATA_ASSETS = [
   "./static/localization-data.json",
   "./static/usage.json",
   "./static/usage_official.json",
-  "./static/paste_sets_champions_ma.json",
-  "./static/paste_teams_champions_ma.json",
+  "./static/paste_sets_champions_mb.json",
+  "./static/paste_teams_champions_mb.json",
   "./config-default.txt",
   "./poke_analysis-main/stats/abilities.json",
   "./poke_analysis-main/stats/champions_vgc.json",
@@ -134,8 +134,8 @@ self.addEventListener("activate", (event) => {
 function routeCacheName(url) {
   const path = url.pathname;
   if (
-    path.endsWith("paste_sets_champions_ma.json")
-    || path.endsWith("paste_teams_champions_ma.json")
+    path.endsWith("paste_sets_champions_mb.json")
+    || path.endsWith("paste_teams_champions_mb.json")
     || path.endsWith("config-default.txt")
   ) {
     return {name: DATA_CACHE, mode: "network-first"};

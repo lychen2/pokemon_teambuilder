@@ -398,6 +398,29 @@ function buildField(field, attacker) {
   };
 }
 
+function extractDamageRolls(damage, hits, maxHP) {
+  if (!Array.isArray(damage) || !maxHP) return [];
+  // Multi-hit moves: damage[i] is a per-hit array of rolls. Sum across hits
+  // sharing the same roll index for a 16-bar cumulative distribution.
+  if (Array.isArray(damage[0]) && damage[0].length) {
+    const layers = damage;
+    const n = layers[0].length;
+    const out = new Array(n).fill(0);
+    for (let i = 0; i < n; i++) {
+      let total = 0;
+      for (let h = 0; h < hits; h++) {
+        const layer = layers[Math.min(h, layers.length - 1)];
+        total += layer[Math.min(i, layer.length - 1)] || 0;
+      }
+      out[i] = Math.round((total * 100 / maxHP) * 10) / 10;
+    }
+    return out;
+  }
+  // Single-roll-array path. `hits` may multiply (e.g. fixed-multi-hit).
+  const multiplier = hits > 1 ? hits : 1;
+  return damage.map((d) => Math.round((d * multiplier * 100 / maxHP) * 10) / 10);
+}
+
 function buildMoveResult(result, move, defender, side, isBadDreams) {
   const [minDamage, maxDamage] = calcMinMaxDamage(result.damage, move.hits);
   const minPercent = Math.floor(minDamage * 1000 / defender.maxHP) / 10;
@@ -411,6 +434,11 @@ function buildMoveResult(result, move, defender, side, isBadDreams) {
     description: result.description,
     minPercent,
     maxPercent,
+    // Phase A overdrive: ship the per-roll distribution so the renderer can
+    // paint a histogram instead of a flat min/max bar. Best-effort: if the
+    // damage shape is unexpected, fall through to an empty array so the
+    // histogram canvas just stays blank (the existing damage-bar still works).
+    damageRolls: extractDamageRolls(result.damage, move.hits, defender.maxHP),
   };
 }
 

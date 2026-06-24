@@ -1,0 +1,208 @@
+{
+  "configs": [
+    {
+      "id": "custom:garchomp:0",
+      "source": "custom",
+      "speciesId": "garchomp",
+      "speciesName": "Garchomp",
+      "displayName": "Garchomp",
+      "types": [
+        "Dragon",
+        "Ground"
+      ],
+      "ability": "Rough Skin",
+      "item": "Life Orb",
+      "teraType": "",
+      "nature": "Jolly",
+      "note": "",
+      "level": 50,
+      "evs": {
+        "hp": 0,
+        "atk": 256,
+        "def": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 256
+      },
+      "championPoints": {
+        "hp": 2,
+        "atk": 32,
+        "def": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 32
+      },
+      "moveNames": [
+        "Dragon Claw",
+        "Protect",
+        "Earthquake",
+        "Stomping Tantrum"
+      ],
+      "teammates": {},
+      "usage": 0,
+      "baseStats": {
+        "hp": 108,
+        "atk": 130,
+        "def": 95,
+        "spa": 80,
+        "spd": 85,
+        "spe": 102
+      },
+      "displayLabel": "Garchomp",
+      "speciesLabel": "Garchomp",
+      "abilities": {
+        "0": "Sand Veil",
+        "H": "Rough Skin"
+      },
+      "spritePosition": {
+        "x": 40,
+        "y": 1110
+      },
+      "moves": [
+        {
+          "id": "dragonclaw",
+          "name": "Dragon Claw",
+          "type": "Dragon",
+          "category": "Physical",
+          "accuracy": 100,
+          "basePower": 80,
+          "priority": 0,
+          "target": "normal",
+          "shortDesc": "No additional effect.",
+          "flags": {
+            "contact": 1,
+            "protect": 1,
+            "mirror": 1,
+            "metronome": 1,
+            "slicing": 1
+          },
+          "boosts": null,
+          "self": null,
+          "selfBoost": null,
+          "secondary": null,
+          "recoil": null,
+          "mindBlownRecoil": false
+        },
+        {
+          "id": "protect",
+          "name": "Protect",
+          "type": "Normal",
+          "category": "Status",
+          "accuracy": true,
+          "basePower": 0,
+          "priority": 4,
+          "target": "self",
+          "shortDesc": "Prevents moves from affecting the user this turn.",
+          "flags": {
+            "noassist": 1,
+            "failcopycat": 1
+          },
+          "boosts": null,
+          "self": null,
+          "selfBoost": null,
+          "secondary": null,
+          "recoil": null,
+          "mindBlownRecoil": false
+        },
+        {
+          "id": "earthquake",
+          "name": "Earthquake",
+          "type": "Ground",
+          "category": "Physical",
+          "accuracy": 100,
+          "basePower": 100,
+          "priority": 0,
+          "target": "allAdjacent",
+          "shortDesc": "Hits adjacent Pokemon. Double damage on Dig.",
+          "flags": {
+            "protect": 1,
+            "mirror": 1,
+            "nonsky": 1,
+            "metronome": 1
+          },
+          "boosts": null,
+          "self": null,
+          "selfBoost": null,
+          "secondary": null,
+          "recoil": null,
+          "mindBlownRecoil": false
+        },
+        {
+          "id": "stompingtantrum",
+          "name": "Stomping Tantrum",
+          "type": "Ground",
+          "category": "Physical",
+          "accuracy": 100,
+          "basePower": 75,
+          "priority": 0,
+          "target": "normal",
+          "shortDesc": "Power doubles if the user's last move failed.",
+          "flags": {
+            "contact": 1,
+            "protect": 1,
+            "mirror": 1,
+            "metronome": 1
+          },
+          "boosts": null,
+          "self": null,
+          "selfBoost": null,
+          "secondary": null,
+          "recoil": null,
+          "mindBlownRecoil": false
+        }
+      ],
+      "abilityInfo": {
+        "onDamagingHitOrder": 1,
+        "flags": {},
+        "name": "Rough Skin",
+        "rating": 2.5,
+        "num": 24,
+        "desc": "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down.",
+        "shortDesc": "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
+        "localizedName": "粗糙皮肤",
+        "localizedShortDesc": "受到接触伤害时对方损失1/8最大HP",
+        "localizedDesc": "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down."
+      },
+      "itemInfo": {
+        "name": "Life Orb",
+        "spritenum": 249,
+        "fling": {
+          "basePower": 30
+        },
+        "num": 270,
+        "gen": 4,
+        "desc": "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
+        "shortDesc": "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
+        "localizedName": "生命宝珠",
+        "localizedShortDesc": "携带后攻击招式伤害提升30%，攻击招式命中后损失1/10最大HP",
+        "localizedDesc": "携带后攻击招式伤害提升30%，攻击招式命中后损失1/10最大HP"
+      },
+      "natureInfo": "速度 +10% / 特攻 -10%",
+      "offensiveTypes": [
+        "Dragon",
+        "Ground"
+      ],
+      "stats": {
+        "hp": 185,
+        "atk": 182,
+        "def": 115,
+        "spa": 90,
+        "spd": 105,
+        "spe": 169
+      },
+      "choiceScarfSpeed": null,
+      "plusOneSpeed": null,
+      "doubleSpeed": null,
+      "spreadLabel": "加点：2/32/0/0/0/32",
+      "originalSpreadLabel": "Jolly 0/256/0/0/0/256",
+      "validation": {
+        "hasWarnings": false,
+        "hasErrors": false,
+        "items": []
+      }
+    }
+  ],
+  "feedback": [],
+  "errors": [],
+  "warnings": []
+}

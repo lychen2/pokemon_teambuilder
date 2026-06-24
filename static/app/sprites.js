@@ -17,13 +17,16 @@ function sheetSpriteMarkup(spritePosition, className = "") {
   return `<span class="${classes}" style="background-position: ${-x}px ${-y}px"></span>`;
 }
 
-function pokeIconMarkup(url, label) {
+function pokeIconMarkup(url, label, spritePosition) {
   if (!url) {
     return "";
   }
+  const fallbackPosition = spritePosition
+    ? `${-spritePosition.x}px ${-spritePosition.y}px`
+    : "0 0";
   return `
-    <span class="sprite sprite-image">
-      <img class="poke-icon-image" src="${escapeAttribute(url)}" alt="${escapeAttribute(label)}" loading="lazy">
+    <span class="sprite sprite-image" style="--fallback-position: ${fallbackPosition};" title="${escapeAttribute(label)}">
+      <img class="poke-icon-image" src="${escapeAttribute(url)}" alt="" aria-hidden="true" loading="eager" decoding="async" onerror="this.parentElement.classList.add('poke-icon-error')">
     </span>
   `;
 }
@@ -41,7 +44,7 @@ export function spriteMarkup(config, state) {
   if (state?.iconScheme === ICON_SCHEMES.POKE_ICONS) {
     const url = getPokeIconUrl(config, state.datasets);
     if (url) {
-      return pokeIconMarkup(url, label);
+      return pokeIconMarkup(url, label, config?.spritePosition);
     }
     return sheetSpriteMarkup(config?.spritePosition, "sprite-fallback");
   }

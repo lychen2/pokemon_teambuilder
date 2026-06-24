@@ -7,6 +7,8 @@ from .paths import CHAMPIONS_VGC_PATH, STATS_DIR, TEAMBUILDER_SOURCE
 from .showdown_sources import write_formats_data
 
 CHAMPIONS_VGC_NAME_PATTERN = re.compile(r"^\[Gen \d+ Champions\] VGC\b")
+TARGET_REGULATION_PATTERN = re.compile(r"\bReg(?:ulation)?\s+M-B\b", re.IGNORECASE)
+
 
 
 def normalize_showdown_id(value):
@@ -27,15 +29,17 @@ def parse_teambuilder_table(source):
 def select_champions_vgc_format(formats):
     candidates = [
         entry for entry in formats
-        if is_champions_vgc_format(entry) and "(Bo3)" not in entry.get("name", "")
+        if is_champions_vgc_format(entry)
+        and "(Bo3)" not in entry.get("name", "")
+        and TARGET_REGULATION_PATTERN.search(entry.get("name", ""))
     ]
     preferred = [entry for entry in candidates if entry.get("bestOfDefault")]
     if len(preferred) == 1:
         return preferred[0]
     if len(candidates) == 1:
         return candidates[0]
-    names = [entry.get("name", "<unknown>") for entry in candidates]
-    raise ValueError(f"Unable to determine Champions VGC format uniquely: {names}")
+    names = [entry.get("name", "<unknown>") for entry in formats if is_champions_vgc_format(entry)]
+    raise ValueError(f"Unable to determine Champions VGC Reg M-B format uniquely: {names}")
 
 
 def is_champions_vgc_format(entry):

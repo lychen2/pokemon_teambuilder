@@ -2,9 +2,7 @@ import subprocess
 import sys
 
 from .champions import write_champions_vgc_data
-from .io import fetch_binary_to_file
 from .paths import (
-    BINARY_SOURCES,
     DEFAULT_PRESET_SCRIPT,
     LOCALIZATION_BUILD_SCRIPT,
     ROOT,
@@ -13,7 +11,8 @@ from .paths import (
     TEXT_SOURCES,
 )
 from .showdown_sources import extract_forms_index, write_learnsets_data, write_text_source
-from .smogon_usage import update_usage_data
+from .pikalytics_usage import update_usage_data
+from .team_planner_assets import sync_team_planner_assets
 
 
 def ensure_directories():
@@ -21,7 +20,7 @@ def ensure_directories():
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def run_update(skip_assets=False, strict_pastes=False):
+def run_update(strict_pastes=False):
     print("Starting core data update...")
     ensure_directories()
     write_core_sources()
@@ -29,14 +28,13 @@ def run_update(skip_assets=False, strict_pastes=False):
     write_learnsets_data()
     champions_payload = write_champions_vgc_data()
     update_usage_data(champions_payload)
+    sync_team_planner_assets(champions_payload)
     # Localization must come before any reverse-mapping consumer (none active
     # right now — official-usage scraping is disabled until a reliable data
     # source is identified).
     write_localization_data()
     # refresh_official_usage()  # disabled: pending reliable upstream
     rebuild_default_preset(strict_pastes)
-    if not skip_assets:
-        write_binary_sources()
     print("Core data update completed.")
 
 
@@ -53,12 +51,6 @@ def refresh_official_usage():
 def write_core_sources():
     for source in TEXT_SOURCES:
         write_text_source(*source)
-
-
-def write_binary_sources():
-    for source in BINARY_SOURCES:
-        fetch_binary_to_file(*source)
-
 
 def write_localization_data():
     print("Updating localization data.")

@@ -1,0 +1,1 @@
+{"type":"module","scripts":{"check":"node --check static/app/main.js","desktop:prepare":"node tools/prepare-tauri-assets.mjs","desktop:prepare:check":"node tools/prepare-tauri-assets.mjs --check","desktop:build":"npm run desktop:prepare && tauri build","tauri":"tauri"},"devDependencies":{"@tauri-apps/cli":"^2.11.3"}}

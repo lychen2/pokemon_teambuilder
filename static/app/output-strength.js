@@ -56,7 +56,7 @@ function normalizeMoveAccuracy(rawAccuracy) {
   return Number.isFinite(normalized) && normalized > 0 ? normalized : 0;
 }
 
-function scoreMove(config, move, datasets) {
+export function scoreMoveOutput(config, move, datasets) {
   const rawMove = getRawMove(move, datasets);
   if (!isDamagingMove(rawMove)) return null;
   const basePower = getBasePower(rawMove);
@@ -146,7 +146,7 @@ function buildDisplaySummary(moves = []) {
 
 function buildOutputEntry(config, datasets, index) {
   const scoredMoves = (config.moves || [])
-    .map((move) => scoreMove(config, move, datasets))
+    .map((move) => scoreMoveOutput(config, move, datasets))
     .filter(Boolean)
     .sort((left, right) => {
       if (right.score !== left.score) return right.score - left.score;

@@ -8,6 +8,10 @@ DEFAULT_PRESET_SCRIPT = ROOT / "poke_analysis-main" / "build_default_preset.py"
 
 STATIC_USAGE_PATH = STATIC_DIR / "usage.json"
 CHAMPIONS_VGC_PATH = STATS_DIR / "champions_vgc.json"
+TEAM_PLANNER_ASSET_MANIFEST_PATH = STATIC_DIR / "team-planner-assets.json"
+TEAM_PLANNER_ASSET_DIR = STATIC_DIR / "team-planner-assets"
+LIMITLESS_MB_SOURCE_PATH = Path("/home/zonazcy/Projects/pokedata/limitless_vgc_M-B_teams.csv")
+LIMITLESS_MB_STATIC_PATH = STATIC_DIR / "limitless_vgc_M-B_teams.csv"
 
 TEXT_SOURCES = (
     ("https://play.pokemonshowdown.com/data/items.js", STATS_DIR / "items.json", "items"),
@@ -16,10 +20,6 @@ TEXT_SOURCES = (
     ("https://play.pokemonshowdown.com/data/pokedex.json", STATS_DIR / "pokedex.json", "pokedex"),
 )
 
-BINARY_SOURCES = (
-    ("https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png", STATIC_DIR / "pokemonicons-sheet.png", "pokemon icons"),
-    ("https://play.pokemonshowdown.com/sprites/itemicons-sheet.png", STATIC_DIR / "itemicons-sheet.png", "item icons"),
-)
 
 FORMS_SOURCE = "https://play.pokemonshowdown.com/js/battle-dex-data.js"
 FORMATS_SOURCE = "https://play.pokemonshowdown.com/data/formats.js"

@@ -8,21 +8,73 @@ import {
 } from "./constants.js";
 import {t} from "./i18n.js";
 
+export function escapeHtml(text) {
+  return String(text || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function json5ToJson(text) {
   return text.replace(/([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)(\s*:)/g, '$1"$2"$3');
 }
 
-export async function fetchJson(path) {
+function parseJsonWithJson5Fallback(text, path) {
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    try {
+      return JSON.parse(json5ToJson(text));
+    } catch (fallbackError) {
+      throw new Error(`Failed to parse: ${path}`);
+    }
+  }
+}
+
+// Node has a global fetch (v18+), but it rejects relative URLs ("Invalid URL").
+// Browser builds must use fetch for relative app assets; only Node/headless
+// execution resolves relative paths through fs.
+function isAbsoluteFetchUrl(path) {
+  return /^[a-z][a-z0-9+.-]*:/i.test(String(path || ""));
+}
+
+function isBrowserRuntime() {
+  return typeof window !== "undefined" && typeof document !== "undefined";
+}
+
+async function readJsonFromFile(path) {
+  let fs, pathToFileURL, resolvePath;
+  try {
+    const fsModule = await import("node:fs/promises");
+    const urlModule = await import("node:url");
+    const pathModule = await import("node:path");
+    fs = fsModule;
+    pathToFileURL = urlModule.pathToFileURL;
+    resolvePath = pathModule.resolve;
+  } catch (error) {
+    throw new Error(`Failed to load (no fs available): ${path}`);
+  }
+  const resolved = resolvePath(process.cwd(), path.replace(/^\.?\//, ""));
+  const text = await fs.readFile(pathToFileURL(resolved), "utf8");
+  return parseJsonWithJson5Fallback(text, path);
+}
+
+async function fetchJsonOverHttp(path) {
   const response = await fetch(path);
   if (!response.ok) {
     throw new Error(`Failed to load: ${path}`);
   }
   const text = await response.text();
-  try {
-    return JSON.parse(text);
-  } catch (error) {
-    return JSON.parse(json5ToJson(text));
+  return parseJsonWithJson5Fallback(text, path);
+}
+
+export async function fetchJson(path) {
+  if (isBrowserRuntime() || isAbsoluteFetchUrl(path)) {
+    return fetchJsonOverHttp(path);
   }
+  return readJsonFromFile(path);
 }
 
 export function normalizeName(text) {

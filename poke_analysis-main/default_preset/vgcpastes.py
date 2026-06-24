@@ -13,12 +13,14 @@ from .common import (
     ROOT,
     STAT_KEYS,
     VGCPASTES_CSV_PATH,
+    VGCPASTES_FALLBACK_CSV_PATH,
     format_preset_block,
     normalize_name,
     species_ability,
 )
 from .name_resolution import maybe_mega_species, resolve_ability, resolve_item, resolve_move, resolve_species
 TEAM_ID_COL = 0
+TEAM_ID_PREFIXES = ("MB", "PC")
 DESCRIPTION_COL = 1
 PASTE_URL_COL = 24
 EVS_COL = 25
@@ -89,15 +91,17 @@ class PokePasteClient:
 
 def build_vgcpastes_preset(datasets, usage_data: dict, refresh=False, limit=0, strict=False):
     client = PokePasteClient(refresh=refresh)
-    rows = parse_vgcpastes_rows(limit)
-    configs = []
-    errors = []
-    for row in rows:
-        try:
-            text = client.fetch(row.url)
-            configs.extend(parse_paste_configs(text, row, datasets))
-        except Exception as error:
-            errors.append(f"{row.team_id} {row.url}: {error}")
+    configs, errors = load_paste_configs(
+        client=client,
+        rows=parse_vgcpastes_rows(limit),
+        datasets=datasets,
+    )
+    fallback_configs, fallback_errors = load_paste_configs(
+        client=client,
+        rows=parse_vgcpastes_rows(limit, VGCPASTES_FALLBACK_CSV_PATH),
+        datasets=datasets,
+    )
+    errors.extend(fallback_errors)
     client.save_cache()
     if errors and strict:
         raise RuntimeError("VGCPastes import failed:\n" + "\n".join(errors[:30]))
@@ -106,7 +110,14 @@ def build_vgcpastes_preset(datasets, usage_data: dict, refresh=False, limit=0, s
         for error in errors[:30]:
             print(f"  {error}")
     selected = select_common_configs(configs, datasets, usage_data)
-    payload = build_paste_sets_payload(configs, selected, errors)
+    fallback_selected = select_common_configs(fallback_configs, datasets, usage_data)
+    all_configs, selected, fallback_count = apply_fallback_configs(
+        configs,
+        selected,
+        fallback_configs,
+        fallback_selected,
+    )
+    payload = build_paste_sets_payload(all_configs, selected, errors, fallback_count)
     PASTE_SETS_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     teams = build_paste_teams(configs)
     teams_payload = build_paste_teams_payload(teams)
@@ -115,9 +126,57 @@ def build_vgcpastes_preset(datasets, usage_data: dict, refresh=False, limit=0, s
     return text, len(selected), payload
 
 
-def parse_vgcpastes_rows(limit=0) -> list:
+def load_paste_configs(client: PokePasteClient, rows: list, datasets) -> tuple:
+    configs = []
+    errors = []
+    for row in rows:
+        try:
+            text = client.fetch(row.url)
+            configs.extend(parse_paste_configs(text, row, datasets))
+        except Exception as error:
+            errors.append(f"{row.team_id} {row.url}: {error}")
+    return configs, errors
+
+
+def apply_fallback_configs(
+    primary_configs: list,
+    primary_selected: list,
+    fallback_configs: list,
+    fallback_selected: list,
+) -> tuple:
+    primary_species = {config["speciesId"] for config in primary_configs}
+    missing_species = {
+        config["speciesId"]
+        for config in fallback_selected
+        if config["speciesId"] not in primary_species
+    }
+    if not missing_species:
+        return primary_configs, primary_selected, 0
+    merged_configs = list(primary_configs)
+    merged_selected = list(primary_selected)
+    for config in fallback_configs:
+        if config["speciesId"] in missing_species:
+            merged_configs.append(_fallback_config(config))
+    for config in fallback_selected:
+        if config["speciesId"] in missing_species:
+            merged_selected.append(_fallback_config(config))
+    return merged_configs, merged_selected, len(missing_species)
+
+
+def _fallback_config(config: dict) -> dict:
+    source = dict(config.get("source") or {})
+    source["sourceKind"] = "vgcpastes-fallback"
+    source["fallbackOnly"] = True
+    return {
+        **config,
+        "note": f"VGCPastes fallback {source.get('teamId', '')}".strip(),
+        "source": source,
+    }
+
+
+def parse_vgcpastes_rows(limit=0, path=VGCPASTES_CSV_PATH) -> list:
     rows = []
-    with VGCPASTES_CSV_PATH.open(newline="", encoding="utf-8-sig") as handle:
+    with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.reader(handle)
         for row in reader:
             if not _is_data_row(row):
@@ -409,7 +468,7 @@ def _clean_team_member(config: dict) -> dict:
 def build_paste_teams_payload(teams: list) -> dict:
     return {
         "info": {
-            "source": "VGCPastes Repository - Champions M-A.csv",
+            "source": str(VGCPASTES_CSV_PATH.name),
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "teamCount": len(teams),
             "topN": PASTE_TEAMS_TOP_N,
@@ -419,13 +478,15 @@ def build_paste_teams_payload(teams: list) -> dict:
     }
 
 
-def build_paste_sets_payload(configs: list, selected: list, errors: list) -> dict:
+def build_paste_sets_payload(configs: list, selected: list, errors: list, fallback_count=0) -> dict:
     return {
         "info": {
-            "source": "VGCPastes Repository - Champions M-A.csv",
+            "source": str(VGCPASTES_CSV_PATH.name),
+            "fallbackSource": str(VGCPASTES_FALLBACK_CSV_PATH.name),
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "parsedConfigCount": len(configs),
             "selectedConfigCount": len(selected),
+            "fallbackSpeciesCount": fallback_count,
             "skippedPasteErrors": errors,
         },
         "configs": configs,
@@ -434,7 +495,7 @@ def build_paste_sets_payload(configs: list, selected: list, errors: list) -> dic
 
 
 def _is_data_row(row: list) -> bool:
-    return len(row) > POKEMON_START_COL and str(row[TEAM_ID_COL]).strip().startswith("PC")
+    return len(row) > POKEMON_START_COL and str(row[TEAM_ID_COL]).strip().startswith(TEAM_ID_PREFIXES)
 
 
 def _row_species(row: list) -> list:

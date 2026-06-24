@@ -1,0 +1,50 @@
+{
+  "productName": "Poke Type",
+  "version": "0.1.0",
+  "identifier": "com.lychen2.poketype",
+  "build": {
+    "beforeBuildCommand": "npm run desktop:prepare",
+    "beforeDevCommand": "npm run desktop:prepare",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist/desktop"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Poke Type · Champions VGC",
+        "width": 1440,
+        "height": 960,
+        "minWidth": 1024,
+        "minHeight": 720,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Utility",
+    "shortDescription": "Champions VGC team builder and analysis tool.",
+    "longDescription": "Local-first Champions VGC team builder with Showdown import/export, matchup analysis, damage calculation, speed tiers and output ranking.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEI1ODRFMjJGMTNCNDI5MjAKUldRZ0tiUVRMK0tFdGVlNnc0cWkzWm9pN0tMaUpobzJHc1dtNWZDalphN3AzaGV3UmUxSW1nN0MK",
+      "endpoints": [
+        "https://github.com/lychen2/pokemon_teambuilder/releases/latest/download/latest.json"
+      ]
+    }
+  }
+}

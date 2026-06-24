@@ -11,6 +11,9 @@ const PICKER_CONTAINER_ID = "vgcpastes-picker";
 const MEMBER_LIMIT_PER_TEAM = 6;
 const ROLE_TAG_LIMIT = 4;
 const TEAM_ARCHETYPE_LIMIT = 2;
+const INITIAL_RENDER_LIMIT = 24;
+const SEARCH_RENDER_LIMIT = 60;
+
 const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const STAT_LABELS = {hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe"};
 const TEAM_CARD_CACHE = new WeakMap();
@@ -329,7 +332,12 @@ function bodyMarkup(state, picker, teams) {
   if (!teams || !teams.length) {
     return `<p class="muted">${escapeHtml(t(language, "vgcpastes.empty"))}</p>`;
   }
-  return `<ol class="vgcpastes-team-list">${teams.map((team) => getCachedTeamCardMarkup(team, state)).join("")}</ol>`;
+  const limit = (picker.query || "").trim() ? SEARCH_RENDER_LIMIT : INITIAL_RENDER_LIMIT;
+  const visibleTeams = teams.slice(0, limit);
+  const clippedCopy = teams.length > visibleTeams.length
+    ? `<p class="muted">${escapeHtml(`先显示 ${visibleTeams.length}/${teams.length} 支，继续输入可缩小范围。`)}</p>`
+    : "";
+  return `${clippedCopy}<ol class="vgcpastes-team-list">${visibleTeams.map((team) => getCachedTeamCardMarkup(team, state)).join("")}</ol>`;
 }
 
 export function renderVgcpastesPicker(state) {

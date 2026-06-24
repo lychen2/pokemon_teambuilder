@@ -6,12 +6,15 @@ export const DATA_PATHS = {
   abilities: "./poke_analysis-main/stats/abilities.json",
   items: "./poke_analysis-main/stats/items.json",
   championsVgc: "./poke_analysis-main/stats/champions_vgc.json",
-  pokeIconMap: "./static/poke-icons-map.json",
   localizationData: "./static/localization-data.json",
   usage: "./static/usage.json",
   usageOfficial: "./static/usage_official.json",
-  pasteTeams: "./static/paste_teams_champions_ma.json",
+  pasteTeams: "./static/paste_teams_champions_mb.json",
+  teamPlannerAssets: "./static/team-planner-assets.json",
 };
+
+export const IS_DESKTOP_RUNTIME = window.__TAURI_INTERNALS__ !== undefined;
+export const DEFAULT_ICON_SCHEME = IS_DESKTOP_RUNTIME ? "showdown" : "poke-icons";
 
 export const ICON_SCHEMES = {
   SHOWDOWN: "showdown",

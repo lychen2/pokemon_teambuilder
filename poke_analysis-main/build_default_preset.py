@@ -18,6 +18,7 @@ from default_preset.common import (
 )
 from default_preset.pokechamp import PokeChampClient, build_usage_official, canonicalize_usage_official_payload
 from default_preset.preset_builder import build_default_preset
+from default_preset.limitless_mb import build_limitless_mb_preset
 from default_preset.vgcpastes import build_vgcpastes_preset
 
 
@@ -28,7 +29,7 @@ def parse_args():
     parser.add_argument("--refresh", action="store_true", help="Ignore cached PokéChamp pages")
     parser.add_argument("--limit", type=int, default=0, help="Only process first N ranked Pokemon")
     parser.add_argument("--usage-only", action="store_true", help="Only write usage_official.json")
-    parser.add_argument("--source", choices=("vgcpastes", "pokechamp"), default="vgcpastes")
+    parser.add_argument("--source", choices=("limitless-mb", "vgcpastes", "pokechamp"), default="vgcpastes")
     parser.add_argument("--strict-pastes", action="store_true", help="Fail when any Pokepaste row is invalid")
     return parser.parse_args()
 
@@ -36,24 +37,34 @@ def parse_args():
 def main():
     args = parse_args()
     datasets = load_local_datasets()
-    usage_official = load_or_build_usage_official(args, datasets)
-    USAGE_OFFICIAL_PATH.write_text(
-        json_dumps(canonicalize_usage_official_payload(usage_official, datasets)),
-        encoding="utf-8",
-    )
-    print(f"Wrote official usage data to {USAGE_OFFICIAL_PATH}")
+    usage_official = None
+    if args.source == "pokechamp" or args.usage_only:
+        usage_official = load_or_build_usage_official(args, datasets)
+        USAGE_OFFICIAL_PATH.write_text(
+            json_dumps(canonicalize_usage_official_payload(usage_official, datasets)),
+            encoding="utf-8",
+        )
+        print(f"Wrote official usage data to {USAGE_OFFICIAL_PATH}")
 
     if args.usage_only:
         return
 
     if args.source == "pokechamp":
         preset_text, count = build_default_preset(usage_official.payload, datasets)
-    else:
+    elif args.source == "vgcpastes":
         usage_data = load_json(USAGE_PATH)
         preset_text, count, _ = build_vgcpastes_preset(
             datasets=datasets,
             usage_data=usage_data,
             refresh=args.refresh,
+            limit=args.limit,
+            strict=args.strict_pastes,
+        )
+    else:
+        usage_data = load_json(USAGE_PATH)
+        preset_text, count, _ = build_limitless_mb_preset(
+            datasets=datasets,
+            usage_data=usage_data,
             limit=args.limit,
             strict=args.strict_pastes,
         )

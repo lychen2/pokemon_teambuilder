@@ -1,13 +1,4 @@
-import {normalizeLookupText} from "./utils.js";
-
-function escapeHtml(text) {
-  return String(text || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
+import { normalizeLookupText, escapeHtml } from "./utils.js";
 
 function mergeRanges(ranges = []) {
   if (!ranges.length) {
@@ -27,15 +18,23 @@ function mergeRanges(ranges = []) {
 }
 
 function buildHighlightRanges(label = "", query = "") {
-  const tokens = String(query || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const tokens = String(query || "")
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
   if (!label || !tokens.length) {
     return [];
   }
   const lowered = String(label).toLowerCase();
-  return mergeRanges(tokens.map((token) => {
-    const index = lowered.indexOf(token);
-    return index >= 0 ? [index, index + token.length] : null;
-  }).filter(Boolean));
+  return mergeRanges(
+    tokens
+      .map((token) => {
+        const index = lowered.indexOf(token);
+        return index >= 0 ? [index, index + token.length] : null;
+      })
+      .filter(Boolean),
+  );
 }
 
 export function resolveSearchMatch(fields = [], query = "") {
@@ -46,18 +45,25 @@ export function resolveSearchMatch(fields = [], query = "") {
   }
   return fields.reduce((best, field) => {
     const texts = Array.isArray(field.texts) ? field.texts : [field.text];
-    const matches = texts.filter(Boolean).map((label) => {
-      const matchIndex = normalizeLookupText(label).indexOf(searchToken);
-      return matchIndex < 0 ? null : {
-        kind: field.kind || "",
-        label,
-        weight: Number(field.weight || 0),
-        matchIndex,
-        ranges: buildHighlightRanges(label, rawQuery),
-      };
-    }).filter(Boolean);
+    const matches = texts
+      .filter(Boolean)
+      .map((label) => {
+        const matchIndex = normalizeLookupText(label).indexOf(searchToken);
+        return matchIndex < 0
+          ? null
+          : {
+              kind: field.kind || "",
+              label,
+              weight: Number(field.weight || 0),
+              matchIndex,
+              ranges: buildHighlightRanges(label, rawQuery),
+            };
+      })
+      .filter(Boolean);
     const candidate = matches.sort(compareSearchMatches)[0] || null;
-    return !best || (candidate && compareSearchMatches(candidate, best) < 0) ? candidate : best;
+    return !best || (candidate && compareSearchMatches(candidate, best) < 0)
+      ? candidate
+      : best;
   }, null);
 }
 
@@ -71,17 +77,28 @@ export function compareSearchMatches(left, right) {
   if (!right) {
     return -1;
   }
-  const leftWeight = Number.isFinite(Number(left.weight)) ? Number(left.weight) : Number.MAX_SAFE_INTEGER;
-  const rightWeight = Number.isFinite(Number(right.weight)) ? Number(right.weight) : Number.MAX_SAFE_INTEGER;
+  const leftWeight = Number.isFinite(Number(left.weight))
+    ? Number(left.weight)
+    : Number.MAX_SAFE_INTEGER;
+  const rightWeight = Number.isFinite(Number(right.weight))
+    ? Number(right.weight)
+    : Number.MAX_SAFE_INTEGER;
   if (leftWeight !== rightWeight) {
     return leftWeight - rightWeight;
   }
-  const leftIndex = Number.isFinite(Number(left.matchIndex)) ? Number(left.matchIndex) : Number.MAX_SAFE_INTEGER;
-  const rightIndex = Number.isFinite(Number(right.matchIndex)) ? Number(right.matchIndex) : Number.MAX_SAFE_INTEGER;
+  const leftIndex = Number.isFinite(Number(left.matchIndex))
+    ? Number(left.matchIndex)
+    : Number.MAX_SAFE_INTEGER;
+  const rightIndex = Number.isFinite(Number(right.matchIndex))
+    ? Number(right.matchIndex)
+    : Number.MAX_SAFE_INTEGER;
   if (leftIndex !== rightIndex) {
     return leftIndex - rightIndex;
   }
-  return String(left.label || "").localeCompare(String(right.label || ""), "zh-Hans-CN");
+  return String(left.label || "").localeCompare(
+    String(right.label || ""),
+    "zh-Hans-CN",
+  );
 }
 
 export function renderHighlightedText(label = "", ranges = []) {

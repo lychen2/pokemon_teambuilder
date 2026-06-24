@@ -48,9 +48,20 @@ function buildPasteCorePairs(pasteTeams, topN = 24) {
     .sort((left, right) => right.count - left.count)
     .slice(0, topN);
 }
+
+function buildPokeIconMap(teamPlannerAssets = {}) {
+  return Object.fromEntries(
+    Object.entries(teamPlannerAssets.pokemon || {})
+      .filter(([, entry]) => entry?.file)
+      .map(([speciesId, entry]) => [speciesId, `./static/${entry.file}`]),
+  );
+}
+
 import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
+let pasteTeamsFetchStarted = false;
+
 const ALWAYS_ACTIVE_MOVE_OVERRIDES = Object.freeze({
   weatherball: {basePower: 100},
 });
@@ -198,7 +209,38 @@ function buildLocalizedSearchLookup(entries, baseLookup) {
   return lookup;
 }
 
-function buildAvailableSpecies(pokedex, formsIndex, speciesIds = []) {
+const UNSELECTABLE_ALL_SPECIES_NONSTANDARD = new Set(["CAP", "Custom", "LGPE", "Unobtainable"]);
+
+function isSelectableAllSpeciesEntry(entry = {}) {
+  return Boolean(
+    entry?.name
+      && entry?.baseStats
+      && !entry.battleOnly
+      && !UNSELECTABLE_ALL_SPECIES_NONSTANDARD.has(String(entry.isNonstandard || "")),
+  );
+}
+
+function buildSelectableSpeciesIds(pokedex, forcedSpeciesIds = []) {
+  const seen = new Set();
+  const ids = [];
+  Object.keys(pokedex || {}).forEach((speciesId) => {
+    if (!isSelectableAllSpeciesEntry(pokedex[speciesId])) {
+      return;
+    }
+    seen.add(speciesId);
+    ids.push(speciesId);
+  });
+  forcedSpeciesIds.forEach((speciesId) => {
+    if (!pokedex?.[speciesId] || seen.has(speciesId)) {
+      return;
+    }
+    seen.add(speciesId);
+    ids.push(speciesId);
+  });
+  return ids;
+}
+
+function buildAvailableSpecies(pokedex, formsIndex, speciesIds = [], legacySeasonSpeciesIds = new Set()) {
   return speciesIds
     .map((speciesId) => {
       const entry = pokedex[speciesId];
@@ -213,6 +255,9 @@ function buildAvailableSpecies(pokedex, formsIndex, speciesIds = []) {
         baseStats: entry.baseStats || {},
         types: entry.types || [],
         abilities: entry.abilities || {},
+        tags: entry.tags || [],
+        isNonstandard: entry.isNonstandard || null,
+        legacySeasonAvailable: legacySeasonSpeciesIds.has(speciesId),
         spritePosition: {
           x: (spriteIndex % 12) * 40,
           y: Math.floor(spriteIndex / 12) * 30,
@@ -228,21 +273,21 @@ export async function loadDatasets() {
     return datasetCache.value;
   }
 
-  const [pokeIconMap, localizationData, pokedex, formsIndex, moves, learnsets, abilities, items, championsVgc, usage, pasteTeams] = await Promise.all([
-    fetchJson(DATA_PATHS.pokeIconMap),
+  // Heavy-payload fetches that the default library view does NOT need at
+  // first paint. Learnsets start in parallel because move legality depends on
+  // them soon after import; usage and paste-team meta are started by explicit
+  // ensure* functions so VGCPastes and Roles do not steal first-paint time.
+  const learnsetsPromise = fetchJson(DATA_PATHS.learnsets);
+
+  const [localizationData, teamPlannerAssets, pokedex, formsIndex, moves, abilities, items, championsVgc] = await Promise.all([
     fetchJson(DATA_PATHS.localizationData),
+    fetchJson(DATA_PATHS.teamPlannerAssets),
     fetchJson(DATA_PATHS.pokedex),
     fetchJson(DATA_PATHS.formsIndex),
     fetchJson(DATA_PATHS.moves),
-    fetchJson(DATA_PATHS.learnsets),
     fetchJson(DATA_PATHS.abilities),
     fetchJson(DATA_PATHS.items),
     fetchJson(DATA_PATHS.championsVgc),
-    fetchJson(DATA_PATHS.usage),
-    fetchJson(DATA_PATHS.pasteTeams).catch((error) => {
-      console.warn("paste_teams_champions_ma.json missing", error);
-      return null;
-    }),
   ]);
   // Official usage source is disabled until a reliable upstream is identified.
   // Keeping the variable null preserves the rest of the data layer's null-guards.
@@ -283,26 +328,44 @@ export async function loadDatasets() {
     Object.values(mergedAbilities).map((entry) => [normalizeName(entry.name), entry.localizedName || entry.name]),
   );
 
+  const seasonSpeciesIds = championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || [];
+  const seasonSpeciesIdSet = new Set(seasonSpeciesIds);
+  const pokeIconMap = buildPokeIconMap(teamPlannerAssets);
+
+  const selectableSpeciesIds = buildSelectableSpeciesIds(mergedPokedex, seasonSpeciesIds);
+  const seasonAvailableSpecies = buildAvailableSpecies(mergedPokedex, formsIndex, seasonSpeciesIds, seasonSpeciesIdSet);
+  const allAvailableSpecies = buildAvailableSpecies(mergedPokedex, formsIndex, selectableSpeciesIds, seasonSpeciesIdSet);
+
   datasetCache.value = {
     localization: localizationData,
     pokedex: mergedPokedex,
     formsIndex,
     moves: mergedMoves,
-    learnsets,
+    // learnsets starts null and is populated when learnsetsReady resolves.
+    // getLearnsetMap is null-safe via optional chaining (learnsets.js:79).
+    learnsets: null,
     abilities: mergedAbilities,
     items: mergedItems,
     championsVgc,
-    usage,
+    // usage starts null and derivative tables start empty; populated when
+    // usageReady resolves. All consumers are null-safe via `datasets?.usageLookup?.…`
+    // (recommendation-scoring/teammates.js, usage.js, main.js builder option sorts).
+    usage: null,
     usageOfficial,
-    usageLookup: buildUsageLookup(usage),
-    globalMoveUsageCounts: buildGlobalMoveUsageCounts(usage, moveLookup),
-    globalItemUsageCounts: buildGlobalItemUsageCounts(usage, itemLookup),
+    usageLookup: new Map(),
+    globalMoveUsageCounts: new Map(),
+    globalItemUsageCounts: new Map(),
     localizedSpeciesNames,
     localizedItemNames,
     localizedMoveNames,
     localizedAbilityNames,
+    teamPlannerAssets,
     pokeIconMap,
-    availableSpecies: buildAvailableSpecies(mergedPokedex, formsIndex, championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || []),
+
+    seasonSpeciesIds,
+    availableSpecies: seasonAvailableSpecies,
+    seasonAvailableSpecies,
+    allAvailableSpecies,
     speciesIndex: buildSpeciesIndex(mergedPokedex),
     moveLookup,
     moveSearchLookup,
@@ -310,10 +373,86 @@ export async function loadDatasets() {
     abilitySearchLookup,
     itemLookup,
     itemSearchLookup,
-    pasteSpeciesCounts: buildPasteSpeciesCounts(pasteTeams),
-    pasteCorePairs: buildPasteCorePairs(pasteTeams),
+    // Stored for ensureUsageData() to build derivative tables lazily.
+    _moveLookupForUsage: moveLookup,
+    _itemLookupForUsage: itemLookup,
+    // paste counts/cores start empty; populated when pasteTeamsReady resolves.
+    // team-role-meta.js consumers are null-safe via `|| {}` and `Array.isArray(…) ? … : []`.
+    pasteSpeciesCounts: {},
+    pasteCorePairs: [],
   };
+  // Wire learnsets in once the deferred fetch resolves. Mutating the cached
+  // object means existing references to `datasets.learnsets` start seeing
+  // real data without re-issuing loadDatasets.
+  datasetCache.value.learnsetsReady = learnsetsPromise
+    .then((learnsets) => {
+      datasetCache.value.learnsets = learnsets;
+      return learnsets;
+    })
+    .catch((error) => {
+      console.error("learnsets.json failed to load", error);
+      // Keep learnsets as null; null-safe call sites continue to work.
+      // Surface the failure for the user-visible status line per the
+      // \"不引入静默 fallback\" rule — re-throw so awaiters can react.
+      throw error;
+    });
+  // Same pattern for usage.json (~30 MB) — derivative tables are built once
+  // the fetch resolves. The fetch is deferred: ensureUsageData() starts it
+  // on idle or first team member add, not at boot. All consumers are
+  // null-safe via optional chaining on datasets.usageLookup etc.
+  datasetCache.value.usageReady = null;
+  datasetCache.value.pasteTeamsReady = null;
   return datasetCache.value;
+}
+
+let usageFetchStarted = false;
+
+/**
+ * Start the usage.json (~30 MB) fetch if not already in progress.
+ * Idempotent — safe to call multiple times. Returns the usageReady promise.
+ * Called from main.js on idle callback and on first team member add.
+ */
+export function ensureUsageData() {
+  const datasets = datasetCache.value;
+  if (!datasets) return null;
+  if (datasets.usageReady) return datasets.usageReady;
+  if (usageFetchStarted) return null;
+  usageFetchStarted = true;
+
+  const usagePromise = fetchJson(DATA_PATHS.usage);
+  datasets.usageReady = usagePromise
+    .then((usage) => {
+      datasets.usage = usage;
+      datasets.usageLookup = buildUsageLookup(usage);
+      datasets.globalMoveUsageCounts = buildGlobalMoveUsageCounts(usage, datasets._moveLookupForUsage);
+      datasets.globalItemUsageCounts = buildGlobalItemUsageCounts(usage, datasets._itemLookupForUsage);
+      return usage;
+    })
+    .catch((error) => {
+      console.error("usage.json failed to load", error);
+      throw error;
+    });
+  return datasets.usageReady;
+}
+
+export function ensurePasteTeamMetaData() {
+  const datasets = datasetCache.value;
+  if (!datasets) return null;
+  if (datasets.pasteTeamsReady) return datasets.pasteTeamsReady;
+  if (pasteTeamsFetchStarted) return null;
+  pasteTeamsFetchStarted = true;
+
+  datasets.pasteTeamsReady = fetchJson(DATA_PATHS.pasteTeams)
+    .then((pasteTeams) => {
+      datasets.pasteSpeciesCounts = buildPasteSpeciesCounts(pasteTeams);
+      datasets.pasteCorePairs = buildPasteCorePairs(pasteTeams);
+      return pasteTeams;
+    })
+    .catch((error) => {
+      console.error("paste_teams_champions_mb.json failed to load", error);
+      throw error;
+    });
+  return datasets.pasteTeamsReady;
 }
 
 function sortTierEntries(entries) {
