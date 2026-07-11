@@ -163,7 +163,15 @@ export function buildRoleMeta(library = [], datasets = {}, options = {}) {
 }
 
 export function getMetaHash(meta = {}) {
-  const ids = (meta.entries || []).map((entry) => entry.speciesId).join(",");
-  const coreCount = (meta.cores || []).length;
-  return `${meta.source || "empty"}|${ids}|${meta.entries?.length || 0}|cores=${coreCount}`;
+  const entries = (meta.entries || []).map((entry) => ({
+    speciesId: entry.speciesId || "",
+    weight: Number(entry.weight || 0),
+    config: entry.config || null,
+  }));
+  const cores = (meta.cores || []).map((core) => ({
+    a: core.a || "",
+    b: core.b || "",
+    weight: Number(core.weight || 0),
+  }));
+  return JSON.stringify({source: meta.source || "empty", entries, cores});
 }

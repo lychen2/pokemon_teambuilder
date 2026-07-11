@@ -21,6 +21,7 @@ const DUPLICATE_WEATHER_LEAD_PENALTY = 3;
 const DUPLICATE_WEATHER_LINEUP_PENALTY = 2.5;
 const EXTRA_MEGA_LEAD_PENALTY = 12;
 const EXTRA_MEGA_LINEUP_PENALTY = 18;
+const MISSING_MEGA_LINEUP_PENALTY = 14;
 const LEAD_ROLE_BONUS = Object.freeze({
   fakeout: 4,
   tailwind: 3,
@@ -105,6 +106,11 @@ function getDuplicateRolePenalty(team = [], roleId, penaltyPerExtra) {
 
 function getExtraMegaPenalty(team = [], penaltyPerExtra = 0) {
   return Math.max(0, countMegaConfigs(team) - 1) * penaltyPerExtra;
+}
+
+function getMissingMegaPenalty(lineup = [], fullTeam = [], penalty = 0) {
+  if (!countMegaConfigs(fullTeam)) return 0;
+  return countMegaConfigs(lineup) ? 0 : penalty;
 }
 
 function getLeadUtilityBonus(pair = []) {
@@ -334,7 +340,8 @@ function scoreLineup(lineup, opponentTeam, leadScore, context) {
   }, 0);
   const roles = new Set(lineup.flatMap((config) => getUtilityRoles(config)));
   const weatherPenalty = getDuplicateRolePenalty(lineup, "weather", DUPLICATE_WEATHER_LINEUP_PENALTY);
-  const megaPenalty = getExtraMegaPenalty(lineup, EXTRA_MEGA_LINEUP_PENALTY);
+  const megaPenalty = getExtraMegaPenalty(lineup, EXTRA_MEGA_LINEUP_PENALTY)
+    + getMissingMegaPenalty(lineup, context.team, MISSING_MEGA_LINEUP_PENALTY);
   return answerScore - exposure * 0.45 + roles.size * 0.75 + leadScore * 0.5 - weatherPenalty - megaPenalty;
 }
 
@@ -387,8 +394,8 @@ function summarizeLeadPairs(team, opponentTeam, context) {
   const opponentPairs = getPairEntries(opponentTeam, 2);
   return myPairs.map((pair) => {
     const summary = summarizeLeadPair(pair, opponentPairs, context);
-    return {...summary, ...summarizeLeadLineup(pair, team, opponentTeam, summary.score, context)};
-  }).sort((left, right) => right.score - left.score || right.lineupScore - left.lineupScore).slice(0, PREVIEW_LIMIT);
+    return {...summary, ...summarizeLeadLineup(pair, team, opponentTeam, summary.score, {...context, team})};
+  }).sort((left, right) => right.lineupScore - left.lineupScore || right.score - left.score).slice(0, PREVIEW_LIMIT);
 }
 
 function summarizeThreats(team, opponentTeam, context) {
@@ -457,9 +464,46 @@ function buildBoardMatrix(team, opponentTeam, context) {
   return {allyHeaders, opponentHeaders, rows, maxAbsDelta};
 }
 
+function updateMatchupFingerprint(hash, value, seen = new WeakSet()) {
+  if (value === null) return hashUpdate(hash, "null;");
+  if (value === undefined) return hashUpdate(hash, "undefined;");
+  const valueType = typeof value;
+  if (valueType !== "object") return hashUpdate(hash, `${valueType}:${String(value)};`);
+  if (seen.has(value)) return hashUpdate(hash, "cycle;");
+  seen.add(value);
+  if (Array.isArray(value)) {
+    hash = hashUpdate(hash, `array:${value.length}:`);
+    value.forEach((item) => {
+      hash = updateMatchupFingerprint(hash, item, seen);
+    });
+  } else {
+    const keys = Object.keys(value).sort();
+    hash = hashUpdate(hash, `object:${keys.length}:`);
+    keys.forEach((key) => {
+      hash = hashUpdate(hash, `key:${key};`);
+      hash = updateMatchupFingerprint(hash, value[key], seen);
+    });
+  }
+  seen.delete(value);
+  return hashUpdate(hash, ";end;");
+}
+
+function hashUpdate(hash, text) {
+  let next = hash;
+  for (let index = 0; index < text.length; index += 1) {
+    next ^= text.charCodeAt(index);
+    next = Math.imul(next, 16777619);
+  }
+  return next >>> 0;
+}
+
+function fingerprintMatchupValue(value) {
+  return updateMatchupFingerprint(2166136261, value).toString(16).padStart(8, "0");
+}
+
 function buildMatchupCacheKey(team = [], opponentTeam = [], fieldState = {}) {
-  const allyKey = team.map((entry) => entry.id).join(",");
-  const opponentKey = opponentTeam.map((entry) => `${entry.speciesId}:${entry.selectedConfigId || ""}`).join(",");
+  const allyKey = fingerprintMatchupValue(team);
+  const opponentKey = fingerprintMatchupValue(opponentTeam);
   const allyFlags = Object.entries(fieldState.allyFlags || {}).map(([key, flags]) => `${key}:${Number(Boolean(flags?.terastallized))}${Number(Boolean(flags?.paralyzed))}`).sort().join(",");
   const opponentFlags = Object.entries(fieldState.opponentFlags || {}).map(([key, flags]) => `${key}:${Number(Boolean(flags?.terastallized))}${Number(Boolean(flags?.paralyzed))}`).sort().join(",");
   return [allyKey, opponentKey, Number(Boolean(fieldState.allyTailwind)), Number(Boolean(fieldState.opponentTailwind)), Number(Boolean(fieldState.trickRoom)), allyFlags, opponentFlags].join("|");

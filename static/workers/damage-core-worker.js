@@ -81,18 +81,22 @@ $.isEmptyObject = (value) => !value || Object.keys(value).length === 0;
 self.$ = $;
 self.jQuery = $;
 
+function workerAssetUrl(path) {
+  return new URL(path, self.location.origin).href;
+}
+
 importScripts(
-  "../../vendor/champions-damage-core/stat_data.js",
-  "../../vendor/champions-damage-core/type_data.js",
-  "../../vendor/champions-damage-core/nature_data.js",
-  "../../vendor/champions-damage-core/ability_data.js",
-  "../../vendor/champions-damage-core/item_data.js",
-  "../../vendor/champions-damage-core/move_data.js",
-  "../../vendor/champions-damage-core/pokedex.js",
-  "../../vendor/champions-damage-core/ko_chance.js",
-  "../../vendor/champions-damage-core/damage_MASTER.js",
-  "../../vendor/champions-damage-core/damage_SV.js",
-  "../../vendor/champions-damage-core/ap_calc.js",
+  workerAssetUrl("/vendor/champions-damage-core/stat_data.js"),
+  workerAssetUrl("/vendor/champions-damage-core/type_data.js"),
+  workerAssetUrl("/vendor/champions-damage-core/nature_data.js"),
+  workerAssetUrl("/vendor/champions-damage-core/ability_data.js"),
+  workerAssetUrl("/vendor/champions-damage-core/item_data.js"),
+  workerAssetUrl("/vendor/champions-damage-core/move_data.js"),
+  workerAssetUrl("/vendor/champions-damage-core/pokedex.js"),
+  workerAssetUrl("/vendor/champions-damage-core/ko_chance.js"),
+  workerAssetUrl("/vendor/champions-damage-core/damage_MASTER.js"),
+  workerAssetUrl("/vendor/champions-damage-core/damage_SV.js"),
+  workerAssetUrl("/vendor/champions-damage-core/ap_calc.js"),
 );
 
 gen = 10;
@@ -211,9 +215,29 @@ function resolveSpecies(input) {
   }
   const normalizedName = speciesLookup.get(normalizeCalcName(directName));
   if (normalizedName) return normalizedName;
-  const normalizedId = speciesLookup.get(normalizeCalcName(input.speciesId || ""));
+  const speciesId = String(input.speciesId || "").trim();
+  const megaFromId = speciesId.match(/^(.*)-Mega(?:-([A-Z]))?$/);
+  if (megaFromId) {
+    const baseName = megaFromId[1];
+    const suffix = megaFromId[2] || "";
+    const candidate = suffix ? `Mega ${baseName} ${suffix}` : `Mega ${baseName}`;
+    const directMega = speciesLookup.get(normalizeCalcName(candidate));
+    if (directMega) return directMega;
+    const base = speciesLookup.get(normalizeCalcName(baseName));
+    if (base) {
+      const rebuilt = suffix ? `Mega ${base} ${suffix}` : `Mega ${base}`;
+      if (pokedex[rebuilt]) return rebuilt;
+    }
+  }
+  const normalizedId = speciesLookup.get(normalizeCalcName(speciesId));
   if (normalizedId) return normalizedId;
-  throw new Error(`伤害计算器里找不到物种：${directName || input.speciesId || "未知"}`);
+  const parts = speciesId.split("-");
+  for (let drop = parts.length - 1; drop >= 1; drop--) {
+    const baseForm = parts.slice(0, drop).join("-");
+    const baseName = speciesLookup.get(normalizeCalcName(baseForm));
+    if (baseName) return baseName;
+  }
+  throw new Error(`伤害计算器里找不到物种：${directName || speciesId || "未知"}`);
 }
 
 function calcHp(base, points) {

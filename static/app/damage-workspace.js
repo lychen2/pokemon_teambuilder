@@ -3,6 +3,8 @@ let requestId = 0;
 const pendingRequests = new Map();
 
 const REQUEST_TIMEOUT_MS = 5000;
+const DAMAGE_WORKER_VERSION = "damage-core-absolute-v4";
+
 
 function clearPendingTimeout(pending) {
   if (pending?.timeoutId) {
@@ -21,7 +23,7 @@ function getWorker() {
   if (workerInstance) {
     return workerInstance;
   }
-  workerInstance = new Worker(new URL("../workers/damage-core-worker.js", import.meta.url));
+  workerInstance = new Worker(`${new URL("../workers/damage-core-worker.js", import.meta.url).href}?v=${DAMAGE_WORKER_VERSION}`);
   workerInstance.addEventListener("message", (event) => {
     const {id, ok, result, error} = event.data || {};
     const pending = pendingRequests.get(id);

@@ -17,7 +17,7 @@ function sheetSpriteMarkup(spritePosition, className = "") {
   return `<span class="${classes}" style="background-position: ${-x}px ${-y}px"></span>`;
 }
 
-function pokeIconMarkup(url, label, spritePosition) {
+function standaloneIconMarkup(url, label, spritePosition, className = "") {
   if (!url) {
     return "";
   }
@@ -25,18 +25,25 @@ function pokeIconMarkup(url, label, spritePosition) {
     ? `${-spritePosition.x}px ${-spritePosition.y}px`
     : "0 0";
   return `
-    <span class="sprite sprite-image" style="--fallback-position: ${fallbackPosition};" title="${escapeAttribute(label)}">
-      <img class="poke-icon-image" src="${escapeAttribute(url)}" alt="" aria-hidden="true" loading="eager" decoding="async" onerror="this.parentElement.classList.add('poke-icon-error')">
+    <span class="sprite sprite-image ${escapeAttribute(className)}" style="--fallback-position: ${fallbackPosition};" title="${escapeAttribute(label)}">
+      <img class="poke-icon-image" src="${escapeAttribute(url)}" alt="" aria-hidden="true" loading="lazy" decoding="async" onload="this.parentElement.classList.add('poke-icon-loaded')" onerror="this.parentElement.classList.add('poke-icon-error')">
     </span>
   `;
 }
 
-function getPokeIconUrl(config, datasets) {
+function getStandalonePokemonIconUrl(config, datasets, iconScheme) {
   const speciesId = config?.spriteSpeciesId || config?.speciesId || "";
   if (!speciesId) {
     return "";
   }
+  if (iconScheme === ICON_SCHEMES.CHAMPIONS_OFFICIAL) {
+    return datasets?.championsIconMaps?.pokemon?.[speciesId] || "";
+  }
   return datasets?.pokeIconMap?.[speciesId] || "";
+}
+
+function getStandaloneItemIconEntry(itemId, datasets) {
+  return datasets?.championsIconMaps?.items?.[itemId] || null;
 }
 
 function getSpriteLabel(config, state) {
@@ -50,12 +57,25 @@ function getSpriteLabel(config, state) {
   return config?.displayName || config?.speciesName || config?.speciesId || "Pokemon";
 }
 
+
+export function itemIconMarkup(itemInfo, state, className = "") {
+  const itemId = itemInfo?.id || itemInfo?.key || "";
+  if (state?.iconScheme !== ICON_SCHEMES.CHAMPIONS_OFFICIAL || !itemId) {
+    return "";
+  }
+  const iconEntry = getStandaloneItemIconEntry(itemId, state?.datasets);
+  if (!iconEntry || !iconEntry.url) {
+    return "";
+  }
+  const label = itemInfo.localizedName || itemInfo.name || itemId;
+  return standaloneIconMarkup(iconEntry.url, label, null, className);
+}
 export function spriteMarkup(config, state) {
   const label = getSpriteLabel(config, state);
-  if (state?.iconScheme === ICON_SCHEMES.POKE_ICONS) {
-    const url = getPokeIconUrl(config, state.datasets);
+  if (state?.iconScheme === ICON_SCHEMES.POKE_ICONS || state?.iconScheme === ICON_SCHEMES.CHAMPIONS_OFFICIAL) {
+    const url = getStandalonePokemonIconUrl(config, state.datasets, state.iconScheme);
     if (url) {
-      return pokeIconMarkup(url, label, config?.spritePosition);
+      return standaloneIconMarkup(url, label, config?.spritePosition);
     }
     return sheetSpriteMarkup(config?.spritePosition, "sprite-fallback");
   }

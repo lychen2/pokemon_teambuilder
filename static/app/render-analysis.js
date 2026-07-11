@@ -406,7 +406,7 @@ function roleCardMarkup(entry, language, state) {
 
 function roleSetMarkup(roleIds = [], language, emptyKey = "common.none") {
   if (!roleIds.length) {
-    return `<span class="mini-pill">${t(language, emptyKey)}</span>`;
+    return "";
   }
   return roleIds.map((roleId) => renderRolePill(roleId, language, "mini-pill")).join("");
 }
@@ -421,18 +421,8 @@ function moveRoleLineMarkup(entry, language, state) {
   `;
 }
 
-function roleReasonMarkup(entry, language) {
-  const reasons = [
-    ...entry.roleReasons.primary,
-    ...Object.values(entry.roleReasons.secondary).flat(),
-  ];
-  if (!reasons.length) return "";
-  return `
-    <div class="single-role-block">
-      <div class="analysis-label">${t(language, "analysis.roleReasonTitle")}</div>
-      <p class="muted role-reason-copy">${escapeHtml(reasons.map((key) => t(language, key)).join(" / "))}</p>
-    </div>
-  `;
+function roleReasonMarkup(_entry, _language) {
+  return "";
 }
 
 function itemRoleSummaryMarkup(entry, language, state) {
@@ -446,6 +436,16 @@ function itemRoleSummaryMarkup(entry, language, state) {
           return `<span class="mini-pill">${escapeHtml(itemName)} → ${escapeHtml(itemEntry.roleIds.map((roleId) => t(language, `analysis.role.${roleId}`)).join(" / "))}</span>`;
         }).join("")}
       </div>
+    </div>
+  `;
+}
+
+function optionalSingleRoleBlock(label, bodyMarkup) {
+  if (!bodyMarkup) return "";
+  return `
+    <div class="single-role-block">
+      <div class="analysis-label">${label}</div>
+      <div class="analysis-inline-pills">${bodyMarkup}</div>
     </div>
   `;
 }
@@ -465,10 +465,7 @@ function singleRoleCardMarkup(entry, language, state) {
         <div class="analysis-label">${t(language, "analysis.singlePrimary")}</div>
         <div class="analysis-inline-pills">${renderRolePill(entry.primary, language, "mini-pill analysis-good-pill")}</div>
       </div>
-      <div class="single-role-block">
-        <div class="analysis-label">${t(language, "analysis.singleSecondary")}</div>
-        <div class="analysis-inline-pills">${roleSetMarkup(entry.secondary.slice(0, 8), language)}</div>
-      </div>
+      ${optionalSingleRoleBlock(t(language, "analysis.singleSecondary"), roleSetMarkup(entry.secondary.slice(0, 8), language))}
       ${metaPositionMarkup(entry.metaPosition, language)}
       ${roleReasonMarkup(entry, language)}
       <div class="single-role-block">
@@ -476,12 +473,14 @@ function singleRoleCardMarkup(entry, language, state) {
         <p class="muted role-reason-copy">${escapeHtml(t(language, `analysis.moveSlotQuality.${entry.moveSlotQuality}`))}</p>
       </div>
       ${itemRoleSummaryMarkup(entry, language, state)}
-      <div class="single-role-block">
-        <div class="analysis-label">${t(language, "analysis.moveRoleTitle")}</div>
-        <div class="single-role-move-list">
-          ${entry.moveRoles.map((moveEntry) => moveRoleLineMarkup(moveEntry, language, state)).join("")}
+      ${entry.moveRoles.some((moveEntry) => moveEntry.roleIds.length) ? `
+        <div class="single-role-block">
+          <div class="analysis-label">${t(language, "analysis.moveRoleTitle")}</div>
+          <div class="single-role-move-list">
+            ${entry.moveRoles.filter((moveEntry) => moveEntry.roleIds.length).map((moveEntry) => moveRoleLineMarkup(moveEntry, language, state)).join("")}
+          </div>
         </div>
-      </div>
+      ` : ""}
     </article>
   `;
 }
@@ -619,46 +618,6 @@ function renderRolesPanel(analysis, language, state) {
         ${analysis.roles.single.map((entry) => singleRoleCardMarkup(entry, language, state)).join("")}
       </div>
     </section>
-    <div class="analysis-detail-grid">
-      <section class="subpanel">
-        <h3>${t(language, "analysis.rolesTacticalTitle")}</h3>
-        <div class="analysis-role-grid">
-          ${analysis.roles.tactical.map((entry) => roleCardMarkup(entry, language, state)).join("")}
-        </div>
-      </section>
-      <section class="subpanel">
-        <h3>${t(language, "analysis.rolesSupportTitle")}</h3>
-        <div class="analysis-role-grid">
-          ${analysis.roles.support.map((entry) => roleCardMarkup(entry, language, state)).join("")}
-        </div>
-      </section>
-    </div>
-    <div class="analysis-detail-grid">
-      <section class="subpanel">
-        <h3>${t(language, "analysis.rolesStructureTitle")}</h3>
-        <div class="analysis-role-grid">
-          ${analysis.roles.structure.map((entry) => roleCardMarkup(entry, language, state)).join("")}
-        </div>
-      </section>
-      <section class="subpanel">
-        <h3>${t(language, "analysis.rolesBiasTitle")}</h3>
-        <div class="analysis-role-grid">
-          ${analysis.roles.attackBiases.map((entry) => roleCardMarkup(entry, language, state)).join("")}
-        </div>
-      </section>
-    </div>
-    <section class="subpanel">
-      <h3>${t(language, "analysis.rolesGapTitle")}</h3>
-      ${analysis.roles.missing.length
-        ? `<div class="analysis-inline-pills analysis-gap-pills">${analysis.roles.missing.map((roleId) => renderRolePill(roleId, language, "mini-pill analysis-alert-pill")).join("")}</div>`
-        : emptyTextMarkup(language, "analysis.noMissingRoles")}
-    </section>
-    <section class="subpanel">
-      <h3>${t(language, "views.speedTitle")}</h3>
-      <div class="stack-list compact-list">
-        ${analysis.speed.map((entry) => speedCardMarkup(entry, language, state)).join("")}
-      </div>
-    </section>
   `;
 }
 
@@ -731,9 +690,147 @@ function coreLibraryCandidateMarkup(entry, language, state) {
   `;
 }
 
+function getReferenceSearchText(entry = {}, state, language) {
+  return [
+    entry.title || "",
+    t(language, `analysis.reference.archetype.${entry.archetypeId}`),
+    ...(entry.pressureLabels || []),
+    ...(entry.coreMembers || []).map((member) => getLocalizedMemberLabel(member, state, language)),
+  ].join(" ").toLowerCase();
+}
+
+function getFilteredReferenceEntries(analysis, state, language) {
+  const referenceTeams = analysis.referenceTeams || {entries: []};
+  const filter = state.referenceTeamFilter || "all";
+  const query = String(state.referenceTeamQuery || "").trim().toLowerCase();
+  return (referenceTeams.entries || []).filter((entry) => {
+    const filterMatch = filter === "all" || entry.archetypeId === filter;
+    const queryMatch = !query || getReferenceSearchText(entry, state, language).includes(query);
+    return filterMatch && queryMatch;
+  });
+}
+
+function referenceMemberIconsMarkup(members = [], state, language) {
+  return members.map((member) => `
+    <span class="reference-core-icon" title="${escapeHtml(getLocalizedMemberLabel(member, state, language))}">
+      ${spriteMarkup(member, state)}
+    </span>
+  `).join("");
+}
+
+function referenceDefensiveAnswerMarkup(entry, language, state) {
+  return `
+    <article class="reference-answer-card">
+      ${memberPillMarkup(entry.member, state)}
+      <div class="analysis-inline-pills">
+        ${entry.labels.map((label) => `<span class="mini-pill analysis-good-pill">${escapeHtml(label)}</span>`).join("")}
+      </div>
+    </article>
+  `;
+}
+
+function referenceOffensiveAnswerMarkup(entry, language, state) {
+  return `
+    <article class="reference-answer-card">
+      ${memberPillMarkup(entry.member, state)}
+      <div class="analysis-inline-pills">
+        ${entry.hits.map((hit) => `<span class="mini-pill analysis-good-pill">${escapeHtml(getLocalizedMemberLabel(hit.target, state, language))} · ${formatMultiplier(hit.effectiveness)}x</span>`).join("")}
+      </div>
+    </article>
+  `;
+}
+
+function referenceRoleAnswerMarkup(entry, language, state) {
+  return `
+    <article class="reference-answer-card">
+      ${renderRolePill(entry.roleId, language, "mini-pill analysis-good-pill")}
+      <div class="analysis-member-pills">${memberPillsMarkup(entry.members, state)}</div>
+    </article>
+  `;
+}
+
+function referenceLineupMarkup(members = [], language, state) {
+  if (!members.length) return "";
+  const lead = members.slice(0, 2);
+  const back = members.slice(2, 4);
+  return `
+    <div class="reference-lineup-block">
+      <div class="analysis-label">${t(language, "analysis.reference.lineupTitle")}</div>
+      <div class="reference-lineup-rows">
+        <div class="reference-lineup-row">
+          <span class="analysis-label">${t(language, "analysis.reference.leadTitle")}</span>
+          <div class="reference-lineup-icons">${referenceMemberIconsMarkup(lead, state, language)}</div>
+        </div>
+        <div class="reference-lineup-row">
+          <span class="analysis-label">${t(language, "analysis.reference.backTitle")}</span>
+          <div class="reference-lineup-icons">${referenceMemberIconsMarkup(back, state, language)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+function referenceAnswersSectionMarkup(labelKey, entries = [], renderer, _emptyKey, language, state) {
+  if (!entries.length) return "";
+  return `
+    <div class="reference-answer-block">
+      <div class="analysis-label">${t(language, labelKey)}</div>
+      <div class="reference-answer-list">
+        ${entries.map((entry) => renderer(entry, language, state)).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function referenceTeamCardMarkup(entry, language, state) {
+  const title = entry.title || t(language, `analysis.reference.archetype.${entry.subModeId || entry.archetypeId}`);
+  return `
+    <article class="analysis-core-card reference-team-card">
+      <div class="reference-team-head">
+        <div class="reference-team-title">
+          <strong>${escapeHtml(title)}</strong>
+          ${entry.title ? `<span class="source-tag">${escapeHtml(t(language, "analysis.reference.archetype.mega"))}</span>` : ""}
+          <span class="source-tag">${t(language, "analysis.reference.sampleCount", {count: entry.sampleCount})}</span>
+        </div>
+        <div class="reference-core-icons">${referenceMemberIconsMarkup(entry.coreMembers, state, language)}</div>
+      </div>
+      ${referenceLineupMarkup(entry.lineup, language, state)}
+    </article>
+  `;
+}
+
+function renderReferenceTeamsPanel(analysis, language, state) {
+  const referenceTeams = analysis.referenceTeams || {entries: [], filters: []};
+  const entries = getFilteredReferenceEntries(analysis, state, language);
+  return `
+    <section class="subpanel reference-team-panel">
+      <div class="section-head reference-team-toolbar">
+        <div>
+          <h3>${t(language, "analysis.reference.title")}</h3>
+          <p class="muted">${t(language, "analysis.reference.copy")}</p>
+        </div>
+        <div class="reference-team-controls">
+          <select class="analysis-focus-select" data-reference-team-filter>
+            <option value="all">${t(language, "analysis.reference.filterAll")}</option>
+            ${(referenceTeams.filters || []).map((archetypeId) => `
+              <option value="${escapeHtml(archetypeId)}" ${state.referenceTeamFilter === archetypeId ? "selected" : ""}>${escapeHtml(t(language, `analysis.reference.archetype.${archetypeId}`))}</option>
+            `).join("")}
+          </select>
+          <input class="reference-team-search" type="search" data-reference-team-query value="${escapeHtml(state.referenceTeamQuery || "")}" placeholder="${escapeHtml(t(language, "analysis.reference.searchPlaceholder"))}">
+        </div>
+      </div>
+      ${referenceTeams.entries?.length
+        ? `<div class="reference-team-grid">${entries.length ? entries.map((entry) => referenceTeamCardMarkup(entry, language, state)).join("") : `<p class="empty-state">${t(language, "analysis.reference.noFiltered")}</p>`}</div>`
+        : `<p class="empty-state">${t(language, "analysis.reference.empty")}</p>`}
+    </section>
+  `;
+}
+
 function renderCoresPanel(analysis, language, focusId, state) {
   const focusEntry = analysis.cores.suggestionsById[focusId];
   return `
+    ${renderReferenceTeamsPanel(analysis, language, state)}
     <div class="analysis-detail-grid">
       <section class="subpanel">
         <div class="section-head">

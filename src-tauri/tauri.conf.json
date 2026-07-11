@@ -4,7 +4,7 @@
   "identifier": "com.lychen2.poketype",
   "build": {
     "beforeBuildCommand": "npm run desktop:prepare",
-    "beforeDevCommand": "npm run desktop:prepare",
+    "beforeDevCommand": "npm run desktop:prepare:dev",
     "frontendDist": "../dist/desktop"
   },
   "app": {

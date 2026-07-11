@@ -1,10 +1,10 @@
 import {analyzeTeam} from "./analysis.js";
-import {analyzePokemonDamageRoles, buildRoleMeta} from "./team-roles.js";
+import {analyzePokemonDamageRoles, buildRoleMeta, createRoleContext} from "./team-roles.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
 import {buildSyntheticSpeedEntries, clearSpeciesTemplateCache} from "./champions-vgc.js";
-import {DEFAULT_ICON_SCHEME, ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
-import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, ensurePasteTeamMetaData, loadDatasets} from "./data.js";
-import {createDamageWorkspace} from "./damage-workspace.js";
+import {DEFAULT_ICON_SCHEME, ICON_SCHEMES, IS_DESKTOP_RUNTIME, NATURE_TRANSLATIONS} from "./constants.js";
+import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, ensurePasteTeamMetaData, ensureUsageData, loadDatasets} from "./data.js";
+import {createDamageWorkspace} from "./damage-workspace.js?v=damage-core-root-v3";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
 import {
   buildConfigFromBuilder,
@@ -33,7 +33,6 @@ import {
 } from "./matchup-selection.js";
 import {buildCounterOpponentSelections} from "./opponent-team-generator.js";
 import {
-  estimatePersistSize,
   exportFullState,
   flushPersistState,
   importFullState,
@@ -50,7 +49,7 @@ import {
 } from "./recommendation-preferences.js";
 import {recommendConfigs} from "./recommendations.js";
 import {buildOutputReferenceConfigs, calculateOutputStrengthTiers} from "./output-strength.js";
-import {renderAnalysis, renderDamage, renderImportFeedback, renderLibrary, renderMatchup, renderRecommendations, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
+import {renderAnalysis, renderDamage, renderImportFeedback, renderLibrary, renderLibrarySelection, renderMatchup, renderRecommendations, renderSavedOpponentTeams, renderSavedTeams, renderSpeedTiers, renderStatus, renderTeam, renderTeamImportFeedback} from "./render.js";
 import {renderRecommendationCards} from "./render-recommendations.js";
 import {invalidateRenderCache, setInnerHTMLIfChanged} from "./render-cache.js";
 import {closeShortcutsHelp, installKeybindings, openShortcutsHelp} from "./keybindings.js";
@@ -62,6 +61,12 @@ import {renderQuickStart} from "./render-quick-start.js";
 import {renderUsageView} from "./render-usage.js";
 import {renderVgcpastesPicker} from "./render-vgcpastes-picker.js";
 import {renderVgcpastesSuggest} from "./render-vgcpastes-suggest.js";
+import {
+  createSelectionPracticeRound,
+  recordSelectionPracticeFeedback,
+  renderSelectionPractice,
+  solveSelectionPracticeRound,
+} from "./selection-practice.js";
 import {compareSearchMatches, resolveSearchMatch} from "./search-utils.js";
 import {createHistoryStore, initializeHistory, recordHistory, redoHistory, snapshotHistoryState, undoHistory} from "./history.js";
 import {exportConfigToEditableText, exportLibraryToShowdown, exportTeamToShowdown, hydrateConfigs, parseShowdownLibrary} from "./showdown.js";
@@ -72,6 +77,7 @@ import {toast} from "./toast.js";
 import {getUsageItemEntries, getUsageMoveEntries} from "./usage.js";
 import {buildUsageConfigText} from "./usage-stats.js";
 import {formatChampionPoints, formatConfigName, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, isTypingTarget, normalizeLookupText, normalizeName} from "./utils.js";
+import {itemIconMarkup} from "./sprites.js";
 
 const MAX_TEAM_SIZE = 6;
 const DEFAULT_CONFIG_LEVEL = 50;
@@ -80,6 +86,8 @@ const DEFAULT_PRESET_NAME = "Default";
 const DEFAULT_LIBRARY_SOURCE = "default-preset";
 const VGCPASTES_SETS_PATH = "./static/paste_sets_champions_mb.json";
 const IMPORT_FEEDBACK_ERROR = "error";
+const TAURI_INTERNALS = window.__TAURI_INTERNALS__;
+
 const LIBRARY_SEARCH_WEIGHTS = Object.freeze({
   species: 0,
   label: 1,
@@ -246,10 +254,13 @@ const state = {
   search: "",
   matchupSearch: "",
   matchupFilters: {...DEFAULT_MATCHUP_FILTERS, types: [], roles: []},
+  referenceTeamFilter: "all",
+  referenceTeamQuery: "",
   battleField: {...DEFAULT_BATTLE_FIELD, allyFlags: {}, opponentFlags: {}},
   library: [],
   librarySearchIndex: new Map(),
   filteredLibrary: [],
+  libraryRoleContext: null,
   allSpeciesBrowser: [],
   speciesBrowser: [],
   selectedSpeciesId: null,
@@ -269,6 +280,10 @@ const state = {
   savedTeamSearch: "",
   activeTeamSidebarTab: "team",
   savedOpponentTeams: [],
+  selectionPractice: {
+    round: null,
+    feedback: [],
+  },
   damageAttackers: [],
   damageDefenders: [],
   analysis: null,
@@ -304,6 +319,7 @@ let librarySearchDebounceTimer = 0;
 let matchupSearchDebounceTimer = 0;
 let vgcpastesSearchDebounceTimer = 0;
 let savedTeamSearchDebounceTimer = 0;
+let referenceTeamSearchDebounceTimer = 0;
 
 function attachImeAwareSearchInput(element, runHandler) {
   if (!element) return;
@@ -326,6 +342,7 @@ let activeCommandPalette = null;
 let activeModalState = null;
 let modalMutationObserver = null;
 let vgcpastesSourceIndex = null;
+let vgcpastesSourceIndexPromise = null;
 
 const TOOLTIP_OFFSET = 12;
 const BUILDER_STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
@@ -396,7 +413,7 @@ function escapeHtml(text) {
 }
 
 function normalizeIconScheme(iconScheme) {
-  return iconScheme === ICON_SCHEMES.SHOWDOWN ? ICON_SCHEMES.SHOWDOWN : ICON_SCHEMES.POKE_ICONS;
+  return Object.values(ICON_SCHEMES).includes(iconScheme) ? iconScheme : ICON_SCHEMES.POKE_ICONS;
 }
 
 function normalizeDamageField(field = {}) {
@@ -690,8 +707,7 @@ function getFullStateImportErrorMessage(error) {
   return error?.message || t(state.language, "common.unknown");
 }
 
-function warnPersistSizeIfNeeded() {
-  const size = estimatePersistSize(state);
+function updatePersistSizeWarning(size) {
   if (size > PERSIST_SIZE_WARNING_BYTES) {
     if (!persistLimitWarningShown) {
       persistLimitWarningShown = true;
@@ -705,14 +721,12 @@ function warnPersistSizeIfNeeded() {
 
 function scheduleStatePersist() {
   recordHistory(stateHistory, snapshotHistoryState(state));
-  warnPersistSizeIfNeeded();
-  schedulePersistState(state, {onError: handlePersistError});
+  schedulePersistState(state, {onError: handlePersistError, onSerialized: updatePersistSizeWarning});
 }
 
 function flushStatePersist() {
   recordHistory(stateHistory, snapshotHistoryState(state));
-  warnPersistSizeIfNeeded();
-  flushPersistState(state, {onError: handlePersistError});
+  flushPersistState(state, {onError: handlePersistError, onSerialized: updatePersistSizeWarning});
 }
 
 function resetLibraryCompare(speciesId = "") {
@@ -867,6 +881,7 @@ function refreshLibraryState() {
   }
   state.savedOpponentTeams = normalizeSavedOpponentTeams(state.savedOpponentTeams, state.datasets, state.library, state.language);
   buildLibrarySearchIndex();
+  state.libraryRoleContext = createRoleContext(state.library);
   refreshFilteredLibrary();
 }
 
@@ -917,6 +932,7 @@ function getRecommendationPool() {
 
 function refreshRecommendationsState() {
   const recommendationPool = getRecommendationPool();
+  const roleContext = createRoleContext(recommendationPool);
   const weaknessTypes = new Set((state.analysis?.coverage?.weakRows || []).map((entry) => entry.type));
   if (state.recommendFocusType && !weaknessTypes.has(state.recommendFocusType)) {
     state.recommendFocusType = "";
@@ -936,6 +952,7 @@ function refreshRecommendationsState() {
       dismissedKeys: state.dismissedRecommendationKeys,
       fieldState: state.battleField,
       megaOnly: state.recommendMegaOnly,
+      roleContext,
     },
   );
   if (state.recommendBiasAuto) {
@@ -962,13 +979,14 @@ function refreshBattleState() {
   refreshSpeedState();
   refreshOutputState();
   const recommendationPool = getRecommendationPool();
+  const recommendationRoleContext = createRoleContext(recommendationPool);
   state.analysis = analyzeTeam(
     state.team,
     state.speedTiers,
     state.language,
     recommendationPool,
     state.recommendPreferences,
-    {fieldState: state.battleField, datasets: state.datasets, damageRoles: damageRolesByConfigId},
+    {fieldState: state.battleField, datasets: state.datasets, damageRoles: damageRolesByConfigId, roleContext: recommendationRoleContext},
   );
   state.matchup = analyzeMatchup(state.team, state.opponentTeam, state.datasets, {
     fieldState: state.battleField,
@@ -998,6 +1016,7 @@ async function runDamageRoleScan() {
   if (!damageWorkspace) damageWorkspace = createDamageWorkspace();
   const meta = buildRoleMeta(getRecommendationPool(), state.datasets);
   if (!meta?.entries?.length) return;
+  let changed = false;
   for (const config of state.team) {
     if (generation !== damageRoleScanGeneration) return;
     if (!config?.id) continue;
@@ -1005,23 +1024,25 @@ async function runDamageRoleScan() {
       const result = await analyzePokemonDamageRoles(config, meta, damageWorkspace);
       if (generation !== damageRoleScanGeneration) return;
       damageRolesByConfigId.set(config.id, result.damageRoles || []);
-      refreshAnalysisAfterDamageScan();
+      changed = true;
     } catch (error) {
       console.warn("damage-role scan failed for", config?.speciesId, error);
     }
   }
+  if (changed) refreshAnalysisAfterDamageScan();
 }
 
 function refreshAnalysisAfterDamageScan() {
   if (!state.team.length) return;
   const recommendationPool = getRecommendationPool();
+  const roleContext = createRoleContext(recommendationPool);
   state.analysis = analyzeTeam(
     state.team,
     state.speedTiers,
     state.language,
     recommendationPool,
     state.recommendPreferences,
-    {fieldState: state.battleField, datasets: state.datasets, damageRoles: damageRolesByConfigId},
+    {fieldState: state.battleField, datasets: state.datasets, damageRoles: damageRolesByConfigId, roleContext},
   );
   renderCurrentWorkspaceSection();
 }
@@ -1537,6 +1558,15 @@ function scheduleLibrarySearchRender(nextValue) {
   }, 280);
 }
 
+function scheduleReferenceTeamSearchRender(nextValue) {
+  state.referenceTeamQuery = nextValue;
+  window.clearTimeout(referenceTeamSearchDebounceTimer);
+  referenceTeamSearchDebounceTimer = window.setTimeout(() => {
+    referenceTeamSearchDebounceTimer = 0;
+    renderAnalysisSection();
+  }, 180);
+}
+
 function renderQuickStartSection() {
   renderQuickStart(state);
   renderVgcpastesPicker(state);
@@ -1670,6 +1700,10 @@ function renderDamageSection() {
   }
 }
 
+function renderSelectionPracticeSection() {
+  renderSelectionPractice(state);
+}
+
 function renderSpeedSection() {
   renderSpeedTiers(state);
 }
@@ -1704,6 +1738,9 @@ function renderCurrentWorkspaceSection() {
     case "output-view":
       renderOutputSection();
       break;
+    case "selection-practice-view":
+      renderSelectionPracticeSection();
+      break;
     default:
       renderLibrarySection();
       break;
@@ -1720,6 +1757,20 @@ function renderAll() {
   renderWorkspaceContextSection();
   renderCurrentWorkspaceSection();
   renderGuidedConfig();
+}
+
+function renderIconSchemeSections() {
+  renderQuickStartSection();
+  renderTeamSection();
+  renderCurrentWorkspaceSection();
+}
+
+function scheduleIconSchemeRender() {
+  window.requestAnimationFrame(() => {
+    invalidateRenderCache();
+    renderIconSchemeSections();
+    scheduleStatePersist();
+  });
 }
 
 function setStatus(key, params = {}) {
@@ -1818,11 +1869,15 @@ function updateIconSchemeControl() {
   }
   const showdownOption = select.querySelector('option[value="showdown"]');
   const pokeIconsOption = select.querySelector('option[value="poke-icons"]');
+  const championsOption = select.querySelector('option[value="champions-official"]');
   if (showdownOption) {
     showdownOption.textContent = t(state.language, "icons.showdown");
   }
   if (pokeIconsOption) {
     pokeIconsOption.textContent = t(state.language, "icons.pokeIcons");
+  }
+  if (championsOption) {
+    championsOption.textContent = t(state.language, "icons.championsOfficial");
   }
   select.value = state.iconScheme;
   note.textContent = t(state.language, "icons.note");
@@ -1863,9 +1918,7 @@ function setIconScheme(iconScheme, rerender = true) {
   state.iconScheme = nextScheme;
   updateIconSchemeControl();
   if (rerender) {
-    invalidateRenderCache();
-    renderAll();
-    scheduleStatePersist();
+    scheduleIconSchemeRender();
   }
 }
 
@@ -2177,6 +2230,10 @@ function applyPersistedPayload(persisted) {
   state.recommendCompareIds = Array.isArray(persisted?.recommendCompareIds)
     ? persisted.recommendCompareIds.filter(Boolean).slice(0, 2)
     : [];
+  state.selectionPractice.feedback = Array.isArray(persisted?.selectionPracticeFeedback)
+    ? persisted.selectionPracticeFeedback.filter((entry) => entry && typeof entry === "object").slice(0, 80)
+    : [];
+  state.selectionPractice.round = null;
   if (!state.datasets) {
     return;
   }
@@ -2255,6 +2312,14 @@ function downloadBlob(blob, filename) {
   window.URL.revokeObjectURL(url);
 }
 
+function invokeDesktop(command, payload) {
+  if (!TAURI_INTERNALS?.invoke) {
+    throw new Error(t(state.language, "status.shareImageDesktopOnly"));
+  }
+  return TAURI_INTERNALS.invoke(command, payload);
+}
+
+
 function undoStateChange() {
   const snapshot = undoHistory(stateHistory);
   if (!snapshot) {
@@ -2297,10 +2362,11 @@ function selectSpecies(speciesId) {
   if (searchInput) {
     searchInput.value = "";
   }
+  const previousSpeciesId = state.selectedSpeciesId;
   state.selectedSpeciesId = speciesId;
   resetLibraryCompare(speciesId);
   refreshFilteredLibrary();
-  renderLibrarySection();
+  renderLibrarySelection(state, previousSpeciesId);
 }
 
 function toggleLibraryCompare(configId) {
@@ -2319,7 +2385,7 @@ function toggleLibraryCompare(configId) {
     speciesId: state.selectedSpeciesId || "",
     selectedConfigIds: selectedIds,
   };
-  renderLibrarySection();
+  renderLibrarySelection(state, state.selectedSpeciesId);
 }
 
 function toggleMatchupFilterValue(key, value) {
@@ -3115,11 +3181,11 @@ function getMoveAutocompleteStats(move) {
   return {power, accuracy};
 }
 
-function getTypeClassName(type) {
-  return `type-${String(type || "").toLowerCase()}`;
-}
-
 function itemSpriteMarkup(item) {
+  const iconMarkup = itemIconMarkup(item, state, "builder-item-sprite-image");
+  if (iconMarkup) {
+    return iconMarkup;
+  }
   const spriteNum = Number(item?.spritenum);
   if (!Number.isFinite(spriteNum) || spriteNum < 0) {
     return `<span class="builder-item-sprite builder-item-sprite-fallback"></span>`;
@@ -4097,18 +4163,55 @@ function buildVgcpastesSourceIndex(configs = []) {
   return new Map(configs.map((config) => [getVgcpastesSourceKey(config), config.source || null]));
 }
 
-async function loadVgcpastesSourceIndex() {
-  if (vgcpastesSourceIndex) return vgcpastesSourceIndex;
-  const response = await fetch(VGCPASTES_SETS_PATH);
-  if (!response.ok) throw new Error(`Failed to load: ${VGCPASTES_SETS_PATH}`);
-  const payload = await response.json();
-  vgcpastesSourceIndex = buildVgcpastesSourceIndex(Array.isArray(payload?.configs) ? payload.configs : []);
-  return vgcpastesSourceIndex;
+function settlePrefetch(promise) {
+  return promise.then(
+    (value) => ({ok: true, value}),
+    (error) => ({ok: false, error}),
+  );
 }
 
-async function attachPresetSources(configs, path) {
+async function unwrapPrefetch(prefetchResultPromise, fallback) {
+  if (!prefetchResultPromise) {
+    return fallback();
+  }
+  const result = await prefetchResultPromise;
+  if (result.ok) {
+    return result.value;
+  }
+  throw result.error;
+}
+
+async function fetchPresetText(path) {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`Failed to load: ${path}`);
+  }
+  return response.text();
+}
+
+async function loadVgcpastesSourceIndex() {
+  if (vgcpastesSourceIndex) return vgcpastesSourceIndex;
+  if (vgcpastesSourceIndexPromise) return vgcpastesSourceIndexPromise;
+  vgcpastesSourceIndexPromise = fetch(DATA_PATHS.vgcpastesSourceIndex)
+    .then((response) => {
+      if (!response.ok) throw new Error(`Failed to load: ${DATA_PATHS.vgcpastesSourceIndex}`);
+      return response.json();
+    })
+    .then((payload) => {
+      vgcpastesSourceIndex = new Map(Object.entries(payload?.sourcesByConfigKey || {}));
+      return vgcpastesSourceIndex;
+    })
+    .catch((error) => {
+      vgcpastesSourceIndexPromise = null;
+      throw error;
+    });
+  return vgcpastesSourceIndexPromise;
+}
+
+
+async function attachPresetSources(configs, path, options = {}) {
   if (path !== DEFAULT_PRESET_PATH) return configs;
-  const sourceIndex = await loadVgcpastesSourceIndex();
+  const sourceIndex = await unwrapPrefetch(options.sourceIndexPrefetch, () => loadVgcpastesSourceIndex());
   return configs.map((config) => {
     const source = sourceIndex.get(getVgcpastesSourceKey(config));
     return {
@@ -4118,6 +4221,9 @@ async function attachPresetSources(configs, path) {
     };
   });
 }
+
+
+
 
 function isDefaultLibraryConfig(config = {}) {
   if (config.librarySource === DEFAULT_LIBRARY_SOURCE) {
@@ -4143,20 +4249,16 @@ function applyDefaultPresetLibrary(configs, feedback) {
   return {defaultCount: defaultConfigs.length, customCount: customConfigs.length, replacedCount};
 }
 
-async function loadPresetLibrary(path, name, mode = "replace") {
+async function loadPresetLibrary(path, name, mode = "replace", options = {}) {
   try {
-    const response = await fetch(path);
-    if (!response.ok) {
-      throw new Error(`Failed to load: ${path}`);
-    }
-    const text = await response.text();
+    const text = await unwrapPrefetch(options.textPrefetch, () => fetchPresetText(path));
     document.getElementById("custom-library-input").value = text;
     const {configs, feedback} = parseShowdownLibrary(text, state.datasets, {
       fallbackLevel: 50,
       language: state.language,
       resolveConvertedPoint: promptMissingPoint,
     });
-    const configsWithSources = await attachPresetSources(configs, path);
+    const configsWithSources = await attachPresetSources(configs, path, {sourceIndexPrefetch: options.sourceIndexPrefetch});
     if (path === DEFAULT_PRESET_PATH && mode === "replace") {
       const result = applyDefaultPresetLibrary(configsWithSources, feedback);
       announceStatus("status.defaultPresetUpdated", result, {toastType: "success"});
@@ -4275,6 +4377,58 @@ async function loadVgcpastesPickerData() {
     renderVgcpastesPicker(state);
     renderVgcpastesSuggest(state);
   }
+}
+
+async function startSelectionPracticeRound() {
+  await loadVgcpastesPickerData();
+  const round = createSelectionPracticeRound(state.vgcpastesPicker.teams || []);
+  if (!round) {
+    announceStatusMessage("VGCPastes 队伍数据不足，无法开始选出练习。", {toastType: "error"});
+    return;
+  }
+  state.selectionPractice.round = round;
+  renderSelectionPracticeSection();
+  scheduleStatePersist();
+}
+
+function toggleSelectionPracticeMember(memberId) {
+  const round = state.selectionPractice.round;
+  if (!round || !memberId) return;
+  if (round.leadIds.includes(memberId)) {
+    round.leadIds = round.leadIds.filter((id) => id !== memberId);
+    round.result = null;
+    renderSelectionPracticeSection();
+    return;
+  }
+  if (round.backIds.includes(memberId)) {
+    round.backIds = round.backIds.filter((id) => id !== memberId);
+    round.result = null;
+    renderSelectionPracticeSection();
+    return;
+  }
+  if (round.leadIds.length < 2) {
+    round.leadIds = [...round.leadIds, memberId];
+  } else if (round.backIds.length < 2) {
+    round.backIds = [...round.backIds, memberId];
+  }
+  round.result = null;
+  renderSelectionPracticeSection();
+}
+
+function solveSelectionPractice() {
+  const result = solveSelectionPracticeRound(state.selectionPractice.round, state.datasets, state.battleField);
+  if (!result) {
+    announceStatusMessage("请先选满前排 2 只和后排 2 只。", {toastType: "warning"});
+    return;
+  }
+  state.selectionPractice.round.result = result;
+  renderSelectionPracticeSection();
+}
+
+function saveSelectionPracticeFeedback(verdict) {
+  if (!recordSelectionPracticeFeedback(state, verdict)) return;
+  renderSelectionPracticeSection();
+  scheduleStatePersist();
 }
 
 function findVgcpastesTeam(teamId) {
@@ -4404,11 +4558,38 @@ function saveCurrentTeam() {
   };
   state.savedTeams = [snapshot, ...state.savedTeams];
   input.value = "";
-  refreshDerivedState();
-  renderAll();
+  renderSavedTeams(state);
   scheduleStatePersist();
   announceStatus("status.savedTeam", {name}, {toastType: "success"});
 }
+
+async function exportTeamShareImage() {
+  if (!state.team.length) {
+    announceStatus("status.emptyTeamExport", {}, {toastType: "warning"});
+    return;
+  }
+  const input = document.getElementById("saved-team-name");
+  const slotInput = document.getElementById("share-slot");
+  const teamIdInput = document.getElementById("share-team-id");
+  const trainerInput = document.getElementById("share-trainer-name");
+  const avatarInput = document.getElementById("share-avatar-text");
+  const name = input?.value.trim() || state.team.map((config) => config.displayLabel || config.displayName).join("-");
+  const slot = slotInput?.value.trim() || "分享队伍";
+  try {
+    const path = await invokeDesktop("export_team_share_image", {
+      showdown: exportTeamToShowdown(state.team),
+      name,
+      slot,
+      teamId: teamIdInput?.value.trim() || "",
+      trainer: trainerInput?.value.trim() || "",
+      avatar: avatarInput?.value.trim() || "",
+    });
+    announceStatus("status.exportedShareImage", {path}, {toastType: "success"});
+  } catch (error) {
+    announceStatusMessage(String(error && error.message ? error.message : error), {toastType: "error"});
+  }
+}
+
 
 function saveCurrentOpponentTeam() {
   const input = document.getElementById("saved-opponent-name");
@@ -4420,8 +4601,7 @@ function saveCurrentOpponentTeam() {
   const snapshot = createSavedOpponentSnapshot(state.opponentTeam, name);
   state.savedOpponentTeams = [snapshot, ...state.savedOpponentTeams];
   input.value = "";
-  refreshDerivedState();
-  renderAll();
+  renderSavedOpponentTeams(state);
   scheduleStatePersist();
   announceStatus("status.savedOpponentTeam", {name}, {toastType: "success"});
 }
@@ -4476,8 +4656,7 @@ function deleteSavedTeam(teamId) {
   if (state.savedTeams.length === before) {
     return;
   }
-  refreshDerivedState();
-  renderAll();
+  renderSavedTeams(state);
   scheduleStatePersist();
   announceStatus("status.deletedSavedTeam", {count: state.savedTeams.length}, {toastType: "warning"});
 }
@@ -4488,8 +4667,7 @@ function deleteSavedOpponentTeam(teamId) {
   if (state.savedOpponentTeams.length === before) {
     return;
   }
-  refreshDerivedState();
-  renderAll();
+  renderSavedOpponentTeams(state);
   scheduleStatePersist();
   announceStatus("status.deletedSavedOpponentTeam", {count: state.savedOpponentTeams.length}, {toastType: "warning"});
 }
@@ -4583,6 +4761,21 @@ function bindEvents() {
     }
     state.activeCoreConfigId = select.value || null;
     renderAnalysisSection();
+  });
+  document.getElementById("analysis-cores-panel").addEventListener("change", (event) => {
+    const select = event.target.closest("[data-reference-team-filter]");
+    if (!select || select.value === state.referenceTeamFilter) {
+      return;
+    }
+    state.referenceTeamFilter = select.value || "all";
+    renderAnalysisSection();
+  });
+  document.getElementById("analysis-cores-panel").addEventListener("input", (event) => {
+    const input = event.target.closest("[data-reference-team-query]");
+    if (!input || input.value === state.referenceTeamQuery) {
+      return;
+    }
+    scheduleReferenceTeamSearchRender(input.value);
   });
   document.getElementById("analysis-cores-panel").addEventListener("click", (event) => {
     const button = event.target.closest("[data-add-config]");
@@ -5175,6 +5368,30 @@ function bindEvents() {
       renderSavedTeams(state);
     }, 200);
   });
+  const selectionPracticeContainer = document.getElementById("selection-practice-view");
+  if (selectionPracticeContainer) {
+    selectionPracticeContainer.addEventListener("click", (event) => {
+      const newRoundButton = event.target.closest("#selection-practice-new-round-btn");
+      if (newRoundButton) {
+        void startSelectionPracticeRound();
+        return;
+      }
+      const solveButton = event.target.closest("#selection-practice-solve-btn");
+      if (solveButton) {
+        solveSelectionPractice();
+        return;
+      }
+      const memberButton = event.target.closest("[data-practice-member-id]");
+      if (memberButton && !memberButton.closest(".readonly")) {
+        toggleSelectionPracticeMember(memberButton.dataset.practiceMemberId);
+        return;
+      }
+      const feedbackButton = event.target.closest("[data-practice-feedback]");
+      if (feedbackButton) {
+        saveSelectionPracticeFeedback(feedbackButton.dataset.practiceFeedback);
+      }
+    });
+  }
   document.getElementById("team-list").addEventListener("click", (event) => {
     const openImportButton = event.target.closest("[data-open-team-import]");
     if (!openImportButton) {
@@ -5278,6 +5495,7 @@ function bindEvents() {
   });
   document.getElementById("export-library-btn").addEventListener("click", exportLibrary);
   document.getElementById("save-team-btn").addEventListener("click", saveCurrentTeam);
+  document.getElementById("export-team-share-image-btn").addEventListener("click", exportTeamShareImage);
   document.getElementById("save-opponent-team-btn").addEventListener("click", saveCurrentOpponentTeam);
   document.getElementById("auto-generate-opponent-team-btn").addEventListener("click", autoGenerateOpponentTeam);
   document.getElementById("save-config-edit-btn").addEventListener("click", saveConfigEdit);
@@ -5541,6 +5759,9 @@ function setupTooltipEvents() {
 async function initialize() {
   const persisted = loadPersistedState();
   applyPersistedPayload(persisted || {});
+  const shouldLoadDefaultPreset = !state.library.length;
+  const defaultPresetTextPrefetch = shouldLoadDefaultPreset ? settlePrefetch(fetchPresetText(DEFAULT_PRESET_PATH)) : null;
+  const defaultPresetSourceIndexPrefetch = shouldLoadDefaultPreset ? settlePrefetch(loadVgcpastesSourceIndex()) : null;
   setLanguage(state.language, false);
   setStatus("status.initializing");
   clearSpeciesTemplateCache();
@@ -5564,7 +5785,8 @@ async function initialize() {
     saveCurrentTeam,
     setLanguage,
     toggleIconScheme: () => {
-      const next = state.iconScheme === "showdown" ? "poke-icons" : "showdown";
+      const schemes = [ICON_SCHEMES.SHOWDOWN, ICON_SCHEMES.POKE_ICONS, ICON_SCHEMES.CHAMPIONS_OFFICIAL];
+      const next = schemes[(schemes.indexOf(state.iconScheme) + 1) % schemes.length];
       const selector = document.getElementById("icon-scheme-select");
       if (selector) selector.value = next;
       setIconScheme(next);
@@ -5600,7 +5822,10 @@ async function initialize() {
   });
   let loadedDefaultPreset = false;
   if (!state.library.length) {
-    const loadedConfigs = await loadPresetLibrary(DEFAULT_PRESET_PATH, DEFAULT_PRESET_NAME, "replace");
+    const loadedConfigs = await loadPresetLibrary(DEFAULT_PRESET_PATH, DEFAULT_PRESET_NAME, "replace", {
+      textPrefetch: defaultPresetTextPrefetch,
+      sourceIndexPrefetch: defaultPresetSourceIndexPrefetch,
+    });
     loadedDefaultPreset = Boolean(loadedConfigs?.length);
   }
   refreshDerivedState();
@@ -5627,7 +5852,7 @@ initialize().catch((error) => {
   setStatusMessage(t(state.language, "status.initFailed", {message: error.message}));
 });
 
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator && !IS_DESKTOP_RUNTIME) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   });

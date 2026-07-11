@@ -1,6 +1,6 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
-import {spriteMarkup} from "./sprites.js";
+import {itemIconMarkup, spriteMarkup} from "./sprites.js";
 import {getItemSpritePosition, normalizeName} from "./utils.js";
 import {filterVgcpastesTeams} from "./vgcpastes-search.js";
 
@@ -69,11 +69,15 @@ function spriteConfig(member, datasets) {
   };
 }
 
-function itemSpriteMarkup(itemName, datasets, label) {
+function itemSpriteMarkup(itemName, state, label) {
   if (!itemName) {
     return "";
   }
-  const item = datasets?.items?.[normalizeName(itemName)];
+  const item = state.datasets?.items?.[normalizeName(itemName)];
+  const iconMarkup = itemIconMarkup(item, state, "vgcpastes-member-item-icon item-sprite-image");
+  if (iconMarkup) {
+    return iconMarkup;
+  }
   const spriteNum = Number(item?.spritenum);
   if (!Number.isFinite(spriteNum) || spriteNum < 0) {
     return "";
@@ -85,7 +89,7 @@ function itemSpriteMarkup(itemName, datasets, label) {
 function memberMarkup(member, state) {
   const sprite = spriteMarkup(spriteConfig(member, state.datasets), state);
   const localizedItem = localizeItem(state, member.item);
-  const itemIcon = itemSpriteMarkup(member.item, state.datasets, localizedItem);
+  const itemIcon = itemSpriteMarkup(member.item, state, localizedItem);
   const name = localizeSpecies(state, member);
   const ability = localizeAbility(state, member.ability);
   const types = getMemberTypes(member, state.datasets);

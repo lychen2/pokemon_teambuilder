@@ -30,13 +30,14 @@ impl Dataset {
         let usage = load_value(root.join("static/usage.json"))?;
         let paste_teams = load_value(root.join("static/paste_teams_champions_mb.json"))?;
         let champions_vgc = load_value(root.join("poke_analysis-main/stats/champions_vgc.json"))?;
-        let champions_usable_species = champions_vgc
+        let champions_usable_species: HashSet<String> = champions_vgc
             .get("usableSpeciesIds")
             .and_then(Value::as_array)
             .into_iter()
             .flatten()
             .filter_map(Value::as_str)
             .map(str::to_owned)
+            .filter(|species_id| is_selectable_battle_species(&pokedex, species_id))
             .collect();
         Ok(Self {
             pokedex,
@@ -51,6 +52,80 @@ impl Dataset {
         })
     }
 }
+
+fn normalize_identifier(value: &str) -> String {
+    value
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric())
+        .flat_map(char::to_lowercase)
+        .collect()
+}
+
+fn is_mega_entry(entry: &Value) -> bool {
+    let forme = entry
+        .get("forme")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    let name = entry
+        .get("name")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    forme.starts_with("Mega") || name.contains("-Mega")
+}
+
+fn json_str<'a>(entry: &'a Value, key: &str) -> Option<&'a str> {
+    entry.get(key).and_then(Value::as_str)
+}
+
+fn is_battle_equivalent_form(entry: &Value, base_entry: &Value) -> bool {
+    let Some(base_species) = json_str(entry, "baseSpecies") else {
+        return false;
+    };
+    if base_species.is_empty() {
+        return false;
+    }
+    if is_mega_entry(entry) {
+        return false;
+    }
+    if json_str(entry, "requiredItem").map_or(false, |v| !v.is_empty())
+        || json_str(entry, "requiredMove").map_or(false, |v| !v.is_empty())
+        || json_str(entry, "battleOnly").map_or(false, |v| !v.is_empty())
+        || json_str(entry, "changesFrom").map_or(false, |v| !v.is_empty())
+    {
+        return false;
+    }
+    let types_eq = entry.get("types") == base_entry.get("types");
+    let stats_eq = ["hp", "atk", "def", "spa", "spd", "spe"].iter().all(|stat| {
+        entry.get("baseStats").and_then(|s| s.get(stat))
+            == base_entry.get("baseStats").and_then(|s| s.get(stat))
+    });
+    let abilities_eq = entry.get("abilities") == base_entry.get("abilities");
+    types_eq && stats_eq && abilities_eq
+}
+
+fn is_selectable_battle_species(pokedex: &HashMap<String, Value>, species_id: &str) -> bool {
+    let Some(entry) = pokedex.get(species_id) else {
+        return false;
+    };
+    if json_str(entry, "name").map_or(true, str::is_empty) {
+        return false;
+    }
+    if !entry.get("baseStats").map_or(false, |v| v.is_object()) {
+        return false;
+    }
+    if json_str(entry, "battleOnly").map_or(false, |v| !v.is_empty()) && !is_mega_entry(entry) {
+        return false;
+    }
+    let base_species_id = normalize_identifier(json_str(entry, "baseSpecies").unwrap_or(""));
+    if base_species_id.is_empty() {
+        return true;
+    }
+    let Some(base_entry) = pokedex.get(&base_species_id) else {
+        return true;
+    };
+    !is_battle_equivalent_form(entry, base_entry)
+}
+
 
 fn normalize_root(root: &Path) -> PathBuf {
     if root.join("poke_analysis-main/stats/pokedex.json").exists() {

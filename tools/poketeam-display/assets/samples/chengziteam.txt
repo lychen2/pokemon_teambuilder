@@ -1,0 +1,59 @@
+Jolteon @ Life Orb
+Level: 50
+Ability: Volt Absorb
+EVs: 2 HP / 32 SpA / 32 Spe
+Modest Nature
+- Rising Voltage
+- Weather Ball
+- Electroweb
+- Detect
+
+Venusaur-Mega @ Venusaurite
+Level: 50
+Ability: Chlorophyll
+EVs: 21 HP / 1 Def / 24 SpA / 20 Spe
+Modest Nature
+- Protect
+- Sludge Bomb
+- Giga Drain
+- Earth Power
+
+Ceruledge @ Leftovers
+Level: 50
+Ability: Flash Fire
+EVs: 23 HP / 25 Atk / 8 Def / 10 Spe
+Adamant Nature
+- Bitter Blade
+- Poltergeist
+- Bulk Up
+- Protect
+
+Raichu-Mega-X @ Raichunite X
+Level: 50
+Ability: Lightning Rod
+EVs: 2 HP / 32 SpA / 32 Spe
+Timid Nature
+- Rising Voltage
+- Alluring Voice
+- Protect
+- Fake Out
+
+Ninetales-Alola @ Focus Sash
+Level: 50
+Ability: Snow Warning
+EVs: 2 HP / 32 SpA / 32 Spe
+Timid Nature
+- Encore
+- Blizzard
+- Freeze-Dry
+- Protect
+
+Grimmsnarl @ Sitrus Berry
+Level: 50
+Ability: Prankster
+EVs: 32 HP / 25 Def / 9 SpD
+Impish Nature
+- Fake Out
+- Parting Shot
+- Fake Tears
+- Spirit Break

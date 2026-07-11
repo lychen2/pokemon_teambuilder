@@ -8,6 +8,7 @@ sys.path.insert(0, str(ROOT / "poke_analysis-main"))
 from default_preset import common, vgcpastes
 from data_update.team_planner_assets import build_pokemon_manifest
 from default_preset.vgcpastes import apply_fallback_configs
+from data_update import champions
 
 
 def icon_file(manifest, species_id):
@@ -122,6 +123,69 @@ class TeamPlannerIconManifestTests(unittest.TestCase):
         self.assertEqual(icon_file(manifest, "fluttermane"), "0987_000_uk_n.png")
         self.assertEqual(icon_file(manifest, "palafin"), "0964_000_mf_n.png")
 
+class SelectableBattleSpeciesTests(unittest.TestCase):
+    """Verify expand_usable_species_ids_with_mega_forms filters
+    battleOnly non-Mega forms and battle-equivalent forms."""
+
+    def setUp(self):
+        self.fake_pokedex = {
+            "palafin": {"num": 964, "name": "Palafin", "types": ["Water"],
+                        "baseStats": {"hp": 100, "atk": 70, "def": 72, "spa": 53, "spd": 62, "spe": 100},
+                        "abilities": {"0": "Zero to Hero"}},
+            "palafinhero": {"num": 964, "name": "Palafin-Hero", "baseSpecies": "Palafin", "forme": "Hero",
+                            "types": ["Water"],
+                            "baseStats": {"hp": 100, "atk": 160, "def": 97, "spa": 106, "spd": 87, "spe": 100},
+                            "abilities": {"0": "Zero to Hero"}, "battleOnly": "Palafin"},
+            "vivillon": {"num": 666, "name": "Vivillon", "types": ["Bug", "Flying"],
+                         "baseStats": {"hp": 80, "atk": 52, "def": 50, "spa": 90, "spd": 50, "spe": 89},
+                         "abilities": {"0": "Shield Dust", "1": "Compound Eyes"}},
+            "vivillonfancy": {"num": 666, "name": "Vivillon-Fancy", "baseSpecies": "Vivillon", "forme": "Fancy",
+                              "types": ["Bug", "Flying"],
+                              "baseStats": {"hp": 80, "atk": 52, "def": 50, "spa": 90, "spd": 50, "spe": 89},
+                              "abilities": {"0": "Shield Dust", "1": "Compound Eyes"}},
+            "charizard": {"num": 6, "name": "Charizard", "types": ["Fire", "Flying"],
+                          "baseStats": {"hp": 78, "atk": 84, "def": 78, "spa": 109, "spd": 85, "spe": 100},
+                          "abilities": {"0": "Blaze", "H": "Solar Power"}},
+            "charizardmegax": {"num": 6, "name": "Charizard-Mega-X", "baseSpecies": "Charizard", "forme": "Mega-X",
+                               "types": ["Fire", "Dragon"],
+                               "baseStats": {"hp": 78, "atk": 130, "def": 111, "spa": 130, "spd": 85, "spe": 100},
+                               "abilities": {"0": "Tough Claws"}, "requiredItem": "Charizardite X"},
+            "charizardmegay": {"num": 6, "name": "Charizard-Mega-Y", "baseSpecies": "Charizard", "forme": "Mega-Y",
+                               "types": ["Fire", "Flying"],
+                               "baseStats": {"hp": 78, "atk": 104, "def": 78, "spa": 159, "spd": 115, "spe": 100},
+                               "abilities": {"0": "Drought"}, "requiredItem": "Charizardite Y"},
+        }
+        self.fake_items = {"charizarditex": {"name": "Charizardite X"},
+                           "charizarditey": {"name": "Charizardite Y"}}
+
+    def test_filters_battleonly_non_mega(self):
+        result = champions.expand_usable_species_ids_with_mega_forms(
+            self.fake_pokedex, self.fake_items,
+            ["palafin", "palafinhero", "vivillon"],
+        )
+        self.assertIn("palafin", result)
+        self.assertIn("vivillon", result)
+        self.assertNotIn("palafinhero", result, "battleOnly non-Mega should be excluded")
+
+    def test_filters_battle_equivalent_form(self):
+        result = champions.expand_usable_species_ids_with_mega_forms(
+            self.fake_pokedex, self.fake_items,
+            ["vivillon", "vivillonfancy"],
+        )
+        self.assertIn("vivillon", result)
+        self.assertNotIn("vivillonfancy", result,
+                         "battle-equivalent cosmetic form should be excluded")
+
+    def test_preserves_mega_forms(self):
+        result = champions.expand_usable_species_ids_with_mega_forms(
+            self.fake_pokedex, self.fake_items,
+            ["charizard"],
+        )
+        self.assertIn("charizard", result)
+        self.assertIn("charizardmegax", result,
+                      "Mega-X should be included (formeOrder expansion)")
+        self.assertIn("charizardmegay", result,
+                      "Mega-Y should be included (formeOrder expansion)")
 
 
 if __name__ == "__main__":

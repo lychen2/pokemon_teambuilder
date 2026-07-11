@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpoketeam_core.a CMakeFiles/poketeam_core.dir/poketeam_core_autogen/mocs_compilation.cpp.o CMakeFiles/poketeam_core.dir/src/team_parser.cpp.o CMakeFiles/poketeam_core.dir/src/data_repository.cpp.o CMakeFiles/poketeam_core.dir/src/team_analyzer.cpp.o CMakeFiles/poketeam_core.dir/src/team_renderer.cpp.o CMakeFiles/poketeam_core.dir/src/main_window.cpp.o CMakeFiles/poketeam_core.dir/src/share_controller.cpp.o
+/usr/bin/ranlib libpoketeam_core.a

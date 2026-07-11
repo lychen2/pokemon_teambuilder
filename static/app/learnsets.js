@@ -1,5 +1,21 @@
 import {normalizeName} from "./utils.js";
 
+const learnsetCache = new WeakMap();
+
+function getSpeciesCache(datasets, speciesId) {
+  let speciesCache = learnsetCache.get(datasets);
+  if (!speciesCache) {
+    speciesCache = new Map();
+    learnsetCache.set(datasets, speciesCache);
+  }
+  let itemCache = speciesCache.get(speciesId);
+  if (!itemCache) {
+    itemCache = new Map();
+    speciesCache.set(speciesId, itemCache);
+  }
+  return itemCache;
+}
+
 function addUnique(target, value) {
   const normalized = normalizeName(value);
   if (normalized && !target.includes(normalized)) {
@@ -71,10 +87,12 @@ function mergeLearnsetMaps(ids, resolver) {
 
 export function getLearnsetMap(speciesId, datasets, options = {}) {
   const normalized = normalizeName(speciesId);
-  const ids = getCandidateSpeciesIds(normalized, datasets, options.itemName || "");
+  const itemName = normalizeName(options.itemName || "");
+  const itemCache = getSpeciesCache(datasets, normalized);
+  if (itemCache.has(itemName)) return itemCache.get(itemName);
+  const ids = getCandidateSpeciesIds(normalized, datasets, itemName);
   const champion = mergeLearnsetMaps(ids, (id) => datasets.championsVgc?.learnsets?.[id]);
-  if (champion) {
-    return champion;
-  }
-  return mergeLearnsetMaps(ids, (id) => datasets.learnsets?.[id]?.learnset);
+  const result = champion || mergeLearnsetMaps(ids, (id) => datasets.learnsets?.[id]?.learnset);
+  if (result !== null) itemCache.set(itemName, result);
+  return result;
 }

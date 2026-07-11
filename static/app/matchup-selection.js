@@ -1,7 +1,7 @@
 import {buildSpeciesTemplateConfigs} from "./champions-vgc.js";
 import {compareSearchMatches, resolveSearchMatch} from "./search-utils.js";
 import {createRoleContext, getRoleSummaryIds, getUtilityRoles} from "./team-roles.js";
-import {normalizeLookupText, normalizeName} from "./utils.js";
+import {isMegaSpeciesEntry, normalizeLookupText, normalizeName} from "./utils.js";
 
 const MAX_OPPONENT_TEAM_SIZE = 6;
 const SPEED_BUCKET_SLOW_MAX = 120;
@@ -27,9 +27,6 @@ function uniqueValues(values = []) {
   return [...new Set(values.filter(Boolean))];
 }
 
-function isMegaEntry(entry = {}) {
-  return String(entry.forme || "").startsWith("Mega") || String(entry.name || "").includes("-Mega");
-}
 
 function buildCanonicalSpecies(datasets, speciesId, fallbackSpecies = null) {
   const species = datasets.pokedex?.[speciesId];
@@ -61,7 +58,7 @@ function getOpponentSpeciesId(datasets, rawSpeciesId = "") {
     return aliasSpeciesId;
   }
   const entry = datasets.pokedex?.[speciesId];
-  if (!entry || !isMegaEntry(entry)) {
+  if (!entry || !isMegaSpeciesEntry(entry)) {
     return speciesId;
   }
   return normalizeName(entry.baseSpecies || speciesId);

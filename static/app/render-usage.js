@@ -1,7 +1,7 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {spriteMarkup} from "./sprites.js";
-import {getUsageData, getUsageDetail, getUsageRows, isUsageAvailable, formatUsagePoints, formatUsageShare} from "./usage-stats.js";
+import {getUsageData, getUsageDetail, getUsageRows, isUsageAvailable, formatRecordShare, formatUsagePoints, formatUsageShare} from "./usage-stats.js";
 import {getLocalizedNatureName, getTypeLabel} from "./utils.js";
 
 const SORT_KEYS = Object.freeze(["usage", "name", "available"]);
@@ -161,7 +161,7 @@ function spreadPanelMarkup(spreads, language) {
       ${spreads.map((entry) => `
         <div class="usage-bar-row">
           <span>${entry.nature ? `${escapeHtml(natureLabel(entry.nature, language))} ` : ""}<small>${escapeHtml(formatUsagePoints(entry.points, language))}</small></span>
-          <strong>${formatUsageShare(entry.share, 1)}</strong>
+          <strong>${formatRecordShare(entry.share, 1)}</strong>
           <i style="--usage-width:${Math.min(100, entry.share * 100)}%"></i>
         </div>
       `).join("")}
@@ -186,7 +186,7 @@ function recordPanelMarkup(titleKey, entries, state) {
         <div class="usage-bar-row ${entry.spritePosition ? "has-sprite" : ""} ${entry.resolved ? "" : "usage-unresolved"}">
           ${entry.spritePosition ? spriteMarkup(entry, state) : ""}
           <span>${escapeHtml(language === "zh" ? entry.localizedName : entry.resolvedName)}</span>
-          <strong>${formatUsageShare(entry.share, 1)}</strong>
+          <strong>${formatRecordShare(entry.share, 1)}</strong>
           <i style="--usage-width:${Math.min(100, entry.share * 100)}%"></i>
         </div>
       `).join("")}

@@ -39,6 +39,7 @@ function buildStatePayload(state) {
     recommendCompareIds: state.recommendCompareIds,
     savedTeams: state.savedTeams,
     savedOpponentTeams: state.savedOpponentTeams,
+    selectionPracticeFeedback: state.selectionPractice?.feedback || [],
     language: state.language,
     damage: {
       attackerId: state.damage.attackerId,
@@ -141,16 +142,17 @@ export function loadPersistedState() {
   }
 }
 
-export function estimatePersistSize(state) {
-  return JSON.stringify(buildStateEnvelope(buildStatePayload(state))).length;
+export function serializePersistedState(state) {
+  const envelope = buildStateEnvelope(buildStatePayload(state));
+  return {envelope, serialized: JSON.stringify(envelope)};
 }
 
 export function persistState(state, options = {}) {
   clearScheduledPersist();
   try {
-    const envelope = buildStateEnvelope(buildStatePayload(state));
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(envelope));
-    options.onPersisted?.(envelope);
+    const prepared = options.prepared || serializePersistedState(state);
+    window.localStorage.setItem(STORAGE_KEY, prepared.serialized);
+    options.onPersisted?.(prepared.envelope);
     return true;
   } catch (error) {
     const wrapped = isQuotaExceededError(error)
@@ -165,7 +167,9 @@ export function schedulePersistState(state, options = {}) {
   clearScheduledPersist();
   const callback = () => {
     persistHandle = null;
-    persistState(state, options);
+    const prepared = serializePersistedState(state);
+    options.onSerialized?.(prepared.serialized.length);
+    persistState(state, {...options, prepared});
   };
   if (typeof window.requestIdleCallback === "function") {
     persistHandle = window.requestIdleCallback(callback, {timeout: PERSIST_DELAY_MS});
@@ -175,7 +179,9 @@ export function schedulePersistState(state, options = {}) {
 }
 
 export function flushPersistState(state, options = {}) {
-  persistState(state, options);
+  const prepared = serializePersistedState(state);
+  options.onSerialized?.(prepared.serialized.length);
+  persistState(state, {...options, prepared});
 }
 
 export function clearPersistedState() {

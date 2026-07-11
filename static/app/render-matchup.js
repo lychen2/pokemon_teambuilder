@@ -425,6 +425,16 @@ function matchupFiltersMarkup(state) {
   `;
 }
 
+export function renderSavedOpponentTeams(state) {
+  const language = state.language;
+  setInnerHTMLIfChanged(
+    document.getElementById("saved-opponent-list"),
+    state.savedOpponentTeams.length
+      ? state.savedOpponentTeams.map((entry) => savedOpponentCardMarkup(entry, language)).join("")
+      : `<p class="empty-state">${t(language, "matchup.savedEmpty")}</p>`,
+  );
+}
+
 function renderBuilder(state) {
   const language = state.language;
   const filtered = filterOpponentLibrary(state.matchupLibrary, state.matchupSearch, state.matchupFilters);
@@ -435,12 +445,7 @@ function renderBuilder(state) {
       ? state.opponentTeam.map((entry) => opponentCardMarkup(entry, state)).join("")
       : `<div class="team-card empty-slot">${t(language, "matchup.opponentPlaceholder")}</div>`,
   );
-  setInnerHTMLIfChanged(
-    document.getElementById("saved-opponent-list"),
-    state.savedOpponentTeams.length
-      ? state.savedOpponentTeams.map((entry) => savedOpponentCardMarkup(entry, language)).join("")
-      : `<p class="empty-state">${t(language, "matchup.savedEmpty")}</p>`,
-  );
+  renderSavedOpponentTeams(state);
   document.getElementById("matchup-library-summary").textContent = t(language, "matchup.librarySummary", {
     species: state.matchupLibrary.length,
     sets: state.library.length,

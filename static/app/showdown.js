@@ -12,6 +12,7 @@ import {
   formatSpread,
   getChampionPointTotal,
   getNatureSummary,
+  isMegaSpeciesEntry,
   normalizeChampionPoints,
   getSpritePosition,
   normalizeLookupText,
@@ -175,9 +176,6 @@ function sanitizeOptionalText(value) {
   return text;
 }
 
-function isMegaEntry(entry) {
-  return String(entry?.forme || "").startsWith("Mega") || String(entry?.name || "").includes("-Mega");
-}
 
 function resolveSpecies(config, context) {
   const speciesId = config.speciesId
@@ -277,7 +275,7 @@ function finalizeConfig(config, context, fallbackLevel, resolveConvertedPoint, l
   const spriteIndex = context.formsIndex[speciesId] ?? entry.num ?? 0;
   const moves = buildMoveSet(moveNames, context.moveLookup, context.moveSearchLookup);
   const nature = config.nature || "Hardy";
-  const teraType = isMegaEntry(entry) ? "" : config.teraType || "";
+  const teraType = isMegaSpeciesEntry(entry) ? "" : config.teraType || "";
   const stats = applyNatureToChampionStats(
     calculateChampionStats(entry.baseStats, championPoints),
     nature,

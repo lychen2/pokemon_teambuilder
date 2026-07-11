@@ -1,6 +1,6 @@
 import {DATA_PATHS} from "./constants.js";
 import {getSpeedVariants} from "./battle-semantics.js";
-import {buildGlobalItemUsageCounts, buildGlobalMoveUsageCounts, buildUsageLookup} from "./usage.js";
+import {buildUsageLookup} from "./usage.js";
 
 function buildPasteSpeciesCounts(pasteTeams) {
   if (!pasteTeams) return {};
@@ -49,6 +49,12 @@ function buildPasteCorePairs(pasteTeams, topN = 24) {
     .slice(0, topN);
 }
 
+function attachEntryIds(entries = {}) {
+  return Object.fromEntries(
+    Object.entries(entries).map(([entryId, entry]) => [entryId, {...entry, id: entryId}]),
+  );
+}
+
 function buildPokeIconMap(teamPlannerAssets = {}, standalonePokeIconMap = {}) {
   const teamPlannerIconMap = Object.fromEntries(
     Object.entries(teamPlannerAssets.pokemon || {})
@@ -58,7 +64,30 @@ function buildPokeIconMap(teamPlannerAssets = {}, standalonePokeIconMap = {}) {
   return {...standalonePokeIconMap, ...teamPlannerIconMap};
 }
 
-import {compareSpeciesByDex, fetchJson, normalizeLookupText, normalizeName} from "./utils.js";
+function buildChampionsIconMaps(championsIconAssets = {}) {
+  const pokemon = Object.fromEntries(
+    Object.entries(championsIconAssets.pokemon || {})
+      .filter(([, entry]) => entry?.file)
+      .map(([speciesId, entry]) => [speciesId, `./static/${entry.file}`]),
+  );
+  const items = Object.fromEntries(
+    Object.entries(championsIconAssets.items || {})
+      .filter(([, entry]) => entry?.file)
+      .map(([itemId, entry]) => [itemId, {...entry, url: `./static/${entry.file}`}]),
+  );
+  return {pokemon, items};
+}
+
+async function fetchOptionalJson(path, fallbackValue) {
+  try {
+    return await fetchJson(path);
+  } catch (error) {
+    console.warn(error);
+    return fallbackValue;
+  }
+}
+
+import {compareSpeciesByDex, fetchJson, isSelectableBattleSpecies, normalizeLookupText, normalizeName} from "./utils.js";
 
 const datasetCache = {value: null};
 let pasteTeamsFetchStarted = false;
@@ -210,24 +239,13 @@ function buildLocalizedSearchLookup(entries, baseLookup) {
   return lookup;
 }
 
-const UNSELECTABLE_ALL_SPECIES_NONSTANDARD = new Set(["CAP", "Custom", "LGPE", "Unobtainable"]);
-
-function isSelectableAllSpeciesEntry(entry = {}) {
-  return Boolean(
-    entry?.name
-      && entry?.baseStats
-      && !entry.battleOnly
-      && !UNSELECTABLE_ALL_SPECIES_NONSTANDARD.has(String(entry.isNonstandard || "")),
-  );
-}
-
 function buildSelectableSpeciesIds(pokedex, forcedSpeciesIds = []) {
   const seen = new Set();
   const ids = [];
-  Object.keys(pokedex || {}).forEach((speciesId) => {
-    if (!isSelectableAllSpeciesEntry(pokedex[speciesId])) {
-      return;
-    }
+  const candidateIds = Object.keys(pokedex || {}).filter(
+    (speciesId) => isSelectableBattleSpecies(pokedex, speciesId),
+  );
+  candidateIds.forEach((speciesId) => {
     seen.add(speciesId);
     ids.push(speciesId);
   });
@@ -235,11 +253,15 @@ function buildSelectableSpeciesIds(pokedex, forcedSpeciesIds = []) {
     if (!pokedex?.[speciesId] || seen.has(speciesId)) {
       return;
     }
+    if (!isSelectableBattleSpecies(pokedex, speciesId)) {
+      return;
+    }
     seen.add(speciesId);
     ids.push(speciesId);
   });
   return ids;
 }
+
 
 function buildAvailableSpecies(pokedex, formsIndex, speciesIds = [], legacySeasonSpeciesIds = new Set()) {
   return speciesIds
@@ -280,10 +302,12 @@ export async function loadDatasets() {
   // ensure* functions so VGCPastes and Roles do not steal first-paint time.
   const learnsetsPromise = fetchJson(DATA_PATHS.learnsets);
 
-  const [localizationData, teamPlannerAssets, standalonePokeIconMap, pokedex, formsIndex, moves, abilities, items, championsVgc] = await Promise.all([
+  const [localizationData, teamPlannerAssets, standalonePokeIconMap, championsIconAssets, usageDerived, pokedex, formsIndex, moves, abilities, items, championsVgc] = await Promise.all([
     fetchJson(DATA_PATHS.localizationData),
     fetchJson(DATA_PATHS.teamPlannerAssets),
     fetchJson(DATA_PATHS.pokeIconsMap),
+    fetchOptionalJson(DATA_PATHS.championsIconAssets, {pokemon: {}, items: {}}),
+    fetchJson(DATA_PATHS.usageDerived),
     fetchJson(DATA_PATHS.pokedex),
     fetchJson(DATA_PATHS.formsIndex),
     fetchJson(DATA_PATHS.moves),
@@ -303,14 +327,14 @@ export async function loadDatasets() {
     normalizeMoveEntries(mergeDexEntries(moves, championsVgc.overrideMoveData)),
     localizationData,
   ));
-  const mergedAbilities = localizeDexEntries(
+  const mergedAbilities = attachEntryIds(localizeDexEntries(
     mergeDexEntries(abilities, championsVgc.overrideAbilityData),
     localizationData,
-  );
-  const mergedItems = localizeDexEntries(
+  ));
+  const mergedItems = attachEntryIds(localizeDexEntries(
     mergeDexEntries(items, championsVgc.overrideItemData),
     localizationData,
-  );
+  ));
   const moveLookup = buildMoveLookup(mergedMoves);
   const abilityLookup = buildNamedLookup(mergedAbilities);
   const itemLookup = buildNamedLookup(mergedItems);
@@ -330,9 +354,11 @@ export async function loadDatasets() {
     Object.values(mergedAbilities).map((entry) => [normalizeName(entry.name), entry.localizedName || entry.name]),
   );
 
-  const seasonSpeciesIds = championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || [];
+  const rawSeasonSpeciesIds = championsVgc.usableSpeciesIds || championsVgc.availableSpeciesIds || [];
+  const seasonSpeciesIds = rawSeasonSpeciesIds.filter((speciesId) => isSelectableBattleSpecies(mergedPokedex, speciesId));
   const seasonSpeciesIdSet = new Set(seasonSpeciesIds);
   const pokeIconMap = buildPokeIconMap(teamPlannerAssets, standalonePokeIconMap);
+  const championsIconMaps = buildChampionsIconMaps(championsIconAssets);
 
   const selectableSpeciesIds = buildSelectableSpeciesIds(mergedPokedex, seasonSpeciesIds);
   const seasonAvailableSpecies = buildAvailableSpecies(mergedPokedex, formsIndex, seasonSpeciesIds, seasonSpeciesIdSet);
@@ -349,20 +375,19 @@ export async function loadDatasets() {
     abilities: mergedAbilities,
     items: mergedItems,
     championsVgc,
-    // usage starts null and derivative tables start empty; populated when
-    // usageReady resolves. All consumers are null-safe via `datasets?.usageLookup?.…`
-    // (recommendation-scoring/teammates.js, usage.js, main.js builder option sorts).
     usage: null,
     usageOfficial,
     usageLookup: new Map(),
-    globalMoveUsageCounts: new Map(),
-    globalItemUsageCounts: new Map(),
+    globalMoveUsageCounts: new Map(Object.entries(usageDerived?.globalMoveUsageCounts || {})),
+    globalItemUsageCounts: new Map(Object.entries(usageDerived?.globalItemUsageCounts || {})),
     localizedSpeciesNames,
     localizedItemNames,
     localizedMoveNames,
     localizedAbilityNames,
     teamPlannerAssets,
     pokeIconMap,
+    championsIconAssets,
+    championsIconMaps,
 
     seasonSpeciesIds,
     availableSpecies: seasonAvailableSpecies,
@@ -398,10 +423,8 @@ export async function loadDatasets() {
       // \"不引入静默 fallback\" rule — re-throw so awaiters can react.
       throw error;
     });
-  // Same pattern for usage.json (~30 MB) — derivative tables are built once
-  // the fetch resolves. The fetch is deferred: ensureUsageData() starts it
-  // on idle or first team member add, not at boot. All consumers are
-  // null-safe via optional chaining on datasets.usageLookup etc.
+  // Full per-species usage remains deferred; aggregate usage counts are
+  // generated by tools/build-derived-data.mjs during data refresh.
   datasetCache.value.usageReady = null;
   datasetCache.value.pasteTeamsReady = null;
   return datasetCache.value;
@@ -426,8 +449,8 @@ export function ensureUsageData() {
     .then((usage) => {
       datasets.usage = usage;
       datasets.usageLookup = buildUsageLookup(usage);
-      datasets.globalMoveUsageCounts = buildGlobalMoveUsageCounts(usage, datasets._moveLookupForUsage);
-      datasets.globalItemUsageCounts = buildGlobalItemUsageCounts(usage, datasets._itemLookupForUsage);
+      datasets.globalMoveUsageCounts = datasets.globalMoveUsageCounts || new Map();
+      datasets.globalItemUsageCounts = datasets.globalItemUsageCounts || new Map();
       return usage;
     })
     .catch((error) => {

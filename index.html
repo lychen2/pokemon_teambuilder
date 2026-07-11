@@ -44,6 +44,7 @@
           <select id="icon-scheme-select" aria-labelledby="icon-scheme-label">
             <option value="showdown">Showdown 雪碧图</option>
             <option value="poke-icons">Poke Icons</option>
+            <option value="champions-official">Champions 官方</option>
           </select>
         </div>
         <p id="icon-scheme-note" class="site-utility-note muted"></p>
@@ -115,6 +116,13 @@
               <div class="saved-team-form">
                 <input id="saved-team-name" type="text" placeholder="输入队伍名称" data-i18n-placeholder="team.savePlaceholder">
                 <button id="save-team-btn" type="button" class="add-button" data-i18n="team.saveCurrent">保存当前队伍</button>
+                <button id="export-team-share-image-btn" type="button" class="ghost-button" data-i18n="team.exportShareImage">保存分享图</button>
+              </div>
+              <div class="saved-team-form share-metadata-form">
+                <input id="share-slot" type="text" placeholder="栏位" data-i18n-placeholder="team.shareSlotPlaceholder">
+                <input id="share-team-id" type="text" placeholder="队伍 ID" data-i18n-placeholder="team.shareTeamIdPlaceholder">
+                <input id="share-trainer-name" type="text" placeholder="用户名" data-i18n-placeholder="team.shareTrainerPlaceholder">
+                <input id="share-avatar-text" type="text" maxlength="2" placeholder="头像" data-i18n-placeholder="team.shareAvatarPlaceholder">
               </div>
               <input id="saved-team-search" type="search" placeholder="搜索已保存队伍" data-i18n-placeholder="team.searchSavedPlaceholder">
               <div id="saved-team-list" class="stack-list compact-list"></div>
@@ -181,6 +189,7 @@
             <button type="button" class="view-tab" data-view="damage-view" data-i18n="tabs.damage">伤害工作台</button>
             <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
             <button type="button" class="view-tab" data-view="output-view" data-i18n="tabs.output">输出强度</button>
+            <button type="button" class="view-tab" data-view="selection-practice-view" data-i18n="tabs.selectionPractice">选出练习</button>
           </nav>
           <div id="workspace-context-bar" class="workspace-context-bar" aria-live="polite"></div>
 
@@ -320,6 +329,10 @@
             </div>
             <div id="output-tiers" class="stack-list compact-list view-list"></div>
           </section>
+          <section id="selection-practice-view" class="view-panel">
+            <div id="selection-practice-root"></div>
+          </section>
+
         </section>
       </section>
     </main>

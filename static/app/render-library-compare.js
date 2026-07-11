@@ -50,7 +50,7 @@ function renderCompareValue(leftValue, rightValue, className = "") {
 
 function renderRoleMarkup(config, state) {
   const language = state.language;
-  const roleContext = createRoleContext(state.library);
+  const roleContext = state.libraryRoleContext || createRoleContext(state.library);
   return compactRoleSummaryMarkup(config, language, {roleContext}) || escapeHtml(t(language, "common.none"));
 }
 

@@ -3,11 +3,11 @@ import {renderAnalysisView} from "./render-analysis.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderDamageView} from "./render-damage.js";
 import {compareToggleMarkup, renderLibraryComparePanel} from "./render-library-compare.js";
-import {renderMatchupView} from "./render-matchup.js";
+import {renderMatchupView, renderSavedOpponentTeams} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
 import {renderHighlightedText} from "./search-utils.js";
 import {compactRoleSummaryMarkup} from "./role-ui.js";
-import {spriteMarkup} from "./sprites.js";
+import {itemIconMarkup, spriteMarkup} from "./sprites.js";
 import {createRoleContext} from "./team-roles.js";
 import {formatChampionPoints, formatSpread, formatStatLine, getDisplayNote, getItemSpritePosition, getLocalizedNatureName, getMoveCategoryLabel, getNatureMultiplier, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
 
@@ -22,6 +22,11 @@ function escapeHtml(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function findSpeciesButton(speciesId) {
+  return [...document.querySelectorAll("[data-pick-species]")]
+    .find((button) => button.getAttribute("data-pick-species") === speciesId) || null;
 }
 
 function getLocalizedSpeciesName(state, species) {
@@ -49,7 +54,11 @@ function getLocalizedEntryDescription(entry = {}, language) {
   return entry?.localizedShortDesc || entry?.localizedDesc || entry?.shortDesc || entry?.desc || "";
 }
 
-function itemSpriteMarkup(itemInfo) {
+function itemSpriteMarkup(itemInfo, state) {
+  const iconMarkup = itemIconMarkup(itemInfo, state, "item-sprite-image");
+  if (iconMarkup) {
+    return iconMarkup;
+  }
   const spriteNum = Number(itemInfo?.spritenum);
   if (!Number.isFinite(spriteNum) || spriteNum < 0) {
     return "";
@@ -186,12 +195,12 @@ function getLookupEntry(lookup, name) {
   return lookup?.get(normalizeName(name)) || null;
 }
 
-function buildMetaMarkup(config, language) {
+function buildMetaMarkup(config, language, state) {
   const pills = [];
   if (config.item) {
     pills.push(renderInfoPill({
       label: language === "zh" ? getLocalizedEntryName(config.itemInfo, language) || config.item : config.item,
-      leadingMarkup: itemSpriteMarkup(config.itemInfo),
+      leadingMarkup: itemSpriteMarkup(config.itemInfo, {language, datasets: state.datasets, iconScheme: state.iconScheme}),
       tooltipMarkup: buildTextTooltipMarkup(getLocalizedEntryDescription(config.itemInfo, language) || t(language, "tooltip.noItemDesc"), language),
     }));
   }
@@ -312,7 +321,7 @@ function renderSpeedSourcePill(state, source, language) {
   if (itemInfo) {
     return renderInfoPill({
       label: getLocalizedEntryName(itemInfo, language) || source,
-      leadingMarkup: itemSpriteMarkup(itemInfo),
+      leadingMarkup: itemSpriteMarkup(itemInfo, {language, datasets, iconScheme: state.iconScheme}),
       tooltipMarkup: buildTextTooltipMarkup(getLocalizedEntryDescription(itemInfo, language) || t(language, "tooltip.noItemDesc"), language),
       className: "mini-pill speed-boost-source",
     });
@@ -441,15 +450,15 @@ function libraryEmptyMarkup(state, language) {
   return `<p class="empty-state">${t(language, "library.filteredEmpty")}</p>`;
 }
 
-export function renderLibrary(state) {
+function renderSpeciesBrowser(state) {
+  setInnerHTMLIfChanged(document.getElementById("species-browser-host"), speciesBrowserMarkup(state));
+}
+
+function renderLibraryDetails(state) {
   const language = state.language;
   const activeLibrary = state.filteredLibrary;
-  const roleContext = createRoleContext(state.library);
+  const roleContext = state.libraryRoleContext || createRoleContext(state.library);
   const selectedCompareIds = state.libraryCompare?.selectedConfigIds || [];
-  const searchInput = document.getElementById("library-search");
-  if (searchInput && searchInput.value !== state.search) {
-    searchInput.value = state.search || "";
-  }
   document.getElementById("library-summary").textContent = t(language, "library.summary", {
     total: state.library.length,
     filtered: activeLibrary.length,
@@ -461,7 +470,7 @@ export function renderLibrary(state) {
             <div class="entry-title">${spriteMarkup(config, state)}<strong>${libraryConfigNameMarkup(config, state)}</strong>${notePillMarkup(config, language)}${validationPillMarkup(config, language)}<span class="source-tag">${t(language, "common.configLibrary")}</span>${sourceDatePillMarkup(config, language)}</div>
             ${librarySearchHitMarkup(config)}
             <div class="entry-meta">${typePills(config.types, language)}</div>
-            <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
+            <div class="entry-line entry-tags">${buildMetaMarkup(config, language, state)}</div>
             <div class="entry-line entry-tags">${compactRoleSummaryMarkup(config, language, {roleContext})}</div>
             <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
             <div class="entry-line entry-tags team-move-row">${movesMarkup(config, language, state.datasets?.moveLookup)}</div>
@@ -479,8 +488,7 @@ export function renderLibrary(state) {
       `).join("")}</div>`
     : libraryEmptyMarkup(state, language);
   const searching = String(state.search || "").trim();
-  setInnerHTMLIfChanged(document.getElementById("library-list"), `
-      ${speciesBrowserMarkup(state)}
+  setInnerHTMLIfChanged(document.getElementById("library-details-host"), `
     <section class="library-subsection">
       ${selectedSpeciesHeader(state)}
       ${searching ? "" : renderLibraryComparePanel(state)}
@@ -489,9 +497,33 @@ export function renderLibrary(state) {
   `);
 }
 
+export function renderLibrarySelection(state, previousSpeciesId = "") {
+  const previous = previousSpeciesId ? findSpeciesButton(previousSpeciesId) : null;
+  const current = state.selectedSpeciesId ? findSpeciesButton(state.selectedSpeciesId) : null;
+  previous?.classList.remove("active");
+  current?.classList.add("active");
+  renderLibraryDetails(state);
+}
+
+export function renderLibrary(state) {
+  const searchInput = document.getElementById("library-search");
+  if (searchInput && searchInput.value !== state.search) {
+    searchInput.value = state.search || "";
+  }
+  const host = document.getElementById("library-list");
+  if (!document.getElementById("species-browser-host") || !document.getElementById("library-details-host")) {
+    setInnerHTMLIfChanged(host, `
+      <div id="species-browser-host"></div>
+      <div id="library-details-host"></div>
+    `);
+  }
+  renderSpeciesBrowser(state);
+  renderLibraryDetails(state);
+}
+
 export function renderTeam(state) {
   const language = state.language;
-  const roleContext = createRoleContext(state.library);
+  const roleContext = state.libraryRoleContext || createRoleContext(state.library);
   const badge = document.getElementById("team-count-badge");
   if (badge) {
     badge.innerHTML = teamProgressBadgeMarkup(state.team.length, language);
@@ -512,7 +544,7 @@ export function renderTeam(state) {
       <div class="entry-main">
         ${teamHeaderMarkup(config, linkedConfig, language, state)}
         <div class="entry-meta">${typePills(config.types, language)}</div>
-        <div class="entry-line entry-tags">${buildMetaMarkup(config, language)}</div>
+        <div class="entry-line entry-tags">${buildMetaMarkup(config, language, state)}</div>
         <div class="entry-line entry-tags">${compactRoleSummaryMarkup(config, language, {roleContext})}</div>
         <p class="entry-line team-points-line">${formatChampionPoints(config.championPoints, language)}</p>
         <div class="entry-line entry-tags team-move-row">${movesMarkup(config, language, state.datasets?.moveLookup)}</div>
@@ -573,6 +605,8 @@ export function renderAnalysis(state) {
 export function renderMatchup(state) {
   renderMatchupView(state);
 }
+
+export {renderSavedOpponentTeams};
 
 export function renderRecommendations(state) {
   setInnerHTMLIfChanged(document.getElementById("recommend-list"), renderRecommendationsView(state));

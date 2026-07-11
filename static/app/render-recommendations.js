@@ -294,9 +294,8 @@ export function renderRecommendationControls(state) {
   `;
 }
 
-function renderRecommendationCard(config, state) {
+function renderRecommendationCard(config, state, roleContext) {
   const language = state.language;
-  const roleContext = createRoleContext(state.library);
   const isTemplate = config.recommendationAction === "configure";
   const isCompared = state.recommendCompareIds?.includes(config.id);
   const focusScoreMarkup = state.recommendFocusType
@@ -434,8 +433,9 @@ export function renderRecommendationCards(state) {
   if (!state.team.length || state.team.length >= 6) {
     return `<p class="empty-state">${t(language, state.team.length >= 6 ? "recommend.teamFull" : "recommend.empty")}</p>`;
   }
+  const roleContext = state.libraryRoleContext || createRoleContext(state.library);
   return state.recommendations.length
-    ? state.recommendations.map((config) => renderRecommendationCard(config, state)).join("")
+    ? state.recommendations.map((config) => renderRecommendationCard(config, state, roleContext)).join("")
     : `<p class="empty-state">${t(language, "recommend.empty")}</p>`;
 }
 

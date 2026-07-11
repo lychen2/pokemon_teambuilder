@@ -12,6 +12,8 @@ const MISSING_SAMPLE_CONTEXT = Object.freeze({
   samples: EMPTY_CONTEXT.samples,
 });
 
+const roleContextCache = new WeakMap();
+
 const CHOICE_BAND = "choiceband";
 const CHOICE_SPECS = "choicespecs";
 const LIFE_ORB = "lifeorb";
@@ -228,14 +230,15 @@ function getRank(value, samples = []) {
 
 export function createRoleContext(library = []) {
   if (!library.length) return EMPTY_CONTEXT;
+  const cached = roleContextCache.get(library);
+  if (cached) return cached;
   const samples = buildSamples(library);
   const hasSamples = Object.values(samples).some((values) => values.length);
-  if (!hasSamples) return MISSING_SAMPLE_CONTEXT;
-  return {
-    available: true,
-    unavailableReasonKey: "",
-    samples,
-  };
+  const context = hasSamples
+    ? {available: true, unavailableReasonKey: "", samples}
+    : MISSING_SAMPLE_CONTEXT;
+  roleContextCache.set(library, context);
+  return context;
 }
 
 export function getEstimatedRoleMetrics(config = {}, roleContext = EMPTY_CONTEXT) {

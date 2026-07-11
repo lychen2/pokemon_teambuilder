@@ -28,13 +28,13 @@ export function getUsageDetail(datasets, speciesId, options = {}) {
   const profile = row.profile;
   return {
     ...row,
-    spreads: getSpreadEntries(profile, row.sampleWeight),
-    moves: getRecordEntries(profile?.Moves, {sampleWeight: row.sampleWeight, resolver: resolveMoveEntry, datasets}),
-    items: getRecordEntries(profile?.Items, {sampleWeight: row.sampleWeight, resolver: resolveItemEntry, datasets}),
-    abilities: getRecordEntries(profile?.Abilities, {sampleWeight: row.sampleWeight, resolver: resolveAbilityEntry, datasets}),
-    natures: getRecordEntries(profile?.Natures, {sampleWeight: row.sampleWeight, datasets}),
-    teammates: getRecordEntries(profile?.Teammates, {sampleWeight: row.sampleWeight, resolver: resolveSpeciesEntry, datasets}),
-    counters: getRecordEntries(profile?.["Checks and Counters"], {sampleWeight: row.sampleWeight, resolver: resolveSpeciesEntry, datasets}),
+    spreads: getSpreadEntries(profile, row.sampleWeight, row.recordScale),
+    moves: getRecordEntries(profile?.Moves, {sampleWeight: row.sampleWeight, recordScale: row.recordScale, resolver: resolveMoveEntry, datasets}),
+    items: getRecordEntries(profile?.Items, {sampleWeight: row.sampleWeight, recordScale: row.recordScale, resolver: resolveItemEntry, datasets}),
+    abilities: getRecordEntries(profile?.Abilities, {sampleWeight: row.sampleWeight, recordScale: row.recordScale, resolver: resolveAbilityEntry, datasets}),
+    natures: getRecordEntries(profile?.Natures, {sampleWeight: row.sampleWeight, recordScale: row.recordScale, datasets}),
+    teammates: getRecordEntries(profile?.Teammates, {sampleWeight: row.sampleWeight, recordScale: row.recordScale, resolver: resolveSpeciesEntry, datasets}),
+    counters: getRecordEntries(profile?.["Checks and Counters"], {sampleWeight: row.sampleWeight, recordScale: row.recordScale, resolver: resolveSpeciesEntry, datasets}),
   };
 }
 
@@ -65,10 +65,20 @@ export function buildUsageConfigText(datasets, options = {}) {
 }
 
 export function formatUsageShare(value, digits = 1) {
-  if (!Number.isFinite(Number(value))) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
     return "0%";
   }
-  return `${(Number(value) * 100).toFixed(digits)}%`;
+  return `${numeric.toFixed(digits)}%`;
+
+}
+
+export function formatRecordShare(value, digits = 1) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return "0%";
+  }
+  return `${(numeric * 100).toFixed(digits)}%`;
 }
 
 export function getUsageData(datasets, _source = "smogon") {
@@ -91,6 +101,7 @@ function buildUsageRow(datasets, usageName, profile = {}, source = "smogon") {
     usage,
     rank: Number(profile?.rank || 0),
     source: source || "smogon",
+    recordScale: profile?.detailSource === "smogon-moveset" ? "percent" : "count",
     profile,
     sampleWeight: estimateSampleWeight(profile),
     isAvailable: Boolean(speciesId && datasets?.championsVgc?.usableSpeciesIds?.includes(speciesId)),
@@ -146,12 +157,12 @@ function findUsageRow(datasets, speciesId, options = {}) {
     || null;
 }
 
-function getSpreadEntries(profile = {}, sampleWeight = 0) {
+function getSpreadEntries(profile = {}, sampleWeight = 0, recordScale = "count") {
   // Official spread data path retired with usage-official disablement.
   // If the profile still carries a `usageOfficial.spreads` payload from a
   // legacy snapshot, ignore it — Smogon Spreads are the only active source.
   return recordPairs(profile?.Spreads)
-    .map(([key, count]) => parseSpreadEntry(key, count, sampleWeight))
+    .map(([key, count]) => parseSpreadEntry(key, count, sampleWeight, recordScale))
     .filter(Boolean)
     .slice(0, USAGE_RECORD_LIMIT);
 }
@@ -169,7 +180,7 @@ function buildOfficialSpreadEntry(entry) {
   };
 }
 
-function parseSpreadEntry(key, count, sampleWeight) {
+function parseSpreadEntry(key, count, sampleWeight, recordScale = "count") {
   const match = String(key || "").match(/^([A-Za-z]+):(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)$/);
   if (!match) {
     return null;
@@ -180,7 +191,7 @@ function parseSpreadEntry(key, count, sampleWeight) {
     nature: match[1],
     points,
     count: Number(count || 0),
-    share: recordShare(count, sampleWeight),
+    share: recordShare(count, sampleWeight, recordScale),
     validTotal: pointTotal(points) === CHAMPION_TOTAL_POINTS,
     hasNature: true,
   };
@@ -196,7 +207,7 @@ function getRecordEntries(record, options = {}) {
       spritePosition: resolved?.spritePosition || null,
       speciesId: resolved?.speciesId || "",
       count: Number(count || 0),
-      share: recordShare(count, options.sampleWeight),
+      share: recordShare(count, options.sampleWeight, options.recordScale),
       resolved: Boolean(resolved),
     };
   });
@@ -235,6 +246,9 @@ function resolveSpeciesEntry(name, datasets) {
 }
 
 function estimateSampleWeight(profile = {}) {
+  if (profile?.detailSource === "smogon-moveset") {
+    return 100;
+  }
   const spreadTotal = sumRecord(profile?.Spreads);
   if (spreadTotal > 0) {
     return spreadTotal;
@@ -246,7 +260,10 @@ function sumRecord(record = {}) {
   return Object.values(record || {}).reduce((sum, value) => sum + Number(value || 0), 0);
 }
 
-function recordShare(count, sampleWeight) {
+function recordShare(count, sampleWeight, recordScale = "count") {
+  if (recordScale === "percent") {
+    return Number(count || 0) / 100;
+  }
   const total = Number(sampleWeight || 0);
   return total > 0 ? Number(count || 0) / total : 0;
 }

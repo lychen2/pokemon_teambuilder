@@ -1,15 +1,11 @@
 const DEFAULT_HISTORY_LIMIT = 20;
 
-function cloneSnapshot(snapshot) {
-  return JSON.parse(JSON.stringify(snapshot));
+function deserializeSnapshot(serialized) {
+  return JSON.parse(serialized);
 }
 
 function createEntry(snapshot) {
-  const cloned = cloneSnapshot(snapshot);
-  return {
-    snapshot: cloned,
-    serialized: JSON.stringify(cloned),
-  };
+  return {serialized: JSON.stringify(snapshot)};
 }
 
 export function snapshotHistoryState(state) {
@@ -61,7 +57,7 @@ export function undoHistory(store) {
   }
   store.future.unshift(store.present);
   store.present = store.past.pop();
-  return cloneSnapshot(store.present.snapshot);
+  return deserializeSnapshot(store.present.serialized);
 }
 
 export function redoHistory(store) {
@@ -70,5 +66,5 @@ export function redoHistory(store) {
   }
   store.past.push(store.present);
   store.present = store.future.shift();
-  return cloneSnapshot(store.present.snapshot);
+  return deserializeSnapshot(store.present.serialized);
 }

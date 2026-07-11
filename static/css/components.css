@@ -1052,17 +1052,26 @@ kbd {
 }
 
 .sprite-image {
+  position: relative;
   width: 44px;
   height: 44px;
-  background-image: none;
+  background-image: url("../pokemonicons-sheet.png");
+  background-position: var(--fallback-position, 0 0);
+  background-repeat: no-repeat;
 }
 
 .poke-icon-image {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   image-rendering: auto;
+}
+
+.sprite-image.poke-icon-loaded:not(.poke-icon-error) {
+  background-image: none;
 }
 
 .sprite-image.poke-icon-error {
@@ -1089,6 +1098,13 @@ kbd {
   background-image: url("../itemicons-sheet.png");
   background-repeat: no-repeat;
   flex-shrink: 0;
+}
+
+.item-sprite-image,
+.builder-item-sprite-image,
+.vgcpastes-member-item-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* ==========================================================================

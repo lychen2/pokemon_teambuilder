@@ -146,7 +146,8 @@ export async function analyzePokemonDamageRoles(config, meta, scanner, options =
   if (!scanner) {
     return {damageRoles: [], unavailableReason: "scanner-missing", metrics: null, source: meta.source};
   }
-  const cacheKey = buildCacheKey(configHash(config), getMetaHash(meta));
+  const fieldHash = JSON.stringify(options.field || {});
+  const cacheKey = buildCacheKey(configHash(config), getMetaHash(meta), fieldHash);
   const cached = getCached(cacheKey);
   if (cached) return cached;
   try {

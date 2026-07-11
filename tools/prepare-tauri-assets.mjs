@@ -1,4 +1,5 @@
-import {cp, mkdir, rm, stat, readdir} from "node:fs/promises";
+import {cp, mkdir, readFile, readdir, rm, stat, utimes, writeFile} from "node:fs/promises";
+import {createHash} from "node:crypto";
 import {existsSync} from "node:fs";
 import path from "node:path";
 import process from "node:process";
@@ -31,10 +32,13 @@ const FILE_ASSETS = [
   "static/usage.json",
   "static/paste_sets_champions_mb.json",
   "static/paste_teams_champions_mb.json",
+  "static/usage-derived.json",
+  "static/vgcpastes-source-index.json",
   "static/team-planner-assets.json",
   "static/pokemonicons-sheet.png",
   "static/itemicons-sheet.png",
   "static/poke-icons-map.json",
+  "static/champions-official-icons.json",
   "poke_analysis-main/stats/abilities.json",
   "poke_analysis-main/stats/champions_vgc.json",
   "poke_analysis-main/stats/formats.json",
@@ -50,8 +54,12 @@ const DIRECTORY_ASSETS = [
   "static/css",
   "static/workers",
   "static/team-planner-assets",
+  "static/champions-official-icons",
   "vendor/champions-damage-core",
 ];
+
+const DATA_CACHE_VERSION_PATH = "static/data-cache-version.json";
+const DATA_CACHE_ASSETS = FILE_ASSETS.filter((relativePath) => relativePath.endsWith(".json"));
 
 async function assertExists(relativePath) {
   const source = path.join(repoRoot, relativePath);
@@ -60,19 +68,60 @@ async function assertExists(relativePath) {
   });
 }
 
-async function copyFileAsset(relativePath) {
-  const source = path.join(repoRoot, relativePath);
-  const target = path.join(distRoot, relativePath);
+async function copyIfChanged(source, target) {
+  const [sourceStat, targetStat] = await Promise.all([
+    stat(source),
+    stat(target).catch(() => null),
+  ]);
+  if (targetStat && targetStat.size === sourceStat.size && targetStat.mtimeMs >= sourceStat.mtimeMs) {
+    return false;
+  }
   await mkdir(path.dirname(target), {recursive: true});
   await cp(source, target);
+  await utimes(target, sourceStat.atime, sourceStat.mtime);
+  return true;
 }
 
-async function copyDirectoryAsset(relativePath) {
+
+async function copyFileAsset(relativePath, options = {}) {
   const source = path.join(repoRoot, relativePath);
   const target = path.join(distRoot, relativePath);
+  if (options.incremental) {
+    return copyIfChanged(source, target);
+  }
+  await mkdir(path.dirname(target), {recursive: true});
+  await cp(source, target);
+  return true;
+}
+
+async function copyDirectoryAsset(relativePath, options = {}) {
+  const source = path.join(repoRoot, relativePath);
+  const target = path.join(distRoot, relativePath);
+  if (options.incremental) {
+    return copyDirectoryChanged(source, target);
+  }
   await mkdir(path.dirname(target), {recursive: true});
   await cp(source, target, {recursive: true});
+  return true;
 }
+
+async function copyDirectoryChanged(source, target) {
+  let changed = 0;
+  await mkdir(target, {recursive: true});
+  for (const entry of await readdir(source, {withFileTypes: true})) {
+    const sourcePath = path.join(source, entry.name);
+    const targetPath = path.join(target, entry.name);
+    if (entry.isDirectory()) {
+      changed += await copyDirectoryChanged(sourcePath, targetPath);
+      continue;
+    }
+    if (entry.isFile() && await copyIfChanged(sourcePath, targetPath)) {
+      changed += 1;
+    }
+  }
+  return changed;
+}
+
 
 async function countFiles(directory) {
   let total = 0;
@@ -83,29 +132,46 @@ async function countFiles(directory) {
   return total;
 }
 
+async function writeDataCacheVersion() {
+  const hash = createHash("sha256");
+  for (const relativePath of DATA_CACHE_ASSETS) {
+    hash.update(relativePath);
+    hash.update(await readFile(path.join(repoRoot, relativePath)));
+  }
+  const target = path.join(distRoot, DATA_CACHE_VERSION_PATH);
+  await mkdir(path.dirname(target), {recursive: true});
+  await writeFile(target, `${JSON.stringify({version: hash.digest("hex")})}\n`);
+}
+
 async function check() {
   await Promise.all([...FILE_ASSETS, ...DIRECTORY_ASSETS].map(assertExists));
 }
 
-async function prepare() {
+async function prepare(options = {}) {
   await check();
-  await rm(distRoot, {recursive: true, force: true});
+  if (!options.incremental) {
+    await rm(distRoot, {recursive: true, force: true});
+  }
   await mkdir(distRoot, {recursive: true});
+  let changed = 0;
   for (const file of FILE_ASSETS) {
-    await copyFileAsset(file);
+    changed += await copyFileAsset(file, options) ? 1 : 0;
   }
   for (const directory of DIRECTORY_ASSETS) {
-    await copyDirectoryAsset(directory);
+    const copied = await copyDirectoryAsset(directory, options);
+    changed += Number(copied || 0);
   }
+  await writeDataCacheVersion();
   const fileCount = await countFiles(distRoot);
-  console.log(`Prepared ${fileCount} desktop asset files in ${path.relative(repoRoot, distRoot)}`);
+  const mode = options.incremental ? "Updated" : "Prepared";
+  console.log(`${mode} ${changed} changed files, ${fileCount} total desktop asset files in ${path.relative(repoRoot, distRoot)}`);
 }
 
 if (process.argv.includes("--check")) {
   await check();
   console.log("Desktop asset inputs are present");
 } else {
-  await prepare();
+  await prepare({incremental: process.argv.includes("--dev")});
 }
 
 if (!existsSync(path.join(distRoot, "index.html")) && !process.argv.includes("--check")) {

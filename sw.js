@@ -1,4 +1,4 @@
-const CACHE_VERSION = "poke-type-v79-20260504-shell-and-speed-percentile-v2";
+const CACHE_VERSION = "poke-type-v80-20260705-perf-cache-role-context";
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 const IMAGE_CACHE = `${CACHE_VERSION}-image`;
@@ -81,23 +81,6 @@ const IMAGE_ASSETS = [
   "./static/pokemonicons-sheet.png",
 ];
 
-const DATA_ASSETS = [
-  "./static/poke-icons-map.json",
-  "./static/localization-data.json",
-  "./static/usage.json",
-  "./static/usage_official.json",
-  "./static/paste_sets_champions_mb.json",
-  "./static/paste_teams_champions_mb.json",
-  "./config-default.txt",
-  "./poke_analysis-main/stats/abilities.json",
-  "./poke_analysis-main/stats/champions_vgc.json",
-  "./poke_analysis-main/stats/formats.json",
-  "./poke_analysis-main/stats/forms_index.json",
-  "./poke_analysis-main/stats/items.json",
-  "./poke_analysis-main/stats/learnsets.json",
-  "./poke_analysis-main/stats/moves.json",
-  "./poke_analysis-main/stats/pokedex.json",
-];
 
 const PRECACHE_SHELL = [
   ...SHELL_ASSETS,
@@ -112,8 +95,6 @@ self.addEventListener("install", (event) => {
     await shell.addAll(PRECACHE_SHELL).catch(() => {});
     const images = await caches.open(IMAGE_CACHE);
     await images.addAll(IMAGE_ASSETS).catch(() => {});
-    const data = await caches.open(DATA_CACHE);
-    await data.addAll(DATA_ASSETS).catch(() => {});
     await self.skipWaiting();
   })());
 });

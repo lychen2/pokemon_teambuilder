@@ -137,6 +137,39 @@ def unique_legal_tier_entries(champions_table, override_tier, start_index, end_i
 
 def is_mega_entry(entry):
     return str(entry.get("forme", "")).startswith("Mega") or "-Mega" in str(entry.get("name", ""))
+BATTLE_STAT_KEYS = ("hp", "atk", "def", "spa", "spd", "spe")
+
+
+def _get_ability_set(entry):
+    return tuple(sorted(entry.get("abilities", {}).values()))
+
+
+def is_battle_equivalent_form(entry, base_entry):
+    if not entry.get("baseSpecies"):
+        return False
+    if is_mega_entry(entry):
+        return False
+    if entry.get("requiredItem") or entry.get("requiredMove") or entry.get("battleOnly") or entry.get("changesFrom"):
+        return False
+    return (
+        entry.get("types") == base_entry.get("types")
+        and all(
+            entry.get("baseStats", {}).get(stat) == base_entry.get("baseStats", {}).get(stat)
+            for stat in BATTLE_STAT_KEYS
+        )
+        and _get_ability_set(entry) == _get_ability_set(base_entry)
+    )
+
+
+def is_selectable_battle_species(pokedex, species_id):
+    entry = pokedex.get(species_id)
+    if not entry or not entry.get("name") or not entry.get("baseStats"):
+        return False
+    if entry.get("battleOnly") and not is_mega_entry(entry):
+        return False
+    base_species_id = normalize_showdown_id(entry.get("baseSpecies", ""))
+    base_entry = pokedex.get(base_species_id) if base_species_id else None
+    return not base_entry or not is_battle_equivalent_form(entry, base_entry)
 
 
 def is_legal_champions_item(item):
@@ -151,13 +184,18 @@ def expand_usable_species_ids_with_mega_forms(pokedex, items, usable_species_ids
     for species_id in legal_mega_forms_for_base_species(pokedex, items, expanded, seen):
         expanded.append(species_id)
         seen.add(species_id)
-    return expanded
+    return [
+        species_id for species_id in expanded
+        if is_selectable_battle_species(pokedex, species_id)
+    ]
 
 
 def filter_legal_listed_megas(pokedex, items, usable_species_ids):
     expanded = []
     seen = set()
     for species_id in usable_species_ids:
+        if not is_selectable_battle_species(pokedex, species_id):
+            continue
         entry = pokedex.get(species_id, {})
         required = items.get(normalize_showdown_id(entry.get("requiredItem")))
         if is_mega_entry(entry) and not is_legal_champions_item(required):

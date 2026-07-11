@@ -27,7 +27,7 @@ import {
   hasMove,
 } from "./team-roles.js";
 import {summarizeTeamIdentity} from "./team-identity.js";
-import {getBattleEquivalentSpeciesId, getTypeLabel, uniqueStrings} from "./utils.js";
+import {clamp, getBattleEquivalentSpeciesId, getTypeLabel, isMegaConfig, uniqueStrings} from "./utils.js";
 
 const TRICK_ROOM_MOVE = "trickroom";
 const SPEED_MODE_STANDARD = "standard";
@@ -50,6 +50,63 @@ const BLIND_SPOT_PREVIEW_LIMIT = 8;
 const DEFENSIVE_TYPE_PAIRS = buildDefensiveTypePairs();
 const PARTNER_TYPE_COMBOS = buildPartnerTypeCombos();
 
+const REFERENCE_MEGA_PICK_BONUS = 2.4;
+const REFERENCE_TEAM_LIMIT = 64;
+const REFERENCE_BASE_SAMPLE_LIMIT = 240;
+const REFERENCE_TEAM_MIN_SAMPLES = 6;
+const REFERENCE_CLUSTER_ITERATIONS = 8;
+const REFERENCE_FEATURE_KEYS = Object.freeze([
+  "sun",
+  "rain",
+  "sand",
+  "snow",
+  "trickRoom",
+  "tailwind",
+  "fast",
+  "slow",
+  "mega",
+  "physical",
+  "special",
+  "support",
+  "fakeout",
+  "redirection",
+  "guard",
+  "disruption",
+  "pivot",
+  "spread",
+]);
+const REFERENCE_ARCHETYPE_WEIGHTS = Object.freeze({
+  sun: 3.2,
+  rain: 3.2,
+  sand: 3,
+  snow: 3,
+  trickroom: 3.4,
+  tailwind: 2.6,
+  mega: 2.2,
+  balance: 1,
+});
+const WEATHER_ROLE_IDS = Object.freeze(["sunsetter", "rainsetter", "sandsetter", "snowsetter", "weatherresetpivot"]);
+const REFERENCE_WEATHER_IDS = Object.freeze(["sun", "rain", "sand", "snow"]);
+const DEFENSIVE_ANSWER_LIMIT = 3;
+const OFFENSIVE_ANSWER_LIMIT = 3;
+const ROLE_ANSWER_LIMIT = 4;
+
+function getConfigLabel(config = {}, language = "zh") {
+  return config.displayName || config.speciesName || t(language, "common.unknown");
+}
+
+function hasRole(config, roleId, roleContext) {
+  return getUtilityRoles(config, {roleContext}).includes(roleId);
+}
+
+function hasAnyRole(config, roleIds = [], roleContext) {
+  const roles = getUtilityRoles(config, {roleContext});
+  return roleIds.some((roleId) => roles.includes(roleId));
+}
+
+function hasSpreadMove(config = {}) {
+  return (config.moves || []).some((move) => ["alladjacent", "alladjacentfoes"].includes(move?.target));
+}
 function getMedianSpeed(speedTiers = []) {
   const totalCount = speedTiers.reduce((sum, tier) => sum + tier.totalCount, 0);
   if (!totalCount) return 0;
@@ -775,6 +832,553 @@ function summarizeCores(team, weaknesses = [], language = "zh", context = {}) {
   };
 }
 
+function getReferenceTeamKey(config = {}, index = 0) {
+  const sourceTeamId = config.source?.teamId || String(config.note || "").match(/PC[0-9A-Z]+/i)?.[0];
+  if (sourceTeamId) return `source:${String(sourceTeamId).toUpperCase()}`;
+  return `local:${Math.floor(index / 6)}`;
+}
+
+function buildReferenceSamples(library = []) {
+  const groups = new Map();
+  library.forEach((config, index) => {
+    if (!config?.speciesId) return;
+    const key = getReferenceTeamKey(config, index);
+    const group = groups.get(key) || [];
+    group.push(config);
+    groups.set(key, group);
+  });
+  return [...groups.values()]
+    .map((configs) => configs.slice(0, 6))
+    .filter((configs) => configs.length >= 4);
+}
+
+function buildMegaReferenceSamples(library = []) {
+  const groups = new Map();
+  library.forEach((config, index) => {
+    if (!config?.speciesId || !isMegaConfig(config)) return;
+    const key = getReferenceTeamKey(config, index);
+    const group = groups.get(key) || [];
+    group.push(config);
+    groups.set(key, group);
+  });
+  return [...groups.values()].map((configs) => configs.slice(0, 6));
+}
+
+function mergeReferenceSampleEntries(primaryEntries = [], extraEntries = []) {
+  const selected = [...primaryEntries];
+  const selectedKeys = new Set(selected.map((entry) => getReferenceTeamKey(entry.configs?.[0])));
+  for (const entry of extraEntries) {
+    const key = getReferenceTeamKey(entry.configs?.[0]);
+    if (selectedKeys.has(key)) continue;
+    selected.push(entry);
+    selectedKeys.add(key);
+  }
+  return selected;
+}
+
+function selectReferenceSamples(samples = []) {
+  const selected = samples.slice(0, REFERENCE_BASE_SAMPLE_LIMIT);
+  const selectedKeys = new Set(selected.map((configs) => getReferenceTeamKey(configs[0])));
+  const megaSamples = samples.filter((configs) => configs.some(isMegaConfig));
+  for (const configs of megaSamples) {
+    const key = getReferenceTeamKey(configs[0]);
+    if (selectedKeys.has(key)) continue;
+    selected.push(configs);
+    selectedKeys.add(key);
+  }
+  return selected;
+}
+
+function getReferenceTeamVector(configs = [], context = {}) {
+  const medianSpeed = Number(context.speedContext?.medianSpeed || getMedianSpeed(context.speedTiers));
+  const size = Math.max(1, configs.length);
+  const roleCount = (roleId) => configs.filter((config) => hasRole(config, roleId, context.roleContext)).length / size;
+  const anyWeather = WEATHER_ROLE_IDS.some((roleId) => configs.some((config) => hasRole(config, roleId, context.roleContext)));
+  const moveCategories = configs.flatMap((config) => config.moves || []).map((move) => move.category);
+  return {
+    sun: roleCount("sunsetter"),
+    rain: roleCount("rainsetter"),
+    sand: roleCount("sandsetter"),
+    snow: roleCount("snowsetter"),
+    trickRoom: roleCount("trickroom"),
+    tailwind: roleCount("tailwind") + roleCount("speedboostself") * 0.5,
+    fast: configs.filter((config) => getEffectiveSpeed(config, "ally", context.fieldState) > medianSpeed).length / size,
+    slow: configs.filter((config) => getEffectiveSpeed(config, "ally", context.fieldState) <= medianSpeed).length / size,
+    mega: configs.filter(isMegaConfig).length / size,
+    physical: moveCategories.filter((category) => category === "Physical").length / Math.max(1, moveCategories.length),
+    special: moveCategories.filter((category) => category === "Special").length / Math.max(1, moveCategories.length),
+    support: moveCategories.filter((category) => category === "Status").length / Math.max(1, moveCategories.length),
+    fakeout: roleCount("fakeout"),
+    redirection: roleCount("redirection"),
+    guard: roleCount("guard") + roleCount("wideguard"),
+    disruption: roleCount("disruption"),
+    pivot: roleCount("pivot"),
+    spread: configs.filter(hasSpreadMove).length / size,
+    weather: anyWeather ? 1 : 0,
+  };
+}
+
+function vectorToArray(vector = {}) {
+  return REFERENCE_FEATURE_KEYS.map((key) => Number(vector[key] || 0));
+}
+
+function standardizeVectors(vectors = []) {
+  const means = REFERENCE_FEATURE_KEYS.map((_, index) => vectors.reduce((sum, vector) => sum + vector[index], 0) / Math.max(1, vectors.length));
+  const deviations = means.map((mean, index) => {
+    const variance = vectors.reduce((sum, vector) => sum + (vector[index] - mean) ** 2, 0) / Math.max(1, vectors.length);
+    return Math.sqrt(variance) || 1;
+  });
+  return vectors.map((vector) => vector.map((value, index) => (value - means[index]) / deviations[index]));
+}
+
+function dot(left = [], right = []) {
+  return left.reduce((sum, value, index) => sum + value * Number(right[index] || 0), 0);
+}
+
+function normalizeVector(vector = []) {
+  const length = Math.sqrt(dot(vector, vector)) || 1;
+  return vector.map((value) => value / length);
+}
+
+function multiplyCovariance(vectors = [], axis = []) {
+  return axis.map((_, featureIndex) => {
+    return vectors.reduce((sum, vector) => sum + vector[featureIndex] * dot(vector, axis), 0) / Math.max(1, vectors.length - 1);
+  });
+}
+
+function derivePrincipalAxis(vectors = [], seedIndex = 0) {
+  let axis = REFERENCE_FEATURE_KEYS.map((_, index) => (index === seedIndex ? 1 : 0.37));
+  for (let step = 0; step < 12; step += 1) {
+    axis = normalizeVector(multiplyCovariance(vectors, axis));
+  }
+  return axis;
+}
+
+function projectReferenceVectors(vectors = []) {
+  if (!vectors.length) return [];
+  const primaryAxis = derivePrincipalAxis(vectors, 0);
+  const secondarySeed = REFERENCE_FEATURE_KEYS.map((_, index) => (index === 1 ? 1 : 0.19));
+  const primaryComponent = dot(secondarySeed, primaryAxis);
+  const secondaryAxis = normalizeVector(secondarySeed.map((value, index) => value - primaryComponent * primaryAxis[index]));
+  return vectors.map((vector) => ({x: dot(vector, primaryAxis), y: dot(vector, secondaryAxis)}));
+}
+
+function distanceSquared(left, right) {
+  return (left.x - right.x) ** 2 + (left.y - right.y) ** 2;
+}
+
+function assignClusters(points = [], centroids = []) {
+  return points.map((point) => centroids.reduce((best, centroid, index) => {
+    const distance = distanceSquared(point, centroid);
+    return distance < best.distance ? {index, distance} : best;
+  }, {index: 0, distance: Infinity}).index);
+}
+
+function updateCentroids(points = [], assignments = [], clusterCount = 1) {
+  return Array.from({length: clusterCount}, (_, index) => {
+    const members = points.filter((_, pointIndex) => assignments[pointIndex] === index);
+    if (!members.length) return points[index % Math.max(1, points.length)] || {x: 0, y: 0};
+    return {
+      x: members.reduce((sum, point) => sum + point.x, 0) / members.length,
+      y: members.reduce((sum, point) => sum + point.y, 0) / members.length,
+    };
+  });
+}
+
+function clusterReferencePoints(points = [], clusterCount = 1) {
+  if (!points.length) return [];
+  let centroids = [...points]
+    .sort((left, right) => left.x - right.x || left.y - right.y)
+    .filter((_, index) => index % Math.max(1, Math.floor(points.length / clusterCount)) === 0)
+    .slice(0, clusterCount);
+  while (centroids.length < clusterCount) centroids.push(points[centroids.length % points.length]);
+  let assignments = assignClusters(points, centroids);
+  for (let step = 0; step < REFERENCE_CLUSTER_ITERATIONS; step += 1) {
+    centroids = updateCentroids(points, assignments, clusterCount);
+    assignments = assignClusters(points, centroids);
+  }
+  return centroids.map((centroid, clusterIndex) => {
+    const memberIndexes = assignments
+      .map((assignment, pointIndex) => (assignment === clusterIndex ? pointIndex : -1))
+      .filter((pointIndex) => pointIndex >= 0);
+    const representativeIndex = memberIndexes.reduce((bestIndex, pointIndex) => {
+      if (bestIndex < 0) return pointIndex;
+      return distanceSquared(points[pointIndex], centroid) < distanceSquared(points[bestIndex], centroid) ? pointIndex : bestIndex;
+    }, -1);
+    return {centroid, memberIndexes, representativeIndex};
+  }).filter((cluster) => cluster.representativeIndex >= 0);
+}
+
+function getReferenceArchetypeId(vector = {}) {
+  const scores = {
+    sun: vector.sun * REFERENCE_ARCHETYPE_WEIGHTS.sun,
+    rain: vector.rain * REFERENCE_ARCHETYPE_WEIGHTS.rain,
+    sand: vector.sand * REFERENCE_ARCHETYPE_WEIGHTS.sand,
+    snow: vector.snow * REFERENCE_ARCHETYPE_WEIGHTS.snow,
+    trickroom: vector.trickRoom * REFERENCE_ARCHETYPE_WEIGHTS.trickroom + vector.slow,
+    tailwind: vector.tailwind * REFERENCE_ARCHETYPE_WEIGHTS.tailwind + vector.fast,
+    mega: vector.mega * REFERENCE_ARCHETYPE_WEIGHTS.mega,
+    balance: REFERENCE_ARCHETYPE_WEIGHTS.balance + Math.min(vector.physical, vector.special) + vector.support,
+  };
+  return Object.entries(scores).sort((left, right) => right[1] - left[1])[0]?.[0] || "balance";
+}
+
+function getReferenceCoreMembers(configs = [], vector = {}, context = {}) {
+  const seenSpecies = new Set();
+  const preferred = configs
+    .map((config) => {
+      const roles = getUtilityRoles(config, {roleContext: context.roleContext});
+      const score = Number(isMegaConfig(config)) * 3
+        + Number(roles.some((roleId) => ["trickroom", "tailwind", "sunsetter", "rainsetter", "sandsetter", "snowsetter"].includes(roleId))) * 2
+        + Number(hasSpreadMove(config)) * 0.8
+        + Number((config.moves || []).some((move) => move.category !== "Status")) * 0.5
+        + Number(vector.mega > 0 && isMegaConfig(config));
+      return {config, score};
+    })
+    .sort((left, right) => right.score - left.score || getConfigLabel(left.config).localeCompare(getConfigLabel(right.config), "zh-Hans-CN"));
+  return preferred
+    .filter(({config}) => {
+      const key = getReferenceDisplaySpeciesKey(config, context);
+      if (seenSpecies.has(key)) return false;
+      seenSpecies.add(key);
+      return true;
+    })
+    .slice(0, 3)
+    .map(({config}) => createMemberReference(config));
+}
+
+function getReferenceSpeciesKey(config = {}) {
+  return getBattleEquivalentSpeciesId(config.speciesId) || config.speciesId || config.id;
+}
+
+function getReferenceDisplaySpeciesKey(config = {}, context = {}) {
+  const speciesId = config.speciesId || "";
+  const entry = context.datasets?.pokedex?.[speciesId];
+  return getBattleEquivalentSpeciesId(entry?.baseSpecies || speciesId, context.datasets) || speciesId || config.id;
+}
+
+function getReferenceDisplayLabel(config = {}, context = {}) {
+  if (context.language === "zh") {
+    const localized = context.datasets?.localizedSpeciesNames?.get(config.speciesId);
+    if (localized) return localized;
+  }
+  return getConfigLabel(config, context.language);
+}
+
+function getMegaReferenceCoreMembers(megaConfig = {}, entries = [], context = {}) {
+  const targetKey = getReferenceDisplaySpeciesKey(megaConfig, context);
+  const teammateCounts = new Map();
+  const teammateConfigs = new Map();
+  for (const entry of entries) {
+    for (const config of entry.configs || []) {
+      const key = getReferenceDisplaySpeciesKey(config, context);
+      if (!key || key === targetKey || isMegaConfig(config)) continue;
+      teammateCounts.set(key, (teammateCounts.get(key) || 0) + 1);
+      if (!teammateConfigs.has(key)) teammateConfigs.set(key, config);
+    }
+  }
+  const teammates = [...teammateCounts.entries()]
+    .sort((left, right) => right[1] - left[1] || getConfigLabel(teammateConfigs.get(left[0])).localeCompare(getConfigLabel(teammateConfigs.get(right[0])), "zh-Hans-CN"))
+    .slice(0, 2)
+    .map(([key]) => createMemberReference(teammateConfigs.get(key)));
+  return [createMemberReference(megaConfig), ...teammates];
+}
+
+function getMegaReferenceConfigs(megaConfig = {}, entries = []) {
+  const targetKey = getReferenceSpeciesKey(megaConfig);
+  return entries
+    .flatMap((entry) => entry.configs || [])
+    .filter((config) => getReferenceSpeciesKey(config) === targetKey)
+    .slice(0, 6);
+}
+
+function getTopReferenceThreatTypes(configs = [], context = {}) {
+  return TYPE_ORDER.map((type) => {
+    const pressure = configs.reduce((sum, config) => {
+      return sum + getBestMoveEffectiveness(config, {types: [type]}, {fieldState: context.fieldState, side: "ally", defenderSide: "ally"});
+    }, 0) / Math.max(1, configs.length);
+    return {type, pressure};
+  }).sort((left, right) => right.pressure - left.pressure).slice(0, 3);
+}
+
+function getReferenceDefensiveAnswers(team = [], threatTypes = [], context = {}) {
+  return team.map((config) => {
+    const profile = getResistanceProfile(config, {fieldState: context.fieldState, side: "ally"});
+    const covered = threatTypes.filter((entry) => (profile[entry.type] ?? 1) < 1);
+    return {
+      member: createMemberReference(config),
+      labels: covered.map((entry) => getTypeLabel(entry.type, context.language)),
+      score: covered.length * 2 + threatTypes.reduce((sum, entry) => sum + Math.max(0, 1 - (profile[entry.type] ?? 1)), 0),
+    };
+  }).filter((entry) => entry.score > 0).sort((left, right) => right.score - left.score).slice(0, DEFENSIVE_ANSWER_LIMIT);
+}
+
+function getReferenceOffensiveAnswers(team = [], referenceConfigs = [], context = {}) {
+  return team.map((config) => {
+    const hits = referenceConfigs.map((target) => ({
+      target: createMemberReference(target),
+      effectiveness: getBestMoveEffectiveness(config, target, {fieldState: context.fieldState, side: "ally", defenderSide: "opponent"}),
+    })).filter((entry) => entry.effectiveness >= SUPER_EFFECTIVE_THRESHOLD);
+    return {member: createMemberReference(config), hits, score: hits.reduce((sum, entry) => sum + entry.effectiveness, 0)};
+  }).filter((entry) => entry.hits.length).sort((left, right) => right.score - left.score).slice(0, OFFENSIVE_ANSWER_LIMIT);
+}
+
+function getReferenceRoleAnswers(team = [], archetypeId = "balance", context = {}) {
+  const roleIds = {
+    sun: ["weatherresetpivot", "speeddebuff", "fakeout", "guard"],
+    rain: ["weatherresetpivot", "speeddebuff", "redirection", "guard"],
+    sand: ["weatherresetpivot", "wideguard", "redirection", "intimidatepivot"],
+    snow: ["weatherresetpivot", "guard", "disruption", "fakeout"],
+    trickroom: ["taunt", "fakeout", "disruption", "redirection"],
+    tailwind: ["speeddebuff", "paralysiscontrol", "fakeout", "guard"],
+    mega: ["intimidatepivot", "fakeout", "redirection", "speeddebuff"],
+    balance: ["pivot", "fakeout", "disruption", "redirection"],
+  }[archetypeId] || ["pivot", "fakeout", "disruption"];
+  return roleIds.map((roleId) => ({
+    roleId,
+    members: team.filter((config) => hasRole(config, roleId, context.roleContext)).map(createMemberReference),
+  })).filter((entry) => entry.members.length).slice(0, ROLE_ANSWER_LIMIT);
+}
+
+function getReferenceRoleIds(archetypeId = "balance") {
+  return {
+    mega: ["fakeout", "intimidatepivot", "redirection", "speeddebuff", "disruption"],
+    weather: ["weatherresetpivot", "speeddebuff", "fakeout", "guard", "wideguard"],
+    trickroom: ["taunt", "fakeout", "disruption", "redirection", "slowattacker"],
+    tailwind: ["speeddebuff", "paralysiscontrol", "fakeout", "guard", "priority"],
+    balance: ["pivot", "fakeout", "disruption", "redirection"],
+  }[archetypeId] || ["pivot", "fakeout", "disruption"];
+}
+
+function scoreReferenceLineupMember(config, referenceConfigs = [], threatTypes = [], archetypeId = "balance", context = {}, options = {}) {
+  const profile = getResistanceProfile(config, {fieldState: context.fieldState, side: "ally"});
+  const defensiveScore = threatTypes.reduce((sum, entry) => sum + Math.max(0, 1.25 - (profile[entry.type] ?? 1)), 0) * 2;
+  const offensiveScore = referenceConfigs.reduce((sum, target) => {
+    const hit = getBestMoveEffectiveness(config, target, {fieldState: context.fieldState, side: "ally", defenderSide: "opponent"});
+    return sum + (hit >= SUPER_EFFECTIVE_THRESHOLD ? hit : hit >= 1 ? 0.35 : 0);
+  }, 0);
+  const roles = getUtilityRoles(config, {roleContext: context.roleContext});
+  const roleScore = getReferenceRoleIds(archetypeId).filter((roleId) => roles.includes(roleId)).length * 1.6;
+  const speed = getEffectiveSpeed(config, "ally", context.fieldState);
+  const speedScore = archetypeId === "trickroom"
+    ? Number(hasMove(config, TRICK_ROOM_MOVE) || roles.includes("slowattacker")) * 1.2
+    : Number(speed >= Number(context.speedContext?.medianSpeed || 0)) * 0.6;
+  const megaPickBonus = options.includeMegaPickBonus && isMegaConfig(config) ? REFERENCE_MEGA_PICK_BONUS : 0;
+  return defensiveScore + offensiveScore + roleScore + speedScore + megaPickBonus;
+}
+
+function buildReferenceLineup(team = [], referenceConfigs = [], threatTypes = [], archetypeId = "balance", context = {}) {
+  const ranked = team
+    .map((config) => ({config, score: scoreReferenceLineupMember(config, referenceConfigs, threatTypes, archetypeId, context, {includeMegaPickBonus: true})}))
+    .sort((left, right) => right.score - left.score || getConfigLabel(left.config, context.language).localeCompare(getConfigLabel(right.config, context.language), "zh-Hans-CN"));
+  const picked = [];
+  const pickedSpecies = new Set();
+  const pickEntry = (entry, options = {}) => {
+    if (picked.length >= 4) return false;
+    const key = getReferenceDisplaySpeciesKey(entry.config, context);
+    if (pickedSpecies.has(key)) return false;
+    if (!options.allowExtraMega && isMegaConfig(entry.config) && picked.some(isMegaConfig)) return false;
+    picked.push(entry.config);
+    pickedSpecies.add(key);
+    return true;
+  };
+  for (const entry of ranked) {
+    pickEntry(entry);
+  }
+  for (const entry of ranked) {
+    pickEntry(entry, {allowExtraMega: true});
+  }
+  return picked
+    .map((config) => ({config, leadScore: scoreReferenceLineupMember(config, referenceConfigs, threatTypes, archetypeId, context)}))
+    .sort((left, right) => right.leadScore - left.leadScore || getConfigLabel(left.config, context.language).localeCompare(getConfigLabel(right.config, context.language), "zh-Hans-CN"))
+    .map(({config}) => createMemberReference(config));
+}
+function getWeatherLabelId(vector = {}) {
+  return REFERENCE_WEATHER_IDS.sort((left, right) => Number(vector[right] || 0) - Number(vector[left] || 0))[0] || "weather";
+}
+function getReferenceModeScore(entry, archetypeId) {
+  const vector = entry.vector || {};
+  if (archetypeId === "mega") return vector.mega * 5;
+  if (REFERENCE_WEATHER_IDS.includes(archetypeId)) return Number(vector[archetypeId] || 0) * 5;
+  if (archetypeId === "weather") return Math.max(vector.sun, vector.rain, vector.sand, vector.snow) * 5;
+  if (archetypeId === "trickroom") return vector.trickRoom * 5 + vector.slow;
+  if (archetypeId === "tailwind") return vector.tailwind * 4 + vector.fast;
+  return Math.min(vector.physical, vector.special) + vector.support;
+}
+
+
+function pickReferenceSampleForMode(sampleEntries = [], archetypeId) {
+  return sampleEntries
+    .map((entry) => ({...entry, modeScore: getReferenceModeScore(entry, archetypeId)}))
+    .filter((entry) => entry.modeScore > 0.55)
+    .sort((left, right) => right.modeScore - left.modeScore)[0] || null;
+}
+
+function getMegaReferenceConfig(configs = []) {
+  return configs.find((config) => isMegaConfig(config)) || null;
+}
+
+function getMegaReferenceKey(config = {}) {
+  return getBattleEquivalentSpeciesId(config.speciesId) || config.speciesId || config.id || "mega";
+}
+
+function getUsageProfileForReference(config = {}, context = {}) {
+  const keys = [config.speciesId, config.speciesName, config.displayName]
+    .map((value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, ""))
+    .filter(Boolean);
+  for (const key of keys) {
+    const profile = context.datasets?.usageLookup?.get(key)?.profile;
+    if (profile) return profile;
+  }
+  return null;
+}
+
+function getReferenceUsageRank(config = {}, context = {}) {
+  return Number(getUsageProfileForReference(config, context)?.rank || Number.MAX_SAFE_INTEGER);
+}
+
+function getMegaReferenceLimit(entries = []) {
+  return entries.length;
+}
+
+
+function buildMegaReferenceEntries(sampleEntries = [], context = {}) {
+  const groups = new Map();
+  for (const entry of sampleEntries) {
+    for (const megaConfig of (entry.configs || []).filter(isMegaConfig)) {
+      const key = getMegaReferenceKey(megaConfig);
+      const current = groups.get(key) || {megaConfig, entries: []};
+      current.entries.push(entry);
+      groups.set(key, current);
+    }
+  }
+  return [...groups.values()]
+    .map((group) => {
+      const representative = group.entries
+        .map((entry) => ({...entry, modeScore: getReferenceModeScore(entry, "mega") + Number(entry.configs.some((config) => getMegaReferenceKey(config) === getMegaReferenceKey(group.megaConfig))) * 2}))
+        .sort((left, right) => right.modeScore - left.modeScore)[0];
+      if (!representative) return null;
+      const threatTypes = getTopReferenceThreatTypes(getMegaReferenceConfigs(group.megaConfig, group.entries), context);
+      const referenceConfigs = getMegaReferenceConfigs(group.megaConfig, group.entries);
+      return {
+        id: `reference-mega-${getMegaReferenceKey(group.megaConfig)}`,
+        archetypeId: "mega",
+        subModeId: "mega",
+        title: getReferenceDisplayLabel(group.megaConfig, context),
+        _megaConfig: group.megaConfig,
+        sampleCount: group.entries.length,
+        confidence: clamp(group.entries.length / Math.max(1, sampleEntries.length), 0.12, 1),
+        pca: representative.pca,
+        coreMembers: getMegaReferenceCoreMembers(group.megaConfig, group.entries, context),
+        pressureLabels: threatTypes.map((entry) => getTypeLabel(entry.type, context.language)),
+        defensiveAnswers: getReferenceDefensiveAnswers(context.team, threatTypes, context),
+        offensiveAnswers: getReferenceOffensiveAnswers(context.team, referenceConfigs, context),
+        roleAnswers: getReferenceRoleAnswers(context.team, "mega", context),
+        lineup: buildReferenceLineup(context.team, referenceConfigs, threatTypes, "mega", context),
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => getReferenceUsageRank(left._megaConfig, context) - getReferenceUsageRank(right._megaConfig, context) || right.sampleCount - left.sampleCount || right.confidence - left.confidence);
+}
+
+function buildWeatherReferenceEntries(sampleEntries = [], context = {}) {
+  return REFERENCE_WEATHER_IDS
+    .map((weatherId) => {
+      const representative = pickReferenceSampleForMode(sampleEntries, weatherId);
+      if (!representative) return null;
+      const threatTypes = getTopReferenceThreatTypes(representative.configs, context);
+      return {
+        id: `reference-weather-${weatherId}`,
+        archetypeId: "weather",
+        subModeId: weatherId,
+        sampleCount: sampleEntries.filter((entry) => getReferenceModeScore(entry, weatherId) > 0.55).length,
+        confidence: clamp(representative.modeScore / 5, 0.12, 1),
+        pca: representative.pca,
+        coreMembers: getReferenceCoreMembers(representative.configs, representative.vector, context),
+        pressureLabels: threatTypes.map((entry) => getTypeLabel(entry.type, context.language)),
+        defensiveAnswers: getReferenceDefensiveAnswers(context.team, threatTypes, context),
+        offensiveAnswers: getReferenceOffensiveAnswers(context.team, representative.configs, context),
+        roleAnswers: getReferenceRoleAnswers(context.team, "weather", context),
+        lineup: buildReferenceLineup(context.team, representative.configs, threatTypes, "weather", context),
+      };
+    })
+    .filter(Boolean);
+}
+
+
+
+function buildReferenceModeEntry(sampleEntries = [], archetypeId, context = {}) {
+  const representative = pickReferenceSampleForMode(sampleEntries, archetypeId);
+  if (!representative) return null;
+  const threatTypes = getTopReferenceThreatTypes(representative.configs, context);
+  const displayArchetypeId = archetypeId;
+  const subModeId = archetypeId === "weather" ? getWeatherLabelId(representative.vector) : "";
+  return {
+    id: `reference-${displayArchetypeId}`,
+    archetypeId: displayArchetypeId,
+    subModeId,
+    sampleCount: sampleEntries.filter((entry) => getReferenceModeScore(entry, archetypeId) > 0.55).length,
+    confidence: clamp(representative.modeScore / 5, 0.12, 1),
+    pca: representative.pca,
+    coreMembers: getReferenceCoreMembers(representative.configs, representative.vector, context),
+    pressureLabels: threatTypes.map((entry) => getTypeLabel(entry.type, context.language)),
+    defensiveAnswers: getReferenceDefensiveAnswers(context.team, threatTypes, context),
+    offensiveAnswers: getReferenceOffensiveAnswers(context.team, representative.configs, context),
+    roleAnswers: getReferenceRoleAnswers(context.team, displayArchetypeId, context),
+    lineup: buildReferenceLineup(context.team, representative.configs, threatTypes, displayArchetypeId, context),
+  };
+}
+
+function buildReferenceEntry(cluster, sampleEntries = [], context = {}) {
+  const representative = sampleEntries[cluster.representativeIndex];
+  if (!representative) return null;
+  const clusterVectors = cluster.memberIndexes.map((index) => sampleEntries[index]?.vector).filter(Boolean);
+  const vector = Object.fromEntries(REFERENCE_FEATURE_KEYS.map((key) => [
+    key,
+    clusterVectors.reduce((sum, item) => sum + Number(item[key] || 0), 0) / Math.max(1, clusterVectors.length),
+  ]));
+  const archetypeId = getReferenceArchetypeId(vector);
+  const threatTypes = getTopReferenceThreatTypes(representative.configs, context);
+  return {
+    id: `reference-${archetypeId}-${cluster.representativeIndex}`,
+    archetypeId,
+    sampleCount: cluster.memberIndexes.length,
+    confidence: clamp(cluster.memberIndexes.length / Math.max(1, sampleEntries.length), 0.12, 1),
+    pca: representative.pca,
+    coreMembers: getReferenceCoreMembers(representative.configs, vector, context),
+    pressureLabels: threatTypes.map((entry) => getTypeLabel(entry.type, context.language)),
+    defensiveAnswers: getReferenceDefensiveAnswers(context.team, threatTypes, context),
+    offensiveAnswers: getReferenceOffensiveAnswers(context.team, representative.configs, context),
+    roleAnswers: getReferenceRoleAnswers(context.team, archetypeId, context),
+  };
+}
+
+function summarizeReferenceTeams(team = [], library = [], context = {}) {
+  const samples = selectReferenceSamples(buildReferenceSamples(library))
+    .filter((configs) => configs.some((config) => !team.some((member) => member.id === config.id)));
+  if (samples.length < REFERENCE_TEAM_MIN_SAMPLES) {
+    return {entries: [], filters: []};
+  }
+  const sampleVectors = samples.map((configs) => getReferenceTeamVector(configs, context));
+  const projected = projectReferenceVectors(standardizeVectors(sampleVectors.map(vectorToArray)));
+  const sampleEntries = samples.map((configs, index) => ({configs, vector: sampleVectors[index], pca: projected[index] || {x: 0, y: 0}}));
+  const megaOnlySamples = buildMegaReferenceSamples(library)
+    .filter((configs) => configs.some((config) => !team.some((member) => member.id === config.id)));
+  const megaOnlyEntries = megaOnlySamples.map((configs) => ({configs, vector: getReferenceTeamVector(configs, context), pca: {x: 0, y: 0}}));
+  const modeOrder = ["mega", "weather", "trickroom", "tailwind"];
+  const allMegaEntries = buildMegaReferenceEntries(mergeReferenceSampleEntries(sampleEntries, megaOnlyEntries), {...context, team});
+  const megaEntries = allMegaEntries.slice(0, getMegaReferenceLimit(allMegaEntries));
+  const weatherEntries = buildWeatherReferenceEntries(sampleEntries, {...context, team});
+  const speedEntries = ["trickroom", "tailwind"]
+    .map((archetypeId) => buildReferenceModeEntry(sampleEntries, archetypeId, {...context, team}))
+    .filter(Boolean);
+  const entries = [...megaEntries, ...weatherEntries, ...speedEntries].slice(0, REFERENCE_TEAM_LIMIT);
+  return {
+    entries,
+    filters: modeOrder.filter((archetypeId) => entries.some((entry) => entry.archetypeId === archetypeId)),
+  };
+}
+
 export function analyzeTeam(team, speedTiers = [], language = "zh", library = [], preferences = {}, options = {}) {
   if (!team.length) {
     return null;
@@ -811,6 +1415,15 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
   const damageRolesByConfigId = options.damageRoles instanceof Map ? options.damageRoles : null;
   const roles = summarizeRoles(teamWithFlags, speedContext, roleContext, damageRolesByConfigId);
   const identity = summarizeTeamIdentity(teamWithFlags, speedContext, language);
+  const referenceTeams = summarizeReferenceTeams(teamWithFlags, library, {
+    team: teamWithFlags,
+    speedTiers,
+    speedContext,
+    fieldState,
+    roleContext,
+    datasets,
+    language,
+  });
   return {
     fieldState,
     defensive,
@@ -833,5 +1446,6 @@ export function analyzeTeam(team, speedTiers = [], language = "zh", library = []
     identity,
     weaknesses,
     blindSpots,
+    referenceTeams,
   };
 }

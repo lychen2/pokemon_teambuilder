@@ -33,6 +33,96 @@ function parseJsonWithJson5Fallback(text, path) {
   }
 }
 
+const DESKTOP_DATA_CACHE_DATABASE = "poke-type-data-cache";
+const DESKTOP_DATA_CACHE_STORE = "responses";
+const DESKTOP_DATA_CACHE_VERSION_PATH = "./static/data-cache-version.json";
+let desktopDataCachePromise = null;
+
+function isDesktopRuntime() {
+  return isBrowserRuntime() && window.__TAURI_INTERNALS__ !== undefined;
+}
+
+function requestResult(request) {
+  return new Promise((resolve, reject) => {
+    request.addEventListener("success", () => resolve(request.result), {once: true});
+    request.addEventListener("error", () => reject(request.error), {once: true});
+  });
+}
+
+function transactionComplete(transaction) {
+  return new Promise((resolve, reject) => {
+    transaction.addEventListener("complete", () => resolve(), {once: true});
+    transaction.addEventListener("abort", () => reject(transaction.error), {once: true});
+    transaction.addEventListener("error", () => reject(transaction.error), {once: true});
+  });
+}
+
+async function openDesktopDataCache() {
+  if (!("indexedDB" in window)) return null;
+  const request = window.indexedDB.open(DESKTOP_DATA_CACHE_DATABASE, 1);
+  request.addEventListener("upgradeneeded", () => {
+    if (!request.result.objectStoreNames.contains(DESKTOP_DATA_CACHE_STORE)) {
+      request.result.createObjectStore(DESKTOP_DATA_CACHE_STORE);
+    }
+  }, {once: true});
+  return requestResult(request);
+}
+
+async function loadDesktopDataCache() {
+  const [database, versionResponse] = await Promise.all([
+    openDesktopDataCache(),
+    fetch(DESKTOP_DATA_CACHE_VERSION_PATH),
+  ]);
+  if (!database || !versionResponse.ok) return null;
+  const {version} = await versionResponse.json();
+  if (!version) return null;
+  const readTransaction = database.transaction(DESKTOP_DATA_CACHE_STORE, "readonly");
+  const storedVersion = await requestResult(readTransaction.objectStore(DESKTOP_DATA_CACHE_STORE).get("__version__"));
+  if (storedVersion !== version) {
+    const writeTransaction = database.transaction(DESKTOP_DATA_CACHE_STORE, "readwrite");
+    const store = writeTransaction.objectStore(DESKTOP_DATA_CACHE_STORE);
+    store.clear();
+    store.put(version, "__version__");
+    await transactionComplete(writeTransaction);
+  }
+  return {database, version};
+}
+
+function getDesktopDataCache() {
+  if (!isDesktopRuntime()) return Promise.resolve(null);
+  if (!desktopDataCachePromise) {
+    desktopDataCachePromise = loadDesktopDataCache().catch((error) => {
+      console.warn("desktop data cache unavailable", error);
+      return null;
+    });
+  }
+  return desktopDataCachePromise;
+}
+
+async function readDesktopCachedJson(path) {
+  try {
+    const cache = await getDesktopDataCache();
+    if (!cache) return null;
+    const transaction = cache.database.transaction(DESKTOP_DATA_CACHE_STORE, "readonly");
+    return await requestResult(transaction.objectStore(DESKTOP_DATA_CACHE_STORE).get(path));
+  } catch (error) {
+    console.warn("desktop data cache read failed", error);
+    return null;
+  }
+}
+
+async function writeDesktopCachedJson(path, value) {
+  try {
+    const cache = await getDesktopDataCache();
+    if (!cache) return;
+    const transaction = cache.database.transaction(DESKTOP_DATA_CACHE_STORE, "readwrite");
+    transaction.objectStore(DESKTOP_DATA_CACHE_STORE).put(value, path);
+    await transactionComplete(transaction);
+  } catch (error) {
+    console.warn("desktop data cache write failed", error);
+  }
+}
+
 // Node has a global fetch (v18+), but it rejects relative URLs ("Invalid URL").
 // Browser builds must use fetch for relative app assets; only Node/headless
 // execution resolves relative paths through fs.
@@ -62,12 +152,18 @@ async function readJsonFromFile(path) {
 }
 
 async function fetchJsonOverHttp(path) {
+  const cached = await readDesktopCachedJson(path);
+  if (cached !== null && cached !== undefined) {
+    return cached;
+  }
   const response = await fetch(path);
   if (!response.ok) {
     throw new Error(`Failed to load: ${path}`);
   }
   const text = await response.text();
-  return parseJsonWithJson5Fallback(text, path);
+  const parsed = parseJsonWithJson5Fallback(text, path);
+  await writeDesktopCachedJson(path, parsed);
+  return parsed;
 }
 
 export async function fetchJson(path) {
@@ -83,6 +179,13 @@ export function normalizeName(text) {
 
 export function normalizeLookupText(text) {
   return String(text || "").toLowerCase().replace(/[^\u4e00-\u9fffa-z0-9]+/g, "");
+}
+const UNSELECTABLE_BATTLE_SPECIES_NONSTANDARD = new Set(["CAP", "Custom", "LGPE", "Unobtainable"]);
+const BATTLE_STAT_KEYS = Object.freeze(["hp", "atk", "def", "spa", "spd", "spe"]);
+
+
+export function isMegaSpeciesEntry(entry = {}) {
+  return String(entry?.forme || "").startsWith("Mega") || String(entry?.name || "").includes("-Mega");
 }
 
 export function isMegaConfig(config = {}) {
@@ -304,16 +407,28 @@ function hasSameStringArray(left = [], right = []) {
 }
 
 function hasSameBaseStats(left = {}, right = {}) {
-  return ["hp", "atk", "def", "spa", "spd", "spe"].every((stat) => Number(left[stat] || 0) === Number(right[stat] || 0));
+  return BATTLE_STAT_KEYS.every((stat) => Number(left[stat] || 0) === Number(right[stat] || 0));
 }
 
 function isBattleEquivalentForm(entry = {}, baseEntry = {}) {
   if (!entry.baseSpecies) return false;
-  if (String(entry.forme || "").startsWith("Mega")) return false;
+  if (isMegaSpeciesEntry(entry)) return false;
   if (entry.requiredItem || entry.requiredMove || entry.battleOnly || entry.changesFrom) return false;
   return hasSameStringArray(entry.types || [], baseEntry.types || [])
     && hasSameBaseStats(entry.baseStats || {}, baseEntry.baseStats || {})
     && hasSameStringArray(getAbilitySet(entry), getAbilitySet(baseEntry));
+}
+
+export function isSelectableBattleSpecies(pokedex = {}, speciesId = "") {
+  const normalizedSpeciesId = normalizeName(speciesId);
+  const entry = pokedex?.[normalizedSpeciesId];
+  if (!entry?.name || !entry?.baseStats) return false;
+  if (UNSELECTABLE_BATTLE_SPECIES_NONSTANDARD.has(String(entry.isNonstandard || ""))) return false;
+  if (entry.battleOnly && !isMegaSpeciesEntry(entry)) return false;
+
+  const baseSpeciesId = normalizeName(entry.baseSpecies || "");
+  const baseEntry = baseSpeciesId ? pokedex?.[baseSpeciesId] : null;
+  return !baseEntry || !isBattleEquivalentForm(entry, baseEntry);
 }
 
 export function getBattleEquivalentSpeciesId(speciesId = "", datasets = null) {

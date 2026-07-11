@@ -1,6 +1,7 @@
 const STORAGE_KEY = "pokeTypeDamageRoleCache";
 const MAX_ENTRIES = 50;
 const QUOTA_RETRY_TRIM_RATIO = 0.5;
+let memoryStore = null;
 
 function safeStorage() {
   try {
@@ -28,23 +29,29 @@ function trimStoreInPlace(store, ratio) {
     }
   }
 }
+function emptyStore() {
+  return {order: [], values: {}};
+}
 
 function readStore() {
+  if (memoryStore) return memoryStore;
   const storage = safeStorage();
-  if (!storage) return {order: [], values: {}};
+  memoryStore = emptyStore();
+  if (!storage) return memoryStore;
   try {
     const raw = storage.getItem(STORAGE_KEY);
-    if (!raw) return {order: [], values: {}};
+    if (!raw) return memoryStore;
     const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object") return {order: [], values: {}};
-    return {
+    if (!parsed || typeof parsed !== "object") return memoryStore;
+    memoryStore = {
       order: Array.isArray(parsed.order) ? parsed.order : [],
       values: parsed.values && typeof parsed.values === "object" ? parsed.values : {},
     };
+    evict(memoryStore);
   } catch (error) {
     console.warn("damage-cache read failed", error);
-    return {order: [], values: {}};
   }
+  return memoryStore;
 }
 
 function writeStore(store) {
@@ -87,7 +94,6 @@ export function getCached(key) {
   const store = readStore();
   if (!(key in store.values)) return null;
   touch(store, key);
-  writeStore(store);
   return store.values[key];
 }
 
@@ -101,6 +107,7 @@ export function setCached(key, value) {
 }
 
 export function clearCache() {
+  memoryStore = emptyStore();
   const storage = safeStorage();
   if (!storage) return;
   try {
