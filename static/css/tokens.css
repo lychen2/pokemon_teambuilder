@@ -108,11 +108,11 @@
   --body-font: "Inter", "Inter Fallback", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   --mono-font: ui-monospace, "SFMono-Regular", "Cascadia Code", "Fira Code", "Menlo", "Consolas", monospace;
 
-  /* ----- Type scale (1.25 ratio) ----- */
-  --type-h1: 39px;
-  --type-h2: 31px;
-  --type-h3: 25px;
-  --type-h4: 20px;
+  /* ----- Type scale (compact desktop product UI) ----- */
+  --type-h1: 32px;
+  --type-h2: 26px;
+  --type-h3: 20px;
+  --type-h4: 16px;
   --type-body: 16px;
   --type-small: 14px;
   --type-label: 12px;
@@ -150,9 +150,9 @@
   --radius-pill: 999px;
 
   /* ----- Shadows ----- */
-  --shadow-sm: 0 6px 16px rgba(19, 32, 43, 0.06);
-  --shadow-md: 0 14px 34px rgba(19, 32, 43, 0.09);
-  --shadow-lg: 0 22px 54px rgba(19, 32, 43, 0.14);
+  --shadow-sm: 0 2px 8px rgba(19, 32, 43, 0.04);
+  --shadow-md: 0 8px 20px rgba(19, 32, 43, 0.07);
+  --shadow-lg: 0 18px 40px rgba(19, 32, 43, 0.12);
   --shadow: var(--shadow-md);
 
   /* ----- Focus ring + translucent surfaces -----
@@ -174,8 +174,8 @@
 
   /* ----- Layout caps ----- */
   --page-max-width: 1680px;
-  --page-gutter: 32px;
-  --page-gutter-sm: 18px;
+  --page-gutter: 24px;
+  --page-gutter-sm: 16px;
 
   /* ----- Legacy short aliases (kept so view CSS keeps working) ----- */
   --bg: var(--color-bg);
@@ -190,14 +190,4 @@
   --accent-soft: var(--color-primary-soft);
   --good: var(--color-secondary);
   --bad: var(--color-danger);
-}
-
-@media (max-width: 768px) {
-  :root {
-    --type-h1: 31px;
-    --type-h2: 25px;
-    --type-h3: 20px;
-    --type-h4: 16px;
-    --page-gutter: var(--page-gutter-sm);
-  }
 }

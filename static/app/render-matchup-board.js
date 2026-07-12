@@ -1,5 +1,5 @@
 import {t} from "./i18n.js";
-import {spriteMarkup} from "./sprites.js";
+import {spriteMarkup, typeBadgeMarkup} from "./sprites.js";
 import {getTypeLabel, normalizeName} from "./utils.js";
 
 function escapeHtml(text) {
@@ -33,9 +33,7 @@ function getDisplaySpeciesName(state, speciesId, fallbackName = "", fallbackLabe
 }
 
 function typePills(types = [], language) {
-  return types.map((type) => (
-    `<span class="pill type-pill ${getTypeClassName(type)}">${getTypeLabel(type, language)}</span>`
-  )).join("");
+  return types.map((type) => typeBadgeMarkup(type, language)).join("");
 }
 
 function getLocalizedEntryName(entry, state) {
@@ -115,11 +113,10 @@ function getHitClassName(value, side = "ally") {
 
 function renderMoveRow(row, language, side = "ally", state) {
   const typeClass = row.type ? getTypeClassName(row.type) : "type-unknown";
-  const typeLabel = row.type ? getTypeLabel(row.type, language) : "";
   return `
     <div class="matchup-board-move-row">
       <div class="matchup-board-move-name">
-        ${row.type ? `<span class="matchup-board-move-type ${typeClass}">${escapeHtml(typeLabel)}</span>` : ""}
+        ${row.type ? `<span class="matchup-board-move-type ${typeClass}">${typeBadgeMarkup(row.type, language)}</span>` : ""}
         <strong>${escapeHtml(getLocalizedMoveName(state, row.name))}</strong>
       </div>
       <div class="matchup-board-move-hits">

@@ -1,8 +1,9 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
-import {itemIconMarkup, spriteMarkup} from "./sprites.js";
+import {itemIconMarkup, spriteMarkup, typeBadgeMarkup} from "./sprites.js";
 import {getItemSpritePosition, normalizeName} from "./utils.js";
 import {filterVgcpastesTeams} from "./vgcpastes-search.js";
+
 
 const PICKER_CONTAINER_ID = "vgcpastes-picker";
 const MEMBER_LIMIT_PER_TEAM = 6;
@@ -74,7 +75,7 @@ function itemSpriteMarkup(itemName, state, label) {
     return "";
   }
   const item = state.datasets?.items?.[normalizeName(itemName)];
-  const iconMarkup = itemIconMarkup(item, state, "vgcpastes-member-item-icon item-sprite-image");
+  const iconMarkup = itemIconMarkup(item, state, "vgcpastes-member-item-icon");
   if (iconMarkup) {
     return iconMarkup;
   }
@@ -93,8 +94,9 @@ function memberMarkup(member, state) {
   const name = localizeSpecies(state, member);
   const ability = localizeAbility(state, member.ability);
   const types = getMemberTypes(member, state.datasets);
+  const language = state.language;
   const typeMarkup = types.length
-    ? `<div class="vgcpastes-member-types muted">${types.map(escapeHtml).join(" / ")}</div>`
+    ? `<div class="vgcpastes-member-types">${types.map((type) => typeBadgeMarkup(type, language)).join("")}</div>`
     : "";
   return `
     <li class="vgcpastes-member">
@@ -104,8 +106,8 @@ function memberMarkup(member, state) {
       </div>
       <div class="vgcpastes-member-body">
         <div class="vgcpastes-member-name">${escapeHtml(name)}</div>
-        <div class="vgcpastes-member-ability muted">${escapeHtml(ability)}</div>
         ${typeMarkup}
+        <div class="vgcpastes-member-ability muted" title="${escapeHtml(ability)}">${escapeHtml(ability)}</div>
       </div>
     </li>
   `;

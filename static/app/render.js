@@ -7,9 +7,10 @@ import {renderMatchupView, renderSavedOpponentTeams} from "./render-matchup.js";
 import {renderRecommendationsView} from "./render-recommendations.js";
 import {renderHighlightedText} from "./search-utils.js";
 import {compactRoleSummaryMarkup} from "./role-ui.js";
-import {itemIconMarkup, spriteMarkup} from "./sprites.js";
+import {itemIconMarkup, spriteMarkup, typeBadgeMarkup, typeSymbolMarkup} from "./sprites.js";
 import {createRoleContext} from "./team-roles.js";
 import {formatChampionPoints, formatSpread, formatStatLine, getDisplayNote, getItemSpritePosition, getLocalizedNatureName, getMoveCategoryLabel, getNatureMultiplier, getNatureSummary, getTypeLabel, normalizeName} from "./utils.js";
+
 
 const SOURCE_DATE_RECENT_DAYS = 30;
 const SOURCE_DATE_STALE_DAYS = 60;
@@ -55,7 +56,7 @@ function getLocalizedEntryDescription(entry = {}, language) {
 }
 
 function itemSpriteMarkup(itemInfo, state) {
-  const iconMarkup = itemIconMarkup(itemInfo, state, "item-sprite-image");
+  const iconMarkup = itemIconMarkup(itemInfo, state, "item-icon-inline");
   if (iconMarkup) {
     return iconMarkup;
   }
@@ -72,8 +73,9 @@ function getTypeClassName(type) {
 }
 
 function typePills(types = [], language) {
-  return types.map((type) => `<span class="pill type-pill ${getTypeClassName(type)}">${getTypeLabel(type, language)}</span>`).join("");
+  return types.map((type) => typeBadgeMarkup(type, language)).join("");
 }
+
 
 function buildTextTooltipMarkup(detail, language) {
   return `
@@ -156,14 +158,12 @@ function resolveMoveShortDesc(move, moveLookup, language) {
 }
 
 function buildMoveTooltipMarkup(move, language, moveLookup) {
-  const typeLabel = move.type ? getTypeLabel(move.type, language) : t(language, "common.unknown");
   const categoryLabel = getMoveCategoryLabel(move.category, language);
-  const typeClass = move.type ? getTypeClassName(move.type) : "";
   const description = resolveMoveShortDesc(move, moveLookup, language);
   return `
     <div class="tooltip-stack">
       <div class="tooltip-meta-row">
-        <span class="tooltip-chip type-chip ${typeClass}">${escapeHtml(t(language, "tooltip.type"))}: ${escapeHtml(typeLabel)}</span>
+        ${move.type ? typeBadgeMarkup(move.type, language) : `<span class="tooltip-chip">${escapeHtml(t(language, "tooltip.type"))}: ${escapeHtml(t(language, "common.unknown"))}</span>`}
         <span class="tooltip-chip">${escapeHtml(t(language, "tooltip.category"))}: ${escapeHtml(categoryLabel)}</span>
       </div>
       <div class="tooltip-desc-box">${escapeHtml(description || t(language, "tooltip.noMoveDesc"))}</div>
@@ -172,12 +172,21 @@ function buildMoveTooltipMarkup(move, language, moveLookup) {
 }
 
 function movesMarkup(config, language, moveLookup) {
-  return (config.moves || []).map((move) => renderInfoPill({
-    label: language === "zh"
-      ? getLocalizedEntryName(moveLookup?.get(normalizeName(move.name)) || move, language)
-      : move.name,
-    tooltipMarkup: buildMoveTooltipMarkup(move, language, moveLookup),
-  })).join("");
+  return (config.moves || []).map((move) => {
+    const entry = moveLookup?.get(normalizeName(move.name)) || move;
+    const label = language === "zh"
+      ? getLocalizedEntryName(entry, language) || move.name
+      : move.name;
+    const leading = move.type
+      ? typeSymbolMarkup(move.type, language, "move-type-symbol")
+      : "";
+    return renderInfoPill({
+      label,
+      leadingMarkup: leading,
+      tooltipMarkup: buildMoveTooltipMarkup(move, language, moveLookup),
+      className: `move-pill${move.type ? ` type-tint type-${String(move.type).toLowerCase()}` : ""}`,
+    });
+  }).join("");
 }
 
 function renderInfoPill({label, leadingMarkup = "", tooltipMarkup, className = ""}) {
@@ -513,8 +522,10 @@ export function renderLibrary(state) {
   const host = document.getElementById("library-list");
   if (!document.getElementById("species-browser-host") || !document.getElementById("library-details-host")) {
     setInnerHTMLIfChanged(host, `
-      <div id="species-browser-host"></div>
-      <div id="library-details-host"></div>
+      <div class="library-workbench">
+        <aside id="species-browser-host" class="library-species-pane"></aside>
+        <div id="library-details-host" class="library-detail-pane"></div>
+      </div>
     `);
   }
   renderSpeciesBrowser(state);

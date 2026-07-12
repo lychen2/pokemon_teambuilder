@@ -1,8 +1,8 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
-import {spriteMarkup} from "./sprites.js";
+import {spriteMarkup, typeBadgeMarkup} from "./sprites.js";
 import {getUsageData, getUsageDetail, getUsageRows, isUsageAvailable, formatRecordShare, formatUsagePoints, formatUsageShare} from "./usage-stats.js";
-import {getLocalizedNatureName, getTypeLabel} from "./utils.js";
+import {getLocalizedNatureName} from "./utils.js";
 
 const SORT_KEYS = Object.freeze(["usage", "name", "available"]);
 // Official usage source is disabled until a reliable upstream is identified.
@@ -133,7 +133,7 @@ function usageDetailMarkup(detail, state) {
       <div>
         <h3>${spriteMarkup(detail, state)}${escapeHtml(language === "zh" ? detail.localizedName : detail.speciesName)}</h3>
         <div class="entry-meta">
-          ${(species.types || []).map((type) => `<span class="pill type-pill type-${String(type).toLowerCase()}">${escapeHtml(getTypeLabel(type, language))}</span>`).join("")}
+          ${(species.types || []).map((type) => typeBadgeMarkup(type, language)).join("")}
           <span class="source-tag">${formatUsageShare(detail.usage, 1)}</span>
         </div>
       </div>

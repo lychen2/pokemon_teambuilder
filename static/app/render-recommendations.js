@@ -1,9 +1,10 @@
 import {t} from "./i18n.js";
 import {getRecommendationScoreMix, RECOMMENDATION_BIAS_ITEM, RECOMMENDATION_PREFERENCE_ITEMS} from "./recommendation-preferences.js";
 import {compactRoleSummaryMarkup} from "./role-ui.js";
-import {spriteMarkup} from "./sprites.js";
+import {spriteMarkup, typeSymbolMarkup} from "./sprites.js";
 import {createRoleContext} from "./team-roles.js";
 import {getDisplayNote, normalizeName} from "./utils.js";
+
 
 function escapeHtml(text) {
   return String(text || "")
@@ -157,7 +158,7 @@ function renderConfigPreview(config, state, language) {
     config.ability ? `${t(language, "builder.ability")} · ${getLocalizedAbilityName(state, config)}` : "",
     config.teraType ? `Tera · ${config.teraType}` : "",
   ].filter(Boolean).slice(0, 3);
-  const moves = (config.moveNames || []).slice(0, 4);
+  const moves = (config.moves || config.moveNames || []).slice(0, 4);
   while (moves.length < 4) {
     moves.push("");
   }
@@ -168,11 +169,21 @@ function renderConfigPreview(config, state, language) {
         ${itemConflictMarkup}
       </div>
       <div class="recommend-move-grid">
-        ${moves.map((move) => `
-          <span class="recommend-move-chip ${move ? "" : "is-empty"}" title="${escapeHtml(getLocalizedMoveName(state, move) || "")}">
-            ${escapeHtml(getLocalizedMoveName(state, move) || "—")}
-          </span>
-        `).join("")}
+        ${moves.map((move) => {
+          const moveName = typeof move === "string" ? move : (move?.name || "");
+          const moveType = typeof move === "string"
+            ? (state.datasets?.moveLookup?.get(normalizeName(moveName))?.type || "")
+            : (move?.type || state.datasets?.moveLookup?.get(normalizeName(moveName))?.type || "");
+          const label = getLocalizedMoveName(state, moveName) || "—";
+          const typeMark = moveName && moveType ? typeSymbolMarkup(moveType, language, "move-type-symbol") : "";
+          const typeClass = moveType ? ` type-tint type-${String(moveType).toLowerCase()}` : "";
+          return `
+            <span class="recommend-move-chip${moveName ? "" : " is-empty"}${typeClass}" title="${escapeHtml(label)}">
+              ${typeMark}
+              <span class="recommend-move-label">${escapeHtml(label)}</span>
+            </span>
+          `;
+        }).join("")}
       </div>
     </div>
   `;

@@ -384,10 +384,7 @@ export function renderSelectionPractice(state) {
   `;
   setInnerHTMLIfChanged(root, `
     <div class="section-head">
-      <div>
-        <h2>${escapeHtml(t(language, "selectionPractice.title"))}</h2>
-        <p class="muted">${escapeHtml(t(language, "selectionPractice.copy"))}</p>
-      </div>
+      <h2>${escapeHtml(t(language, "selectionPractice.title"))}</h2>
     </div>
     ${body}
     <section class="subpanel selection-practice-feedback">

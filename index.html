@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poke Type · Champions VGC 队伍工具</title>
+    <title>Poke Type · Champions M-B</title>
     <meta name="description" content="Champions VGC M-B 赛季的纯静态队伍工作台。本地优先，无后端，无追踪。">
     <meta name="theme-color" content="#174a73">
     <link rel="icon" type="image/png" href="./icon.png">
-    <link rel="manifest" href="./manifest.webmanifest">
 
     <link rel="stylesheet" href="./static/css/tokens.css">
     <link rel="stylesheet" href="./static/css/base.css">
@@ -27,27 +26,20 @@
   </head>
   <body>
     <header class="site-header" role="banner">
-      <a class="site-brand" href="./index.html" aria-label="Poke Type 静态构筑器首页">
+      <a class="site-brand" href="./index.html" aria-label="Poke Type">
         <span class="site-brand-mark" aria-hidden="true">PT</span>
         <span>Poke Type · Champions M-B</span>
       </a>
       <div class="site-utility">
-        <div class="site-utility-field">
-          <span class="site-utility-label" data-i18n="language.label">界面语言</span>
-          <div id="language-switch" class="language-switch" role="group" data-i18n-aria-label="language.aria" aria-label="界面语言切换">
-            <button type="button" class="lang-button active" data-language="zh">中文</button>
-            <button type="button" class="lang-button" data-language="en">English</button>
-          </div>
+        <div id="language-switch" class="language-switch" role="group" data-i18n-aria-label="language.aria" aria-label="界面语言切换">
+          <button type="button" class="lang-button active" data-language="zh">中文</button>
+          <button type="button" class="lang-button" data-language="en">English</button>
         </div>
-        <div class="site-utility-field">
-          <span id="icon-scheme-label" class="site-utility-label" data-i18n="icons.label">图标方案</span>
-          <select id="icon-scheme-select" aria-labelledby="icon-scheme-label">
-            <option value="showdown">Showdown 雪碧图</option>
-            <option value="poke-icons">Poke Icons</option>
-            <option value="champions-official">Champions 官方</option>
-          </select>
-        </div>
-        <p id="icon-scheme-note" class="site-utility-note muted"></p>
+        <select id="icon-scheme-select" data-i18n-aria-label="icons.label" aria-label="图标方案">
+          <option value="showdown">Showdown 雪碧图</option>
+          <option value="poke-icons">Poke Icons</option>
+          <option value="champions-official">Champions 官方</option>
+        </select>
         <details class="header-help">
           <summary class="header-help-trigger" aria-label="规则与状态">
             <span aria-hidden="true">?</span>
@@ -57,18 +49,10 @@
             <p data-i18n="hero.ruleHp">HP = 种族值 + 75，其余五项 = 种族值 + 20。</p>
             <p data-i18n="hero.ruleIv">默认满 IV，不存在减 IV；总计 66 点，单项上限 32 点，每点 +1。</p>
             <p id="status-text" class="header-help-status">正在加载基础数据…</p>
-            <p class="header-help-foot muted" data-i18n="header.help.shortcuts">按 <kbd>?</kbd> 查看键盘快捷键</p>
           </div>
         </details>
       </div>
     </header>
-
-    <section class="hero">
-      <h1 data-i18n="hero.title">宝可梦队伍组建分析</h1>
-      <p class="hero-copy" data-i18n="hero.copy">
-        粘贴 Showdown 配置，分析覆盖、推荐搭档、计算伤害。本地优先，零后端。
-      </p>
-    </section>
 
     <div id="data-load-banner" class="data-load-banner" role="alert" aria-live="assertive" hidden>
       <p id="data-load-banner-message" class="data-load-banner-message"></p>
@@ -79,17 +63,14 @@
       <aside class="panel team-sidebar" aria-label="当前队伍侧栏">
         <div class="team-sidebar-header">
           <div class="section-head sidebar-main-head">
-            <div>
-              <h2 data-i18n="team.title">当前队伍</h2>
-              <p class="muted sidebar-copy" data-i18n="team.shared">队伍在配置库、分析、推荐和速度线页面之间共享。</p>
-            </div>
+            <h2 data-i18n="team.title">当前队伍</h2>
             <div id="team-count-badge" class="count-badge" aria-live="polite">0 / 6</div>
           </div>
           <div class="action-row sidebar-actions">
-            <button id="export-team-btn" type="button" class="ghost-button" data-i18n="team.export">导出队伍</button>
-            <button id="copy-team-btn" type="button" class="ghost-button" data-i18n="team.copy">复制队伍</button>
-            <button id="sidebar-save-team-btn" type="button" class="add-button sidebar-primary-action" data-i18n="team.saveShortcut">保存为…</button>
-            <button id="clear-team-btn" type="button" class="ghost-button danger-button" data-i18n="team.clear">清空队伍</button>
+            <button id="export-team-btn" type="button" class="ghost-button" data-i18n="team.export">导出</button>
+            <button id="copy-team-btn" type="button" class="ghost-button" data-i18n="team.copy">复制</button>
+            <button id="sidebar-save-team-btn" type="button" class="add-button sidebar-primary-action" data-i18n="team.saveShortcut">保存…</button>
+            <button id="clear-team-btn" type="button" class="ghost-button danger-button" data-i18n="team.clear">清空</button>
           </div>
         </div>
 
@@ -132,43 +113,38 @@
           <section id="team-sidebar-panel-import" class="team-sidebar-panel" role="tabpanel" aria-labelledby="team-sidebar-tab-import" hidden>
             <div class="team-import-panel sidebar-block">
               <div class="team-import-body">
-                <p class="muted" data-i18n="team.importCopy">直接粘贴 Showdown 队伍文本，系统会自动挂靠相似配置；大改动再询问是否加入配置库。</p>
-                <textarea id="team-import-input" rows="6" placeholder="Flutter Mane @ Focus Sash&#10;Ability: Protosynthesis&#10;Tera Type: Fairy&#10;EVs: 4 HP / 252 SpA / 252 Spe&#10;Timid Nature&#10;- Moonblast&#10;- Shadow Ball&#10;- Icy Wind&#10;- Protect" data-i18n-placeholder="team.importPlaceholder"></textarea>
+                <textarea id="team-import-input" rows="8" placeholder="Flutter Mane @ Focus Sash&#10;Ability: Protosynthesis&#10;Tera Type: Fairy&#10;EVs: 4 HP / 252 SpA / 252 Spe&#10;Timid Nature&#10;- Moonblast&#10;- Shadow Ball&#10;- Icy Wind&#10;- Protect" data-i18n-placeholder="team.importPlaceholder"></textarea>
                 <div class="action-row sidebar-actions">
-                  <button id="import-team-btn" type="button" class="add-button" data-i18n="team.importAction">覆盖导入队伍</button>
-                  <button id="clear-team-import-btn" type="button" class="ghost-button" data-i18n="team.importClear">清空输入</button>
+                  <button id="import-team-btn" type="button" class="add-button" data-i18n="team.importAction">导入队伍</button>
+                  <button id="clear-team-import-btn" type="button" class="ghost-button" data-i18n="team.importClear">清空</button>
                 </div>
                 <p id="team-import-feedback" class="muted" data-i18n="team.importEmpty">未导入队伍代码。</p>
                 <div id="team-import-feedback-details" class="import-feedback-details" hidden></div>
               </div>
             </div>
           </section>
+
         </div>
       </aside>
 
       <section class="workspace" aria-label="工作区">
         <section class="panel controls-panel">
           <div id="quick-start-panel" hidden></div>
-          <div id="vgcpastes-picker"></div>
           <details class="import-panel">
-            <summary data-i18n="controls.importSummary">导入自定义配置库</summary>
-            <p class="muted" data-i18n="controls.importHelp">
-              支持直接粘贴 Pokémon Showdown 队伍文本。可写传统 `EVs:`，系统会自动压缩为 Champions 66 点；
-              也可直接写 `Points:` 作为点数分配。若粘贴 `IVs:`，前端会忽略并按满 IV 处理。
-            </p>
-            <textarea id="custom-library-input" rows="10" placeholder="Incineroar @ Safety Goggles&#10;Ability: Intimidate&#10;Level: 50&#10;Tera Type: Grass&#10;EVs: 236 HP / 4 Atk / 116 Def / 4 SpD / 148 Spe&#10;Impish Nature&#10;- Fake Out&#10;- Parting Shot&#10;- Flare Blitz&#10;- Knock Off" data-i18n-placeholder="controls.importPlaceholder"></textarea>
+            <summary data-i18n="controls.importSummary">导入配置库</summary>
+            <textarea id="custom-library-input" rows="8" placeholder="Incineroar @ Safety Goggles&#10;Ability: Intimidate&#10;Level: 50&#10;Tera Type: Grass&#10;EVs: 236 HP / 4 Atk / 116 Def / 4 SpD / 148 Spe&#10;Impish Nature&#10;- Fake Out&#10;- Parting Shot&#10;- Flare Blitz&#10;- Knock Off" data-i18n-placeholder="controls.importPlaceholder"></textarea>
             <div class="action-row">
-              <button id="import-custom-btn" type="button" data-i18n="controls.importReplace">覆盖导入</button>
-              <button id="append-custom-btn" type="button" class="ghost-button" data-i18n="controls.importAppend">追加导入</button>
+              <button id="import-custom-btn" type="button" data-i18n="controls.importReplace">覆盖</button>
+              <button id="append-custom-btn" type="button" class="ghost-button" data-i18n="controls.importAppend">追加</button>
             </div>
             <details class="advanced-actions-panel">
-              <summary data-i18n="controls.advancedSummary">更多操作</summary>
+              <summary data-i18n="controls.advancedSummary">更多</summary>
               <div class="action-row">
-                <button id="load-default-preset-btn" type="button" class="ghost-button" data-i18n="controls.loadDefaultPreset">载入默认预设</button>
+                <button id="load-default-preset-btn" type="button" class="ghost-button" data-i18n="controls.loadDefaultPreset">默认预设</button>
                 <button id="import-file-btn" type="button" class="ghost-button" data-i18n="controls.importFile">文件导入</button>
                 <button id="export-library-btn" type="button" class="ghost-button" data-i18n="controls.exportLibrary">导出配置库</button>
-                <button id="export-full-state-btn" type="button" class="ghost-button" data-i18n="controls.exportFullState">导出全部状态</button>
-                <button id="import-full-state-btn" type="button" class="ghost-button" data-i18n="controls.importFullState">导入全部状态</button>
+                <button id="export-full-state-btn" type="button" class="ghost-button" data-i18n="controls.exportFullState">导出状态</button>
+                <button id="import-full-state-btn" type="button" class="ghost-button" data-i18n="controls.importFullState">导入状态</button>
                 <button id="clear-custom-btn" type="button" class="ghost-button danger-button" data-i18n="controls.clearLibrary">清空配置库</button>
               </div>
             </details>
@@ -180,45 +156,61 @@
         </section>
 
         <section class="workspace-stack panel">
-          <nav class="view-tabs" aria-label="功能切换">
-            <button type="button" class="view-tab active" data-view="library-view" data-i18n="tabs.library">配置库</button>
-            <button type="button" class="view-tab" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
-            <button type="button" class="view-tab" data-view="matchup-view" data-i18n="tabs.matchup">对局分析</button>
-            <button type="button" class="view-tab" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
-            <button type="button" class="view-tab" data-view="usage-view" data-i18n="tabs.usage">使用率</button>
-            <button type="button" class="view-tab" data-view="damage-view" data-i18n="tabs.damage">伤害工作台</button>
-            <button type="button" class="view-tab" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
-            <button type="button" class="view-tab" data-view="output-view" data-i18n="tabs.output">输出强度</button>
-            <button type="button" class="view-tab" data-view="selection-practice-view" data-i18n="tabs.selectionPractice">选出练习</button>
+          <nav class="workspace-navigation" aria-label="工作区导航">
+            <div class="domain-tabs" role="tablist" data-i18n-aria-label="navigation.domainsAria">
+              <button type="button" class="domain-tab active" data-domain="build" data-default-view="library-view" data-i18n="domains.build">构筑</button>
+              <button type="button" class="domain-tab" data-domain="analyze" data-default-view="analysis-view" data-i18n="domains.analyze">分析</button>
+              <button type="button" class="domain-tab" data-domain="battle" data-default-view="matchup-view" data-i18n="domains.battle">对局</button>
+              <button type="button" class="domain-tab" data-domain="tools" data-default-view="usage-view" data-i18n="domains.tools">工具</button>
+            </div>
+            <div class="view-tabs" aria-label="域内功能切换">
+              <button type="button" class="view-tab active" data-domain="build" data-view="library-view" data-i18n="tabs.library">配置库</button>
+              <button type="button" class="view-tab" data-domain="build" data-view="recommend-view" data-i18n="tabs.recommend">组队推荐</button>
+              <button type="button" class="view-tab" data-domain="analyze" data-view="analysis-view" data-i18n="tabs.analysis">队伍分析</button>
+              <button type="button" class="view-tab" data-domain="analyze" data-view="speed-view" data-i18n="tabs.speed">速度线</button>
+              <button type="button" class="view-tab" data-domain="analyze" data-view="output-view" data-i18n="tabs.output">输出强度</button>
+              <button type="button" class="view-tab" data-domain="battle" data-view="matchup-view" data-i18n="tabs.matchup">对局分析</button>
+              <button type="button" class="view-tab" data-domain="battle" data-view="selection-practice-view" data-i18n="tabs.selectionPractice">选出练习</button>
+              <button type="button" class="view-tab" data-domain="tools" data-view="usage-view" data-i18n="tabs.usage">使用率</button>
+              <button type="button" class="view-tab" data-domain="tools" data-view="damage-view" data-i18n="tabs.damage">伤害工作台</button>
+            </div>
           </nav>
           <div id="workspace-context-bar" class="workspace-context-bar" aria-live="polite"></div>
 
           <section id="library-view" class="view-panel active">
             <div class="section-head">
-              <div>
-                <h2 data-i18n="views.libraryTitle">配置库</h2>
-                <p id="library-summary" class="muted"></p>
-              </div>
+              <h2 data-i18n="views.libraryTitle">配置库</h2>
+              <p id="library-summary" class="visually-hidden" aria-live="polite"></p>
               <label class="library-search-field">
-                <span data-i18n="controls.searchLabel">搜索配置库</span>
+                <span class="visually-hidden" data-i18n="controls.searchLabel">搜索配置库</span>
                 <input id="library-search" type="search" placeholder="搜索宝可梦 / 配置 / 招式" data-i18n-placeholder="controls.searchPlaceholder" autocomplete="off" autocapitalize="none" spellcheck="false">
               </label>
             </div>
             <div id="library-list" class="stack-list view-list"></div>
+            <section class="library-reference-teams" aria-labelledby="reference-teams-title">
+              <div class="section-head section-head-tight">
+                <div>
+                  <h3 id="reference-teams-title" data-i18n="vgcpastes.sectionTitle">公开队伍</h3>
+                  <p class="muted" data-i18n="vgcpastes.sectionCopy">搜索并载入公开六人队，继续在当前构筑中调整。</p>
+                </div>
+              </div>
+              <div id="vgcpastes-picker"></div>
+            </section>
           </section>
 
           <section id="analysis-view" class="view-panel">
-            <div class="section-head">
-              <div>
-                <h2 data-i18n="views.analysisTitle">队伍分析</h2>
-                <p class="muted" data-i18n="views.analysisCopy">分析基于队伍已选配置的属性、招式和速度数据。</p>
+            <div class="section-head analysis-page-head">
+              <h2 data-i18n="views.analysisTitle">队伍分析</h2>
+              <div class="analysis-jump-actions" aria-label="相关分析">
+                <button type="button" class="ghost-button mini-action" data-analysis-view="speed-view" data-i18n="analysis.jumpSpeed">查看速度线</button>
+                <button type="button" class="ghost-button mini-action" data-analysis-view="output-view" data-i18n="analysis.jumpOutput">查看输出强度</button>
               </div>
             </div>
             <div id="analysis-overview" class="analysis-overview"></div>
-            <nav id="analysis-tabs" class="analysis-tabs" aria-label="分析维度">
-              <button type="button" class="analysis-tab active" data-analysis-tab="coverage" data-i18n="analysis.tab.coverage">Coverage</button>
-              <button type="button" class="analysis-tab" data-analysis-tab="roles" data-i18n="analysis.tab.roles">Roles</button>
-              <button type="button" class="analysis-tab" data-analysis-tab="cores" data-i18n="analysis.tab.cores">Cores</button>
+            <nav id="analysis-tabs" class="analysis-tabs" role="tablist" data-i18n-aria-label="analysis.questionsAria" aria-label="分析维度">
+              <button type="button" class="analysis-tab active" role="tab" aria-selected="true" aria-controls="analysis-coverage-panel" data-analysis-tab="coverage" data-i18n="analysis.tab.coverage">Coverage</button>
+              <button type="button" class="analysis-tab" role="tab" aria-selected="false" aria-controls="analysis-roles-panel" data-analysis-tab="roles" data-i18n="analysis.tab.roles">Roles</button>
+              <button type="button" class="analysis-tab" role="tab" aria-selected="false" aria-controls="analysis-cores-panel" data-analysis-tab="cores" data-i18n="analysis.tab.cores">Cores</button>
             </nav>
             <section id="analysis-coverage-panel" class="analysis-detail-panel active" data-analysis-panel="coverage"></section>
             <section id="analysis-roles-panel" class="analysis-detail-panel" data-analysis-panel="roles"></section>
@@ -227,13 +219,10 @@
 
           <section id="matchup-view" class="view-panel">
             <div class="section-head">
-              <div>
-                <h2 data-i18n="views.matchupTitle">对局分析</h2>
-                <p class="muted" data-i18n="views.matchupCopy">快速选择对面六只，保存常见对局，并生成 12 只速度线、首发和四选建议。</p>
-              </div>
+              <h2 data-i18n="views.matchupTitle">对局分析</h2>
             </div>
             <div class="analysis-detail-grid matchup-builder-grid">
-              <section class="subpanel matchup-opponent-panel">
+              <section class="subpanel matchup-opponent-panel battle-team-panel">
                 <div class="section-head">
                   <h3 data-i18n="matchup.opponentTitle">对面队伍</h3>
                   <div class="action-row">
@@ -241,14 +230,13 @@
                     <button id="clear-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.clearOpponent">清空对面</button>
                   </div>
                 </div>
-                <p class="muted" data-i18n="matchup.opponentCopy">从当前配置库里快速勾出对面的 6 只宝可梦。</p>
                 <div id="opponent-team-list" class="team-grid matchup-team-grid"></div>
                 <div id="vgcpastes-suggest" class="vgcpastes-suggest"></div>
                 <div class="saved-team-panel matchup-save-panel">
-                  <h3 data-i18n="matchup.saveTitle">保存对面队伍</h3>
+                  <h3 data-i18n="matchup.saveTitle">保存对面</h3>
                   <div class="saved-team-form">
                     <input id="saved-opponent-name" type="text" placeholder="输入对局名称" data-i18n-placeholder="matchup.savePlaceholder">
-                    <button id="save-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.saveCurrent">保存当前对面</button>
+                    <button id="save-opponent-team-btn" type="button" class="ghost-button" data-i18n="matchup.saveCurrent">保存对面</button>
                   </div>
                   <div id="saved-opponent-list" class="stack-list compact-list"></div>
                 </div>
@@ -259,7 +247,7 @@
                   <p id="matchup-library-summary" class="muted"></p>
                 </div>
                 <label>
-                  <span data-i18n="matchup.searchLabel">搜索配置库</span>
+                  <span class="visually-hidden" data-i18n="matchup.searchLabel">搜索配置库</span>
                   <input id="matchup-search" type="search" placeholder="搜索对面宝可梦 / 招式" data-i18n-placeholder="matchup.searchPlaceholder">
                 </label>
                 <div id="matchup-library-list" class="stack-list compact-list view-list matchup-picker-list"></div>
@@ -270,80 +258,52 @@
 
           <section id="recommend-view" class="view-panel">
             <div class="section-head">
-              <div>
-                <h2 data-i18n="views.recommendTitle">组队推荐</h2>
-                <p class="muted" data-i18n="views.recommendCopy">推荐候选只来自你当前导入的配置库。</p>
-              </div>
+              <h2 data-i18n="views.recommendTitle">组队推荐</h2>
             </div>
             <div id="recommend-list" class="stack-list compact-list view-list"></div>
           </section>
 
           <section id="usage-view" class="view-panel">
             <div class="section-head">
-              <div>
-                <h2 data-i18n="views.usageTitle">使用率</h2>
-                <p class="muted" data-i18n="views.usageCopy">查看当前 Champions 规则对应的 Smogon usage；新规则缺统计时页面会保留核心功能并明确显示缺数据。</p>
-              </div>
+              <h2 data-i18n="views.usageTitle">使用率</h2>
             </div>
             <div id="usage-content"></div>
           </section>
 
           <section id="damage-view" class="view-panel">
             <div class="section-head">
-              <div>
-                <h2 data-i18n="views.damageTitle">伤害工作台</h2>
-                <p class="muted" data-i18n="views.damageCopy">使用内置 Champions 伤害引擎直接做对位计算，不再依赖外部前端页面。</p>
-              </div>
+              <h2 data-i18n="views.damageTitle">伤害工作台</h2>
             </div>
             <div class="damage-layout">
-              <section class="subpanel">
-                <div id="damage-controls"></div>
-              </section>
-              <section class="subpanel">
-                <div id="damage-field"></div>
-              </section>
-              <section class="subpanel">
-                <div id="damage-summary"></div>
-              </section>
+              <section class="subpanel"><div id="damage-controls"></div></section>
+              <section class="subpanel"><div id="damage-field"></div></section>
+              <section class="subpanel"><div id="damage-summary"></div></section>
             </div>
             <div id="damage-scan"></div>
           </section>
 
           <section id="speed-view" class="view-panel">
-            <div class="section-head">
-              <div>
-                <h2 data-i18n="views.speedLineTitle">常见速度线</h2>
-                <p id="speed-summary" class="muted"></p>
-              </div>
-            </div>
+            <div class="section-head"><h2 data-i18n="views.speedLineTitle">常见速度线</h2></div>
+            <p id="speed-summary" class="visually-hidden" aria-live="polite"></p>
             <div id="speed-tiers" class="stack-list compact-list view-list"></div>
           </section>
 
           <section id="output-view" class="view-panel">
-            <div class="section-head">
-              <div>
-                <h2 data-i18n="views.outputTitle">输出强度</h2>
-                <p class="muted" data-i18n="views.outputCopy">按配置库已配置招式的输出上限与稳定输出，快速整理火力参考线。</p>
-                <p id="output-summary" class="muted"></p>
-              </div>
-            </div>
+            <div class="section-head"><h2 data-i18n="views.outputTitle">输出强度</h2></div>
+            <p id="output-summary" class="visually-hidden" aria-live="polite"></p>
             <div id="output-tiers" class="stack-list compact-list view-list"></div>
           </section>
+
           <section id="selection-practice-view" class="view-panel">
             <div id="selection-practice-root"></div>
           </section>
-
         </section>
       </section>
     </main>
 
     <footer class="site-footer" role="contentinfo">
-      <div>
-        <span data-i18n="footer.tagline">本地优先 · 无后端 · 不收集任何数据。</span>
-      </div>
       <div class="site-footer-meta">
         <span data-i18n="footer.format">Champions M-B · 66 pt</span>
-        <span data-i18n="footer.shortcuts">按 <kbd>?</kbd> 查看快捷键</span>
       </div>
     </footer>
 
@@ -354,7 +314,6 @@
           <h2 id="config-editor-title" data-i18n="editor.title">编辑配置</h2>
           <button type="button" class="ghost-button modal-close-button" data-close-editor data-i18n="editor.cancel">取消</button>
         </div>
-        <p class="muted modal-copy" data-i18n="editor.copy">直接修改这条配置的 Showdown 文本并保存。若同时保留 `EVs:` 和 `Points:`，会优先按 `Points:` 读取。</p>
         <textarea id="config-editor-input" rows="16"></textarea>
         <div class="action-row modal-actions">
           <button id="switch-guided-editor-mode-btn" type="button" class="ghost-button" data-i18n="editor.switchToGuided">切回表单编辑</button>

@@ -1,0 +1,9 @@
+{
+  "enableSkillCommands": true,
+  "skills": [
+    "./skills"
+  ],
+  "prompts": [
+    "./prompts"
+  ]
+}

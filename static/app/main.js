@@ -2,7 +2,8 @@ import {analyzeTeam} from "./analysis.js";
 import {analyzePokemonDamageRoles, buildRoleMeta, createRoleContext} from "./team-roles.js";
 import {buildAutocompleteEntries, getAutocompleteMatches} from "./builder-autocomplete.js";
 import {buildSyntheticSpeedEntries, clearSpeciesTemplateCache} from "./champions-vgc.js";
-import {DEFAULT_ICON_SCHEME, ICON_SCHEMES, IS_DESKTOP_RUNTIME, NATURE_TRANSLATIONS} from "./constants.js";
+import {DEFAULT_ICON_SCHEME, DATA_PATHS, ICON_SCHEMES, NATURE_TRANSLATIONS} from "./constants.js";
+import {invokeDesktop} from "./desktop-bridge.js";
 import {calculateConfiguredSpeedTiers, calculateSpeedLineTiers, ensurePasteTeamMetaData, ensureUsageData, loadDatasets} from "./data.js";
 import {createDamageWorkspace} from "./damage-workspace.js?v=damage-core-root-v3";
 import {applyStaticTranslations, DEFAULT_LANGUAGE, normalizeLanguage, t} from "./i18n.js";
@@ -77,7 +78,7 @@ import {toast} from "./toast.js";
 import {getUsageItemEntries, getUsageMoveEntries} from "./usage.js";
 import {buildUsageConfigText} from "./usage-stats.js";
 import {formatChampionPoints, formatConfigName, getItemSpritePosition, getMoveCategoryLabel, getNatureSummary, getTypeLabel, isTypingTarget, normalizeLookupText, normalizeName} from "./utils.js";
-import {itemIconMarkup} from "./sprites.js";
+import {itemIconMarkup, typeBadgeMarkup} from "./sprites.js";
 
 const MAX_TEAM_SIZE = 6;
 const DEFAULT_CONFIG_LEVEL = 50;
@@ -86,7 +87,6 @@ const DEFAULT_PRESET_NAME = "Default";
 const DEFAULT_LIBRARY_SOURCE = "default-preset";
 const VGCPASTES_SETS_PATH = "./static/paste_sets_champions_mb.json";
 const IMPORT_FEEDBACK_ERROR = "error";
-const TAURI_INTERNALS = window.__TAURI_INTERNALS__;
 
 const LIBRARY_SEARCH_WEIGHTS = Object.freeze({
   species: 0,
@@ -186,6 +186,18 @@ const DEFAULT_LIBRARY_COMPARE = {
   speciesId: "",
   selectedConfigIds: [],
 };
+
+const VIEW_DOMAINS = Object.freeze({
+  "library-view": "build",
+  "recommend-view": "build",
+  "analysis-view": "analyze",
+  "speed-view": "analyze",
+  "output-view": "analyze",
+  "matchup-view": "battle",
+  "selection-practice-view": "battle",
+  "usage-view": "tools",
+  "damage-view": "tools",
+});
 
 const state = {
   datasets: null,
@@ -321,6 +333,21 @@ let vgcpastesSearchDebounceTimer = 0;
 let savedTeamSearchDebounceTimer = 0;
 let referenceTeamSearchDebounceTimer = 0;
 
+async function loadRecommendationUsageData() {
+  const usageReady = ensureUsageData();
+  if (!usageReady) {
+    return;
+  }
+  try {
+    await usageReady;
+    refreshRecommendationsState();
+    renderRecommendationsSection();
+    renderMatchupSection();
+  } catch (error) {
+    console.error("usage.json failed to load for recommendations", error);
+    announceStatus("status.usageLoadFailed", {message: error?.message || ""}, {toastType: "error"});
+  }
+}
 function attachImeAwareSearchInput(element, runHandler) {
   if (!element) return;
   let composing = false;
@@ -363,26 +390,6 @@ const EMPTY_BUILDER_POINTS = Object.freeze({
 const FULL_SPEED_BUILDER_POINTS = Object.freeze({
   ...EMPTY_BUILDER_POINTS,
   spe: MAX_SPEED_POINTS,
-});
-const TYPE_CHIP_COLORS = Object.freeze({
-  Normal: "#919aa2",
-  Fire: "#e68a3f",
-  Water: "#5b9be6",
-  Electric: "#e6bd3f",
-  Grass: "#5da85d",
-  Ice: "#69bfd2",
-  Fighting: "#c55f4c",
-  Poison: "#9b69d2",
-  Ground: "#b99253",
-  Flying: "#7f9ee8",
-  Psychic: "#e76f92",
-  Bug: "#96b03f",
-  Rock: "#aa9c5a",
-  Ghost: "#6f78c4",
-  Dragon: "#5f74da",
-  Dark: "#5f5a5a",
-  Steel: "#6f98a8",
-  Fairy: "#de7fb5",
 });
 let globalTooltip = null;
 let activeEditorTarget = null;
@@ -1863,8 +1870,7 @@ function updateLanguageSwitch() {
 
 function updateIconSchemeControl() {
   const select = document.getElementById("icon-scheme-select");
-  const note = document.getElementById("icon-scheme-note");
-  if (!select || !note) {
+  if (!select) {
     return;
   }
   const showdownOption = select.querySelector('option[value="showdown"]');
@@ -1880,7 +1886,6 @@ function updateIconSchemeControl() {
     championsOption.textContent = t(state.language, "icons.championsOfficial");
   }
   select.value = state.iconScheme;
-  note.textContent = t(state.language, "icons.note");
 }
 
 function setLanguage(language, rerender = true) {
@@ -1923,9 +1928,18 @@ function setIconScheme(iconScheme, rerender = true) {
 }
 
 function applyActiveView(viewId) {
+  const activeDomain = VIEW_DOMAINS[viewId] || "build";
   state.activeView = viewId;
+  document.querySelectorAll(".domain-tab").forEach((button) => {
+    const active = button.dataset.domain === activeDomain;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
   document.querySelectorAll(".view-tab").forEach((button) => {
-    button.classList.toggle("active", button.dataset.view === viewId);
+    const active = button.dataset.view === viewId;
+    button.hidden = button.dataset.domain !== activeDomain;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-current", active ? "page" : "false");
   });
   document.querySelectorAll(".view-panel").forEach((panel) => {
     panel.classList.toggle("active", panel.id === viewId);
@@ -2310,13 +2324,6 @@ function downloadBlob(blob, filename) {
   link.click();
   link.remove();
   window.URL.revokeObjectURL(url);
-}
-
-function invokeDesktop(command, payload) {
-  if (!TAURI_INTERNALS?.invoke) {
-    throw new Error(t(state.language, "status.shareImageDesktopOnly"));
-  }
-  return TAURI_INTERNALS.invoke(command, payload);
 }
 
 
@@ -2864,10 +2871,6 @@ function setupModalFocusTrap() {
   });
 }
 
-function typePillMarkup(type) {
-  return `<span class="pill type-pill type-${String(type || "").toLowerCase()}">${getTypeLabel(type, state.language)}</span>`;
-}
-
 function syncSelectOptions(select, options, selectedValue, blankLabel = "") {
   select.innerHTML = options.map((option) => {
     if (!option) {
@@ -3217,8 +3220,7 @@ function buildPowerChipMarkup(power) {
 }
 
 function buildTypeChipMarkup(type) {
-  const background = TYPE_CHIP_COLORS[type] || "#7f8b96";
-  return `<span class="builder-autocomplete-chip type-chip" style="background:${background};color:#fff;">${escapeHtml(getTypeLabel(type, state.language))}</span>`;
+  return typeBadgeMarkup(type, state.language, "builder-autocomplete-type-badge");
 }
 
 function getAutocompleteDetailText(entry, context) {
@@ -4692,9 +4694,18 @@ function handleContextAction(action) {
 }
 
 function bindEvents() {
-  document.querySelector(".view-tabs").addEventListener("click", (event) => {
+  document.querySelector(".workspace-navigation").addEventListener("click", (event) => {
+    const domainButton = event.target.closest("[data-default-view]");
+    if (domainButton) {
+      const rememberedView = domainButton.dataset.lastView;
+      setActiveView(rememberedView && VIEW_DOMAINS[rememberedView] === domainButton.dataset.domain
+        ? rememberedView
+        : domainButton.dataset.defaultView);
+      return;
+    }
     const button = event.target.closest("[data-view]");
     if (!button) return;
+    document.querySelector(`[data-default-view][data-domain="${button.dataset.domain}"]`)?.setAttribute("data-last-view", button.dataset.view);
     setActiveView(button.dataset.view);
   });
 
@@ -4739,14 +4750,38 @@ function bindEvents() {
     handleContextAction(button.dataset.contextAction);
   });
 
-  document.getElementById("analysis-tabs").addEventListener("click", (event) => {
+  const analysisTabs = document.getElementById("analysis-tabs");
+  analysisTabs.addEventListener("click", (event) => {
     const button = event.target.closest("[data-analysis-tab]");
     if (!button || button.dataset.analysisTab === state.activeAnalysisTab) {
       return;
     }
     setActiveAnalysisTab(button.dataset.analysisTab);
   });
+  analysisTabs.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+      return;
+    }
+    const tabs = [...analysisTabs.querySelectorAll("[data-analysis-tab]")];
+    const currentIndex = tabs.indexOf(document.activeElement);
+    if (currentIndex < 0) {
+      return;
+    }
+    event.preventDefault();
+    const nextIndex = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : (currentIndex + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    tabs[nextIndex].focus();
+    setActiveAnalysisTab(tabs[nextIndex].dataset.analysisTab);
+  });
   document.getElementById("analysis-view").addEventListener("click", (event) => {
+    const viewButton = event.target.closest("[data-analysis-view]");
+    if (viewButton) {
+      setActiveView(viewButton.dataset.analysisView);
+      return;
+    }
     const focusButton = event.target.closest("[data-analysis-focus-type]");
     if (!focusButton) {
       return;
@@ -5830,6 +5865,7 @@ async function initialize() {
   }
   refreshDerivedState();
   renderAll();
+  void loadRecommendationUsageData();
   if (!document.getElementById("custom-library-input").value.trim()) {
     renderLibraryImportFeedback(t(state.language, "controls.importEmpty"));
   }
@@ -5851,9 +5887,3 @@ initialize().catch((error) => {
   console.error(error);
   setStatusMessage(t(state.language, "status.initFailed", {message: error.message}));
 });
-
-if ("serviceWorker" in navigator && !IS_DESKTOP_RUNTIME) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  });
-}

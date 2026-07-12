@@ -54,12 +54,12 @@ function countDuplicateTypes(team, candidate) {
   return (candidate.types || []).filter((type) => seen.has(type)).length;
 }
 
-function buildRiskLabels(candidate, focusWeaknessTypes, teamWeaknessTypes, fieldState, language) {
+function buildRiskTypes(candidate, focusWeaknessTypes, teamWeaknessTypes, fieldState) {
   const candidateWeaknesses = getWeaknessTypes(candidate, fieldState);
   return uniqueStrings([
     ...candidateWeaknesses.filter((type) => focusWeaknessTypes.includes(type)),
     ...candidateWeaknesses.filter((type) => teamWeaknessTypes.includes(type)),
-  ]).map((type) => getTypeLabel(type, language));
+  ]);
 }
 
 function buildCandidateScore(entry) {
@@ -80,16 +80,20 @@ function buildCandidateEntry(candidate, context) {
   const teamCovered = getCoveredTypes(candidate, context.teamWeaknessTypes, context.fieldState, (value) => value < 1);
   const immunityTypes = getCoveredTypes(candidate, context.focusWeaknessTypes, context.fieldState, (value) => value === 0);
   const roleIds = getRolePatchIds(candidate, context.missingRoles, context.roleContext);
-  const riskLabels = buildRiskLabels(candidate, context.focusWeaknessTypes, context.teamWeaknessTypes, context.fieldState, context.language);
+  const riskTypes = buildRiskTypes(candidate, context.focusWeaknessTypes, context.teamWeaknessTypes, context.fieldState);
   const entry = {
     configId: candidate.id,
     speciesId: candidate.speciesId || "",
     speciesName: candidate.speciesName || candidate.displayName || "",
     label: formatConfigName(candidate.displayName || candidate.speciesName || "", candidate.note || ""),
+    focusCoveredTypes: focusCovered,
+    teamCoveredTypes: teamCovered,
+    immunityTypes,
+    riskTypes,
     focusCoveredLabels: focusCovered.map((type) => getTypeLabel(type, context.language)),
     teamCoveredLabels: teamCovered.map((type) => getTypeLabel(type, context.language)),
     immunityLabels: immunityTypes.map((type) => getTypeLabel(type, context.language)),
-    riskLabels,
+    riskLabels: riskTypes.map((type) => getTypeLabel(type, context.language)),
     roleIds,
     duplicateTypes: countDuplicateTypes(context.team, candidate),
     extraMega: context.teamMegaCount > 0 && countMegaConfigs([candidate]) > 0,

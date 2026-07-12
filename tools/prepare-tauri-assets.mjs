@@ -24,8 +24,6 @@ const distRoot = path.join(repoRoot, "dist", "desktop");
 const FILE_ASSETS = [
   "index.html",
   "icon.png",
-  "manifest.webmanifest",
-  "sw.js",
   "config-default.txt",
   "PSChina Server Translation SV-1.7.2.user.js",
   "static/localization-data.json",

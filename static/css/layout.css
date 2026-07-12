@@ -1,47 +1,6 @@
-.app-shell {
-  display: grid;
-  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
-  gap: 18px;
-  padding: 0 32px 32px;
-}
 
-/* `.team-sidebar` is owned by shell.css now (sticky pin + viewport-bounded
-   internal scrollbar so the active team panel is always reachable). The old
-   block here used to set `overflow: hidden` which silently overrode shell.css
-   and trapped the bottom of the team list off-screen. Do not re-introduce it. */
 
-.workspace {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
 
-.view-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 12px;
-}
-
-.view-tab {
-  width: auto;
-  min-width: 112px;
-  background: var(--panel-alt);
-}
-
-.view-tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--color-surface);
-}
-
-.view-panel {
-  display: none;
-}
-
-.view-panel.active {
-  display: block;
-}
 
 .import-panel summary {
   cursor: pointer;
@@ -68,10 +27,49 @@
   overflow: auto;
 }
 
+.library-workbench {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  gap: var(--space-md);
+  align-items: start;
+}
+
+.library-species-pane,
+.library-detail-pane {
+  min-width: 0;
+}
+
+.library-species-pane {
+  position: sticky;
+  top: var(--space-md);
+  max-height: calc(100dvh - 140px);
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+}
+
 .library-subsection {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.library-reference-teams {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.library-reference-teams .vgcpastes-picker {
+  margin: 0;
+}
+
+@media (max-width: 1159px) {
+  .library-workbench {
+    grid-template-columns: minmax(180px, 0.62fr) minmax(0, 1.38fr);
+  }
 }
 
 .library-config-grid {
@@ -516,12 +514,16 @@
   position: relative;
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  padding: 10px;
-  border-radius: var(--radius-sm);
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
   background: var(--color-surface);
   border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(19, 32, 43, 0.03);
   overflow: visible;
+  transition:
+    border-color var(--motion-fast, 150ms) var(--ease-standard, ease),
+    box-shadow var(--motion-fast, 150ms) var(--ease-standard, ease);
 }
 
 .entry-card:hover,
@@ -529,17 +531,20 @@
 .team-card:hover,
 .team-card:focus-within {
   z-index: 8;
+  border-color: color-mix(in srgb, var(--color-primary, var(--accent)) 26%, var(--line));
+  box-shadow: 0 4px 14px rgba(19, 32, 43, 0.05);
 }
 
 .entry-card.compact {
-  padding: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
 }
 
 .entry-main {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .card-actions {
@@ -567,7 +572,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 5px 6px;
 }
 
 .entry-title strong {
@@ -593,7 +598,8 @@
 .entry-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  align-items: center;
+  gap: 5px;
 }
 
 .speed-entry {
@@ -1301,12 +1307,51 @@
 }
 
 .team-move-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+.team-move-row .info-pill,
+.team-move-row .move-pill {
+  max-width: 100%;
+}
+
+.entry-meta .type-badge-banner {
+  height: 18px;
+  max-width: 86px;
+}
+
+.entry-line.entry-tags .info-pill {
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 8px;
   gap: 5px;
 }
 
-.team-move-row .info-pill {
-  max-width: 100%;
+.entry-line.entry-tags .info-pill .item-icon,
+.entry-line.entry-tags .info-pill .item-icon-inline,
+.entry-line.entry-tags .info-pill .item-sprite {
+  width: 16px;
+  height: 16px;
 }
+
+.entry-line.entry-tags .info-pill .item-icon-image {
+  width: 16px;
+  height: 16px;
+}
+
+.entry-line.entry-tags .info-pill-label {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.library-config-grid {
+  gap: 12px;
+}
+
 
 .team-ev-line,
 .team-speed-line {
@@ -2012,6 +2057,14 @@
   margin-bottom: 10px;
 }
 
-.tera-hint-pill {
+.tera-hint-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }

@@ -17,26 +17,164 @@
 .type-steel { --type-bg: #9a9ab8; --type-fg: #13202b; }
 .type-fairy { --type-bg: #d685ad; --type-fg: #13202b; }
 
-.type-pill,
-.type-chip {
+/* ==========================================================================
+   Type badges + move chips
+   Banner icons: team-planner-assets/type/*.png
+   Symbol icons: team-planner-assets/type/*_sym.png
+   ========================================================================== */
+
+.type-badge {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  border-color: color-mix(in srgb, var(--type-bg), #000 14%);
+  max-width: 100%;
+  min-height: 18px;
+  padding: 1px 6px 1px 3px;
+  border: 1px solid color-mix(in srgb, var(--type-bg, #7f8b96) 42%, var(--color-border));
+  border-radius: 999px;
   background:
-    radial-gradient(circle at 8px 50%, rgba(255, 255, 255, 0.88) 0 3px, transparent 3.5px),
-    linear-gradient(135deg, color-mix(in srgb, var(--type-bg), #fff 20%), var(--type-bg));
-  color: var(--type-fg);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--type-bg, #7f8b96) 28%, var(--color-surface)) 0%,
+      color-mix(in srgb, var(--type-bg, #7f8b96) 10%, var(--color-surface)) 100%
+    );
+  color: var(--color-text);
+  line-height: 1.15;
+  vertical-align: middle;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--type-bg, transparent) 14%, transparent);
 }
 
-.type-pill::before,
-.type-chip::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--type-bg), #000 24%);
+.type-badge-symbol {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.type-badge-label {
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.type-badge.compact {
+  gap: 0;
+  min-height: 16px;
+  padding: 1px;
+  border-radius: 5px;
+}
+
+.type-badge.compact .type-badge-symbol {
+  width: 14px;
+  height: 14px;
+}
+
+.type-badge.compact .type-badge-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.type-symbol {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.type-symbol-img {
+  display: block;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.type-symbol-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Shared type-tinted chip surface: soft wash under the icon that fades
+   into the chip body. No hard stop under the symbol. */
+.type-tint-surface {
+  --type-wash: color-mix(in srgb, var(--type-bg, #7f8b96) 22%, var(--color-surface));
+  --type-wash-soft: color-mix(in srgb, var(--type-bg, #7f8b96) 8%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--type-bg, var(--color-border)) 34%, var(--color-border));
+  background:
+    linear-gradient(
+      90deg,
+      var(--type-wash) 0%,
+      var(--type-wash-soft) 28%,
+      var(--color-surface) 58%
+    );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--type-bg, transparent) 18%, transparent);
+}
+
+.info-pill.move-pill {
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 4px 9px 4px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.info-pill.move-pill.type-tint,
+.recommend-move-chip.type-tint,
+.mini-pill.type-tint {
+  --type-wash: color-mix(in srgb, var(--type-bg, #7f8b96) 24%, var(--color-surface));
+  --type-wash-soft: color-mix(in srgb, var(--type-bg, #7f8b96) 9%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--type-bg, var(--color-border)) 36%, var(--color-border));
+  background:
+    linear-gradient(
+      90deg,
+      var(--type-wash) 0%,
+      var(--type-wash-soft) 30%,
+      var(--color-surface) 62%
+    );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--type-bg, transparent) 16%, transparent);
+}
+
+.info-pill.move-pill .move-type-symbol,
+.recommend-move-chip .move-type-symbol {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.info-pill.move-pill .type-symbol-img,
+.recommend-move-chip .type-symbol-img {
+  width: 16px;
+  height: 16px;
+}
+
+.info-pill.move-pill .info-pill-label {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.2;
 }

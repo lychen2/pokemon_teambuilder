@@ -1,6 +1,6 @@
 import {t} from "./i18n.js";
 import {setInnerHTMLIfChanged} from "./render-cache.js";
-import {spriteMarkup} from "./sprites.js";
+import {spriteMarkup, typeBadgeMarkup} from "./sprites.js";
 import {getTypeLabel, normalizeName} from "./utils.js";
 
 const MATRIX_MAX_ALPHA = 0.36;
@@ -97,7 +97,12 @@ function teraHintMarkup(state, language) {
   const entries = getAllyTeraEntries(state, language);
   if (!entries.length) return "";
   const pills = entries
-    .map((entry) => `<span class="mini-pill tera-hint-pill type-${entry.type.toLowerCase()}">${escapeHtml(entry.name)} → ${escapeHtml(entry.label)}</span>`)
+    .map((entry) => `
+      <span class="tera-hint-entry">
+        <span>${escapeHtml(entry.name)}</span>
+        ${typeBadgeMarkup(entry.type, language)}
+      </span>
+    `)
     .join("");
   return `
     <div class="analysis-tera-hint">
@@ -125,23 +130,30 @@ function archetypePillsMarkup(identity, language) {
 
 function comboCardMarkup(entry, language) {
   const toneClass = entry.status === "complete" ? "good" : "";
-  const missingText = entry.missingTypes.length
-    ? t(language, "analysis.identityComboNear", {types: entry.missingTypes.join(" / ")})
-    : t(language, "analysis.identityComboComplete");
   const focusButton = entry.focusType
     ? `<button type="button" class="ghost-button mini-action" data-analysis-focus-type="${escapeHtml(entry.focusType)}">${t(language, "analysis.identityFocusAction", {type: entry.missingTypes[0]})}</button>`
     : "";
   return `
-    <article class="analysis-cover-card ${toneClass}">
+    <article class="analysis-cover-card analysis-combo-row ${toneClass}">
       <div class="analysis-list-head">
-        <strong>${escapeHtml(entry.label)}</strong>
+        <div class="analysis-type-badges">
+          ${(entry.typeIds || []).map((type) => typeBadgeMarkup(type, language)).join("")}
+        </div>
         <span class="mini-pill ${entry.status === "complete" ? "analysis-good-pill" : ""}">
           ${t(language, `analysis.identityStatus.${entry.status}`)}
         </span>
       </div>
-      <p class="muted">${escapeHtml(missingText)}</p>
-      <div class="analysis-inline-pills">
-        ${entry.coveredTypes.map((type) => `<span class="mini-pill">${escapeHtml(type)}</span>`).join("")}
+      <div class="analysis-combo-status">
+        <span class="analysis-label">${t(language, "analysis.identityCovered")}</span>
+        <div class="analysis-type-badges">
+          ${(entry.coveredTypeIds || []).map((type) => typeBadgeMarkup(type, language)).join("")}
+        </div>
+        ${(entry.missingTypeIds || []).length ? `
+          <span class="analysis-label">${t(language, "analysis.identityMissing")}</span>
+          <div class="analysis-type-badges">
+            ${entry.missingTypeIds.map((type) => typeBadgeMarkup(type, language)).join("")}
+          </div>
+        ` : ""}
       </div>
       ${focusButton}
     </article>
@@ -156,8 +168,8 @@ function identityOverviewMarkup(identity, language) {
   return `
     <div class="analysis-identity-stack">
       ${archetypePillsMarkup(identity, language)}
-      <div class="analysis-identity-card">
-        <div class="analysis-label">${t(language, "analysis.identityComboTitle")}</div>
+      <div class="analysis-identity-card analysis-combo-panel">
+        <div class="analysis-subgroup-title">${t(language, "analysis.identityComboTitle")}</div>
         <div class="analysis-cover-grid">
           ${combos.length
             ? combos.map((entry) => comboCardMarkup(entry, language)).join("")
@@ -240,7 +252,6 @@ function coverageGapCardMarkup(entry, language, state) {
         </div>
       </div>
       ${entry.patchable ? `
-        <p class="muted">${t(language, "analysis.coverGapPatchable")}</p>
         <div class="analysis-gap-member-list">
           ${entry.suggestions.map((suggestion) => `
             <article class="analysis-gap-member-card">
@@ -470,16 +481,26 @@ function singleRoleCardMarkup(entry, language, state) {
       ${roleReasonMarkup(entry, language)}
       <div class="single-role-block">
         <div class="analysis-label">${t(language, "analysis.moveSlotTitle")}</div>
-        <p class="muted role-reason-copy">${escapeHtml(t(language, `analysis.moveSlotQuality.${entry.moveSlotQuality}`))}</p>
+        <div class="analysis-inline-pills">
+          ${renderTooltipPill(
+            t(language, `analysis.moveSlotQualityShort.${entry.moveSlotQuality}`),
+            t(language, `analysis.moveSlotQuality.${entry.moveSlotQuality}`),
+            language,
+            "mini-pill",
+          )}
+        </div>
       </div>
       ${itemRoleSummaryMarkup(entry, language, state)}
       ${entry.moveRoles.some((moveEntry) => moveEntry.roleIds.length) ? `
-        <div class="single-role-block">
-          <div class="analysis-label">${t(language, "analysis.moveRoleTitle")}</div>
+        <details class="analysis-evidence-disclosure">
+          <summary>
+            <span>${t(language, "analysis.moveRoleTitle")}</span>
+            <span class="source-tag">${t(language, "analysis.moveRoleCount", {count: entry.moveRoles.filter((moveEntry) => moveEntry.roleIds.length).length})}</span>
+          </summary>
           <div class="single-role-move-list">
             ${entry.moveRoles.filter((moveEntry) => moveEntry.roleIds.length).map((moveEntry) => moveRoleLineMarkup(moveEntry, language, state)).join("")}
           </div>
-        </div>
+        </details>
       ` : ""}
     </article>
   `;
@@ -580,7 +601,6 @@ function renderCoveragePanel(analysis, language, state) {
     <div class="analysis-detail-grid">
       <section class="subpanel">
         <h3>${t(language, "analysis.coverageIncomingTitle")}</h3>
-        <p class="muted">${t(language, "analysis.coverMatrixIncomingCopy")}</p>
         <div class="analysis-matrix-head" style="${matrixStyle(defensiveHeaders)}">
           <div class="analysis-matrix-corner">${t(language, "analysis.coverMatrixAxisIncoming")}</div>
           ${matrixHeadersMarkup(defensiveHeaders, state, language)}
@@ -591,7 +611,6 @@ function renderCoveragePanel(analysis, language, state) {
       </section>
       <section class="subpanel">
         <h3>${t(language, "analysis.coverageOutgoingTitle")}</h3>
-        <p class="muted">${t(language, "analysis.coverMatrixOutgoingCopy")}</p>
         <div class="analysis-matrix-head" style="${matrixStyle(offensiveHeaders)}">
           <div class="analysis-matrix-corner">${t(language, "analysis.coverMatrixAxisOutgoing")}</div>
           ${matrixHeadersMarkup(offensiveHeaders, state, language)}
@@ -623,27 +642,32 @@ function renderRolesPanel(analysis, language, state) {
 
 function coreSuggestionMarkup(entry, language) {
   return `
-    <article class="analysis-core-card good">
-      <div class="analysis-list-head">
-        <strong>${escapeHtml(entry.label)}</strong>
+    <article class="analysis-core-card analysis-type-idea-card good">
+      <div class="analysis-type-idea-head">
+        <div class="analysis-type-badges">
+          ${entry.types.map((type) => typeBadgeMarkup(type, language)).join("")}
+        </div>
         <span class="source-tag score-tag">${t(language, "analysis.coreScore", {value: entry.score.toFixed(1)})}</span>
       </div>
-      <div class="analysis-inline-pills">
-        ${entry.types.map((type, index) => `<span class="pill type-pill type-${type.toLowerCase()}">${escapeHtml(entry.typeLabels[index])}</span>`).join("")}
+      <div class="analysis-type-idea-metrics">
+        <span class="mini-pill analysis-good-pill">${t(language, "analysis.coreTypePatches", {count: entry.covered.length})}</span>
+        <span class="mini-pill">${t(language, "analysis.coreTypeSynergy", {count: entry.synergy})}</span>
       </div>
-      <p class="muted analysis-core-copy">${t(language, "analysis.coreSuggestionCovered", {count: entry.covered.length, synergy: entry.synergy})}</p>
-      <div class="analysis-inline-pills">
-        ${entry.coveredLabels.map((label) => `<span class="mini-pill analysis-good-pill">${escapeHtml(label)}</span>`).join("")}
+      <div class="analysis-type-idea-result">
+        <span class="analysis-label">${t(language, "analysis.coreTypeCovered")}</span>
+        <div class="analysis-type-badges">
+          ${entry.covered.map((type) => typeBadgeMarkup(type, language)).join("")}
+        </div>
       </div>
     </article>
   `;
 }
 
-function coreCandidatePillsMarkup(labels = [], language, className = "") {
-  if (!labels.length) {
+function coreCandidateTypeBadgesMarkup(types = [], language) {
+  if (!types.length) {
     return `<span class="mini-pill">${t(language, "common.none")}</span>`;
   }
-  return labels.map((label) => `<span class="mini-pill ${className}">${escapeHtml(label)}</span>`).join("");
+  return types.map((type) => typeBadgeMarkup(type, language)).join("");
 }
 
 function coreLibraryCandidateMarkup(entry, language, state) {
@@ -662,19 +686,19 @@ function coreLibraryCandidateMarkup(entry, language, state) {
       <div>
         <div class="analysis-label">${t(language, "analysis.coreCandidateFocusCover")}</div>
         <div class="analysis-inline-pills">
-          ${entry.focusCoveredLabels.length ? coreCandidatePillsMarkup(entry.focusCoveredLabels, language, "analysis-good-pill") : `<span class="mini-pill">${t(language, "common.none")}</span>`}
+          ${coreCandidateTypeBadgesMarkup(entry.focusCoveredTypes, language)}
         </div>
       </div>
       <div>
         <div class="analysis-label">${t(language, "analysis.coreCandidateTeamCover")}</div>
         <div class="analysis-inline-pills">
-          ${entry.teamCoveredLabels.length ? coreCandidatePillsMarkup(entry.teamCoveredLabels, language, "analysis-good-pill") : `<span class="mini-pill">${t(language, "common.none")}</span>`}
+          ${coreCandidateTypeBadgesMarkup(entry.teamCoveredTypes, language)}
         </div>
       </div>
       <div>
         <div class="analysis-label">${t(language, "analysis.coreCandidateRisk")}</div>
         <div class="analysis-inline-pills">
-          ${entry.riskLabels.length ? coreCandidatePillsMarkup(entry.riskLabels, language, "analysis-alert-pill") : `<span class="mini-pill">${t(language, "analysis.coreCandidateNoRisk")}</span>`}
+          ${entry.riskTypes.length ? coreCandidateTypeBadgesMarkup(entry.riskTypes, language) : `<span class="mini-pill">${t(language, "analysis.coreCandidateNoRisk")}</span>`}
         </div>
       </div>
       ${entry.roleIds.length ? `
@@ -803,13 +827,15 @@ function referenceTeamCardMarkup(entry, language, state) {
 function renderReferenceTeamsPanel(analysis, language, state) {
   const referenceTeams = analysis.referenceTeams || {entries: [], filters: []};
   const entries = getFilteredReferenceEntries(analysis, state, language);
+  const keepOpen = Boolean(state.referenceTeamQuery || (state.referenceTeamFilter && state.referenceTeamFilter !== "all"));
   return `
-    <section class="subpanel reference-team-panel">
-      <div class="section-head reference-team-toolbar">
-        <div>
-          <h3>${t(language, "analysis.reference.title")}</h3>
-          <p class="muted">${t(language, "analysis.reference.copy")}</p>
-        </div>
+    <details class="subpanel reference-team-panel analysis-section-disclosure"${keepOpen ? " open" : ""}>
+      <summary>
+        <strong>${t(language, "analysis.reference.title")}</strong>
+        <span class="source-tag">${t(language, "analysis.reference.groupSummary", {count: referenceTeams.entries?.length || 0})}</span>
+      </summary>
+      <div class="reference-team-content">
+        <p class="muted">${t(language, "analysis.reference.copy")}</p>
         <div class="reference-team-controls">
           <select class="analysis-focus-select" data-reference-team-filter>
             <option value="all">${t(language, "analysis.reference.filterAll")}</option>
@@ -819,18 +845,17 @@ function renderReferenceTeamsPanel(analysis, language, state) {
           </select>
           <input class="reference-team-search" type="search" data-reference-team-query value="${escapeHtml(state.referenceTeamQuery || "")}" placeholder="${escapeHtml(t(language, "analysis.reference.searchPlaceholder"))}">
         </div>
+        ${referenceTeams.entries?.length
+          ? `<div class="reference-team-grid">${entries.length ? entries.map((entry) => referenceTeamCardMarkup(entry, language, state)).join("") : `<p class="empty-state">${t(language, "analysis.reference.noFiltered")}</p>`}</div>`
+          : `<p class="empty-state">${t(language, "analysis.reference.empty")}</p>`}
       </div>
-      ${referenceTeams.entries?.length
-        ? `<div class="reference-team-grid">${entries.length ? entries.map((entry) => referenceTeamCardMarkup(entry, language, state)).join("") : `<p class="empty-state">${t(language, "analysis.reference.noFiltered")}</p>`}</div>`
-        : `<p class="empty-state">${t(language, "analysis.reference.empty")}</p>`}
-    </section>
+    </details>
   `;
 }
 
 function renderCoresPanel(analysis, language, focusId, state) {
   const focusEntry = analysis.cores.suggestionsById[focusId];
   return `
-    ${renderReferenceTeamsPanel(analysis, language, state)}
     <div class="analysis-detail-grid">
       <section class="subpanel">
         <div class="section-head">
@@ -857,7 +882,6 @@ function renderCoresPanel(analysis, language, focusId, state) {
               : `<p class="muted">${t(language, "analysis.coreNoTeamCover")}</p>`}
             <div class="analysis-subsection-head">
               <h4>${t(language, "analysis.coreLibraryTitle")}</h4>
-              <p class="muted">${t(language, "analysis.coreLibraryCopy")}</p>
             </div>
             <div class="analysis-core-grid">
               ${focusEntry.libraryCandidates?.length
@@ -867,7 +891,6 @@ function renderCoresPanel(analysis, language, focusId, state) {
             ${focusEntry.suggestions?.length ? `
               <div class="analysis-subsection-head">
                 <h4>${t(language, "analysis.coreTypeIdeaTitle")}</h4>
-                <p class="muted">${t(language, "analysis.coreTypeIdeaCopy")}</p>
               </div>
               <div class="analysis-core-grid">
                 ${focusEntry.suggestions.map((entry) => coreSuggestionMarkup(entry, language)).join("")}
@@ -897,6 +920,7 @@ function renderCoresPanel(analysis, language, focusId, state) {
         </div>
       </section>
     </div>
+    ${renderReferenceTeamsPanel(analysis, language, state)}
   `;
 }
 
@@ -906,7 +930,12 @@ export function renderAnalysisView(state) {
   const tabTargets = ["coverage", "roles", "cores"];
 
   document.querySelectorAll("[data-analysis-tab]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.analysisTab === activeTab);
+    const active = button.dataset.analysisTab === activeTab;
+    button.classList.toggle("active", active);
+    if (button.getAttribute("role") === "tab") {
+      button.setAttribute("aria-selected", String(active));
+      button.tabIndex = active ? 0 : -1;
+    }
   });
   document.querySelectorAll(".analysis-detail-panel").forEach((panel) => {
     panel.classList.toggle("active", panel.dataset.analysisPanel === activeTab);
@@ -925,16 +954,27 @@ export function renderAnalysisView(state) {
 
   const teraHint = teraHintMarkup(state, language);
   const identityMarkup = identityOverviewMarkup(analysis.identity, language);
+  const primaryIssue = analysis.blindSpots.length
+    ? t(language, "analysis.priority.blindSpots", {count: analysis.blindSpots.length})
+    : analysis.weaknesses.length
+      ? t(language, "analysis.priority.weaknesses", {count: analysis.weaknesses.length})
+      : t(language, "analysis.priority.stable");
   setInnerHTMLIfChanged(document.getElementById("analysis-overview"), `
+    <article class="analysis-priority-card">
+      <span class="analysis-label">${t(language, "analysis.priorityTitle")}</span>
+      <strong>${escapeHtml(primaryIssue)}</strong>
+    </article>
+    <div class="analysis-metric-strip">
+      <div class="analysis-stat"><strong>${analysis.weaknesses.length}</strong><span>${t(language, "analysis.weaknesses")}</span></div>
+      <div class="analysis-stat"><strong>${analysis.blindSpots.length}</strong><span>${t(language, "analysis.blindSpots")}</span></div>
+      <div class="analysis-stat"><strong>${analysis.coverage.strongCount}</strong><span>${t(language, "analysis.coverageStrong")}</span></div>
+      <div class="analysis-stat"><strong>${t(language, `analysis.speedMode.${analysis.speedContext.mode}`)}</strong><span>${t(language, "analysis.speedPlan")}</span></div>
+      <div class="analysis-stat"><strong>${analysis.roles.filledUtilityCount}</strong><span>${t(language, "analysis.rolesFilled")}</span></div>
+      <div class="analysis-stat"><strong>${analysis.cores.bestPairs[0]?.score.toFixed(1) || "0.0"}</strong><span>${t(language, "analysis.bestCore")}</span></div>
+      <div class="analysis-stat analysis-stat-wide"><strong>${analysis.structure.duplicateTypes.join(" / ") || t(language, "common.none")}</strong><span>${t(language, "analysis.duplicateTypes")}</span></div>
+    </div>
     ${teraHint}
     ${identityMarkup}
-    <div class="metric-card"><strong>${analysis.weaknesses.length}</strong><span>${t(language, "analysis.weaknesses")}</span></div>
-    <div class="metric-card"><strong>${analysis.blindSpots.length}</strong><span>${t(language, "analysis.blindSpots")}</span></div>
-    <div class="metric-card"><strong>${analysis.coverage.strongCount}</strong><span>${t(language, "analysis.coverageStrong")}</span></div>
-    <div class="metric-card"><strong>${t(language, `analysis.speedMode.${analysis.speedContext.mode}`)}</strong><span>${t(language, "analysis.speedPlan")}</span></div>
-    <div class="metric-card"><strong>${analysis.roles.filledUtilityCount}</strong><span>${t(language, "analysis.rolesFilled")}</span></div>
-    <div class="metric-card"><strong>${analysis.cores.bestPairs[0]?.score.toFixed(1) || "0.0"}</strong><span>${t(language, "analysis.bestCore")}</span></div>
-    <div class="metric-card"><strong>${analysis.structure.duplicateTypes.join(" / ") || t(language, "common.none")}</strong><span>${t(language, "analysis.duplicateTypes")}</span></div>
   `);
 
   const coreFocusId = state.activeCoreConfigId || analysis.cores.memberOptions[0]?.id || "";

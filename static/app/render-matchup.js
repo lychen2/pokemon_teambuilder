@@ -4,8 +4,9 @@ import {setInnerHTMLIfChanged} from "./render-cache.js";
 import {renderMatchupBoard} from "./render-matchup-board.js";
 import {renderRecommendationListOnly} from "./render-recommendations.js";
 import {renderHighlightedText} from "./search-utils.js";
-import {spriteMarkup} from "./sprites.js";
+import {spriteMarkup, typeBadgeMarkup} from "./sprites.js";
 import {getDisplayNote, getTypeLabel} from "./utils.js";
+
 
 const CONFIG_PREVIEW_LIMIT = 3;
 const MATCHUP_ROLE_FILTERS = [
@@ -42,7 +43,7 @@ function getTypeClassName(type) {
 }
 
 function typePills(types = [], language) {
-  return types.map((type) => `<span class="pill type-pill ${getTypeClassName(type)}">${getTypeLabel(type, language)}</span>`).join("");
+  return types.map((type) => typeBadgeMarkup(type, language)).join("");
 }
 
 function buildTextTooltipMarkup(detail, language) {

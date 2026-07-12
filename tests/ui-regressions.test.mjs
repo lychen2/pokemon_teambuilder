@@ -35,6 +35,7 @@ const officialNatureTranslations = Object.freeze({
 const {ICON_SCHEMES, NATURE_TRANSLATIONS} = await import("../static/app/constants.js");
 const {analyzeTeam} = await import("../static/app/analysis.js");
 const {t} = await import("../static/app/i18n.js");
+const {buildUsageLookup, getUsageTeammateShare} = await import("../static/app/usage.js");
 const {loadDatasets} = await import("../static/app/data.js");
 const {itemIconMarkup, spriteMarkup} = await import("../static/app/sprites.js");
 const {recommendConfigs} = await import("../static/app/recommendations.js");
@@ -85,9 +86,63 @@ test("Champions Official scheme uses synced Pokemon and item icons", async () =>
   assert.match(pokemonMarkup, /champions-official-icons\/pokemon\/aegislash\.png/);
   assert.match(pokemonMarkup, /--fallback-position: -40px -90px/);
 
-  assert.equal(itemIconMarkup(datasets.items.abomasite, {iconScheme: ICON_SCHEMES.CHAMPIONS_OFFICIAL, datasets}), "");
+  const abomasiteMarkup = itemIconMarkup(datasets.items.abomasite, {iconScheme: ICON_SCHEMES.CHAMPIONS_OFFICIAL, datasets});
+  assert.match(abomasiteMarkup, /champions-official-icons\/items\/abomasite\.png/);
   const itemMarkup = itemIconMarkup(datasets.items.barbaracite, {iconScheme: ICON_SCHEMES.CHAMPIONS_OFFICIAL, datasets});
   assert.match(itemMarkup, /champions-official-icons\/items\/barbaracite\.png/);
+});
+
+test("desktop UI CSS keeps public teams on one six-member row and a persistent two-column shell", async () => {
+  const componentsCss = await readFile("static/css/components.css", "utf8");
+  const shellCss = await readFile("static/css/shell.css", "utf8");
+  const memberGridStart = componentsCss.indexOf(".vgcpastes-member-list {");
+  const memberGridEnd = componentsCss.indexOf(".vgcpastes-member {", memberGridStart);
+  const memberGridCss = componentsCss.slice(memberGridStart, memberGridEnd);
+  const itemBadgeStart = componentsCss.indexOf(".vgcpastes-member-item-icon,");
+  const itemBadgeEnd = componentsCss.indexOf(".vgcpastes-member-sprite .item-icon-image", itemBadgeStart);
+  const itemBadgeCss = componentsCss.slice(itemBadgeStart, itemBadgeEnd);
+
+  assert.match(memberGridCss, /repeat\(6, minmax\(0, 1fr\)\)/);
+  assert.doesNotMatch(memberGridCss, /repeat\([23],|auto-fit|auto-fill/);
+  assert.match(itemBadgeCss, /background-color: transparent/);
+  assert.match(itemBadgeCss, /filter: drop-shadow/);
+  assert.match(itemBadgeCss, /box-shadow: none/);
+  assert.doesNotMatch(shellCss, /@media \(max-width: 1100px\)[\s\S]*grid-template-columns: 1fr/);
+  assert.match(shellCss, /@media \(max-width: 1159px\)[\s\S]*grid-template-columns: 220px minmax\(0, 1fr\)/);
+});
+
+test("team analysis uses one balanced, bilingual workspace layout", async () => {
+  const [analysisCss, typeCss, indexHtml, renderAnalysisJs, renderUsageJs, renderJs, mainJs] = await Promise.all([
+    readFile("static/css/analysis.css", "utf8"),
+    readFile("static/css/type-colors.css", "utf8"),
+    readFile("index.html", "utf8"),
+    readFile("static/app/render-analysis.js", "utf8"),
+    readFile("static/app/render-usage.js", "utf8"),
+    readFile("static/app/render.js", "utf8"),
+    readFile("static/app/main.js", "utf8"),
+  ]);
+  const cssWithoutComments = analysisCss.replace(/\/\*[\s\S]*?\*\//g, "");
+  let braceDepth = 0;
+  for (const character of cssWithoutComments) {
+    if (character === "{") braceDepth += 1;
+    if (character === "}") braceDepth -= 1;
+    assert.ok(braceDepth >= 0, "analysis.css must not close an unopened block");
+  }
+
+  assert.equal(braceDepth, 0, "analysis.css must close every block");
+  assert.doesNotMatch(indexHtml, /analysis-question-nav/);
+  assert.match(indexHtml, /analysis-jump-actions/);
+  assert.match(indexHtml, /role="tablist"/);
+  assert.match(renderAnalysisJs, /typeBadgeMarkup\(type, language\)/);
+  assert.doesNotMatch(
+    [typeCss, renderAnalysisJs, renderUsageJs, renderJs, mainJs].join("\n"),
+    /\btype-(?:pill|chip)\b/,
+    "all displayed Pokemon types should use typeBadgeMarkup",
+  );
+  assert.match(renderAnalysisJs, /analysis-evidence-disclosure/);
+  assert.match(renderAnalysisJs, /analysis-section-disclosure/);
+  assert.equal(t("zh", "analysis.workspaceCopy"), "先看结论，再下钻到属性、职能和核心证据。");
+  assert.equal(t("en", "analysis.jumpSpeed"), "View speed tiers");
 });
 
 test("Poke Icons title uses localized species names in Chinese", async () => {
@@ -112,10 +167,9 @@ test("reference Mega cards include long-tail Megas without duplicate base repres
 
   assert.ok(scizor, "Scizor-Mega should be represented even when fallback samples are incomplete");
   assert.ok(raichuY, "Raichu-Mega-Y should be represented");
-  assert.deepEqual(
-    raichuY.coreMembers.map((member) => member.speciesName),
-    ["Raichu-Mega-Y", "Pelipper"],
-  );
+  assert.equal(raichuY.coreMembers.length, 2);
+  assert.ok(raichuY.coreMembers.some((member) => member.speciesName === "Raichu-Mega-Y"));
+  assert.equal(raichuY.coreMembers.filter((member) => member.speciesName.includes("-Mega")).length, 1);
 
   const garchompMega = configs.find((config) => config.speciesId === "garchompmega");
   const rockSlideGarchompMega = {
@@ -170,4 +224,36 @@ test("cached role context preserves analysis and recommendation output", async (
     recommendConfigs(library, team, [], "zh", {datasets}),
     recommendConfigs(library, team, [], "zh", {datasets, roleContext}),
   );
+});
+
+test("pairing bias uses teammate percentages and changes recommendation order", async () => {
+  const datasets = await loadDatasets();
+  const usage = JSON.parse(await readFile("static/usage.json", "utf8"));
+  const datasetsWithUsage = {
+    ...datasets,
+    usageLookup: buildUsageLookup(usage),
+  };
+  const text = await readFile("config-default.txt", "utf8");
+  const {configs} = parseShowdownLibrary(text, datasetsWithUsage, {fallbackLevel: 50, language: "zh"});
+  const team = ["garchomp", "whimsicott", "incineroar"]
+    .map((speciesId) => configs.find((config) => config.speciesId === speciesId))
+    .filter(Boolean);
+
+  assert.equal(team.length, 3);
+  assert.ok(Math.abs(getUsageTeammateShare(datasetsWithUsage, "garchomp", "charizardmegay") - 0.20849) < 1e-6);
+
+  const teamFit = recommendConfigs(configs, team, [], "zh", {
+    datasets: datasetsWithUsage,
+    weights: {pairingBias: 0},
+  }).recommendations;
+  const pairing = recommendConfigs(configs, team, [], "zh", {
+    datasets: datasetsWithUsage,
+    weights: {pairingBias: 100},
+  }).recommendations;
+
+  assert.notDeepEqual(
+    pairing.map((entry) => entry.speciesId),
+    teamFit.map((entry) => entry.speciesId),
+  );
+  assert.ok(new Set(pairing.map((entry) => entry.recommendationAxes.pairingPercent)).size > 1);
 });

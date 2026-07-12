@@ -134,19 +134,19 @@ textarea:focus-visible {
 .hero-note,
 .modal-panel {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 .panel,
 .hero-note {
-  padding: var(--space-lg);
+  padding: var(--space-md);
 }
 
 .subpanel {
   padding: var(--space-md);
-  background: rgba(255, 255, 255, 0.78);
+  background: var(--color-surface-muted);
 }
 
 .section-head {
@@ -186,31 +186,34 @@ textarea:focus-visible {
 .info-pill {
   display: inline-flex;
   align-items: center;
-  border-radius: var(--radius-pill);
+  border-radius: 8px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  min-height: 28px;
-  padding: 5px 8px;
+  min-height: 26px;
+  padding: 4px 8px;
   line-height: 1.2;
 }
 
 .pill {
   padding: var(--space-chip-y) var(--space-chip-x);
+  border-radius: var(--radius-pill);
 }
 
 .mini-pill {
-  padding: 4px 8px;
+  padding: 3px 8px;
   font-size: var(--type-mono-sm);
   max-width: 100%;
   overflow-wrap: break-word;
+  border-radius: 8px;
 }
 
 .info-pill {
   position: relative;
-  gap: var(--space-xs);
-  padding: 5px 9px;
+  gap: 5px;
+  padding: 4px 9px;
   cursor: help;
   max-width: 100%;
+  border-radius: 8px;
 }
 
 .info-pill-label {
@@ -256,15 +259,18 @@ textarea:focus-visible {
    ========================================================================== */
 
 .language-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-paper-translucent);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+  box-shadow: none;
 }
 
 .view-tab,
 .analysis-tab {
-  background: var(--color-surface-muted);
+  background: transparent;
   color: var(--color-text);
 }
 
@@ -285,18 +291,11 @@ textarea:focus-visible {
   background: var(--color-primary-hover);
 }
 
-.language-switch {
-  display: inline-flex;
-  gap: var(--space-sm);
-  padding: 6px;
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-}
-
 .lang-button {
   width: auto;
-  min-width: 88px;
-  padding: 9px 14px;
+  min-width: 64px;
+  min-height: 32px;
+  padding: 6px 10px;
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
@@ -576,35 +575,44 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
-/* 2-column member grid. `auto-fit minmax(120px, 1fr)` collapses to 1 column
-   under ~256px. Sprite cells carry overflow:visible so the item-icon (which
-   protrudes -3px bottom-right) is not clipped by the grid track. */
+/* Keep all six public-team members on one scan line. At narrower widths the
+   sprites remain visible while the repeated name/type/ability copy collapses. */
 .vgcpastes-member-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 3px 6px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px 10px;
+}
+
+@media (max-width: 719px) {
+  .vgcpastes-member {
+    justify-content: center;
+  }
+
+  .vgcpastes-team-card .vgcpastes-member-body {
+    display: none;
+  }
 }
 
 .vgcpastes-member {
   position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
   min-width: 0;
-  padding: 1px 0;
+  padding: 2px 0;
   overflow: visible;
 }
 
 .vgcpastes-team-card .vgcpastes-member-body {
   flex: 1 1 auto;
   display: grid;
-  gap: 0;
+  gap: 1px;
   min-width: 0;
   font-size: 0.7rem;
-  line-height: 1.18;
+  line-height: 1.2;
 }
 
 .vgcpastes-member-sprite {
@@ -614,20 +622,58 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   width: 40px;
-  height: 30px;
+  height: 34px;
   overflow: visible;
 }
 
-.vgcpastes-member-item-icon {
+/* Item sits on the Pokemon icon's bottom-right corner, never in the text column. */
+.vgcpastes-member-item-icon,
+.vgcpastes-member-sprite .item-icon,
+.vgcpastes-member-sprite .item-sprite {
   position: absolute;
-  bottom: -3px;
-  right: -3px;
-  width: 24px;
-  height: 24px;
-  background-repeat: no-repeat;
-  transform-origin: bottom right;
-  transform: scale(0.7);
+  right: -2px;
+  bottom: -2px;
+  width: 16px;
+  height: 16px;
   z-index: 2;
+  pointer-events: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 1px 1px rgba(19, 32, 43, 0.34));
+  transform: none;
+}
+
+.vgcpastes-member-sprite .item-icon-image {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.vgcpastes-member-sprite .sprite,
+.vgcpastes-member-sprite .sprite-image {
+  width: 36px;
+  height: 30px;
+}
+
+.vgcpastes-member-sprite .poke-icon-image {
+  width: 36px;
+  height: 30px;
+}
+
+.vgcpastes-member-types {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.vgcpastes-member-types .type-badge-banner {
+  height: 14px;
+  max-width: 68px;
 }
 
 /* ----- Member tags / role pills (used when member rendered standalone) ----- */
@@ -640,10 +686,11 @@ textarea:focus-visible {
 }
 
 .vgcpastes-member-ability {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--color-muted);
 }
 
 .vgcpastes-member-tags {
@@ -1100,9 +1147,30 @@ kbd {
   flex-shrink: 0;
 }
 
-.item-sprite-image,
-.builder-item-sprite-image,
-.vgcpastes-member-item-icon {
+.item-icon,
+.item-icon-inline,
+.builder-item-sprite-image {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  line-height: 0;
+}
+
+.item-icon-image,
+.item-icon-inline .item-icon-image,
+.builder-item-sprite-image .item-icon-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+/* Keep Showdown sheet item sprites at their native cell size. */
+.item-sprite-image {
   width: 24px;
   height: 24px;
 }
@@ -1167,4 +1235,21 @@ kbd {
 .shortcuts-row > span {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+/* Keep the surface grammar flat: hierarchy comes from spacing and borders. */
+.panel,
+.subpanel,
+.modal-panel {
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.subpanel {
+  background: var(--color-surface-muted);
+}
+
+.vgcpastes-team-card {
+  border-radius: 10px;
+  box-shadow: 0 1px 0 rgba(19, 32, 43, 0.03);
 }

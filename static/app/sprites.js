@@ -1,4 +1,5 @@
 import {ICON_SCHEMES} from "./constants.js";
+import {getTypeLabel} from "./utils.js";
 
 function escapeAttribute(text) {
   return String(text || "")
@@ -57,6 +58,58 @@ function getSpriteLabel(config, state) {
   return config?.displayName || config?.speciesName || config?.speciesId || "Pokemon";
 }
 
+function typeKey(type) {
+  return String(type || "").trim().toLowerCase();
+}
+
+export function typeIconUrl(type) {
+  const key = typeKey(type);
+  if (!key) {
+    return "";
+  }
+  return `./static/team-planner-assets/type/${key}.png`;
+}
+
+export function typeSymbolUrl(type) {
+  const key = typeKey(type);
+  if (!key) {
+    return "";
+  }
+  return `./static/team-planner-assets/type/${key}_sym.png`;
+}
+
+/** Localized type chip: symbol icon + translated label (never English-only banners). */
+export function typeBadgeMarkup(type, language = "zh", className = "") {
+  if (!type) {
+    return "";
+  }
+  const key = typeKey(type);
+  const label = getTypeLabel(type, language);
+  const symbol = typeSymbolUrl(type);
+  const classes = ["type-badge", `type-${key}`, className].filter(Boolean).join(" ");
+  return `
+    <span class="${escapeAttribute(classes)}" title="${escapeAttribute(label)}">
+      <img class="type-badge-symbol" src="${escapeAttribute(symbol)}" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.remove()">
+      <span class="type-badge-label">${escapeAttribute(label)}</span>
+    </span>
+  `;
+}
+
+export function typeSymbolMarkup(type, language = "zh", className = "") {
+  if (!type) {
+    return "";
+  }
+  const key = typeKey(type);
+  const label = getTypeLabel(type, language);
+  const symbol = typeSymbolUrl(type);
+  const classes = ["type-symbol", `type-${key}`, className].filter(Boolean).join(" ");
+  return `
+    <span class="${escapeAttribute(classes)}" title="${escapeAttribute(label)}">
+      <img class="type-symbol-img" src="${escapeAttribute(symbol)}" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.style.display='none'">
+      <span class="type-symbol-label">${escapeAttribute(label)}</span>
+    </span>
+  `;
+}
 
 export function itemIconMarkup(itemInfo, state, className = "") {
   const itemId = itemInfo?.id || itemInfo?.key || "";
@@ -68,8 +121,14 @@ export function itemIconMarkup(itemInfo, state, className = "") {
     return "";
   }
   const label = itemInfo.localizedName || itemInfo.name || itemId;
-  return standaloneIconMarkup(iconEntry.url, label, null, className);
+  const classes = ["item-icon", className].filter(Boolean).join(" ");
+  return `
+    <span class="${escapeAttribute(classes)}" title="${escapeAttribute(label)}">
+      <img class="item-icon-image" src="${escapeAttribute(iconEntry.url)}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+    </span>
+  `;
 }
+
 export function spriteMarkup(config, state) {
   const label = getSpriteLabel(config, state);
   if (state?.iconScheme === ICON_SCHEMES.POKE_ICONS || state?.iconScheme === ICON_SCHEMES.CHAMPIONS_OFFICIAL) {

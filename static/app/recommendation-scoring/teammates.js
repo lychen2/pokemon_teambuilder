@@ -12,7 +12,7 @@ const TEAMMATE_LIFT_WEIGHT = 0.4;
 
 function getTeammateAffinity(share = 0, candidateUsage = 0) {
   const shareScore = clamp(share / TEAMMATE_SHARE_TARGET, 0, 1);
-  const usageBaseline = Math.max(Number(candidateUsage || 0), MIN_USAGE_BASELINE);
+  const usageBaseline = Math.max(Number(candidateUsage || 0) / 100, MIN_USAGE_BASELINE);
   const liftScore = clamp((share / usageBaseline) / TEAMMATE_LIFT_TARGET, 0, 1);
   return shareScore * TEAMMATE_SHARE_WEIGHT + liftScore * TEAMMATE_LIFT_WEIGHT;
 }
@@ -28,7 +28,7 @@ export function buildTeammateUsageSummary(team, candidate, datasets) {
   );
   const pairings = team.map((member) => {
     const share = getUsageTeammateShare(datasets, member.speciesId, candidate.speciesId);
-    const lift = share / Math.max(candidateUsage, MIN_USAGE_BASELINE);
+    const lift = share / Math.max(candidateUsage / 100, MIN_USAGE_BASELINE);
     const affinity = getTeammateAffinity(share, candidateUsage);
     return {
       member,

@@ -3,6 +3,7 @@ import sys
 
 from .champions import write_champions_vgc_data
 from .champions_icon_assets import sync_champions_icon_assets
+from .io import fetch_binary_to_file
 from .paths import (
     DEFAULT_PRESET_SCRIPT,
     LOCALIZATION_BUILD_SCRIPT,
@@ -10,6 +11,8 @@ from .paths import (
     STATIC_DIR,
     STATS_DIR,
     TEXT_SOURCES,
+    VGCPASTES_CSV_PATH,
+    VGCPASTES_CSV_URL,
 )
 from .showdown_sources import extract_forms_index, write_learnsets_data, write_text_source
 from .smogon_usage import update_usage_data
@@ -24,6 +27,7 @@ def ensure_directories():
 def run_update(strict_pastes=False):
     print("Starting core data update...")
     ensure_directories()
+    sync_vgcpastes_csv()
     write_core_sources()
     extract_forms_index()
     write_learnsets_data()
@@ -53,6 +57,11 @@ def refresh_official_usage():
 def write_core_sources():
     for source in TEXT_SOURCES:
         write_text_source(*source)
+
+
+def sync_vgcpastes_csv():
+    fetch_binary_to_file(VGCPASTES_CSV_URL, VGCPASTES_CSV_PATH, "VGCPastes CSV")
+
 
 def write_localization_data():
     print("Updating localization data.")

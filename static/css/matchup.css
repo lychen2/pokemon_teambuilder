@@ -194,11 +194,7 @@
   margin-bottom: 2px;
 }
 
-@media (max-width: 640px) {
-  .matchup-lead-body {
-    grid-template-columns: 1fr;
-  }
-}
+
 
 .matchup-board-panel,
 .matchup-board-layout,
@@ -234,9 +230,9 @@
 
 .matchup-board-matrix-row {
   display: grid;
-  grid-template-columns: 38px repeat(6, minmax(42px, 1fr));
-  gap: 6px;
-  min-width: 320px;
+  grid-template-columns: 44px repeat(6, minmax(44px, 1fr));
+  gap: 5px;
+  min-width: 340px;
 }
 
 .matchup-board-matrix-header,
@@ -307,18 +303,19 @@
 .matchup-board-entry {
   display: grid;
   gap: 8px;
-  padding: 8px;
-  border-radius: var(--radius-sm);
+  padding: 10px;
+  border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--color-surface);
+  box-shadow: 0 1px 0 rgba(19, 32, 43, 0.03);
 }
 
 .matchup-board-entry-ally {
-  grid-template-columns: 58px minmax(0, 1fr);
+  grid-template-columns: 72px minmax(0, 1fr);
 }
 
 .matchup-board-entry-opponent {
-  grid-template-columns: minmax(0, 1fr) 58px;
+  grid-template-columns: minmax(0, 1fr) 72px;
 }
 
 .matchup-board-side-rail,
@@ -353,14 +350,26 @@
 }
 
 .matchup-board-side-types {
-  display: grid;
-  gap: 4px;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  width: 100%;
+  max-width: 72px;
 }
 
-.matchup-board-side-types .pill {
-  padding: 3px 7px;
+.matchup-board-side-types .type-badge {
+  max-width: 100%;
+  padding: 1px 5px 1px 2px;
+}
+
+.matchup-board-side-types .type-badge-label {
   font-size: 10px;
+}
+
+.matchup-board-side-types .type-badge-symbol {
+  width: 12px;
+  height: 12px;
 }
 
 .matchup-board-side-main {
@@ -541,6 +550,11 @@
   font-size: 12px;
 }
 
+.matchup-board-move-type .type-badge-banner {
+  height: 14px;
+  max-width: 64px;
+}
+
 .matchup-board-move-type {
   display: inline-flex;
   align-items: center;
@@ -703,48 +717,7 @@
   }
 }
 
-@media (max-width: 768px) {
-  .matchup-picker-panel {
-    max-height: none;
-  }
 
-  .matchup-picker-list {
-    overflow: visible;
-    padding-right: 0;
-  }
-
-  .matchup-picker-card {
-    grid-template-columns: 1fr;
-  }
-
-  .matchup-board-layout,
-  .matchup-board-speed-list {
-    grid-template-columns: 1fr;
-  }
-
-  .matchup-board-speed-row {
-    grid-template-columns: 1fr;
-  }
-
-  .matchup-board-entry-ally,
-  .matchup-board-entry-opponent {
-    grid-template-columns: 1fr;
-  }
-
-  .matchup-board-entry-opponent .matchup-board-side-rail {
-    order: -1;
-  }
-
-  .matchup-board-move-head,
-  .matchup-board-move-row {
-    grid-template-columns: 1fr;
-  }
-
-  .matchup-board-targets,
-  .matchup-board-move-hits {
-    min-width: 260px;
-  }
-}
 
 /* At viewport 1281–1599 the matchup board is in 3-column mode (ally | speed |
    opponent), so each entry's `side-main` drops to 208–367 px. The inline
@@ -847,4 +820,23 @@
   .selection-practice-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* Shared ally/opponent roster treatment for the battle domain. */
+.team-grid,
+.matchup-team-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.team-card,
+.matchup-team-grid .team-card,
+.matchup-team-grid .entry-card {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.battle-team-panel {
+  border-top: 3px solid var(--color-primary);
 }

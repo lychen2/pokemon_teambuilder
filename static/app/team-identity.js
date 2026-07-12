@@ -51,6 +51,9 @@ function buildDefensiveCombos(team = [], language = "zh") {
     return {
       id: combo.id,
       label: combo.types.map((type) => getTypeLabel(type, language)).join(" / "),
+      typeIds: combo.types,
+      coveredTypeIds: coveredTypes,
+      missingTypeIds: missingTypes,
       coveredTypes: coveredTypes.map((type) => getTypeLabel(type, language)),
       missingTypes: missingTypes.map((type) => getTypeLabel(type, language)),
       focusType: missingTypes.length === 1 ? missingTypes[0] : "",

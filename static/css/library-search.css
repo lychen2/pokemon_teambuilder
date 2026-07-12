@@ -10,9 +10,3 @@
 .library-search-field input {
   min-height: 42px;
 }
-
-@media (max-width: 768px) {
-  .library-search-field {
-    width: 100%;
-  }
-}

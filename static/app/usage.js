@@ -48,7 +48,6 @@ function shouldReplaceUsageEntry(current, candidate) {
 
 function buildPreparedUsageEntry(name, profile = {}) {
   const teammateMap = buildTeammateMap(profile.Teammates);
-  const teammateTotal = [...teammateMap.values()].reduce((sum, value) => sum + Number(value || 0), 0);
   return {
     name,
     isWildcard: String(name || "").includes("*"),
@@ -56,7 +55,6 @@ function buildPreparedUsageEntry(name, profile = {}) {
       ...profile,
       usageKey: name,
       teammateMap,
-      teammateTotal,
     },
   };
 }
@@ -233,7 +231,7 @@ export function getUsageTeammateShare(datasets, sourceSpeciesId, teammateSpecies
     sourceSpeciesId,
     datasets?.pokedex?.[sourceSpeciesId]?.name || sourceSpeciesId,
   );
-  if (!sourceProfile?.teammateMap?.size || !sourceProfile.teammateTotal) {
+  if (!sourceProfile?.teammateMap?.size) {
     return 0;
   }
   const teammateKeys = getUsageFallbackKeys(
@@ -244,7 +242,8 @@ export function getUsageTeammateShare(datasets, sourceSpeciesId, teammateSpecies
   for (const key of teammateKeys) {
     const count = Number(sourceProfile.teammateMap.get(key) || 0);
     if (count > 0) {
-      return count / sourceProfile.teammateTotal;
+      // Smogon moveset teammate values are percentages, not additive counts.
+      return count / 100;
     }
   }
   return 0;

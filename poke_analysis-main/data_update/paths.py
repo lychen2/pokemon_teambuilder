@@ -14,6 +14,11 @@ CHAMPIONS_ICON_ASSET_MANIFEST_PATH = STATIC_DIR / "champions-official-icons.json
 CHAMPIONS_ICON_ASSET_DIR = STATIC_DIR / "champions-official-icons"
 LIMITLESS_MB_SOURCE_PATH = Path("/home/zonazcy/Projects/pokedata/limitless_vgc_M-B_teams.csv")
 LIMITLESS_MB_STATIC_PATH = STATIC_DIR / "limitless_vgc_M-B_teams.csv"
+VGCPASTES_CSV_PATH = STATIC_DIR / "VGCPastes Repository - Champions M-B.csv"
+VGCPASTES_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1axlwmzPA49rYkqXh7zHvAtSP-TKbM0ijGYBPRflLSWw/export?format=csv&gid=1458357160"
+)
 
 TEXT_SOURCES = (
     ("https://play.pokemonshowdown.com/data/items.js", STATS_DIR / "items.json", "items"),
