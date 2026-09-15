@@ -1,0 +1,9 @@
+{
+  "createdAt": "2026-09-14T08:10:57.525Z",
+  "algorithm": "mc-1.4.0",
+  "environment": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "corpus": "44cdfd0e4846242f486a",
+  "model": "f60b1f44c4508ff285e8",
+  "elapsedMs": 45266.512851,
+  "persistedModelIdentical": true
+}

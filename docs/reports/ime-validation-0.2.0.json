@@ -1,0 +1,25 @@
+{
+  "createdAt": "2026-09-14T00:33:34.820Z",
+  "inputMethod": "Fcitx5 / Rime luna_pinyin_simp",
+  "text": "皮卡丘",
+  "events": [
+    "compositionstart",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionupdate",
+    "compositionend"
+  ],
+  "focusPreserved": true
+}

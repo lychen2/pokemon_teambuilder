@@ -1,0 +1,439 @@
+{
+  "createdAt": "2026-09-14T00:48:28.592Z",
+  "algorithmVersion": "mc-1.3.0",
+  "environmentId": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "modelVersion": "b0cc92aa690fac941d72",
+  "window": "2026-09-13T00:00:00Z",
+  "independentNewConfigurations": 1,
+  "independentNewTeams": 0,
+  "excludedTrainingSources": [
+    "791705272:PC517"
+  ],
+  "trainingExclusions": [
+    {
+      "sourceId": "791705272:PC517",
+      "date": "29th April 2026",
+      "reasons": [
+        "日期不可解析，未推断时间先后"
+      ]
+    }
+  ],
+  "audit": [
+    {
+      "source": "smogon-11130346",
+      "status": "independent-complete-configuration",
+      "configurations": 1
+    }
+  ],
+  "probability": {
+    "frozen": {
+      "samples": 3,
+      "logLoss": 2.466612619105498,
+      "brier": 0.7473285996432385,
+      "accuracy": 0.3333333333333333,
+      "unseen": 0,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.2,
+          "count": 1,
+          "confidence": 0.20571223463036337,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.3,
+          "count": 1,
+          "confidence": 0.3867722187106629,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.4,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.5,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.6,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.7,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.8,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.9,
+          "count": 1,
+          "confidence": 0.9090909090909086,
+          "accuracy": 1
+        }
+      ]
+    },
+    "noHistory": {
+      "samples": 3,
+      "logLoss": 2.56553532120219,
+      "brier": 0.8291468271571364,
+      "accuracy": 0.3333333333333333,
+      "unseen": 0,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.2,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.3,
+          "count": 2,
+          "confidence": 0.3333333333333333,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.4,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.5,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.6,
+          "count": 1,
+          "confidence": 0.6666666666666672,
+          "accuracy": 1
+        },
+        {
+          "lower": 0.7,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.8,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.9,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        }
+      ]
+    },
+    "noPartialEvidence": {
+      "samples": 3,
+      "logLoss": 2.4393506679480237,
+      "brier": 0.7427657794871166,
+      "accuracy": 0.3333333333333333,
+      "unseen": 0,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.2,
+          "count": 1,
+          "confidence": 0.20248439306809335,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.3,
+          "count": 1,
+          "confidence": 0.377572304474963,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.4,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.5,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.6,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.7,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.8,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.9,
+          "count": 1,
+          "confidence": 0.9090909090909093,
+          "accuracy": 1
+        }
+      ]
+    }
+  },
+  "recovery": [
+    {
+      "source": "smogon-11130346:0",
+      "speciesId": "aegislash",
+      "exactRank": null,
+      "observedInTraining": false,
+      "predictions": [
+        {
+          "configurationId": "e1842b802b7eec1621b7",
+          "archetypeId": "e1842b802b7eec1621b7",
+          "probability": 0.06054977487330523,
+          "evidence": [
+            "该完整配置：当前独立构筑 1，历史独立构筑 1",
+            "流派的真实代表配置",
+            "缺字段兼容权重：当前 0.00，历史 0.33",
+            "时间留出温度校准 1.5；内部校准不代表独立盲测"
+          ],
+          "set": {
+            "speciesId": "aegislash",
+            "itemId": "focussash",
+            "abilityId": "stancechange",
+            "natureId": "adamant",
+            "points": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "moves": [
+              "poltergeist",
+              "shadowsneak",
+              "closecombat",
+              "wideguard"
+            ],
+            "level": 50,
+            "sourceKind": "observed",
+            "sourceIds": [
+              "2001945654:MC142:5",
+              "791705272:PC1073:5"
+            ]
+          }
+        },
+        {
+          "configurationId": "652feda82d5120c99fa6",
+          "archetypeId": "652feda82d5120c99fa6",
+          "probability": 0.026708481079802934,
+          "evidence": [
+            "该完整配置：当前独立构筑 0，历史独立构筑 3",
+            "流派的真实代表配置",
+            "时间留出温度校准 1.5；内部校准不代表独立盲测"
+          ],
+          "set": {
+            "speciesId": "aegislash",
+            "itemId": "focussash",
+            "abilityId": "stancechange",
+            "natureId": "adamant",
+            "points": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "moves": [
+              "poltergeist",
+              "shadowsneak",
+              "closecombat",
+              "kingsshield"
+            ],
+            "level": 50,
+            "sourceKind": "historical",
+            "sourceIds": [
+              "791705272:PC647:2",
+              "791705272:PC913:2",
+              "791705272:PC707:4"
+            ]
+          }
+        },
+        {
+          "configurationId": "f5b72d35fbe92fa2c752",
+          "archetypeId": "f5b72d35fbe92fa2c752",
+          "probability": 0.0266595420226718,
+          "evidence": [
+            "该完整配置：当前独立构筑 0，历史独立构筑 3",
+            "流派的真实代表配置",
+            "缺字段兼容权重：当前 0.00，历史 0.46",
+            "时间留出温度校准 1.5；内部校准不代表独立盲测"
+          ],
+          "set": {
+            "speciesId": "aegislash",
+            "itemId": "focussash",
+            "abilityId": "stancechange",
+            "natureId": "adamant",
+            "points": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "moves": [
+              "kingsshield",
+              "poltergeist",
+              "ironhead",
+              "shadowsneak"
+            ],
+            "level": 50,
+            "sourceKind": "historical",
+            "sourceIds": [
+              "791705272:PC1041:3",
+              "791705272:PC961:1",
+              "791705272:PC851:5"
+            ]
+          }
+        },
+        {
+          "configurationId": "7ba436e709bacaafa2da",
+          "archetypeId": "8a6d1140ba4cc2614ec9",
+          "probability": 0.021569178866649528,
+          "evidence": [
+            "该完整配置：当前独立构筑 0，历史独立构筑 2",
+            "同一流派内的真实变体，招式与配点未合并",
+            "缺字段兼容权重：当前 0.00，历史 0.48",
+            "时间留出温度校准 1.5；内部校准不代表独立盲测"
+          ],
+          "set": {
+            "speciesId": "aegislash",
+            "itemId": "spelltag",
+            "abilityId": "stancechange",
+            "natureId": "adamant",
+            "points": {
+              "hp": 30,
+              "atk": 20,
+              "def": 15,
+              "spa": 0,
+              "spd": 0,
+              "spe": 1
+            },
+            "moves": [
+              "closecombat",
+              "poltergeist",
+              "shadowsneak",
+              "kingsshield"
+            ],
+            "level": 50,
+            "sourceKind": "historical",
+            "sourceIds": [
+              "791705272:PC463:4",
+              "791705272:PC447:1"
+            ]
+          }
+        },
+        {
+          "configurationId": "013ca142bbe4c9fa268f",
+          "archetypeId": "013ca142bbe4c9fa268f",
+          "probability": 0.02109480608513676,
+          "evidence": [
+            "该完整配置：当前独立构筑 0，历史独立构筑 2",
+            "流派的真实代表配置",
+            "时间留出温度校准 1.5；内部校准不代表独立盲测"
+          ],
+          "set": {
+            "speciesId": "aegislash",
+            "itemId": "focussash",
+            "abilityId": "stancechange",
+            "natureId": "adamant",
+            "points": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "moves": [
+              "shadowsneak",
+              "closecombat",
+              "ironhead",
+              "poltergeist"
+            ],
+            "level": 50,
+            "sourceKind": "historical",
+            "sourceIds": [
+              "791705272:PC353:1",
+              "791705272:PC824:3"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "发表日期晚于冻结训练语料的新配置；按完整配置排除重复，并隔离相关作者和来源。",
+    "一份独立配置只产生三个字段预测，数量不足以证明模型优劣；不将其记为一支完整队伍。",
+    "其余队友、实战选出及胜负未知，没有填充或推断成观测事实。",
+    "内部温度与历史强度仅由训练资料决定；外部结果未用于调参，使用后该窗口保留为已观察测试集。"
+  ]
+}

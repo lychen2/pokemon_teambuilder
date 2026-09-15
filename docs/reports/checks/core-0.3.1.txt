@@ -1,0 +1,99 @@
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  20:42:15
+   Duration  1.16s (import 79%, transform 18%, tests 3%)
+
+
+{"file": "tests/artwork.test.ts", "code": 0, "elapsed": 1.9362220019975211}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  20:42:17
+   Duration  8.22s (tests 88%, import 10%, transform 3%)
+
+
+{"file": "tests/configurations.test.ts", "code": 0, "elapsed": 8.931945192991407}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  20:42:26
+   Duration  4.44s (tests 69%, import 26%, transform 6%)
+
+
+{"file": "tests/core.test.ts", "code": 0, "elapsed": 5.137139391998062}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  20:42:31
+   Duration  4.43s (tests 68%, import 25%, transform 7%)
+
+
+{"file": "tests/history.test.ts", "code": 0, "elapsed": 5.140036388009321}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  20:42:36
+   Duration  4.61s (tests 65%, import 29%, transform 6%)
+
+
+{"file": "tests/lineups.test.ts", "code": 0, "elapsed": 5.234752855001716}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  20:42:42
+   Duration  2.17s (import 52%, tests 37%, transform 11%)
+
+
+{"file": "tests/mechanisms.test.ts", "code": 0, "elapsed": 2.8723096629983047}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  20:42:44
+   Duration  2.40s (tests 52%, import 38%, transform 10%)
+
+
+{"file": "tests/research-mechanics.test.ts", "code": 0, "elapsed": 3.157783038986963}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  20:42:48
+   Duration  3.36s (tests 60%, import 32%, transform 8%)
+
+
+{"file": "tests/research.test.ts", "code": 0, "elapsed": 4.1784223270078655}
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  20:42:52
+   Duration  19.33s (tests 93%, import 5%, transform 2%)
+
+
+{"file": "tests/simulation.test.ts", "code": 0, "elapsed": 20.190830328996526}

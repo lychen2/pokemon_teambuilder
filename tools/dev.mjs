@@ -1,0 +1,18 @@
+import {spawn} from 'node:child_process';
+import {createServer} from 'vite';
+import {context} from 'esbuild';
+import {createRequire} from 'node:module';
+import {mkdir, copyFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {esbuildBinary} from './esbuild-runtime.mjs';
+const require = createRequire(import.meta.url);
+await mkdir('assets/runtime', {recursive: true});
+const nativeEsbuild = esbuildBinary();
+await copyFile(nativeEsbuild.source, resolve('assets/runtime', nativeEsbuild.name));
+const compiler = await context({entryPoints: {main: 'apps/desktop/main/index.ts', preload: 'apps/desktop/main/preload.ts', service: 'apps/desktop/main/service.ts', 'compute-worker': 'apps/desktop/main/compute-worker.ts'}, outdir: 'dist', outExtension: {'.js': '.cjs'}, platform: 'node', target: 'node24', format: 'cjs', bundle: true, external: ['electron', 'esbuild', 'ts-chacha20'], sourcemap: true});
+await compiler.rebuild(); await compiler.watch();
+const server = await createServer(); await server.listen();
+const debugPort = process.env.POKE_DEBUG_PORT;
+const electronArgs = ['.', ...(debugPort ? [`--remote-debugging-port=${debugPort}`] : [])];
+const electron = spawn(require('electron'), electronArgs, {stdio: 'inherit', env: {...process.env, POKE_DEV_URL: 'http://127.0.0.1:5184'}});
+electron.on('exit', async code => {await server.close(); await compiler.dispose(); process.exit(code ?? 0);});

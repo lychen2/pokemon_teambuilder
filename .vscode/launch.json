@@ -1,0 +1,65 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "开发模式 (Vite + Electron 热更新)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "console": "integratedTerminal",
+      "env": {
+        "POKE_DEBUG_PORT": "9222"
+      },
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": {"group": "poke-teambuilder", "order": 1}
+    },
+    {
+      "name": "生产模式 (运行已构建 dist)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": {"group": "poke-teambuilder", "order": 2}
+    },
+    {
+      "name": "调试主进程 (Electron + 源码映射)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "runtimeArgs": [".", "--remote-debugging-port=9222"],
+      "preLaunchTask": "build",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/dist/**/*.cjs"],
+      "presentation": {"group": "poke-teambuilder", "order": 3}
+    },
+    {
+      "name": "调试渲染进程 (attach 9222)",
+      "type": "chrome",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}/apps/desktop/renderer",
+      "sourceMaps": true,
+      "presentation": {"group": "poke-teambuilder", "order": 4}
+    }
+  ],
+  "compounds": [
+    {
+      "name": "全量调试 (主进程 + 渲染进程)",
+      "configurations": [
+        "调试主进程 (Electron + 源码映射)",
+        "调试渲染进程 (attach 9222)"
+      ],
+      "stopAll": true,
+      "presentation": {"group": "poke-teambuilder", "order": 5}
+    }
+  ]
+}

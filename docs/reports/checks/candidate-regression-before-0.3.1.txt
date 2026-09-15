@@ -1,0 +1,26 @@
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ❯ tests/mechanisms.test.ts (7 tests | 1 failed | 6 skipped) 579ms
+   × 机制候选不能被单一物种的变体占满，沙暴核心能保留原配置补齐 578ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/mechanisms.test.ts > 机制候选不能被单一物种的变体占满，沙暴核心能保留原配置补齐
+AssertionError: expected 5 to be greater than or equal to 6
+ ❯ tests/mechanisms.test.ts:108:24
+    106|   const candidates = search.candidates(draft);
+    107|   const species = new Set([...core.map(member => member.set.speciesId)…
+    108|   expect(species.size).toBeGreaterThanOrEqual(engine.ruleTable.maxTeam…
+       |                        ^
+    109|   const proposals = search.recommend({draft, kind: 'complete', limit: …
+    110|   expect(proposals[0].members.slice(0, core.length)).toEqual(core);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 skipped (7)
+   Start at  22:03:34
+   Duration  1.62s (import 48%, tests 39%, transform 12%)
+

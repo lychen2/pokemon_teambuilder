@@ -1,0 +1,55 @@
+import {launchDesktop} from './launch';
+import {test, expect} from '@playwright/test';
+import {mkdtemp, readFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join, resolve} from 'node:path';
+import type {BootstrapData} from '../../packages/core/types';
+
+test('具体速度线、回合条件保留、构筑笔记和指定位置替换', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'poke-research-ui-'));
+  const app = await launchDesktop(directory);
+  try {
+    const page = await app.firstWindow();
+    const b: BootstrapData = JSON.parse(await readFile('assets/bootstrap.json', 'utf8'));
+    await page.getByRole('button', {name: '导入', exact: true}).click();
+    await page.getByLabel('Showdown 队伍文本').fill(b.corpus.teams.find(t => t.url.includes('73e5d6533b781089'))!.raw);
+    await page.getByRole('button', {name: '解析队伍'}).click(); await page.getByRole('button', {name: '开始构筑'}).click();
+    await page.getByRole('tab', {name: '速度关系'}).click();
+    const own = await page.getByLabel('比较的成员').locator('option').allTextContents();
+    expect(own).toContain('大狃拉');
+    await page.getByLabel('比较的成员').selectOption({label: '大狃拉'});
+    await page.getByLabel('速度计算场地').selectOption('Grassy');
+    await expect(page.locator('.speed-benchmark').first()).toBeVisible();
+    const speedBefore = await page.locator('.speed-values b').first().textContent();
+    await page.getByLabel('我方顺风', {exact: true}).check();
+    await expect(page.locator('.speed-values b').first()).toHaveText(String(Number(speedBefore) * 2));
+    await page.locator('.speed-benchmark').first().click();
+    await expect(page.getByLabel('场地', {exact: true})).toHaveValue('Grassy');
+    await expect(page.getByRole('dialog')).toContainText('我方顺风');
+    await expect(page.getByRole('dialog')).toContainText('基础命中率');
+    await page.getByRole('dialog').getByRole('button', {name: '关闭', exact: true}).click();
+    await page.getByRole('tab', {name: '构筑笔记'}).click();
+    await page.getByRole('button', {name: '插入思考模板'}).click();
+    await expect(page.getByLabel('构筑与对局笔记')).toHaveValue(/主要胜利路线/);
+    const notes = '核心：建立青草场地触发轻装。\n需要验证对空间队的首发与后排。';
+    await page.getByLabel('构筑与对局笔记').fill(notes);
+    await expect(page.getByText('已自动保存', {exact: true})).toBeVisible();
+    const before = (await page.evaluate(() => window.poke.call('bootstrap', undefined))).drafts.find(d => d.members.length === 6)!;
+    expect(before.notes).toBe(notes);
+    await page.getByRole('button', {name: '编辑赛富豪', exact: true}).click();
+    await page.getByRole('button', {name: '为这个位置寻找替换建议'}).click();
+    await expect(page.locator('.proposal-card').first()).toBeVisible();
+    await page.locator('.proposal-card').first().getByRole('button', {name: '比较并应用'}).click();
+    await page.getByRole('button', {name: '应用这个方案'}).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(page.getByText('已自动保存', {exact: true})).toBeVisible();
+    const after = (await page.evaluate(() => window.poke.call('bootstrap', undefined))).drafts.find(d => d.id === before.id)!;
+    const target = before.members.find(m => m.set.speciesId === 'gholdengo')!;
+    expect(after.members.filter(m => m.id !== target.id)).toEqual(before.members.filter(m => m.id !== target.id));
+    expect(after.members.find(m => m.id === target.id)?.set).not.toEqual(target.set);
+    expect(after.notes).toBe(notes);
+    await page.getByRole('button', {name: '撤销修改'}).click();
+    await expect(page.getByRole('button', {name: '编辑赛富豪', exact: true})).toBeVisible();
+    await page.screenshot({path: 'test-results/research-tools.png'});
+  } finally {await app.close();}
+});

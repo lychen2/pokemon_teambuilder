@@ -1,0 +1,99 @@
+{
+  "createdAt": "2026-09-13T22:27:25.254095+00:00",
+  "version": "0.1.0",
+  "algorithmVersion": "mc-1.2.1",
+  "platform": "linux-x64",
+  "artifacts": [
+    {
+      "path": "release/poke-teambuilder-0.1.0-x86_64.AppImage",
+      "sizeBytes": 146066532,
+      "sha256": "4e027fdd986dbd069264929af451efec271d029d11cc88ce2e918e998721907e"
+    },
+    {
+      "path": "release/poke-teambuilder-0.1.0-x64.tar.gz",
+      "sizeBytes": 146545130,
+      "sha256": "420f22a5a5dca518fb929a80bf5a047b7804da49df12bb80122299c6e1c62ea4"
+    }
+  ],
+  "packagedContent": [
+    {
+      "path": "poke-teambuilder",
+      "sha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+      "sizeBytes": 228130120,
+      "tarMatches": true
+    },
+    {
+      "path": "resources/app.asar",
+      "sha256": "146a86ee45b274c017d94a70a09addb4a2cf5f45e3e26a5f8d69889b5020cdc3",
+      "sizeBytes": 49822701,
+      "tarMatches": true
+    },
+    {
+      "path": "resources/assets/bootstrap.json",
+      "sha256": "83dfacc23410bf97d7b0372fff3ec735795ac8595d0ce9efd59afc6d8d8d70f8",
+      "sizeBytes": 12861749,
+      "tarMatches": true
+    },
+    {
+      "path": "resources/assets/runtime/esbuild",
+      "sha256": "e1698a3d5c6c0798fee4fd3b5cc816651f460c63d390a7a26ea4beb0b1884100",
+      "sizeBytes": 11427952,
+      "tarMatches": true
+    },
+    {
+      "path": "resources/assets/runtime/ts-chacha20.cjs",
+      "sha256": "2b6f3d0f6f002130a3689529bd16a967d40fa8d3f07f3645064ab2bcf49bf1ce",
+      "sizeBytes": 4550,
+      "tarMatches": true
+    },
+    {
+      "path": "resources/assets/licenses/NODE-DEPENDENCIES.txt",
+      "sha256": "cc0f6d2fc16ecfc360167082829ef998b03a1be48c7e2de0aa7255667cbfe217",
+      "sizeBytes": 81019,
+      "tarMatches": true
+    },
+    {
+      "path": "resources/assets/licenses/THIRD_PARTY_NOTICES.md",
+      "sha256": "f30066d57c2de2f96b7d53003d461a373aeaddc0e0c6eecd5f98685a6209d050",
+      "sizeBytes": 3665,
+      "tarMatches": true
+    }
+  ],
+  "licenseRecords": 63,
+  "checks": {
+    "typecheck": "passed",
+    "core": {
+      "passed": 36,
+      "files": 4,
+      "seconds": 7.53,
+      "timeoutSeconds": 60
+    },
+    "linuxUnpacked": {
+      "passed": 9,
+      "imeSkippedInOrdinarySuite": 1,
+      "ruleUpdateSeconds": 41.2
+    },
+    "appImage": {
+      "passed": 3,
+      "launch": "AppImage directly via FUSE; no extraction mode",
+      "ruleUpdateSeconds": 41.5
+    },
+    "tarExtracted": {
+      "passed": 2,
+      "ruleUpdateSeconds": 37.3
+    },
+    "systemIME": {
+      "passed": 1,
+      "seconds": 1.7,
+      "artifact": "linux-unpacked",
+      "input": "皮卡丘",
+      "focusPreserved": true
+    }
+  },
+  "nativeStartup": {
+    "desktop": "niri / Wayland",
+    "windowVisible": true,
+    "testMode": false,
+    "modelVersion": "2786ca287788e332823c"
+  }
+}

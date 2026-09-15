@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="精灵球截成六瓣：四瓣已定，两瓣留空，正上方为绿色核心">
+  <!--
+    队伍构筑主题图标。
+    一枚精灵球的球壳被截成六瓣，对应六个队伍位置：上方三瓣与正下方一瓣已经落定，
+    左右下两瓣只留描边，表示尚未补齐的构筑；正上方那瓣用绿色，代表锁定的核心。
+    上半浅紫、下半白，加粗的赤道带与中心按钮保持精灵球读法；瓣间与留空处由 mask 真实挖空。
+  -->
+  <defs>
+    <linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0" stop-color="#8a6fd0"/>
+      <stop offset="1" stop-color="#463079"/>
+    </linearGradient>
+    <mask id="six-slots" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <!-- 完整球壳为可见区 -->
+      <circle cx="256" cy="256" r="192" fill="#fff"/>
+      <!-- 瓣间切口 -->
+      <g stroke="#000" stroke-width="22">
+        <line x1="256" y1="256" x2="148" y2="68.9"/>
+        <line x1="256" y1="256" x2="364" y2="68.9"/>
+        <line x1="256" y1="256" x2="364" y2="443.1"/>
+        <line x1="256" y1="256" x2="148" y2="443.1"/>
+      </g>
+      <!-- 左下与右下两瓣留空 -->
+      <path d="M256 256 L448 256 A192 192 0 0 1 352 422.3 Z" fill="#000"/>
+      <path d="M256 256 L160 422.3 A192 192 0 0 1 64 256 Z" fill="#000"/>
+    </mask>
+  </defs>
+
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bg)"/>
+
+  <g mask="url(#six-slots)">
+    <!-- 下半球：白 -->
+    <circle cx="256" cy="256" r="192" fill="#ffffff"/>
+    <!-- 上半球：浅紫 -->
+    <path d="M64 256 A192 192 0 0 1 448 256 Z" fill="#c3b2ee"/>
+    <!-- 核心：正上方那一瓣 -->
+    <path d="M256 256 L160 89.7 A192 192 0 0 1 352 89.7 Z" fill="#c9ecc0"/>
+    <!-- 赤道带 -->
+    <rect x="64" y="236" width="384" height="40" fill="#3f2b6e"/>
+  </g>
+
+  <!-- 两瓣留空：只描边，读作待补的位置 -->
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="8" stroke-linejoin="round">
+    <path d="M256 256 L448 256 A192 192 0 0 1 352 422.3 Z"/>
+    <path d="M256 256 L160 422.3 A192 192 0 0 1 64 256 Z"/>
+  </g>
+
+  <!-- 中心按钮：球的眼，也是整套构筑围绕的核心 -->
+  <circle cx="256" cy="256" r="80" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="60" fill="none" stroke="#3f2b6e" stroke-width="16"/>
+  <circle cx="256" cy="256" r="26" fill="#c9ecc0"/>
+</svg>

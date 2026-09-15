@@ -1,0 +1,20 @@
+# 第一列为匹配模式，第二列起为属性。
+# 统一以 LF 检出：仓库里的 shell 脚本与 esbuild/Electron 产出的 JS 都在 Linux 与 CI 上执行。
+* text=auto eol=lf
+*.sh text eol=lf
+*.mjs text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+
+# 二进制资源不做行尾转换与 diff。
+*.png binary
+*.ico binary
+*.jpg binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+assets/runtime/** binary
+assets/engines/** -diff
+
+# 由 tools/collect-licenses.mjs 生成，保留原始字节，避免行尾转换造成无谓改动
+assets/licenses/NODE-DEPENDENCIES.txt -text

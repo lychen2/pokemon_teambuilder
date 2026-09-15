@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "detail": "pnpm build：编译 main/preload/service/compute-worker 到 dist/，并构建 renderer",
+      "type": "shell",
+      "command": "pnpm build",
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": [],
+      "presentation": {"group": "poke-teambuilder", "reveal": "always", "panel": "dedicated"}
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+
+> poke-teambuilder@0.2.0 typecheck /home/zonazcy/Projects/poke_teambuilder
+> tsc --noEmit
+

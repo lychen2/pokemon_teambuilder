@@ -1,0 +1,347 @@
+{
+  "createdAt": "2026-09-14T06:42:35.690Z",
+  "before": {
+    "model": "f60b1f44c4508ff285e8",
+    "threats": 24,
+    "scenarios": 147,
+    "runs": [
+      {
+        "stage": "cold",
+        "ms": 26283.258627000003,
+        "teams": [
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9701813731999988,
+              "resilience": 0.36283337051158077,
+              "speed": 0.7263130866979938,
+              "coverage": 1,
+              "tailRisk": 0.36796659939810256
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "rillaboom|lifeorb|grassysurge|adamant|24,15,0,0,14,13|fakeout,grassyglide,highhorsepower,woodhammer||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "corviknight|leftovers|mirrorarmor|careful|19,11,5,0,5,26|bravebird,bulkup,roost,tailwind||50"
+            ],
+            "metrics": {
+              "pressure": 0.9657409864832979,
+              "resilience": 0.40058445711583507,
+              "speed": 0.7062071885910712,
+              "coverage": 1,
+              "tailRisk": 0.36019314050970863
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "aerodactyl|aerodactylite|unnerve|jolly|2,32,0,0,0,32|dualwingbeat,rockslide,tailwind,wideguard||50"
+            ],
+            "metrics": {
+              "pressure": 0.9625558513709307,
+              "resilience": 0.3496209005179386,
+              "speed": 0.7483280483554805,
+              "coverage": 1,
+              "tailRisk": 0.3644144777243943
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "torkoal|charcoal|drought|quiet|32,0,1,32,1,0|eruption,helpinghand,protect,weatherball||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9730883171658296,
+              "resilience": 0.3659451052440797,
+              "speed": 0.6841800814270914,
+              "coverage": 1,
+              "tailRisk": 0.37248452961760975
+            }
+          }
+        ],
+        "states": {
+          "budgetMs": null,
+          "deadlineReached": false,
+          "evaluatedStates": 2364,
+          "completedLayers": 5
+        }
+      },
+      {
+        "stage": "warm",
+        "ms": 19353.231561,
+        "teams": [
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9701813731999988,
+              "resilience": 0.36283337051158077,
+              "speed": 0.7263130866979938,
+              "coverage": 1,
+              "tailRisk": 0.36796659939810256
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "rillaboom|lifeorb|grassysurge|adamant|24,15,0,0,14,13|fakeout,grassyglide,highhorsepower,woodhammer||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "corviknight|leftovers|mirrorarmor|careful|19,11,5,0,5,26|bravebird,bulkup,roost,tailwind||50"
+            ],
+            "metrics": {
+              "pressure": 0.9657409864832979,
+              "resilience": 0.40058445711583507,
+              "speed": 0.7062071885910712,
+              "coverage": 1,
+              "tailRisk": 0.36019314050970863
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "aerodactyl|aerodactylite|unnerve|jolly|2,32,0,0,0,32|dualwingbeat,rockslide,tailwind,wideguard||50"
+            ],
+            "metrics": {
+              "pressure": 0.9625558513709307,
+              "resilience": 0.3496209005179386,
+              "speed": 0.7483280483554805,
+              "coverage": 1,
+              "tailRisk": 0.3644144777243943
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "torkoal|charcoal|drought|quiet|32,0,1,32,1,0|eruption,helpinghand,protect,weatherball||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9730883171658296,
+              "resilience": 0.3659451052440797,
+              "speed": 0.6841800814270914,
+              "coverage": 1,
+              "tailRisk": 0.37248452961760975
+            }
+          }
+        ],
+        "states": {
+          "budgetMs": null,
+          "deadlineReached": false,
+          "evaluatedStates": 2364,
+          "completedLayers": 5
+        }
+      }
+    ]
+  },
+  "after": {
+    "model": "f60b1f44c4508ff285e8",
+    "threats": 24,
+    "scenarios": 147,
+    "runs": [
+      {
+        "stage": "cold",
+        "ms": 14691.16292,
+        "teams": [
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9701813731999988,
+              "resilience": 0.36283337051158077,
+              "speed": 0.7263130866979938,
+              "coverage": 1,
+              "tailRisk": 0.36796659939810256
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "rillaboom|lifeorb|grassysurge|adamant|24,15,0,0,14,13|fakeout,grassyglide,highhorsepower,woodhammer||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "corviknight|leftovers|mirrorarmor|careful|19,11,5,0,5,26|bravebird,bulkup,roost,tailwind||50"
+            ],
+            "metrics": {
+              "pressure": 0.9657409864832979,
+              "resilience": 0.40058445711583507,
+              "speed": 0.7062071885910712,
+              "coverage": 1,
+              "tailRisk": 0.36019314050970863
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "aerodactyl|aerodactylite|unnerve|jolly|2,32,0,0,0,32|dualwingbeat,rockslide,tailwind,wideguard||50"
+            ],
+            "metrics": {
+              "pressure": 0.9625558513709307,
+              "resilience": 0.3496209005179386,
+              "speed": 0.7483280483554805,
+              "coverage": 1,
+              "tailRisk": 0.3644144777243943
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "torkoal|charcoal|drought|quiet|32,0,1,32,1,0|eruption,helpinghand,protect,weatherball||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9730883171658296,
+              "resilience": 0.3659451052440797,
+              "speed": 0.6841800814270914,
+              "coverage": 1,
+              "tailRisk": 0.37248452961760975
+            }
+          }
+        ],
+        "states": {
+          "budgetMs": null,
+          "deadlineReached": false,
+          "evaluatedStates": 2364,
+          "reusedStates": 539,
+          "completedLayers": 5
+        }
+      },
+      {
+        "stage": "warm",
+        "ms": 4606.025319999997,
+        "teams": [
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9701813731999988,
+              "resilience": 0.36283337051158077,
+              "speed": 0.7263130866979938,
+              "coverage": 1,
+              "tailRisk": 0.36796659939810256
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "rillaboom|lifeorb|grassysurge|adamant|24,15,0,0,14,13|fakeout,grassyglide,highhorsepower,woodhammer||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "corviknight|leftovers|mirrorarmor|careful|19,11,5,0,5,26|bravebird,bulkup,roost,tailwind||50"
+            ],
+            "metrics": {
+              "pressure": 0.9657409864832979,
+              "resilience": 0.40058445711583507,
+              "speed": 0.7062071885910712,
+              "coverage": 1,
+              "tailRisk": 0.36019314050970863
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|hasty|2,22,0,0,10,32|doubleedge,dracometeor,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "pelipper|ejectbutton|drizzle|timid|32,0,0,0,2,32|hurricane,tailwind,weatherball,wideguard||50",
+              "aerodactyl|aerodactylite|unnerve|jolly|2,32,0,0,0,32|dualwingbeat,rockslide,tailwind,wideguard||50"
+            ],
+            "metrics": {
+              "pressure": 0.9625558513709307,
+              "resilience": 0.3496209005179386,
+              "speed": 0.7483280483554805,
+              "coverage": 1,
+              "tailRisk": 0.3644144777243943
+            }
+          },
+          {
+            "sets": [
+              "sneasler|grassyseed|unburden|adamant|16,20,0,0,0,30|closecombat,direclaw,fakeout,protect||50",
+              "salamence|salamencite|intimidate|timid|2,0,0,32,0,32|dracometeor,hypervoice,protect,tailwind||50",
+              "talonflame|sharpbeak|galewings|adamant|7,32,0,0,0,27|bravebird,feint,flareblitz,tailwind||50",
+              "rillaboom|miracleseed|grassysurge|adamant|17,25,0,0,15,9|grassyglide,protect,uturn,woodhammer||50",
+              "torkoal|charcoal|drought|quiet|32,0,1,32,1,0|eruption,helpinghand,protect,weatherball||50",
+              "tyranitar|tyranitarite|sandstream|adamant|17,17,0,0,0,32|knockoff,lowkick,protect,rockslide||50"
+            ],
+            "metrics": {
+              "pressure": 0.9730883171658296,
+              "resilience": 0.3659451052440797,
+              "speed": 0.6841800814270914,
+              "coverage": 1,
+              "tailRisk": 0.37248452961760975
+            }
+          }
+        ],
+        "states": {
+          "budgetMs": null,
+          "deadlineReached": false,
+          "evaluatedStates": 2364,
+          "reusedStates": 539,
+          "completedLayers": 5
+        }
+      }
+    ]
+  },
+  "identicalConfigurationsAndMetrics": true,
+  "notes": [
+    "同一大狃拉核心、48候选、24流派、147对手名单场景、2364个搜索状态；没有缩减候选范围或更改权重。",
+    "前后四个完整方案的全部配置与五项指标逐项相同。",
+    "每个阶段各运行一次，存在运行时波动；不能把单个核心的耗时推广为所有队伍。",
+    "热缓存完整构筑仍超过约3秒目标。",
+    "快速评分与模拟效果另行报告，计算提速不构成强度提升证据。"
+  ]
+}

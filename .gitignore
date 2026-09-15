@@ -1,0 +1,23 @@
+# 依赖与本地产物（以 / 开头的模式只匹配仓库根目录，
+# 否则 dist/ 这类模式会连带忽略 assets/engines/*/showdown/dist/ 里的引擎运行时文件）
+/node_modules/
+/.upstream/
+/.local/
+*.log
+
+# 构建与打包输出
+/dist/
+/release/
+/test-results/
+/playwright-report/
+
+# 平台相关的运行时二进制：由 pnpm build 按当前平台复制，不进仓库
+/assets/runtime/
+
+# 体积大且可再生成的中间数据：bootstrap.json 已是应用真正加载的产物
+/assets/corpus.json
+/assets/raw/
+
+# 说明：
+# assets/bootstrap.json、assets/engines/、assets/pokemon/、assets/dex.json、assets/translations.json
+# 需要提交，CI 才能在没有网络同步的情况下直接构建与打包。

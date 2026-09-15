@@ -1,0 +1,56 @@
+
+> poke-teambuilder@0.3.0 test:ime /home/zonazcy/Projects/poke_teambuilder
+> xvfb-run -a -s '-screen 0 3200x2000x24' dbus-run-session -- node tools/test-ime.mjs
+
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.0' (uid=1000 pid=665551 comm="fcitx5 -D")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.5' (uid=1000 pid=665563 comm="/usr/lib/xdg-desktop-portal")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.5' (uid=1000 pid=665563 comm="/usr/lib/xdg-desktop-portal")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.5' (uid=1000 pid=665563 comm="/usr/lib/xdg-desktop-portal")
+
+** (xdg-desktop-portal-gnome:665586): WARNING **: 16:38:55.572: GDK backend forced via env var, portal dialogs will not work properly.
+Non-compatible display server, exposing settings only.
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.8' (uid=1000 pid=665586 comm="/usr/lib/xdg-desktop-portal-gnome")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.5' (uid=1000 pid=665563 comm="/usr/lib/xdg-desktop-portal")
+fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.10' (uid=1000 pid=665606 comm="/usr/lib/xdg-desktop-portal-gtk")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.a11y.Bus'
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.12' (uid=1000 pid=665617 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+
+** (xdg-desktop-portal-gtk:665606): WARNING **: 16:38:55.697: AT-SPI: Could not obtain desktop path or name
+
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.12' (uid=1000 pid=665617 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+
+** (xdg-desktop-portal-gtk:665606): WARNING **: 16:38:55.699: atk-bridge: GetRegisteredEvents returned message with unknown signature
+
+** (xdg-desktop-portal-gtk:665606): WARNING **: 16:38:55.699: atk-bridge: get_device_events_reply: unknown signature
+
+(/usr/lib/xdg-desktop-portal:665563): xdg-desktop-portal-WARNING **: 16:38:55.710: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+
+(/usr/lib/xdg-desktop-portal:665563): xdg-desktop-portal-WARNING **: 16:38:55.710: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+
+(/usr/lib/xdg-desktop-portal:665563): xdg-desktop-portal-WARNING **: 16:38:55.710: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.secrets' requested by ':1.5' (uid=1000 pid=665563 comm="/usr/lib/xdg-desktop-portal")
+discover_other_daemon: 1GNOME_KEYRING_CONTROL=/run/user/1000/keyring
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'
+
+Running 1 test using 1 worker
+
+(node:665654) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.12' (uid=1000 pid=665617 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.12' (uid=1000 pid=665617 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha")
+dbus-daemon[665516]: [session uid=1000 pid=665516 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+  ✓  1 tests/desktop/ime.spec.ts:10:1 › 系统 Fcitx5／Rime 的真实中文组合输入、确认候选与搜索焦点 (3.1s)
+
+  1 passed (3.7s)
+
+(/usr/lib/xdg-desktop-portal:665563): xdg-desktop-portal-WARNING **: 16:39:00.101: Failed to create secret proxy: Error calling StartServiceByName for org.freedesktop.secrets: The connection is closed
+A connection to the bus can't be made

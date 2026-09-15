@@ -1,0 +1,937 @@
+{
+  "createdAt": "2026-09-14T11:51:31.125457+00:00",
+  "beforeAlgorithm": "mc-1.4.0",
+  "afterAlgorithm": "mc-1.5.0",
+  "environmentId": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "beforeModelVersion": "f60b1f44c4508ff285e8",
+  "afterModelVersion": "4ab4b1884f323b06602b",
+  "inputs": {
+    "before": {
+      "file": "strategy-benchmark-mc-1.4.0.json",
+      "sha256": "44e2cc39fd3daa50ddf05d2cc13f5c192440af4366861ed6a4a0f8162638ca36"
+    },
+    "after": {
+      "file": "strategy-benchmark-mc-1.5.0.json",
+      "sha256": "e64c8444b88cc4687494ebb505e29f6149084e43d6b2edea98ef2dde6e811683"
+    }
+  },
+  "rows": [
+    {
+      "category": "灭歌",
+      "strategy": "mixed",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 1,
+        "losses": 5,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 3484.625446
+      },
+      "after": {
+        "wins": 1,
+        "losses": 5,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2544.776943
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "灭歌",
+      "strategy": "mixed",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 4,
+        "losses": 10,
+        "ties": 0,
+        "completed": 14,
+        "unfinished": 1,
+        "trainingGames": 10,
+        "elapsedMs": 3007.9023509999997
+      },
+      "after": {
+        "wins": 7,
+        "losses": 13,
+        "ties": 0,
+        "completed": 20,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3003.3449920000003
+      }
+    },
+    {
+      "category": "灭歌",
+      "strategy": "damage",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 4530.572038999999
+      },
+      "after": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2788.3014920000005
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "灭歌",
+      "strategy": "damage",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 2,
+        "losses": 7,
+        "ties": 0,
+        "completed": 9,
+        "unfinished": 1,
+        "trainingGames": 7,
+        "elapsedMs": 3005.641222
+      },
+      "after": {
+        "wins": 2,
+        "losses": 10,
+        "ties": 0,
+        "completed": 12,
+        "unfinished": 1,
+        "trainingGames": 10,
+        "elapsedMs": 3004.5812129999995
+      }
+    },
+    {
+      "category": "灭歌",
+      "strategy": "support",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 3115.9692680000007
+      },
+      "after": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2303.7756769999996
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 4,
+          "seed": 1540706258,
+          "policy": "mixed",
+          "before": 1,
+          "after": 0
+        }
+      ]
+    },
+    {
+      "category": "灭歌",
+      "strategy": "support",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 5,
+        "losses": 5,
+        "ties": 0,
+        "completed": 10,
+        "unfinished": 1,
+        "trainingGames": 7,
+        "elapsedMs": 3000.100053000002
+      },
+      "after": {
+        "wins": 4,
+        "losses": 9,
+        "ties": 0,
+        "completed": 13,
+        "unfinished": 1,
+        "trainingGames": 10,
+        "elapsedMs": 3013.1022500000017
+      }
+    },
+    {
+      "category": "复活",
+      "strategy": "mixed",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 1,
+        "losses": 5,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2658.426083000002
+      },
+      "after": {
+        "wins": 1,
+        "losses": 5,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2180.6517790000034
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "复活",
+      "strategy": "mixed",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 6,
+        "losses": 19,
+        "ties": 0,
+        "completed": 25,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3002.549923999999
+      },
+      "after": {
+        "wins": 9,
+        "losses": 20,
+        "ties": 0,
+        "completed": 29,
+        "unfinished": 1,
+        "trainingGames": 13,
+        "elapsedMs": 3008.299314
+      }
+    },
+    {
+      "category": "复活",
+      "strategy": "damage",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1849.4611259999983
+      },
+      "after": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1674.6941079999997
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "复活",
+      "strategy": "damage",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 6,
+        "losses": 10,
+        "ties": 0,
+        "completed": 16,
+        "unfinished": 1,
+        "trainingGames": 12,
+        "elapsedMs": 3025.4490189999997
+      },
+      "after": {
+        "wins": 7,
+        "losses": 12,
+        "ties": 0,
+        "completed": 19,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3001.3168240000014
+      }
+    },
+    {
+      "category": "复活",
+      "strategy": "support",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1533.887424000004
+      },
+      "after": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1288.8523779999996
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "复活",
+      "strategy": "support",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 10,
+        "losses": 9,
+        "ties": 0,
+        "completed": 19,
+        "unfinished": 0,
+        "trainingGames": 13,
+        "elapsedMs": 3005.4901919999975
+      },
+      "after": {
+        "wins": 11,
+        "losses": 10,
+        "ties": 0,
+        "completed": 21,
+        "unfinished": 0,
+        "trainingGames": 14,
+        "elapsedMs": 3000.7629899999993
+      }
+    },
+    {
+      "category": "空间",
+      "strategy": "mixed",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2125.7556719999993
+      },
+      "after": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1824.2169049999975
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "空间",
+      "strategy": "mixed",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 7,
+        "losses": 21,
+        "ties": 0,
+        "completed": 28,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3007.9489230000036
+      },
+      "after": {
+        "wins": 7,
+        "losses": 23,
+        "ties": 0,
+        "completed": 30,
+        "unfinished": 1,
+        "trainingGames": 12,
+        "elapsedMs": 3000.065416999998
+      }
+    },
+    {
+      "category": "空间",
+      "strategy": "damage",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 5,
+        "losses": 1,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1674.3396609999982
+      },
+      "after": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1549.6589450000029
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 1,
+          "seed": 1540493921,
+          "policy": "mixed",
+          "before": 1,
+          "after": 0
+        }
+      ]
+    },
+    {
+      "category": "空间",
+      "strategy": "damage",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 9,
+        "losses": 7,
+        "ties": 0,
+        "completed": 16,
+        "unfinished": 1,
+        "trainingGames": 13,
+        "elapsedMs": 3024.3128350000043
+      },
+      "after": {
+        "wins": 8,
+        "losses": 10,
+        "ties": 0,
+        "completed": 18,
+        "unfinished": 0,
+        "trainingGames": 13,
+        "elapsedMs": 3010.601316
+      }
+    },
+    {
+      "category": "空间",
+      "strategy": "support",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1379.9393350000028
+      },
+      "after": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1182.2224179999976
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "空间",
+      "strategy": "support",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 4,
+        "losses": 13,
+        "ties": 0,
+        "completed": 17,
+        "unfinished": 1,
+        "trainingGames": 14,
+        "elapsedMs": 3011.425116999999
+      },
+      "after": {
+        "wins": 5,
+        "losses": 15,
+        "ties": 0,
+        "completed": 20,
+        "unfinished": 1,
+        "trainingGames": 15,
+        "elapsedMs": 3018.633692000003
+      }
+    },
+    {
+      "category": "场地轻装",
+      "strategy": "mixed",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 3019.8782959999953
+      },
+      "after": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2585.769290000004
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "场地轻装",
+      "strategy": "mixed",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 6,
+        "losses": 18,
+        "ties": 0,
+        "completed": 24,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3000.211313
+      },
+      "after": {
+        "wins": 9,
+        "losses": 19,
+        "ties": 0,
+        "completed": 28,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3002.492917000003
+      }
+    },
+    {
+      "category": "场地轻装",
+      "strategy": "damage",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 1,
+        "losses": 5,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2042.370566000005
+      },
+      "after": {
+        "wins": 0,
+        "losses": 6,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1811.750831999998
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 1,
+          "seed": 1540494784,
+          "policy": "mixed",
+          "before": 1,
+          "after": 0
+        }
+      ]
+    },
+    {
+      "category": "场地轻装",
+      "strategy": "damage",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 2,
+        "losses": 13,
+        "ties": 0,
+        "completed": 15,
+        "unfinished": 0,
+        "trainingGames": 12,
+        "elapsedMs": 3004.551054000003
+      },
+      "after": {
+        "wins": 1,
+        "losses": 15,
+        "ties": 0,
+        "completed": 16,
+        "unfinished": 1,
+        "trainingGames": 12,
+        "elapsedMs": 3012.031673999998
+      }
+    },
+    {
+      "category": "场地轻装",
+      "strategy": "support",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1774.0815000000002
+      },
+      "after": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1439.9066630000016
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 3,
+          "seed": 1540810642,
+          "policy": "support",
+          "before": 1,
+          "after": 0
+        }
+      ]
+    },
+    {
+      "category": "场地轻装",
+      "strategy": "support",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 4,
+        "losses": 11,
+        "ties": 0,
+        "completed": 15,
+        "unfinished": 1,
+        "trainingGames": 12,
+        "elapsedMs": 3005.4299050000045
+      },
+      "after": {
+        "wins": 3,
+        "losses": 14,
+        "ties": 0,
+        "completed": 17,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3012.0786890000018
+      }
+    },
+    {
+      "category": "晴天",
+      "strategy": "mixed",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 5,
+        "losses": 1,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2744.143347999998
+      },
+      "after": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2167.7875170000043
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 3,
+          "seed": 1540810609,
+          "policy": "support",
+          "before": 1,
+          "after": 0
+        }
+      ]
+    },
+    {
+      "category": "晴天",
+      "strategy": "mixed",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 12,
+        "losses": 2,
+        "ties": 0,
+        "completed": 14,
+        "unfinished": 0,
+        "trainingGames": 12,
+        "elapsedMs": 3000.4500199999893
+      },
+      "after": {
+        "wins": 17,
+        "losses": 9,
+        "ties": 0,
+        "completed": 26,
+        "unfinished": 1,
+        "trainingGames": 13,
+        "elapsedMs": 3000.0759770000004
+      }
+    },
+    {
+      "category": "晴天",
+      "strategy": "damage",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2066.796531
+      },
+      "after": {
+        "wins": 5,
+        "losses": 1,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1766.1259819999977
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 2,
+          "seed": 1540390424,
+          "policy": "damage",
+          "before": 0,
+          "after": 1
+        }
+      ]
+    },
+    {
+      "category": "晴天",
+      "strategy": "damage",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 11,
+        "losses": 3,
+        "ties": 0,
+        "completed": 14,
+        "unfinished": 1,
+        "trainingGames": 13,
+        "elapsedMs": 3001.6778560000093
+      },
+      "after": {
+        "wins": 11,
+        "losses": 4,
+        "ties": 0,
+        "completed": 15,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3006.2446320000017
+      }
+    },
+    {
+      "category": "晴天",
+      "strategy": "support",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 5,
+        "losses": 1,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1240.8172979999945
+      },
+      "after": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1116.4451010000048
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 2,
+          "seed": 1540390424,
+          "policy": "damage",
+          "before": 1,
+          "after": 0
+        }
+      ]
+    },
+    {
+      "category": "晴天",
+      "strategy": "support",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 13,
+        "losses": 5,
+        "ties": 0,
+        "completed": 18,
+        "unfinished": 1,
+        "trainingGames": 10,
+        "elapsedMs": 3021.776792000004
+      },
+      "after": {
+        "wins": 10,
+        "losses": 7,
+        "ties": 0,
+        "completed": 17,
+        "unfinished": 1,
+        "trainingGames": 14,
+        "elapsedMs": 3022.2873959999997
+      }
+    },
+    {
+      "category": "常规轮转",
+      "strategy": "mixed",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2373.5077290000045
+      },
+      "after": {
+        "wins": 4,
+        "losses": 2,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2162.536386000007
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "常规轮转",
+      "strategy": "mixed",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 11,
+        "losses": 9,
+        "ties": 0,
+        "completed": 20,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3001.098429000005
+      },
+      "after": {
+        "wins": 10,
+        "losses": 9,
+        "ties": 0,
+        "completed": 19,
+        "unfinished": 1,
+        "trainingGames": 12,
+        "elapsedMs": 3011.559469999993
+      }
+    },
+    {
+      "category": "常规轮转",
+      "strategy": "damage",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 3007.1898539999966
+      },
+      "after": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2463.911150999993
+      },
+      "pairedOutcomeChanges": []
+    },
+    {
+      "category": "常规轮转",
+      "strategy": "damage",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 2,
+        "losses": 11,
+        "ties": 0,
+        "completed": 13,
+        "unfinished": 1,
+        "trainingGames": 10,
+        "elapsedMs": 3018.2342690000078
+      },
+      "after": {
+        "wins": 4,
+        "losses": 9,
+        "ties": 0,
+        "completed": 13,
+        "unfinished": 1,
+        "trainingGames": 11,
+        "elapsedMs": 3000.289545000007
+      }
+    },
+    {
+      "category": "常规轮转",
+      "strategy": "support",
+      "budget": "fixed-games",
+      "before": {
+        "wins": 2,
+        "losses": 4,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 2929.8184230000043
+      },
+      "after": {
+        "wins": 3,
+        "losses": 3,
+        "ties": 0,
+        "completed": 6,
+        "unfinished": 0,
+        "trainingGames": 8,
+        "elapsedMs": 1594.092695000014
+      },
+      "pairedOutcomeChanges": [
+        {
+          "index": 6,
+          "seed": 1541020165,
+          "policy": "support",
+          "before": 0,
+          "after": 1
+        }
+      ]
+    },
+    {
+      "category": "常规轮转",
+      "strategy": "support",
+      "budget": "fixed-time",
+      "before": {
+        "wins": 4,
+        "losses": 9,
+        "ties": 0,
+        "completed": 13,
+        "unfinished": 1,
+        "trainingGames": 8,
+        "elapsedMs": 3006.5727220000117
+      },
+      "after": {
+        "wins": 8,
+        "losses": 6,
+        "ties": 0,
+        "completed": 14,
+        "unfinished": 1,
+        "trainingGames": 8,
+        "elapsedMs": 3007.037878999996
+      }
+    }
+  ],
+  "notes": [
+    "同一语料与相同模型数值；修正计划Mega条件与雪天协议，默认策略及权重未改变。",
+    "固定场数的对手、种子、训练场数和复评场数逐组对齐；双方都使用对应版本的伤害与支援策略，因此不是仅改己方策略的因果实验。",
+    "相同时间实验的场数随机器状态和执行路径变化；不能把吞吐量提升解释为决策能力提升。",
+    "这是已观察的机制开发用例；新版本未显示整体胜场提升，没有宣称真实排位优势。"
+  ]
+}

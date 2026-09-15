@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:354838) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/desktop/editing.spec.ts:8:1 › 导入满队、配点错误与预览、伤害条件、模拟期间编辑和取消 (7.3s)
+  ✓  2 tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 (41.5s)
+  ✓  3 tests/desktop/workspace.spec.ts:8:1 › 核心构筑、方案比较、撤销、保存恢复与窄窗口 (12.0s)
+
+  3 passed (1.0m)

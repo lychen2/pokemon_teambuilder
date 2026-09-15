@@ -1,0 +1,1162 @@
+{
+  "createdAt": "2026-09-13T23:59:46.266Z",
+  "algorithmVersion": "mc-1.3.0",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "environmentId": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "modelVersion": "d1f86252a34b7983ebc2",
+  "machine": {
+    "cpu": "AMD Ryzen AI 9 H 365 w/ Radeon 880M",
+    "threads": 20,
+    "ramGiB": 30.625621795654297
+  },
+  "split": {
+    "cutoff": "2026-09-10T16:00:00.000Z",
+    "training": 1927,
+    "heldTeams": 48,
+    "independentNewExternalSamples": 0
+  },
+  "probability": {
+    "uncalibrated": {
+      "samples": 864,
+      "logLoss": 1.1617187609430917,
+      "brier": 0.4633366635975133,
+      "accuracy": 0.6134259259259259,
+      "unseen": 86,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 42,
+          "confidence": 0.16113327349586706,
+          "accuracy": 0.09523809523809523
+        },
+        {
+          "lower": 0.2,
+          "count": 80,
+          "confidence": 0.2594650952865948,
+          "accuracy": 0.1875
+        },
+        {
+          "lower": 0.3,
+          "count": 112,
+          "confidence": 0.3503132565602313,
+          "accuracy": 0.32142857142857145
+        },
+        {
+          "lower": 0.4,
+          "count": 95,
+          "confidence": 0.4477423359314425,
+          "accuracy": 0.47368421052631576
+        },
+        {
+          "lower": 0.5,
+          "count": 98,
+          "confidence": 0.5422150461685605,
+          "accuracy": 0.5408163265306123
+        },
+        {
+          "lower": 0.6,
+          "count": 71,
+          "confidence": 0.64759507597515,
+          "accuracy": 0.647887323943662
+        },
+        {
+          "lower": 0.7,
+          "count": 62,
+          "confidence": 0.7577606917836586,
+          "accuracy": 0.8548387096774194
+        },
+        {
+          "lower": 0.8,
+          "count": 50,
+          "confidence": 0.8560502164143275,
+          "accuracy": 0.96
+        },
+        {
+          "lower": 0.9,
+          "count": 254,
+          "confidence": 0.9606278404460112,
+          "accuracy": 0.905511811023622
+        }
+      ]
+    },
+    "calibrated": {
+      "samples": 864,
+      "logLoss": 1.1504391399549214,
+      "brier": 0.45901793200000285,
+      "accuracy": 0.6053240740740741,
+      "unseen": 86,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 2,
+          "confidence": 0.09091672938661796,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.1,
+          "count": 53,
+          "confidence": 0.15430036917580853,
+          "accuracy": 0.09433962264150944
+        },
+        {
+          "lower": 0.2,
+          "count": 69,
+          "confidence": 0.2529266489447982,
+          "accuracy": 0.2463768115942029
+        },
+        {
+          "lower": 0.3,
+          "count": 144,
+          "confidence": 0.3453443690426677,
+          "accuracy": 0.2777777777777778
+        },
+        {
+          "lower": 0.4,
+          "count": 97,
+          "confidence": 0.45193229962227305,
+          "accuracy": 0.44329896907216493
+        },
+        {
+          "lower": 0.5,
+          "count": 78,
+          "confidence": 0.5472111579371481,
+          "accuracy": 0.6282051282051282
+        },
+        {
+          "lower": 0.6,
+          "count": 70,
+          "confidence": 0.6474417422503891,
+          "accuracy": 0.7
+        },
+        {
+          "lower": 0.7,
+          "count": 48,
+          "confidence": 0.7558044546099413,
+          "accuracy": 0.8541666666666666
+        },
+        {
+          "lower": 0.8,
+          "count": 51,
+          "confidence": 0.8612573153632818,
+          "accuracy": 1
+        },
+        {
+          "lower": 0.9,
+          "count": 252,
+          "confidence": 0.9575225605725219,
+          "accuracy": 0.9047619047619048
+        }
+      ]
+    },
+    "noPartialEvidence": {
+      "samples": 864,
+      "logLoss": 1.153060476444699,
+      "brier": 0.4604911715376244,
+      "accuracy": 0.6006944444444444,
+      "unseen": 86,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 2,
+          "confidence": 0.09091672938661796,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.1,
+          "count": 52,
+          "confidence": 0.15212415206884303,
+          "accuracy": 0.09615384615384616
+        },
+        {
+          "lower": 0.2,
+          "count": 70,
+          "confidence": 0.2514345877825258,
+          "accuracy": 0.22857142857142856
+        },
+        {
+          "lower": 0.3,
+          "count": 147,
+          "confidence": 0.34579753167687627,
+          "accuracy": 0.2789115646258503
+        },
+        {
+          "lower": 0.4,
+          "count": 97,
+          "confidence": 0.4532811201074111,
+          "accuracy": 0.4329896907216495
+        },
+        {
+          "lower": 0.5,
+          "count": 74,
+          "confidence": 0.5478580735004147,
+          "accuracy": 0.6081081081081081
+        },
+        {
+          "lower": 0.6,
+          "count": 73,
+          "confidence": 0.6461682215751825,
+          "accuracy": 0.7123287671232876
+        },
+        {
+          "lower": 0.7,
+          "count": 45,
+          "confidence": 0.7542021061976437,
+          "accuracy": 0.8444444444444444
+        },
+        {
+          "lower": 0.8,
+          "count": 51,
+          "confidence": 0.8581089227173756,
+          "accuracy": 1
+        },
+        {
+          "lower": 0.9,
+          "count": 253,
+          "confidence": 0.9569184105254154,
+          "accuracy": 0.9051383399209486
+        }
+      ]
+    },
+    "noHistoryPrior": {
+      "samples": 864,
+      "logLoss": 1.1234719837457368,
+      "brier": 0.45221996788605406,
+      "accuracy": 0.6157407407407407,
+      "unseen": 86,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 28,
+          "confidence": 0.16235559294941063,
+          "accuracy": 0.14285714285714285
+        },
+        {
+          "lower": 0.2,
+          "count": 98,
+          "confidence": 0.260829514156185,
+          "accuracy": 0.17346938775510204
+        },
+        {
+          "lower": 0.3,
+          "count": 119,
+          "confidence": 0.3456202096459177,
+          "accuracy": 0.33613445378151263
+        },
+        {
+          "lower": 0.4,
+          "count": 106,
+          "confidence": 0.4523357278674167,
+          "accuracy": 0.5
+        },
+        {
+          "lower": 0.5,
+          "count": 110,
+          "confidence": 0.5418338424875534,
+          "accuracy": 0.5363636363636364
+        },
+        {
+          "lower": 0.6,
+          "count": 91,
+          "confidence": 0.6460750123102191,
+          "accuracy": 0.8021978021978022
+        },
+        {
+          "lower": 0.7,
+          "count": 51,
+          "confidence": 0.7451314800090773,
+          "accuracy": 0.9215686274509803
+        },
+        {
+          "lower": 0.8,
+          "count": 37,
+          "confidence": 0.844669074573887,
+          "accuracy": 0.972972972972973
+        },
+        {
+          "lower": 0.9,
+          "count": 224,
+          "confidence": 0.9566564045939204,
+          "accuracy": 0.90625
+        }
+      ]
+    }
+  },
+  "masking": [
+    {
+      "mode": "points",
+      "observations": 288,
+      "assigned": 186,
+      "identifiableInTraining": 71,
+      "meanTrueGroupMass": 1,
+      "hiddenItemLogLoss": null,
+      "medoidsUnchanged": true,
+      "missingPointsRemainUnknown": true
+    },
+    {
+      "mode": "points-nature",
+      "observations": 288,
+      "assigned": 206,
+      "identifiableInTraining": 71,
+      "meanTrueGroupMass": 0.9614352783366867,
+      "hiddenItemLogLoss": null,
+      "medoidsUnchanged": true,
+      "missingPointsRemainUnknown": true
+    },
+    {
+      "mode": "points-nature-item",
+      "observations": 288,
+      "assigned": 225,
+      "identifiableInTraining": 71,
+      "meanTrueGroupMass": 0.9108243075787473,
+      "hiddenItemLogLoss": 1.0466669186449487,
+      "medoidsUnchanged": true,
+      "missingPointsRemainUnknown": true
+    }
+  ],
+  "ablations": [
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 24,
+      "beamWidth": 4,
+      "elapsedMs": 2979.468157000003,
+      "retainedRare": 9,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9771006430932058,
+        "resilience": 0.26995682417861494,
+        "speed": 0.7631782945736436,
+        "coverage": 1,
+        "tailRisk": 0.3897134701240937
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 24,
+      "beamWidth": 7,
+      "elapsedMs": 1473.9224220000033,
+      "retainedRare": 9,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9771006430932058,
+        "resilience": 0.26995682417861494,
+        "speed": 0.7631782945736436,
+        "coverage": 1,
+        "tailRisk": 0.3897134701240937
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 24,
+      "beamWidth": 12,
+      "elapsedMs": 1708.9632700000002,
+      "retainedRare": 9,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9771006430932058,
+        "resilience": 0.26995682417861494,
+        "speed": 0.7631782945736436,
+        "coverage": 1,
+        "tailRisk": 0.3897134701240937
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 48,
+      "beamWidth": 4,
+      "elapsedMs": 2302.3850759999987,
+      "retainedRare": 11,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9757784851425506,
+        "resilience": 0.27609076929984117,
+        "speed": 0.737984496124031,
+        "coverage": 1,
+        "tailRisk": 0.3938473542801356
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 48,
+      "beamWidth": 7,
+      "elapsedMs": 1591.799500000001,
+      "retainedRare": 11,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9593351794008609,
+        "resilience": 0.32657305254332336,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.4040388705307164
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 48,
+      "beamWidth": 12,
+      "elapsedMs": 2174.2137399999992,
+      "retainedRare": 11,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9593351794008609,
+        "resilience": 0.32657305254332336,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.4040388705307164
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 96,
+      "beamWidth": 4,
+      "elapsedMs": 2512.5524460000015,
+      "retainedRare": 12,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.982399969822014,
+        "resilience": 0.30524959374467464,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.39416636228018664
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 96,
+      "beamWidth": 7,
+      "elapsedMs": 2383.200377000001,
+      "retainedRare": 12,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.982399969822014,
+        "resilience": 0.30524959374467464,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.39416636228018664
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 96,
+      "beamWidth": 12,
+      "elapsedMs": 2848.4894580000037,
+      "retainedRare": 12,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9737396460723666,
+        "resilience": 0.27224408315069626,
+        "speed": 0.7852713178294576,
+        "coverage": 1,
+        "tailRisk": 0.40018750255428037
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 24,
+      "beamWidth": 4,
+      "elapsedMs": 2100.0453109999944,
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9656534463527072,
+        "resilience": 0.3213278315167198,
+        "speed": 0.565891472868217,
+        "coverage": 1,
+        "tailRisk": 0.4366544832852405
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 24,
+      "beamWidth": 7,
+      "elapsedMs": 1347.7956590000103,
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9656534463527072,
+        "resilience": 0.3213278315167198,
+        "speed": 0.565891472868217,
+        "coverage": 1,
+        "tailRisk": 0.4366544832852405
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 24,
+      "beamWidth": 12,
+      "elapsedMs": 1767.0932639999955,
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.964381506052039,
+        "resilience": 0.3223587348341192,
+        "speed": 0.6151162790697674,
+        "coverage": 1,
+        "tailRisk": 0.4246233349085772
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 48,
+      "beamWidth": 4,
+      "elapsedMs": 1965.7456970000057,
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9590300245565601,
+        "resilience": 0.3021564371085467,
+        "speed": 0.7325581395348837,
+        "coverage": 1,
+        "tailRisk": 0.42256651281627605
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 48,
+      "beamWidth": 7,
+      "elapsedMs": 1890.8062419999915,
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9590300245565601,
+        "resilience": 0.3021564371085467,
+        "speed": 0.7325581395348837,
+        "coverage": 1,
+        "tailRisk": 0.42256651281627605
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 48,
+      "beamWidth": 12,
+      "elapsedMs": 2136.037454000005,
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9590300245565601,
+        "resilience": 0.3021564371085467,
+        "speed": 0.7325581395348837,
+        "coverage": 1,
+        "tailRisk": 0.42256651281627605
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 96,
+      "beamWidth": 4,
+      "elapsedMs": 2870.6251559999946,
+      "retainedRare": 10,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.25,
+      "legal": true,
+      "score": {
+        "pressure": 0.9802240395880019,
+        "resilience": 0.28064010080495383,
+        "speed": 0.7585271317829458,
+        "coverage": 1,
+        "tailRisk": 0.37773273641767524
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 96,
+      "beamWidth": 7,
+      "elapsedMs": 2574.62022099999,
+      "retainedRare": 10,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.25,
+      "legal": true,
+      "score": {
+        "pressure": 0.9802240395880019,
+        "resilience": 0.28064010080495383,
+        "speed": 0.7585271317829458,
+        "coverage": 1,
+        "tailRisk": 0.37773273641767524
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 96,
+      "beamWidth": 12,
+      "elapsedMs": 2693.3692830000073,
+      "retainedRare": 10,
+      "rareAvailable": 69,
+      "forcedRetention": true,
+      "solutions": 4,
+      "recovery": 0.25,
+      "legal": true,
+      "score": {
+        "pressure": 0.9802240395880019,
+        "resilience": 0.28064010080495383,
+        "speed": 0.7585271317829458,
+        "coverage": 1,
+        "tailRisk": 0.37773273641767524
+      }
+    }
+  ],
+  "timedAblations": [
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 24,
+      "beamWidth": 4,
+      "budgetMs": 3000,
+      "elapsedMs": 2732.7426540000015,
+      "overrunMs": 0,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": false,
+        "evaluatedStates": 816,
+        "completedLayers": 4
+      },
+      "retainedRare": 9,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9771006430932058,
+        "resilience": 0.26995682417861494,
+        "speed": 0.7631782945736436,
+        "coverage": 1,
+        "tailRisk": 0.3897134701240937
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 24,
+      "beamWidth": 7,
+      "budgetMs": 3000,
+      "elapsedMs": 2971.135857000001,
+      "overrunMs": 0,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": false,
+        "evaluatedStates": 925,
+        "completedLayers": 4
+      },
+      "retainedRare": 9,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9771006430932058,
+        "resilience": 0.26995682417861494,
+        "speed": 0.7631782945736436,
+        "coverage": 1,
+        "tailRisk": 0.3897134701240937
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 24,
+      "beamWidth": 12,
+      "budgetMs": 3000,
+      "elapsedMs": 3010.3761479999957,
+      "overrunMs": 10.376147999995737,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 757,
+        "completedLayers": 4
+      },
+      "retainedRare": 9,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9771006430932058,
+        "resilience": 0.26995682417861494,
+        "speed": 0.7631782945736436,
+        "coverage": 1,
+        "tailRisk": 0.3897134701240937
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 48,
+      "beamWidth": 4,
+      "budgetMs": 3000,
+      "elapsedMs": 3006.951599,
+      "overrunMs": 6.951598999999987,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 528,
+        "completedLayers": 4
+      },
+      "retainedRare": 11,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9593351794008609,
+        "resilience": 0.32657305254332336,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.4040388705307164
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 48,
+      "beamWidth": 7,
+      "budgetMs": 3000,
+      "elapsedMs": 3027.944051999999,
+      "overrunMs": 27.94405199999892,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 635,
+        "completedLayers": 4
+      },
+      "retainedRare": 11,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9757784851425506,
+        "resilience": 0.27609076929984117,
+        "speed": 0.737984496124031,
+        "coverage": 1,
+        "tailRisk": 0.3938473542801356
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 48,
+      "beamWidth": 12,
+      "budgetMs": 3000,
+      "elapsedMs": 3024.7405670000007,
+      "overrunMs": 24.740567000000738,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 784,
+        "completedLayers": 3
+      },
+      "retainedRare": 11,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.75,
+      "legal": true,
+      "score": {
+        "pressure": 0.9757784851425506,
+        "resilience": 0.27609076929984117,
+        "speed": 0.737984496124031,
+        "coverage": 1,
+        "tailRisk": 0.3938473542801356
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 96,
+      "beamWidth": 4,
+      "budgetMs": 3000,
+      "elapsedMs": 3009.219649999999,
+      "overrunMs": 9.219649999999092,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 907,
+        "completedLayers": 4
+      },
+      "retainedRare": 12,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.982399969822014,
+        "resilience": 0.30524959374467464,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.39416636228018664
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 96,
+      "beamWidth": 7,
+      "budgetMs": 3000,
+      "elapsedMs": 3031.509686999998,
+      "overrunMs": 31.50968699999794,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 893,
+        "completedLayers": 3
+      },
+      "retainedRare": 12,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.982399969822014,
+        "resilience": 0.30524959374467464,
+        "speed": 0.6631782945736435,
+        "coverage": 1,
+        "tailRisk": 0.39416636228018664
+      }
+    },
+    {
+      "source": "2001945654:MC136",
+      "candidateBudget": 96,
+      "beamWidth": 12,
+      "budgetMs": 3000,
+      "elapsedMs": 3009.2981779999973,
+      "overrunMs": 9.298177999997279,
+      "status": "budget-before-complete-team",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 1010,
+        "completedLayers": 2
+      },
+      "retainedRare": 12,
+      "rareAvailable": 69,
+      "solutions": 0,
+      "recovery": null,
+      "legal": null,
+      "score": null
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 24,
+      "beamWidth": 4,
+      "budgetMs": 3000,
+      "elapsedMs": 2519.9791280000063,
+      "overrunMs": 0,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": false,
+        "evaluatedStates": 820,
+        "completedLayers": 4
+      },
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9656534463527072,
+        "resilience": 0.3213278315167198,
+        "speed": 0.565891472868217,
+        "coverage": 1,
+        "tailRisk": 0.4366544832852405
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 24,
+      "beamWidth": 7,
+      "budgetMs": 3000,
+      "elapsedMs": 2719.1737869999924,
+      "overrunMs": 0,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": false,
+        "evaluatedStates": 914,
+        "completedLayers": 4
+      },
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9656534463527072,
+        "resilience": 0.3213278315167198,
+        "speed": 0.565891472868217,
+        "coverage": 1,
+        "tailRisk": 0.4366544832852405
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 24,
+      "beamWidth": 12,
+      "budgetMs": 3000,
+      "elapsedMs": 3016.984105999989,
+      "overrunMs": 16.98410599998897,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 951,
+        "completedLayers": 4
+      },
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.964381506052039,
+        "resilience": 0.3223587348341192,
+        "speed": 0.6151162790697674,
+        "coverage": 1,
+        "tailRisk": 0.4246233349085772
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 48,
+      "beamWidth": 4,
+      "budgetMs": 3000,
+      "elapsedMs": 3018.131407000008,
+      "overrunMs": 18.13140700000804,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 910,
+        "completedLayers": 4
+      },
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9590300245565601,
+        "resilience": 0.3021564371085467,
+        "speed": 0.7325581395348837,
+        "coverage": 1,
+        "tailRisk": 0.42256651281627605
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 48,
+      "beamWidth": 7,
+      "budgetMs": 3000,
+      "elapsedMs": 3016.2642970000015,
+      "overrunMs": 16.264297000001534,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 790,
+        "completedLayers": 4
+      },
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9590300245565601,
+        "resilience": 0.3021564371085467,
+        "speed": 0.7325581395348837,
+        "coverage": 1,
+        "tailRisk": 0.42256651281627605
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 48,
+      "beamWidth": 12,
+      "budgetMs": 3000,
+      "elapsedMs": 3008.951608999996,
+      "overrunMs": 8.951608999996097,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 773,
+        "completedLayers": 4
+      },
+      "retainedRare": 8,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.5,
+      "legal": true,
+      "score": {
+        "pressure": 0.9590300245565601,
+        "resilience": 0.3021564371085467,
+        "speed": 0.7325581395348837,
+        "coverage": 1,
+        "tailRisk": 0.42256651281627605
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 96,
+      "beamWidth": 4,
+      "budgetMs": 3000,
+      "elapsedMs": 3012.215897000002,
+      "overrunMs": 12.21589700000186,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 608,
+        "completedLayers": 4
+      },
+      "retainedRare": 10,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.25,
+      "legal": true,
+      "score": {
+        "pressure": 0.9802240395880019,
+        "resilience": 0.28064010080495383,
+        "speed": 0.7585271317829458,
+        "coverage": 1,
+        "tailRisk": 0.37773273641767524
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 96,
+      "beamWidth": 7,
+      "budgetMs": 3000,
+      "elapsedMs": 3028.777865000011,
+      "overrunMs": 28.777865000010934,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 738,
+        "completedLayers": 3
+      },
+      "retainedRare": 10,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.25,
+      "legal": true,
+      "score": {
+        "pressure": 0.9802240395880019,
+        "resilience": 0.28064010080495383,
+        "speed": 0.7585271317829458,
+        "coverage": 1,
+        "tailRisk": 0.37773273641767524
+      }
+    },
+    {
+      "source": "2001945654:MC137",
+      "candidateBudget": 96,
+      "beamWidth": 12,
+      "budgetMs": 3000,
+      "elapsedMs": 3019.6753520000057,
+      "overrunMs": 19.67535200000566,
+      "status": "completed-proposals",
+      "statistics": {
+        "budgetMs": 3000,
+        "deadlineReached": true,
+        "evaluatedStates": 1169,
+        "completedLayers": 3
+      },
+      "retainedRare": 10,
+      "rareAvailable": 69,
+      "solutions": 4,
+      "recovery": 0.25,
+      "legal": true,
+      "score": {
+        "pressure": 0.9802240395880019,
+        "resilience": 0.28064010080495383,
+        "speed": 0.7585271317829458,
+        "coverage": 1,
+        "tailRisk": 0.37773273641767524
+      }
+    }
+  ],
+  "notes": [
+    "字段概率直接汇总搜索与模拟共用的真实配置后验；去掉历史先验时，历史配置标签仍保留。",
+    "当前留出已用于开发，不是新的盲测；新的资料可通过 --input=bootstrap.json 使用相同流程评估。",
+    "遮蔽实验将真实留出配置的部分字段作为已知观察，隐藏值不填零；只有训练中存在完全相同配置时，才能报告真实流派分配质量。",
+    "遮蔽模式的隐藏道具损失是受控信息补充后的诊断，不与完全无已知字段的盲推断成绩混称同一指标。",
+    "低频召回分母为训练中当前出现 1–2 次且含指定技术招式的真实完整变体；配点差异保留。不代表未知新配置的召回能力。",
+    "ablations 为不限制时间的节点参数实验；timedAblations 每组采用独立空伤害缓存和相同 3000 毫秒墙钟预算。超时前尚未成队则报告零方案；正在执行的单次评估及结果整理可能造成少量超时，另列 overrunMs。应用默认没有强加这一实验时间上限。"
+  ]
+}

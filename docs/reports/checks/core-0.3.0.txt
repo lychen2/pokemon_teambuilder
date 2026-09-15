@@ -1,0 +1,129 @@
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/artwork.test.ts > 当前规则的全部初始与 Mega 形态都有经校验的 Champions 原图 29ms
+ ✓ tests/artwork.test.ts > 雌雄、地区、Mega 和家庭数量分别对应其完整形态，不能共用全国图鉴编号 1ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  16:04:15
+   Duration  1.16s (import 80%, transform 17%, tests 3%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/configurations.test.ts > 非代表的帮助咆哮虎和佯攻大狃拉保留真实配置、条件概率和搜索来源 523ms
+ ✓ tests/configurations.test.ts > 配置与流派后验、字段概率使用同一个分布，原代表 ID 稳定 21ms
+ ✓ tests/configurations.test.ts > 完全相同的转贴只增加来源，历史不提高当前样本频率 239ms
+ ✓ tests/configurations.test.ts > 已保存的代表保留项迁移为真实配置 ID，重复打开不改变记录 2ms
+ ✓ tests/configurations.test.ts > 选出比较全部首发；换队、换对手、规则或数据变化不能保存旧路线 6590ms
+ ✓ tests/configurations.test.ts > 显式搜索时间预算不足时不返回未完成队伍，正常调用没有隐含时间上限 640ms
+ ✓ tests/configurations.test.ts > 作者队报的掩护、空间及款待路线随关键队友改变，未知初始特性不冒充原配置 532ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  16:04:17
+   Duration  9.84s (tests 88%, import 10%, transform 2%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/core.test.ts > Champions 规则与伤害 > 机制回归矩阵逐档对照真实引擎 92ms
+ ✓ tests/core.test.ts > Champions 规则与伤害 > 能力点、导入导出及伤害与 Showdown 对照 74ms
+ ✓ tests/core.test.ts > Champions 规则与伤害 > 省略等级与显式等级均遵循环境的实战等级调整 34ms
+ ✓ tests/core.test.ts > Champions 规则与伤害 > 最高乱数击杀、气腰、多段与回合中树果 2ms
+ ✓ tests/core.test.ts > Champions 规则与伤害 > Mega 前后、威吓免疫、精神场地与范围衰减 7ms
+ ✓ tests/core.test.ts > Champions 规则与伤害 > 实际入场的种子轻装、顺风与空间速度顺序 30ms
+ ✓ tests/core.test.ts > Champions 规则与伤害 > 双方速度分别计算，铁球、围巾、同速与空间不混淆 156ms
+ ✓ tests/core.test.ts > 来源与统计 > 表头重排、失败来源、未知配点保留 18ms
+ ✓ tests/core.test.ts > 来源与统计 > 转贴不放大共现，历史不污染当前频率 232ms
+ ✓ tests/core.test.ts > 来源与统计 > 真实代表、加权流派与缺字段的距离 10ms
+ ✓ tests/core.test.ts > 来源与统计 > 先验扫描保留固定语料的时间留出校准结果 254ms
+ ✓ tests/core.test.ts > 构筑、配点与本地版本 > 推荐合法、核心与字段锁保持、旧结果拒绝应用 1448ms
+ ✓ tests/core.test.ts > 构筑、配点与本地版本 > 分析随配置改变；固定性格配点达到最小速度阈值 63ms
+ ✓ tests/core.test.ts > 构筑、配点与本地版本 > 速度、击杀、生存联合目标均在最终配点上成立 967ms
+ ✓ tests/core.test.ts > 构筑、配点与本地版本 > SQLite 草稿修订、重启恢复及旧版本内容保留 137ms
+
+ Test Files  1 passed (1)
+      Tests  15 passed (15)
+   Start at  16:04:28
+   Duration  4.99s (tests 72%, import 23%, transform 5%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/history.test.ts > 新赛季零样本时，真实历史配置通过当前规则校验后可推荐，当前频率仍为零 60ms
+ ✓ tests/history.test.ts > 新赛季观察出现后当前来源主导，历史配置不抬高当前频率 42ms
+ ✓ tests/history.test.ts > 关闭历史推荐时，保留项冲突显式报告，锁定物种也只新增当前配置 2796ms
+ ✓ tests/history.test.ts > 冷启动模拟使用真实历史队伍并记录赛季，关闭后明确缺少当前对手 283ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  16:04:33
+   Duration  4.93s (tests 66%, import 27%, transform 6%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/lineups.test.ts > 未选出的场地手不触发种子，参考伤害保留相同形态与场地条件 734ms
+ ✓ tests/lineups.test.ts > Mega 耿鬼的踩影只属于耿鬼进化路线，后排 Mega 天气不能提前借给首发 361ms
+ ✓ tests/lineups.test.ts > 复活是同一份有限资源，新增受益队友不会重复累计同一句支援收益 2ms
+ ✓ tests/lineups.test.ts > 按真实对手名单选出，未覆盖配置保留范围，选出人数随 Showdown 规则变化 1811ms
+ ✓ tests/lineups.test.ts > 预览只依赖公开对手和己方配置，实际配点改变评分，固定采样可复现 396ms
+ ✓ tests/lineups.test.ts > 选出缓存保留完整指标，配点与权重改变后不能复用旧结果 201ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  16:04:39
+   Duration  5.36s (tests 67%, import 28%, transform 5%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/research-mechanics.test.ts > 魔法镜反弹保留公开执行与特性，但不伪造原配置的招式 198ms
+ ✓ tests/research-mechanics.test.ts > 特殊 Mega 的初始形态由 battleOnly 确定，不丢失永恒之花形态 1ms
+ ✓ tests/research-mechanics.test.ts > 破坏光线后的强制充能是等待行动，带颜色的公开血条按比例读取 44ms
+ ✓ tests/research-mechanics.test.ts > PP 耗尽后的挣扎为无属性伤害，对幽灵不受普通系免疫 19ms
+ ✓ tests/research-mechanics.test.ts > 命中风险由真实天气机制决定；多次命中提前落空；替代方案重新校验 91ms
+ ✓ tests/research-mechanics.test.ts > 画皮和结冻头的首次命中、失效后伤害及形态速度与实际 Showdown 一致 18ms
+ ✓ tests/research-mechanics.test.ts > 复生祈祷选择倒下队友，实际 Showdown 恢复其一半 HP 29ms
+ ✓ tests/research-mechanics.test.ts > 灭歌倒数与换出重置来自实际回合，支援依赖随关键队友消失 28ms
+ ✓ tests/research-mechanics.test.ts > 引文不伪造作者意图，解析失败可见，回放胜负不混入构筑频率 36ms
+ ✓ tests/research-mechanics.test.ts > 清理预览保留被回放引用的版本和研究快照，拒绝过期预览 372ms
+ ✓ tests/research-mechanics.test.ts > 时间留出隔离队伍、作者、链接，不纳入未来历史资料 178ms
+ ✓ tests/research-mechanics.test.ts > 未知性格与道具可贡献已知招式，去历史先验不留下零概率标签 646ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  16:04:45
+   Duration  3.21s (tests 54%, import 37%, transform 9%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/research.test.ts > 构筑研究记录与统一条件 > 笔记不使推荐过期，成员变化仍失效，异步建议保留最新笔记 1178ms
+ ✓ tests/research.test.ts > 构筑研究记录与统一条件 > 两条计划与战绩重启保留，历史快照不可改写，未知选出不进入分母 167ms
+ ✓ tests/research.test.ts > 构筑研究记录与统一条件 > 速度目标直接保留轻装与顺风条件，不能误用自然速度阈值 427ms
+ ✓ tests/research.test.ts > 构筑研究记录与统一条件 > 低血量伤害逐档一致，残血气腰不挡击杀；连击按机制分布 28ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  16:04:49
+   Duration  3.26s (tests 58%, import 34%, transform 8%)
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ✓ tests/simulation.test.ts > 封闭信息集过滤精确 HP 与队表，行动生成只接收观察对象 106ms
+ ✓ tests/simulation.test.ts > 实际回合、固定种子复现、取消不伪造胜负 11478ms
+ ✓ tests/simulation.test.ts > 配对训练预算一致，相同队伍收益差为零，无解物种立即暴露 12285ms
+ ✓ tests/simulation.test.ts > 伤害与支援策略完成真实回合并保留逐场决策证据 1319ms
+ ✓ tests/simulation.test.ts > 信息键保留已知招式、道具和计时，策略无法读取对手私有字段 42ms
+ ✓ tests/simulation.test.ts > 过期场地与已换出成员的临时状态不阻止树复用，公开知识及空间剩余回合不可合并 7ms
+ ✓ tests/simulation.test.ts > 策略不奖励被精神场地挡住的击掌奇袭，帮助按队友同时行动评分 30ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  16:04:53
+   Duration  26.74s (tests 95%, import 4%, transform 1%)
+

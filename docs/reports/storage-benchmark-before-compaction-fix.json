@@ -1,0 +1,1027 @@
+{
+  "status": "completed",
+  "createdAt": "2026-09-13T23:49:07.212Z",
+  "algorithmVersion": "mc-1.3.0",
+  "environmentIds": [
+    "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+    "gen9championsvgc2026regmc-02b03843bc1793d1858b"
+  ],
+  "initialCorpus": "44cdfd0e4846242f486a",
+  "finalCorpus": "9b075361f5cc20459e0c",
+  "elapsedMs": 133536.217576,
+  "rows": [
+    {
+      "phase": "initial",
+      "elapsedMs": 647.309053,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 1,
+              "bytes": 2504
+            },
+            {
+              "table": "history",
+              "rows": 1,
+              "bytes": 2504
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "environments",
+              "rows": 1,
+              "bytes": 901892
+            },
+            {
+              "table": "corpora",
+              "rows": 1,
+              "bytes": 11145862
+            },
+            {
+              "table": "models",
+              "rows": 1,
+              "bytes": 814032
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 12935168,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 13072792,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 0,
+              "files": 0
+            }
+          ],
+          "plan": {
+            "models": [],
+            "corpora": [],
+            "hash": "cbf62b0857314b059685",
+            "cacheRows": 0,
+            "removableBytes": 0
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 198243768,
+            "external": 25706680,
+            "rss": 514191360,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:44cdfd0e4846242f486a:d839b84a9e2f096d304d",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              }
+            ]
+          },
+          {
+            "process": "fast",
+            "heapUsed": 11456048,
+            "external": 6182571,
+            "rss": 514191360,
+            "contexts": []
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11395592,
+            "external": 6182571,
+            "rss": 514191360,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 11312376,
+            "external": 6182571,
+            "rss": 514191360,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:46:54.344Z"
+      }
+    },
+    {
+      "phase": "two-real-environments",
+      "elapsedMs": 44116.357134,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "history",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 1,
+              "bytes": 6046
+            },
+            {
+              "table": "environments",
+              "rows": 2,
+              "bytes": 1803841
+            },
+            {
+              "table": "corpora",
+              "rows": 2,
+              "bytes": 22291724
+            },
+            {
+              "table": "models",
+              "rows": 2,
+              "bytes": 1628064
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 25837568,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 13291152,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 36709563,
+              "files": 402
+            }
+          ],
+          "plan": {
+            "models": [],
+            "corpora": [],
+            "hash": "cbf62b0857314b059685",
+            "cacheRows": 0,
+            "removableBytes": 0
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 219603712,
+            "external": 17140484,
+            "rss": 1701031936,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:44cdfd0e4846242f486a:d839b84a9e2f096d304d",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              }
+            ]
+          },
+          {
+            "process": "fast",
+            "heapUsed": 11488568,
+            "external": 6182611,
+            "rss": 1701031936,
+            "contexts": []
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11414496,
+            "external": 6182611,
+            "rss": 1701031936,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 1014773424,
+            "external": 15065716,
+            "rss": 1701031936,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:47:37.831Z"
+      }
+    },
+    {
+      "phase": "sync-and-six-switches-1",
+      "elapsedMs": 95268.091826,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "history",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 2,
+              "bytes": 6268
+            },
+            {
+              "table": "environments",
+              "rows": 2,
+              "bytes": 1803841
+            },
+            {
+              "table": "corpora",
+              "rows": 3,
+              "bytes": 35984391
+            },
+            {
+              "table": "models",
+              "rows": 3,
+              "bytes": 3072501
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 2,
+              "bytes": 44506
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 41017344,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 17349352,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 36709563,
+              "files": 402
+            }
+          ],
+          "plan": {
+            "models": [
+              "d839b84a9e2f096d304d"
+            ],
+            "corpora": [
+              "44cdfd0e4846242f486a"
+            ],
+            "hash": "49b9a8784753f8c73fe6",
+            "cacheRows": 2,
+            "removableBytes": 11959894
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 273075520,
+            "external": 17136839,
+            "rss": 2004512768,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:44cdfd0e4846242f486a:d839b84a9e2f096d304d",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              }
+            ]
+          },
+          {
+            "process": "fast",
+            "heapUsed": 230954192,
+            "external": 15094174,
+            "rss": 2004512768,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              }
+            ]
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11418808,
+            "external": 6182611,
+            "rss": 2004512768,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 581635144,
+            "external": 16664143,
+            "rss": 2004512768,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:48:28.986Z"
+      },
+      "jobs": [
+        {
+          "id": "ee720dee-c3e1-419f-a5bc-3975bf567a30",
+          "status": "completed",
+          "message": "构筑数据与配置模型已更新"
+        }
+      ]
+    },
+    {
+      "phase": "sync-and-six-switches-2",
+      "elapsedMs": 107845.510347,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "history",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 3,
+              "bytes": 6490
+            },
+            {
+              "table": "environments",
+              "rows": 2,
+              "bytes": 1803841
+            },
+            {
+              "table": "corpora",
+              "rows": 3,
+              "bytes": 35984391
+            },
+            {
+              "table": "models",
+              "rows": 3,
+              "bytes": 3072501
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 2,
+              "bytes": 44506
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 41017344,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 17349352,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 36709563,
+              "files": 402
+            }
+          ],
+          "plan": {
+            "models": [
+              "d839b84a9e2f096d304d"
+            ],
+            "corpora": [
+              "44cdfd0e4846242f486a"
+            ],
+            "hash": "49b9a8784753f8c73fe6",
+            "cacheRows": 2,
+            "removableBytes": 11959894
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 285396608,
+            "external": 17133026,
+            "rss": 1884049408,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:44cdfd0e4846242f486a:d839b84a9e2f096d304d",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              }
+            ]
+          },
+          {
+            "process": "fast",
+            "heapUsed": 230965128,
+            "external": 15094174,
+            "rss": 1884049408,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              }
+            ]
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11252224,
+            "external": 6182611,
+            "rss": 1884049408,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 156765696,
+            "external": 16721734,
+            "rss": 1884049408,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:48:41.565Z"
+      },
+      "jobs": [
+        {
+          "id": "b71ce982-a169-4b16-9623-49c8da16392b",
+          "status": "completed",
+          "message": "构筑数据与配置模型已更新"
+        }
+      ]
+    },
+    {
+      "phase": "sync-and-six-switches-3",
+      "elapsedMs": 119928.257364,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "history",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 4,
+              "bytes": 6712
+            },
+            {
+              "table": "environments",
+              "rows": 2,
+              "bytes": 1803841
+            },
+            {
+              "table": "corpora",
+              "rows": 3,
+              "bytes": 35984391
+            },
+            {
+              "table": "models",
+              "rows": 3,
+              "bytes": 3072501
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 2,
+              "bytes": 44506
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 41017344,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 17349352,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 36709563,
+              "files": 402
+            }
+          ],
+          "plan": {
+            "models": [
+              "d839b84a9e2f096d304d"
+            ],
+            "corpora": [
+              "44cdfd0e4846242f486a"
+            ],
+            "hash": "49b9a8784753f8c73fe6",
+            "cacheRows": 2,
+            "removableBytes": 11959894
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 333556576,
+            "external": 17133026,
+            "rss": 1484763136,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:44cdfd0e4846242f486a:d839b84a9e2f096d304d",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              }
+            ]
+          },
+          {
+            "process": "fast",
+            "heapUsed": 230969704,
+            "external": 15094174,
+            "rss": 1477881856,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              }
+            ]
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11262152,
+            "external": 6182611,
+            "rss": 1477881856,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 209655024,
+            "external": 17016830,
+            "rss": 1477881856,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:48:53.658Z"
+      },
+      "jobs": [
+        {
+          "id": "86cf43eb-8fd6-4f38-a8f6-c84c075f44a1",
+          "status": "completed",
+          "message": "构筑数据与配置模型已更新"
+        }
+      ]
+    },
+    {
+      "phase": "sync-and-six-switches-4",
+      "elapsedMs": 133024.52396299999,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "history",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 5,
+              "bytes": 6934
+            },
+            {
+              "table": "environments",
+              "rows": 2,
+              "bytes": 1803841
+            },
+            {
+              "table": "corpora",
+              "rows": 3,
+              "bytes": 35984391
+            },
+            {
+              "table": "models",
+              "rows": 3,
+              "bytes": 3072501
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 2,
+              "bytes": 44506
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 41058304,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 17349352,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 36709563,
+              "files": 402
+            }
+          ],
+          "plan": {
+            "models": [
+              "d839b84a9e2f096d304d"
+            ],
+            "corpora": [
+              "44cdfd0e4846242f486a"
+            ],
+            "hash": "49b9a8784753f8c73fe6",
+            "cacheRows": 2,
+            "removableBytes": 11959894
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 311804776,
+            "external": 17133026,
+            "rss": 1477451776,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:44cdfd0e4846242f486a:d839b84a9e2f096d304d",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 0
+              }
+            ]
+          },
+          {
+            "process": "fast",
+            "heapUsed": 230973536,
+            "external": 15094174,
+            "rss": 1477287936,
+            "contexts": [
+              {
+                "key": "gen9championsvgc2026regmc-02b03843bc1793d1858b:d1af3d7efc8e9589bcb4:a8771231facb05fbe726",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              },
+              {
+                "key": "gen9championsvgc2026regmc-b93855027bc29c2f645c:9b075361f5cc20459e0c:8adf171ccd0307b7a7fe",
+                "observations": 12894,
+                "archetypes": 890,
+                "damageEntries": 336
+              }
+            ]
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11270768,
+            "external": 6182611,
+            "rss": 1477287936,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 299394720,
+            "external": 17311809,
+            "rss": 1477287936,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:49:06.743Z"
+      },
+      "jobs": [
+        {
+          "id": "2b90ca50-e5a5-46b0-99f9-f9dd51272060",
+          "status": "completed",
+          "message": "构筑数据与配置模型已更新"
+        }
+      ]
+    },
+    {
+      "phase": "explicit-cache-cleanup",
+      "elapsedMs": 133230.319456,
+      "report": {
+        "storage": {
+          "tables": [
+            {
+              "table": "drafts",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "history",
+              "rows": 2,
+              "bytes": 5015
+            },
+            {
+              "table": "research_entries",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "jobs",
+              "rows": 5,
+              "bytes": 6934
+            },
+            {
+              "table": "environments",
+              "rows": 2,
+              "bytes": 1803841
+            },
+            {
+              "table": "corpora",
+              "rows": 3,
+              "bytes": 35984391
+            },
+            {
+              "table": "models",
+              "rows": 3,
+              "bytes": 3072501
+            },
+            {
+              "table": "analysis_cache",
+              "rows": 0,
+              "bytes": 0
+            },
+            {
+              "table": "source_registry",
+              "rows": 0,
+              "bytes": 0
+            }
+          ],
+          "disk": [
+            {
+              "name": "teambuilder.sqlite",
+              "bytes": 41017344,
+              "files": 1
+            },
+            {
+              "name": "teambuilder.sqlite-wal",
+              "bytes": 41257712,
+              "files": 1
+            },
+            {
+              "name": "raw",
+              "bytes": 0,
+              "files": 0
+            },
+            {
+              "name": "engines",
+              "bytes": 36709563,
+              "files": 402
+            }
+          ],
+          "plan": {
+            "models": [
+              "d839b84a9e2f096d304d"
+            ],
+            "corpora": [
+              "44cdfd0e4846242f486a"
+            ],
+            "hash": "49b9a8784753f8c73fe6",
+            "cacheRows": 0,
+            "removableBytes": 11959894
+          }
+        },
+        "runtime": [
+          {
+            "process": "service",
+            "heapUsed": 364153688,
+            "external": 17133026,
+            "rss": 1495474176,
+            "contexts": []
+          },
+          {
+            "process": "fast",
+            "heapUsed": 231041976,
+            "external": 15094174,
+            "rss": 1495474176,
+            "contexts": []
+          },
+          {
+            "process": "deep",
+            "heapUsed": 11282576,
+            "external": 6182611,
+            "rss": 1495474176,
+            "contexts": []
+          },
+          {
+            "process": "maintenance",
+            "heapUsed": 299403880,
+            "external": 17311809,
+            "rss": 1495474176,
+            "contexts": []
+          }
+        ],
+        "collectedAt": "2026-09-13T23:49:06.945Z"
+      }
+    }
+  ],
+  "checks": {
+    "originalDraftPreserved": true,
+    "migratedDraftPreserved": true,
+    "syncCycles": 4,
+    "snapshotSwitches": 24
+  },
+  "notes": [
+    "在隔离数据库中执行真实来源同步和本地规则编译，未接触日常使用的数据库。",
+    "RSS 为共享进程统计，不叠加各 Worker；堆、缓存条数和磁盘内容分别报告。",
+    "最后的清理是测试显式选择，只删除可重算缓存，不删除原文、规则、模型或队伍历史。",
+    "这是重复同步与切换的持续运行记录，不是多小时稳定性或物理多屏验收。"
+  ]
+}

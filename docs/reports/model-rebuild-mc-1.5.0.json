@@ -1,0 +1,25 @@
+{
+  "createdAt": "2026-09-14T11:36:14.827537+00:00",
+  "algorithmVersion": "mc-1.5.0",
+  "previousModel": "f60b1f44c4508ff285e8",
+  "modelVersion": "4ab4b1884f323b06602b",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "checks": {
+    "dex": true,
+    "translations": true,
+    "engine": true,
+    "corpus": true,
+    "environment": true,
+    "model": true
+  },
+  "changedMetadata": [
+    "corpus.updatedAt",
+    "environment.generatedAt",
+    "model.algorithmVersion",
+    "model.version"
+  ],
+  "notes": [
+    "使用原有固定语料重新校验与拟合，未联网获取新样本。",
+    "最初按整个对象比较时发现重新生成的更新时间不同；随后逐字段核对，仅上述四项元数据变化。"
+  ]
+}

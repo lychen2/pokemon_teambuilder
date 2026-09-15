@@ -1,0 +1,11 @@
+{
+  "id": "a08863c8f297-e7fd7e59f3ee",
+  "showdownRevision": "aa17ca0fac8bc5605df673bd8774c2d0e91efa43",
+  "calcRevision": "e7fd7e59f3eef7ea42fba3c8b83261cb4a14109d",
+  "source": "official",
+  "builtAt": "2026-09-13T13:56:41.535Z",
+  "hashes": {
+    "showdown": "a08863c8f297315aab1aff02f4559a4fbf8cc9ec5563ad859dfd473ddc01926d",
+    "calc": "1933c62d9a495e150b7b9e1a7f8833a47f96ebada7ec37d834a408b54958d05b"
+  }
+}

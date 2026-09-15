@@ -1,0 +1,240 @@
+
+> poke-teambuilder@0.2.0 benchmark:external /home/zonazcy/Projects/poke_teambuilder
+> tsx tools/external-benchmark.ts
+
+配置流派 10/221
+配置流派 20/221
+配置流派 30/221
+配置流派 40/221
+配置流派 50/221
+配置流派 60/221
+配置流派 70/221
+配置流派 80/221
+配置流派 90/221
+配置流派 100/221
+配置流派 110/221
+配置流派 120/221
+配置流派 130/221
+配置流派 140/221
+配置流派 150/221
+配置流派 160/221
+配置流派 170/221
+配置流派 180/221
+配置流派 190/221
+配置流派 200/221
+配置流派 210/221
+配置流派 220/221
+在隔离作者与重复来源的时间留出上校准配置概率
+{
+  "independentNewConfigurations": 1,
+  "independentNewTeams": 0,
+  "probability": {
+    "frozen": {
+      "samples": 3,
+      "logLoss": 2.466612619105498,
+      "brier": 0.7473285996432385,
+      "accuracy": 0.3333333333333333,
+      "unseen": 0,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.2,
+          "count": 1,
+          "confidence": 0.20571223463036337,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.3,
+          "count": 1,
+          "confidence": 0.3867722187106629,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.4,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.5,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.6,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.7,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.8,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.9,
+          "count": 1,
+          "confidence": 0.9090909090909086,
+          "accuracy": 1
+        }
+      ]
+    },
+    "noHistory": {
+      "samples": 3,
+      "logLoss": 2.56553532120219,
+      "brier": 0.8291468271571364,
+      "accuracy": 0.3333333333333333,
+      "unseen": 0,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.2,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.3,
+          "count": 2,
+          "confidence": 0.3333333333333333,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.4,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.5,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.6,
+          "count": 1,
+          "confidence": 0.6666666666666672,
+          "accuracy": 1
+        },
+        {
+          "lower": 0.7,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.8,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.9,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        }
+      ]
+    },
+    "noPartialEvidence": {
+      "samples": 3,
+      "logLoss": 2.4393506679480237,
+      "brier": 0.7427657794871166,
+      "accuracy": 0.3333333333333333,
+      "unseen": 0,
+      "bins": [
+        {
+          "lower": 0,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.1,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.2,
+          "count": 1,
+          "confidence": 0.20248439306809335,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.3,
+          "count": 1,
+          "confidence": 0.377572304474963,
+          "accuracy": 0
+        },
+        {
+          "lower": 0.4,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.5,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.6,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.7,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.8,
+          "count": 0,
+          "confidence": null,
+          "accuracy": null
+        },
+        {
+          "lower": 0.9,
+          "count": 1,
+          "confidence": 0.9090909090909093,
+          "accuracy": 1
+        }
+      ]
+    }
+  }
+}

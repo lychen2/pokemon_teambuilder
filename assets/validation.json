@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "六项能力值与 Showdown 一致",
+    "配点边界与规则校验一致",
+    "单次伤害区间与 Showdown 16 档乱数一致",
+    "Showdown 配点与招式导入导出往返一致",
+    "Mega 飞行皮肤与双目标衰减：16 档乱数与 Showdown 一致",
+    "Mega 前初始特性：16 档乱数与 Showdown 一致",
+    "Mega 日照、晴天与范围伤害：16 档乱数与 Showdown 一致",
+    "雨天与适应力：16 档乱数与 Showdown 一致",
+    "青草场地与道具增幅：16 档乱数与 Showdown 一致",
+    "帮助与双打反射壁：16 档乱数与 Showdown 一致",
+    "沙暴岩石特防与光墙：16 档乱数与 Showdown 一致",
+    "恒净之躯的威吓免疫：16 档乱数与 Showdown 一致",
+    "烧伤与负能力等级：16 档乱数与 Showdown 一致",
+    "精神场地的先制限制正确"
+  ],
+  "archetypes": 933,
+  "priorStrength": 8,
+  "tuning": {
+    "validationSamples": 288,
+    "negativeLogLikelihood": 3.1961357905913483
+  },
+  "elapsedMs": 36625.953362,
+  "timestamp": "2026-09-14T12:39:45.405Z"
+}

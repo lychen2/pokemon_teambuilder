@@ -1,0 +1,106 @@
+{
+  "name": "sixfold",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "lychen2",
+  "type": "module",
+  "description": "结阵 Sixfold：面向 Champions 双打封闭队表的本地构筑与对局研究工作台",
+  "main": "dist/main.cjs",
+  "desktopName": "sixfold.desktop",
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node tools/dev.mjs",
+    "build": "node tools/build.mjs",
+    "start": "electron .",
+    "typecheck": "tsc --noEmit",
+    "verify": "pnpm typecheck && pnpm test",
+    "test": "vitest run",
+    "test:ui": "playwright test",
+    "data:sync": "tsx tools/sync-data.ts",
+    "sprites:sync": "tsx tools/sync-sprites.ts",
+    "engine:sync": "tsx tools/sync-engine.ts",
+    "benchmark": "tsx tools/benchmark.ts",
+    "package:linux": "pnpm build && pnpm licenses:collect && electron-builder --linux dir AppImage tar.gz",
+    "package:win": "pnpm build && pnpm licenses:collect && electron-builder --win nsis zip",
+    "licenses:collect": "node tools/collect-licenses.mjs",
+    "benchmark:research": "tsx tools/research-benchmark.ts",
+    "benchmark:strategies": "tsx tools/strategy-benchmark.ts",
+    "benchmark:information": "tsx tools/information-benchmark.ts",
+    "benchmark:external": "tsx tools/external-benchmark.ts",
+    "benchmark:source-intent": "tsx tools/source-intent-benchmark.ts",
+    "benchmark:storage": "pnpm build && tsx tools/storage-benchmark.ts",
+    "smoke-release": "node tools/smoke-release.mjs",
+    "test:ime": "xvfb-run -a -s '-screen 0 3200x2000x24' dbus-run-session -- node tools/test-ime.mjs"
+  },
+  "build": {
+    "appId": "io.github.lychen2.sixfold",
+    "productName": "Sixfold",
+    "asar": true,
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets",
+        "to": "assets"
+      }
+    ],
+    "directories": {
+      "output": "release/${version}"
+    },
+    "linux": {
+      "syncDesktopName": true,
+      "category": "Game",
+      "icon": "assets/app-icon.png",
+      "executableName": "sixfold",
+      "artifactName": "sixfold-${version}-linux-${arch}.${ext}"
+    },
+    "win": {
+      "icon": "assets/app-icon.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "artifactName": "sixfold-${version}-windows-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "shortcutName": "结阵 Sixfold",
+      "artifactName": "sixfold-${version}-windows-${arch}-setup.${ext}"
+    }
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-tooltip": "^1.2.16",
+    "csv-parse": "^7.0.2",
+    "esbuild": "0.28.2",
+    "linkedom": "0.18.12",
+    "lucide-react": "^1.45.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "ts-chacha20": "^1.2.0",
+    "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.5.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "electron": "44.3.0",
+    "electron-builder": "^26.15.3",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0"
+  }
+}

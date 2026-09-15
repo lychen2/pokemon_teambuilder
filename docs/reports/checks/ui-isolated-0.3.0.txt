@@ -1,0 +1,51 @@
+
+Running 2 tests using 1 worker
+
+(node:596125) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 (48.7s)
+(node:597154) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/desktop/research-workflows.spec.ts:17:1 › 多路线计划、实践快照、元数据编辑保留建议和重启记录 (24.4s)
+
+
+  1) tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 ───────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.update-preview')
+    Expected: visible
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.update-preview') with timeout 45000ms
+      - waiting for locator('.update-preview')
+
+
+      28 |     await page.getByLabel('本地 Showdown 目录').fill(source);
+      29 |     await page.getByRole('button', {name: '读取并验证本地规则'}).click();
+    > 30 |     await expect(page.locator('.update-preview')).toBeVisible({timeout: 45000});
+         |                                                   ^
+      31 |     await expect(page.locator('.update-preview')).toContainText('轰擂金刚猩');
+      32 |     await expect(page.locator('.update-preview')).toContainText('16 档乱数');
+      33 |     const before = await page.evaluate(() => window.poke.call('bootstrap', undefined));
+        at /home/zonazcy/Projects/poke_teambuilder/tests/desktop/environment.spec.ts:30:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 ────────────────────────────
+  1 passed (1.2m)

@@ -1,0 +1,30 @@
+import {readFile, writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {BattleEngine} from '../packages/core/battle/engine';
+import {verifyEngine, verifyMechanics} from '../packages/core/battle/verify';
+import {fitModel} from '../packages/core/analysis/model';
+import {importCorpus, PasteCache} from '../packages/core/sources/corpus';
+import {revalidateCorpus} from '../packages/core/sources/revalidate';
+import type {Corpus, BootstrapData} from '../packages/core/types';
+const manifest = JSON.parse(await readFile('assets/engine.json', 'utf8'));
+const translations = JSON.parse(await readFile('assets/translations.json', 'utf8'));
+const engine = new BattleEngine(resolve('assets/engines', manifest.id), process.env.POKE_FORMAT || 'gen9championsvgc2026regmc', translations);
+let corpus: Corpus;
+if (process.argv.includes('--cached-corpus')) corpus = JSON.parse(await readFile('assets/corpus.json', 'utf8'));
+else {
+  const registry = JSON.parse(await readFile('assets/sources.json', 'utf8'));
+  corpus = await importCorpus({sources: registry.sources, engine, cache: new PasteCache(resolve('assets/raw')), refresh: process.argv.includes('--refresh'), progress: console.log});
+  await writeFile('assets/corpus.json', JSON.stringify(corpus));
+}
+corpus = revalidateCorpus(corpus, engine);
+await writeFile('assets/corpus.json', JSON.stringify(corpus));
+const sample = corpus.observations.find(o => o.currentLegal && o.set.moves.some(id => {const move = engine.dex.moves.get(id); return move.basePower && !move.multihit && !move.damageCallback && !move.basePowerCallback;}))?.set;
+if (!sample) throw new Error('候选环境没有包含固定威力攻击招式的合法完整配置，无法进行引擎验算。');
+const checks = [...verifyEngine(engine, sample), ...verifyMechanics(engine)];
+console.log('引擎验证', checks);
+const start = performance.now();
+const model = fitModel(corpus, engine, console.log);
+const bootstrap: BootstrapData = {environment: engine.snapshot(true), engine: manifest, dex: engine.dexData(), corpus, model, translations};
+await writeFile('assets/bootstrap.json', JSON.stringify(bootstrap));
+await writeFile('assets/validation.json', JSON.stringify({checks, archetypes: model.archetypes.length, priorStrength: model.priorStrength, tuning: model.tuning, elapsedMs: performance.now() - start, timestamp: new Date().toISOString()}, null, 2));
+console.log(JSON.stringify({archetypes: model.archetypes.length, elapsedMs: performance.now() - start, tuning: model.tuning}, null, 2));

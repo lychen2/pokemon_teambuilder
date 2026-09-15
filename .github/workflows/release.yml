@@ -1,0 +1,121 @@
+name: 发布
+
+# 打 v* 标签时同时产出 Linux 与 Windows 安装包，并汇总到一个 GitHub Release。
+# 也可以手动触发：不带标签时只上传构建产物，不创建 Release。
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: 校版本
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.read.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: read
+        name: 标签与 package.json 必须一致
+        run: |
+          node -e "
+            const {version} = JSON.parse(require('fs').readFileSync('package.json', 'utf8'));
+            const tag = process.env.GITHUB_REF_TYPE === 'tag' ? process.env.GITHUB_REF_NAME : '';
+            if (tag && tag !== 'v' + version) {
+              console.error('标签 ' + tag + ' 与 package.json 的 ' + version + ' 不一致。');
+              process.exit(1);
+            }
+            console.log('版本 ' + version + (tag ? '（' + tag + '）' : '（手动触发，不打标签）'));
+            require('fs').appendFileSync(process.env.GITHUB_OUTPUT, 'version=' + version + '\n');
+          "
+
+  package:
+    name: 打包 ${{ matrix.name }}
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x64
+            os: ubuntu-latest
+            script: package:linux
+            artifact: release-linux
+          - name: Windows x64
+            os: windows-latest
+            script: package:win
+            artifact: release-windows
+    runs-on: ${{ matrix.os }}
+    env:
+      # 未签名构建：不要在打包阶段尝试签名，也不要上传构建统计。
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 缓存 Electron 与 electron-builder 下载
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+            ~/AppData/Local/electron/Cache
+            ~/AppData/Local/electron-builder/Cache
+          key: electron-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+      - name: 类型检查与单元测试
+        run: pnpm verify
+      - name: 打包
+        run: pnpm run ${{ matrix.script }}
+      - name: 生成校验值
+        run: node tools/checksums.mjs release/${{ needs.version.outputs.version }}
+      - name: 收集安装包
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            release/${{ needs.version.outputs.version }}/*.AppImage
+            release/${{ needs.version.outputs.version }}/*.tar.gz
+            release/${{ needs.version.outputs.version }}/*.zip
+            release/${{ needs.version.outputs.version }}/*setup.exe
+            release/${{ needs.version.outputs.version }}/SHA256SUMS
+            release/${{ needs.version.outputs.version }}/builder-debug.yml
+
+  publish:
+    name: 汇总 Release
+    needs: [version, package]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: packages
+          merge-multiple: true
+      - name: 列出产物
+        run: ls -la packages
+      - name: 创建或更新 Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: 结阵 Sixfold v${{ needs.version.outputs.version }}
+          generate_release_notes: true
+          draft: false
+          files: |
+            packages/*.AppImage
+            packages/*.tar.gz
+            packages/*.zip
+            packages/*setup.exe
+            packages/SHA256SUMS

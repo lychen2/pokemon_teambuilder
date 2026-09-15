@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-09-13T23:27:40.589635+00:00",
+  "algorithmVersion": "mc-1.3.0",
+  "modelBeforeExternalLabels": "d839b84a9e2f096d304d",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "trainingLatestSourceDate": "2026-09-12",
+  "heldFrom": "2026-09-13T00:00:00Z",
+  "sources": [
+    "https://www.smogon.com/forums/threads/vgc-reg-m-c-metagame-discussion-thread.3788116/page-2"
+  ],
+  "eligibility": "Dated M-C complete legal original sets first acquired after freezing this protocol. Exclude exact team fingerprints, shared paste URLs, and related authors/origin URLs from training. Keep excluded/failed counts. Do not tune prior strength, temperature or algorithm using these labels.",
+  "metrics": [
+    "joint configuration top-k recovery",
+    "item/ability/moves log loss",
+    "Brier",
+    "calibration bins",
+    "history/partial evidence ablations"
+  ],
+  "bootstrapSHA256": "70236c97de83c3aa804e9dd3301feb1df4891d49ec3be911eb345cadc233a404"
+}

@@ -1,0 +1,1299 @@
+{
+  "createdAt": "2026-09-14T00:11:20.488Z",
+  "algorithmVersion": "mc-1.3.0",
+  "environmentId": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "modelVersion": "d839b84a9e2f096d304d",
+  "rows": [
+    {
+      "sourceId": "mawile-setup-balance-week91",
+      "url": "https://www.smogon.com/forums/threads/vgc-teams-of-the-week-accepting-regulation-m-b.3727451/page-4#post-11086322",
+      "pasteUrl": "https://pokepast.es/4bd0f376f5730e32",
+      "originalSeason": "M-B",
+      "targetSeason": "M-C",
+      "parseIssues": [
+        "Mawile-Mega 需要补充 Mega 前的特性。"
+      ],
+      "claims": [
+        {
+          "quote": "Sinistcha sets TR for mawile",
+          "interpretation": "来悲粗茶为低速大嘴娃提供空间路线。"
+        },
+        {
+          "quote": "can can re-activate Dragonite's multiscale",
+          "interpretation": "款待通过回复满血恢复多重鳞片；需要核对实际剩余 HP。"
+        },
+        {
+          "quote": "has redirection so Mawile can set up with Swords Dance",
+          "interpretation": "愤怒粉保护大嘴娃剑舞的行动窗口。"
+        },
+        {
+          "quote": "Scarf Basculegion helps with the fast mode and can sweep in the endgame when TR is down",
+          "interpretation": "幽尾玄鱼承担空间以外的高速路线。"
+        },
+        {
+          "quote": "fake out to help set tr",
+          "interpretation": "炽焰咆哮虎通过击掌奇袭支援开空间。"
+        }
+      ],
+      "comparisons": [
+        {
+          "legalInTargetEnvironment": true,
+          "generatedFields": [
+            {
+              "speciesId": "mawile",
+              "field": "abilityId",
+              "value": "hypercutter"
+            }
+          ],
+          "routeForAuthoredMechanisms": {
+            "members": [
+              "mawile",
+              "sinistcha",
+              "incineroar",
+              "basculegion"
+            ],
+            "quickRank": 2,
+            "leadRank": 3,
+            "lead": {
+              "members": [
+                "mawile",
+                "sinistcha"
+              ],
+              "score": 3.1932912586432995,
+              "metrics": {
+                "pressure": 0.81322181262504,
+                "resilience": 0.44942901464407226,
+                "speed": 0.08392603129445235,
+                "coverage": 0.9402560455192035,
+                "tailRisk": 0.6276099054478451
+              },
+              "benefits": [
+                "掩护为强化创造行动窗口"
+              ],
+              "concerns": [
+                "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+              ]
+            },
+            "route": {
+              "id": "6200e225b9574739e36e",
+              "members": [
+                "mawile",
+                "sinistcha",
+                "incineroar",
+                "basculegion"
+              ],
+              "leads": [
+                "mawile",
+                "basculegion"
+              ],
+              "leadOptions": [
+                {
+                  "members": [
+                    "mawile",
+                    "basculegion"
+                  ],
+                  "score": 3.6422218042351355,
+                  "metrics": {
+                    "pressure": 0.8851942669450777,
+                    "resilience": 0.39434830481982636,
+                    "speed": 0.5099573257467994,
+                    "coverage": 0.9644381223328593,
+                    "tailRisk": 0.4520812128005752
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "mawile",
+                    "incineroar"
+                  ],
+                  "score": 3.361433041189905,
+                  "metrics": {
+                    "pressure": 0.8581566686938458,
+                    "resilience": 0.45238204701317447,
+                    "speed": 0.07112375533428165,
+                    "coverage": 0.9758179231863444,
+                    "tailRisk": 0.5226074588611467
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "大嘴娃的部分支援留在后排，第一回合不能直接使用",
+                    "炽焰咆哮虎的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "mawile",
+                    "sinistcha"
+                  ],
+                  "score": 3.1932912586432995,
+                  "metrics": {
+                    "pressure": 0.81322181262504,
+                    "resilience": 0.44942901464407226,
+                    "speed": 0.08392603129445235,
+                    "coverage": 0.9402560455192035,
+                    "tailRisk": 0.6276099054478451
+                  },
+                  "benefits": [
+                    "掩护为强化创造行动窗口"
+                  ],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "incineroar",
+                    "basculegion"
+                  ],
+                  "score": 3.1279323637123357,
+                  "metrics": {
+                    "pressure": 0.776112864039288,
+                    "resilience": 0.4021932904672434,
+                    "speed": 0.5213371266002845,
+                    "coverage": 0.8563300142247512,
+                    "tailRisk": 0.6044878727051289
+                  },
+                  "benefits": [
+                    "威吓与轮转延长防守资源；对免疫威吓或特殊输出的收益有限"
+                  ],
+                  "concerns": [
+                    "炽焰咆哮虎的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "sinistcha",
+                    "basculegion"
+                  ],
+                  "score": 2.6105218146503657,
+                  "metrics": {
+                    "pressure": 0.6740835496161384,
+                    "resilience": 0.39924025809814123,
+                    "speed": 0.5341394025604552,
+                    "coverage": 0.6642958748221907,
+                    "tailRisk": 0.6771657391031034
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "sinistcha",
+                    "incineroar"
+                  ],
+                  "score": 1.9403110181373917,
+                  "metrics": {
+                    "pressure": 0.5623427728323769,
+                    "resilience": 0.45727400029148946,
+                    "speed": 0.0953058321479374,
+                    "coverage": 0.6230440967283072,
+                    "tailRisk": 0.759479264445532
+                  },
+                  "benefits": [
+                    "击掌奇袭为控速创造行动窗口"
+                  ],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                }
+              ],
+              "title": "空间路线",
+              "dependencies": [
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "掩护或限制先制保护强化行动"
+                },
+                {
+                  "supportId": "incineroar",
+                  "beneficiaryId": "mawile",
+                  "reason": "掩护或限制先制保护强化行动"
+                },
+                {
+                  "supportId": "incineroar",
+                  "beneficiaryId": "sinistcha",
+                  "reason": "击掌奇袭为戏法空间创造行动窗口；需要可用的首回合、有效目标且未被场地或特性阻挡"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "低速强化成员可在空间成立后争取同优先度先手；仍需逐一核对对手速度"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "incineroar",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "basculegion",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                }
+              ],
+              "winConditions": [
+                "创造强化窗口，再由强化成员收割",
+                "在戏法空间内争取低速行动优势",
+                "空间结束后由幽尾玄鱼接手高速路线"
+              ],
+              "requirements": [
+                "空间不改变招式优先度；比较对手速度与封印、挑衅路线",
+                "讲究围巾的高速路线与空间内低速路线分开执行；围巾还会锁定招式"
+              ],
+              "metrics": {
+                "pressure": 0.9139395975364323,
+                "resilience": 0.42581115255565793,
+                "speed": 0.3026315789473685,
+                "coverage": 1.0000000000000002,
+                "tailRisk": 0.41588202337656593
+              },
+              "score": 4.050385857468528,
+              "difficultOpponents": [
+                "lucario",
+                "sylveon",
+                "kingambit"
+              ]
+            }
+          },
+          "leadingQuickRoute": {
+            "id": "ac46abb9953042b85f0f",
+            "members": [
+              "dragonite",
+              "mawile",
+              "sinistcha",
+              "basculegion"
+            ],
+            "leads": [
+              "mawile",
+              "basculegion"
+            ],
+            "leadOptions": [
+              {
+                "members": [
+                  "mawile",
+                  "basculegion"
+                ],
+                "score": 3.6422218042351355,
+                "metrics": {
+                  "pressure": 0.8851942669450777,
+                  "resilience": 0.39434830481982636,
+                  "speed": 0.5099573257467994,
+                  "coverage": 0.9644381223328593,
+                  "tailRisk": 0.4520812128005752
+                },
+                "benefits": [],
+                "concerns": [
+                  "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "basculegion"
+                ],
+                "score": 3.609690668819036,
+                "metrics": {
+                  "pressure": 0.8121721401040528,
+                  "resilience": 0.5551934972783715,
+                  "speed": 0.7965860597439548,
+                  "coverage": 0.8179231863442391,
+                  "tailRisk": 0.4519293806414038
+                },
+                "benefits": [],
+                "concerns": []
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "mawile"
+                ],
+                "score": 3.546865544604697,
+                "metrics": {
+                  "pressure": 0.8333134542879906,
+                  "resilience": 0.58422855164567,
+                  "speed": 0.29445234708392604,
+                  "coverage": 0.9758179231863444,
+                  "tailRisk": 0.4598618008944301
+                },
+                "benefits": [],
+                "concerns": [
+                  "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "mawile",
+                  "sinistcha"
+                ],
+                "score": 3.1932912586432995,
+                "metrics": {
+                  "pressure": 0.81322181262504,
+                  "resilience": 0.44942901464407226,
+                  "speed": 0.08392603129445235,
+                  "coverage": 0.9402560455192035,
+                  "tailRisk": 0.6276099054478451
+                },
+                "benefits": [
+                  "掩护为强化创造行动窗口"
+                ],
+                "concerns": []
+              },
+              {
+                "members": [
+                  "sinistcha",
+                  "basculegion"
+                ],
+                "score": 2.6105218146503657,
+                "metrics": {
+                  "pressure": 0.6740835496161384,
+                  "resilience": 0.39924025809814123,
+                  "speed": 0.5341394025604552,
+                  "coverage": 0.6642958748221907,
+                  "tailRisk": 0.6771657391031034
+                },
+                "benefits": [],
+                "concerns": [
+                  "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "sinistcha"
+                ],
+                "score": 2.3344545790180162,
+                "metrics": {
+                  "pressure": 0.5752015889042957,
+                  "resilience": 0.6102742071026176,
+                  "speed": 0.3705547652916074,
+                  "coverage": 0.4950213371266002,
+                  "tailRisk": 0.6258523940660355
+                },
+                "benefits": [],
+                "concerns": [
+                  "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                ]
+              }
+            ],
+            "title": "空间路线",
+            "dependencies": [
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "掩护或限制先制保护强化行动"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "低速强化成员可在空间成立后争取同优先度先手；仍需逐一核对对手速度"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "dragonite",
+                "reason": "款待换入回复队友最大 HP 的四分之一；实际回满后可重新启用多重鳞片"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "basculegion",
+                "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+              }
+            ],
+            "winConditions": [
+              "创造强化窗口，再由强化成员收割",
+              "在戏法空间内争取低速行动优势",
+              "空间结束后由幽尾玄鱼接手高速路线",
+              "通过换入恢复满血减伤，保留关键进攻成员"
+            ],
+            "requirements": [
+              "空间不改变招式优先度；比较对手速度与封印、挑衅路线",
+              "讲究围巾的高速路线与空间内低速路线分开执行；围巾还会锁定招式",
+              "多重鳞片需要当前形态拥有该特性且实际满血；回复不足或持续伤害会使这条路线失效",
+              "本组选出有 2 位可用 Mega 的成员，本场只能选择其中一位进化；两条 Mega 路线不能同时成立"
+            ],
+            "metrics": {
+              "pressure": 0.8959497400390319,
+              "resilience": 0.4917344048719055,
+              "speed": 0.4142958748221907,
+              "coverage": 1.0000000000000002,
+              "tailRisk": 0.39208757310404047
+            },
+            "score": 4.095029790226255,
+            "difficultOpponents": [
+              "kingambit",
+              "lucario",
+              "sylveon"
+            ]
+          },
+          "recoveryDependency": {
+            "supportId": "sinistcha",
+            "beneficiaryId": "dragonite",
+            "reason": "款待换入回复队友最大 HP 的四分之一；实际回满后可重新启用多重鳞片"
+          },
+          "removalChecks": {
+            "withoutMawileHasNoMawileDependency": true,
+            "withoutMawileHasNoSetupRoute": true,
+            "withoutSinistchaHasNoHospitalityRoute": true
+          }
+        },
+        {
+          "legalInTargetEnvironment": true,
+          "generatedFields": [
+            {
+              "speciesId": "mawile",
+              "field": "abilityId",
+              "value": "intimidate"
+            }
+          ],
+          "routeForAuthoredMechanisms": {
+            "members": [
+              "mawile",
+              "sinistcha",
+              "incineroar",
+              "basculegion"
+            ],
+            "quickRank": 2,
+            "leadRank": 3,
+            "lead": {
+              "members": [
+                "mawile",
+                "sinistcha"
+              ],
+              "score": 3.1932912586432995,
+              "metrics": {
+                "pressure": 0.81322181262504,
+                "resilience": 0.44942901464407226,
+                "speed": 0.08392603129445235,
+                "coverage": 0.9402560455192035,
+                "tailRisk": 0.6276099054478451
+              },
+              "benefits": [
+                "掩护为强化创造行动窗口"
+              ],
+              "concerns": [
+                "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+              ]
+            },
+            "route": {
+              "id": "6200e225b9574739e36e",
+              "members": [
+                "mawile",
+                "sinistcha",
+                "incineroar",
+                "basculegion"
+              ],
+              "leads": [
+                "mawile",
+                "basculegion"
+              ],
+              "leadOptions": [
+                {
+                  "members": [
+                    "mawile",
+                    "basculegion"
+                  ],
+                  "score": 3.7772218042351358,
+                  "metrics": {
+                    "pressure": 0.8851942669450777,
+                    "resilience": 0.39434830481982636,
+                    "speed": 0.5099573257467994,
+                    "coverage": 0.9644381223328593,
+                    "tailRisk": 0.4520812128005752
+                  },
+                  "benefits": [
+                    "威吓与轮转延长防守资源；对免疫威吓或特殊输出的收益有限"
+                  ],
+                  "concerns": [
+                    "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "mawile",
+                    "incineroar"
+                  ],
+                  "score": 3.3964330411899053,
+                  "metrics": {
+                    "pressure": 0.8581566686938458,
+                    "resilience": 0.45238204701317447,
+                    "speed": 0.07112375533428165,
+                    "coverage": 0.9758179231863444,
+                    "tailRisk": 0.5226074588611467
+                  },
+                  "benefits": [
+                    "威吓与轮转延长防守资源；对免疫威吓或特殊输出的收益有限"
+                  ],
+                  "concerns": [
+                    "大嘴娃的部分支援留在后排，第一回合不能直接使用",
+                    "炽焰咆哮虎的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "mawile",
+                    "sinistcha"
+                  ],
+                  "score": 3.1932912586432995,
+                  "metrics": {
+                    "pressure": 0.81322181262504,
+                    "resilience": 0.44942901464407226,
+                    "speed": 0.08392603129445235,
+                    "coverage": 0.9402560455192035,
+                    "tailRisk": 0.6276099054478451
+                  },
+                  "benefits": [
+                    "掩护为强化创造行动窗口"
+                  ],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "incineroar",
+                    "basculegion"
+                  ],
+                  "score": 3.1279323637123357,
+                  "metrics": {
+                    "pressure": 0.776112864039288,
+                    "resilience": 0.4021932904672434,
+                    "speed": 0.5213371266002845,
+                    "coverage": 0.8563300142247512,
+                    "tailRisk": 0.6044878727051289
+                  },
+                  "benefits": [
+                    "威吓与轮转延长防守资源；对免疫威吓或特殊输出的收益有限"
+                  ],
+                  "concerns": [
+                    "炽焰咆哮虎的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "sinistcha",
+                    "basculegion"
+                  ],
+                  "score": 2.6105218146503657,
+                  "metrics": {
+                    "pressure": 0.6740835496161384,
+                    "resilience": 0.39924025809814123,
+                    "speed": 0.5341394025604552,
+                    "coverage": 0.6642958748221907,
+                    "tailRisk": 0.6771657391031034
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "sinistcha",
+                    "incineroar"
+                  ],
+                  "score": 1.9403110181373917,
+                  "metrics": {
+                    "pressure": 0.5623427728323769,
+                    "resilience": 0.45727400029148946,
+                    "speed": 0.0953058321479374,
+                    "coverage": 0.6230440967283072,
+                    "tailRisk": 0.759479264445532
+                  },
+                  "benefits": [
+                    "击掌奇袭为控速创造行动窗口"
+                  ],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                }
+              ],
+              "title": "空间路线",
+              "dependencies": [
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "掩护或限制先制保护强化行动"
+                },
+                {
+                  "supportId": "incineroar",
+                  "beneficiaryId": "mawile",
+                  "reason": "掩护或限制先制保护强化行动"
+                },
+                {
+                  "supportId": "incineroar",
+                  "beneficiaryId": "sinistcha",
+                  "reason": "击掌奇袭为戏法空间创造行动窗口；需要可用的首回合、有效目标且未被场地或特性阻挡"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "低速强化成员可在空间成立后争取同优先度先手；仍需逐一核对对手速度"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "incineroar",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "basculegion",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                }
+              ],
+              "winConditions": [
+                "创造强化窗口，再由强化成员收割",
+                "在戏法空间内争取低速行动优势",
+                "空间结束后由幽尾玄鱼接手高速路线"
+              ],
+              "requirements": [
+                "空间不改变招式优先度；比较对手速度与封印、挑衅路线",
+                "讲究围巾的高速路线与空间内低速路线分开执行；围巾还会锁定招式"
+              ],
+              "metrics": {
+                "pressure": 0.9139395975364323,
+                "resilience": 0.42581115255565793,
+                "speed": 0.3026315789473685,
+                "coverage": 1.0000000000000002,
+                "tailRisk": 0.41588202337656593
+              },
+              "score": 4.120385857468527,
+              "difficultOpponents": [
+                "lucario",
+                "sylveon",
+                "kingambit"
+              ]
+            }
+          },
+          "leadingQuickRoute": {
+            "id": "ac46abb9953042b85f0f",
+            "members": [
+              "dragonite",
+              "mawile",
+              "sinistcha",
+              "basculegion"
+            ],
+            "leads": [
+              "mawile",
+              "basculegion"
+            ],
+            "leadOptions": [
+              {
+                "members": [
+                  "mawile",
+                  "basculegion"
+                ],
+                "score": 3.7772218042351358,
+                "metrics": {
+                  "pressure": 0.8851942669450777,
+                  "resilience": 0.39434830481982636,
+                  "speed": 0.5099573257467994,
+                  "coverage": 0.9644381223328593,
+                  "tailRisk": 0.4520812128005752
+                },
+                "benefits": [
+                  "威吓与轮转延长防守资源；对免疫威吓或特殊输出的收益有限"
+                ],
+                "concerns": [
+                  "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "mawile"
+                ],
+                "score": 3.646865544604697,
+                "metrics": {
+                  "pressure": 0.8333134542879906,
+                  "resilience": 0.58422855164567,
+                  "speed": 0.29445234708392604,
+                  "coverage": 0.9758179231863444,
+                  "tailRisk": 0.4598618008944301
+                },
+                "benefits": [],
+                "concerns": [
+                  "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "basculegion"
+                ],
+                "score": 3.609690668819036,
+                "metrics": {
+                  "pressure": 0.8121721401040528,
+                  "resilience": 0.5551934972783715,
+                  "speed": 0.7965860597439548,
+                  "coverage": 0.8179231863442391,
+                  "tailRisk": 0.4519293806414038
+                },
+                "benefits": [],
+                "concerns": []
+              },
+              {
+                "members": [
+                  "mawile",
+                  "sinistcha"
+                ],
+                "score": 3.1932912586432995,
+                "metrics": {
+                  "pressure": 0.81322181262504,
+                  "resilience": 0.44942901464407226,
+                  "speed": 0.08392603129445235,
+                  "coverage": 0.9402560455192035,
+                  "tailRisk": 0.6276099054478451
+                },
+                "benefits": [
+                  "掩护为强化创造行动窗口"
+                ],
+                "concerns": []
+              },
+              {
+                "members": [
+                  "sinistcha",
+                  "basculegion"
+                ],
+                "score": 2.6105218146503657,
+                "metrics": {
+                  "pressure": 0.6740835496161384,
+                  "resilience": 0.39924025809814123,
+                  "speed": 0.5341394025604552,
+                  "coverage": 0.6642958748221907,
+                  "tailRisk": 0.6771657391031034
+                },
+                "benefits": [],
+                "concerns": [
+                  "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "sinistcha"
+                ],
+                "score": 2.3344545790180162,
+                "metrics": {
+                  "pressure": 0.5752015889042957,
+                  "resilience": 0.6102742071026176,
+                  "speed": 0.3705547652916074,
+                  "coverage": 0.4950213371266002,
+                  "tailRisk": 0.6258523940660355
+                },
+                "benefits": [],
+                "concerns": [
+                  "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                ]
+              }
+            ],
+            "title": "空间路线",
+            "dependencies": [
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "掩护或限制先制保护强化行动"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "低速强化成员可在空间成立后争取同优先度先手；仍需逐一核对对手速度"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "dragonite",
+                "reason": "款待换入回复队友最大 HP 的四分之一；实际回满后可重新启用多重鳞片"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "basculegion",
+                "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+              }
+            ],
+            "winConditions": [
+              "创造强化窗口，再由强化成员收割",
+              "在戏法空间内争取低速行动优势",
+              "空间结束后由幽尾玄鱼接手高速路线",
+              "通过换入恢复满血减伤，保留关键进攻成员"
+            ],
+            "requirements": [
+              "空间不改变招式优先度；比较对手速度与封印、挑衅路线",
+              "讲究围巾的高速路线与空间内低速路线分开执行；围巾还会锁定招式",
+              "多重鳞片需要当前形态拥有该特性且实际满血；回复不足或持续伤害会使这条路线失效",
+              "本组选出有 2 位可用 Mega 的成员，本场只能选择其中一位进化；两条 Mega 路线不能同时成立"
+            ],
+            "metrics": {
+              "pressure": 0.8959497400390319,
+              "resilience": 0.4917344048719055,
+              "speed": 0.4142958748221907,
+              "coverage": 1.0000000000000002,
+              "tailRisk": 0.39208757310404047
+            },
+            "score": 4.1300297902262555,
+            "difficultOpponents": [
+              "kingambit",
+              "lucario",
+              "sylveon"
+            ]
+          },
+          "recoveryDependency": {
+            "supportId": "sinistcha",
+            "beneficiaryId": "dragonite",
+            "reason": "款待换入回复队友最大 HP 的四分之一；实际回满后可重新启用多重鳞片"
+          },
+          "removalChecks": {
+            "withoutMawileHasNoMawileDependency": true,
+            "withoutMawileHasNoSetupRoute": true,
+            "withoutSinistchaHasNoHospitalityRoute": true
+          }
+        },
+        {
+          "legalInTargetEnvironment": true,
+          "generatedFields": [
+            {
+              "speciesId": "mawile",
+              "field": "abilityId",
+              "value": "sheerforce"
+            }
+          ],
+          "routeForAuthoredMechanisms": {
+            "members": [
+              "mawile",
+              "sinistcha",
+              "incineroar",
+              "basculegion"
+            ],
+            "quickRank": 2,
+            "leadRank": 3,
+            "lead": {
+              "members": [
+                "mawile",
+                "sinistcha"
+              ],
+              "score": 3.1932912586432995,
+              "metrics": {
+                "pressure": 0.81322181262504,
+                "resilience": 0.44942901464407226,
+                "speed": 0.08392603129445235,
+                "coverage": 0.9402560455192035,
+                "tailRisk": 0.6276099054478451
+              },
+              "benefits": [
+                "掩护为强化创造行动窗口"
+              ],
+              "concerns": [
+                "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+              ]
+            },
+            "route": {
+              "id": "6200e225b9574739e36e",
+              "members": [
+                "mawile",
+                "sinistcha",
+                "incineroar",
+                "basculegion"
+              ],
+              "leads": [
+                "mawile",
+                "basculegion"
+              ],
+              "leadOptions": [
+                {
+                  "members": [
+                    "mawile",
+                    "basculegion"
+                  ],
+                  "score": 3.6422218042351355,
+                  "metrics": {
+                    "pressure": 0.8851942669450777,
+                    "resilience": 0.39434830481982636,
+                    "speed": 0.5099573257467994,
+                    "coverage": 0.9644381223328593,
+                    "tailRisk": 0.4520812128005752
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "mawile",
+                    "incineroar"
+                  ],
+                  "score": 3.361433041189905,
+                  "metrics": {
+                    "pressure": 0.8581566686938458,
+                    "resilience": 0.45238204701317447,
+                    "speed": 0.07112375533428165,
+                    "coverage": 0.9758179231863444,
+                    "tailRisk": 0.5226074588611467
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "大嘴娃的部分支援留在后排，第一回合不能直接使用",
+                    "炽焰咆哮虎的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "mawile",
+                    "sinistcha"
+                  ],
+                  "score": 3.1932912586432995,
+                  "metrics": {
+                    "pressure": 0.81322181262504,
+                    "resilience": 0.44942901464407226,
+                    "speed": 0.08392603129445235,
+                    "coverage": 0.9402560455192035,
+                    "tailRisk": 0.6276099054478451
+                  },
+                  "benefits": [
+                    "掩护为强化创造行动窗口"
+                  ],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "incineroar",
+                    "basculegion"
+                  ],
+                  "score": 3.1279323637123357,
+                  "metrics": {
+                    "pressure": 0.776112864039288,
+                    "resilience": 0.4021932904672434,
+                    "speed": 0.5213371266002845,
+                    "coverage": 0.8563300142247512,
+                    "tailRisk": 0.6044878727051289
+                  },
+                  "benefits": [
+                    "威吓与轮转延长防守资源；对免疫威吓或特殊输出的收益有限"
+                  ],
+                  "concerns": [
+                    "炽焰咆哮虎的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "sinistcha",
+                    "basculegion"
+                  ],
+                  "score": 2.6105218146503657,
+                  "metrics": {
+                    "pressure": 0.6740835496161384,
+                    "resilience": 0.39924025809814123,
+                    "speed": 0.5341394025604552,
+                    "coverage": 0.6642958748221907,
+                    "tailRisk": 0.6771657391031034
+                  },
+                  "benefits": [],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                },
+                {
+                  "members": [
+                    "sinistcha",
+                    "incineroar"
+                  ],
+                  "score": 1.9403110181373917,
+                  "metrics": {
+                    "pressure": 0.5623427728323769,
+                    "resilience": 0.45727400029148946,
+                    "speed": 0.0953058321479374,
+                    "coverage": 0.6230440967283072,
+                    "tailRisk": 0.759479264445532
+                  },
+                  "benefits": [
+                    "击掌奇袭为控速创造行动窗口"
+                  ],
+                  "concerns": [
+                    "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                  ]
+                }
+              ],
+              "title": "空间路线",
+              "dependencies": [
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "掩护或限制先制保护强化行动"
+                },
+                {
+                  "supportId": "incineroar",
+                  "beneficiaryId": "mawile",
+                  "reason": "掩护或限制先制保护强化行动"
+                },
+                {
+                  "supportId": "incineroar",
+                  "beneficiaryId": "sinistcha",
+                  "reason": "击掌奇袭为戏法空间创造行动窗口；需要可用的首回合、有效目标且未被场地或特性阻挡"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "低速强化成员可在空间成立后争取同优先度先手；仍需逐一核对对手速度"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "mawile",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "incineroar",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                },
+                {
+                  "supportId": "sinistcha",
+                  "beneficiaryId": "basculegion",
+                  "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+                }
+              ],
+              "winConditions": [
+                "创造强化窗口，再由强化成员收割",
+                "在戏法空间内争取低速行动优势",
+                "空间结束后由幽尾玄鱼接手高速路线"
+              ],
+              "requirements": [
+                "空间不改变招式优先度；比较对手速度与封印、挑衅路线",
+                "讲究围巾的高速路线与空间内低速路线分开执行；围巾还会锁定招式"
+              ],
+              "metrics": {
+                "pressure": 0.9139395975364323,
+                "resilience": 0.42581115255565793,
+                "speed": 0.3026315789473685,
+                "coverage": 1.0000000000000002,
+                "tailRisk": 0.41588202337656593
+              },
+              "score": 4.050385857468528,
+              "difficultOpponents": [
+                "lucario",
+                "sylveon",
+                "kingambit"
+              ]
+            }
+          },
+          "leadingQuickRoute": {
+            "id": "ac46abb9953042b85f0f",
+            "members": [
+              "dragonite",
+              "mawile",
+              "sinistcha",
+              "basculegion"
+            ],
+            "leads": [
+              "mawile",
+              "basculegion"
+            ],
+            "leadOptions": [
+              {
+                "members": [
+                  "mawile",
+                  "basculegion"
+                ],
+                "score": 3.6422218042351355,
+                "metrics": {
+                  "pressure": 0.8851942669450777,
+                  "resilience": 0.39434830481982636,
+                  "speed": 0.5099573257467994,
+                  "coverage": 0.9644381223328593,
+                  "tailRisk": 0.4520812128005752
+                },
+                "benefits": [],
+                "concerns": [
+                  "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "basculegion"
+                ],
+                "score": 3.609690668819036,
+                "metrics": {
+                  "pressure": 0.8121721401040528,
+                  "resilience": 0.5551934972783715,
+                  "speed": 0.7965860597439548,
+                  "coverage": 0.8179231863442391,
+                  "tailRisk": 0.4519293806414038
+                },
+                "benefits": [],
+                "concerns": []
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "mawile"
+                ],
+                "score": 3.546865544604697,
+                "metrics": {
+                  "pressure": 0.8333134542879906,
+                  "resilience": 0.58422855164567,
+                  "speed": 0.29445234708392604,
+                  "coverage": 0.9758179231863444,
+                  "tailRisk": 0.4598618008944301
+                },
+                "benefits": [],
+                "concerns": [
+                  "大嘴娃的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "mawile",
+                  "sinistcha"
+                ],
+                "score": 3.1932912586432995,
+                "metrics": {
+                  "pressure": 0.81322181262504,
+                  "resilience": 0.44942901464407226,
+                  "speed": 0.08392603129445235,
+                  "coverage": 0.9402560455192035,
+                  "tailRisk": 0.6276099054478451
+                },
+                "benefits": [
+                  "掩护为强化创造行动窗口"
+                ],
+                "concerns": []
+              },
+              {
+                "members": [
+                  "sinistcha",
+                  "basculegion"
+                ],
+                "score": 2.6105218146503657,
+                "metrics": {
+                  "pressure": 0.6740835496161384,
+                  "resilience": 0.39924025809814123,
+                  "speed": 0.5341394025604552,
+                  "coverage": 0.6642958748221907,
+                  "tailRisk": 0.6771657391031034
+                },
+                "benefits": [],
+                "concerns": [
+                  "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                ]
+              },
+              {
+                "members": [
+                  "dragonite",
+                  "sinistcha"
+                ],
+                "score": 2.3344545790180162,
+                "metrics": {
+                  "pressure": 0.5752015889042957,
+                  "resilience": 0.6102742071026176,
+                  "speed": 0.3705547652916074,
+                  "coverage": 0.4950213371266002,
+                  "tailRisk": 0.6258523940660355
+                },
+                "benefits": [],
+                "concerns": [
+                  "来悲粗茶的部分支援留在后排，第一回合不能直接使用"
+                ]
+              }
+            ],
+            "title": "空间路线",
+            "dependencies": [
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "掩护或限制先制保护强化行动"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "低速强化成员可在空间成立后争取同优先度先手；仍需逐一核对对手速度"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "dragonite",
+                "reason": "款待换入回复队友最大 HP 的四分之一；实际回满后可重新启用多重鳞片"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "mawile",
+                "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+              },
+              {
+                "supportId": "sinistcha",
+                "beneficiaryId": "basculegion",
+                "reason": "款待换入回复在场队友最大 HP 的四分之一，依赖可用的轮转窗口"
+              }
+            ],
+            "winConditions": [
+              "创造强化窗口，再由强化成员收割",
+              "在戏法空间内争取低速行动优势",
+              "空间结束后由幽尾玄鱼接手高速路线",
+              "通过换入恢复满血减伤，保留关键进攻成员"
+            ],
+            "requirements": [
+              "空间不改变招式优先度；比较对手速度与封印、挑衅路线",
+              "讲究围巾的高速路线与空间内低速路线分开执行；围巾还会锁定招式",
+              "多重鳞片需要当前形态拥有该特性且实际满血；回复不足或持续伤害会使这条路线失效",
+              "本组选出有 2 位可用 Mega 的成员，本场只能选择其中一位进化；两条 Mega 路线不能同时成立"
+            ],
+            "metrics": {
+              "pressure": 0.8959497400390319,
+              "resilience": 0.4917344048719055,
+              "speed": 0.4142958748221907,
+              "coverage": 1.0000000000000002,
+              "tailRisk": 0.39208757310404047
+            },
+            "score": 4.095029790226255,
+            "difficultOpponents": [
+              "kingambit",
+              "lucario",
+              "sylveon"
+            ]
+          },
+          "recoveryDependency": {
+            "supportId": "sinistcha",
+            "beneficiaryId": "dragonite",
+            "reason": "款待换入回复队友最大 HP 的四分之一；实际回满后可重新启用多重鳞片"
+          },
+          "removalChecks": {
+            "withoutMawileHasNoMawileDependency": true,
+            "withoutMawileHasNoSetupRoute": true,
+            "withoutSinistchaHasNoHospitalityRoute": true
+          }
+        }
+      ],
+      "actualSelections": null,
+      "battleOutcomes": null
+    }
+  ],
+  "notes": [
+    "历史作者意图开发用例；未加入当前共享构筑频率或独立盲测。",
+    "原始大嘴娃仅提供 Mega 后特性，初始特性保持未知；按当前规则枚举合法特性作为显式生成假设，不将任何一种说成作者原配置。",
+    "四人组合从作者描述的配合关系构造，是可核对的研究假设；作者没有提供实际选出、逐局首发或胜负。",
+    "快速排序与作者意图是否一致分别列出；存在路线不表示算法已经找到最优选出。",
+    "款待回复及依赖移除另有真实 Showdown 回合回归；没有把文字标签当成模拟战果。"
+  ]
+}

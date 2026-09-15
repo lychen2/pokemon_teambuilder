@@ -1,0 +1,955 @@
+{
+  "createdAt": "2026-09-14T11:54:08.458024+00:00",
+  "algorithmVersion": "mc-1.5.0",
+  "modelVersion": "4ab4b1884f323b06602b",
+  "reviewType": "逐行核对真实公开协议与行动日志；未经过外部玩家人工复核",
+  "externalExpertReview": false,
+  "sourceReport": "strategy-benchmark-mc-1.5.0.json",
+  "sourceSha256": "e64c8444b88cc4687494ebb505e29f6149084e43d6b2edea98ef2dde6e811683",
+  "reviews": [
+    {
+      "category": "灭歌",
+      "index": 2,
+      "finding": "相同种子下耿鬼本次选择了 Mega 加灭歌；咆哮虎换出，耿鬼仍在行动前被电光双击与精神冲击集火击倒，没有实际唱出灭歌。修复了进化条件遗漏，但尚未解决核心的行动窗口与掩护。",
+      "source": "2001945654:MC101",
+      "opponent": "2001945654:MC111",
+      "strategy": "support",
+      "opponentPolicy": "damage",
+      "budget": "fixed-games",
+      "seed": 1540389276,
+      "turns": 8,
+      "initialCommands": [
+        {
+          "turn": 0,
+          "side": "p1",
+          "command": "team 3,1,4,5",
+          "informationKey": "c5b24724d2ab7966fb67"
+        },
+        {
+          "turn": 0,
+          "side": "p2",
+          "command": "team 3,2,1,5",
+          "informationKey": "c3a4d9603a86155f5757"
+        },
+        {
+          "turn": 1,
+          "side": "p1",
+          "command": "switch 4, move 1 mega",
+          "informationKey": "cdc6111b1634441b2210"
+        },
+        {
+          "turn": 1,
+          "side": "p2",
+          "command": "move 1 2, move 2 2",
+          "informationKey": "2c6db9b4246cf43f3838"
+        },
+        {
+          "turn": 1,
+          "side": "p1",
+          "command": "pass, switch 3",
+          "informationKey": "405fa1b1491563a58d87"
+        }
+      ],
+      "perishMoves": 0,
+      "evidence": [
+        {
+          "line": 27,
+          "text": "|switch|p1a: Incineroar|Incineroar, L50, M|100/100"
+        },
+        {
+          "line": 28,
+          "text": "|switch|p1b: Gengar|Gengar, L50, F|100/100"
+        },
+        {
+          "line": 29,
+          "text": "|switch|p2a: Pawmot|Pawmot, L50, F|100/100"
+        },
+        {
+          "line": 30,
+          "text": "|switch|p2b: Delphox|Delphox, L50, F|100/100"
+        },
+        {
+          "line": 31,
+          "text": "|-ability|p1a: Incineroar|Intimidate|boost"
+        },
+        {
+          "line": 32,
+          "text": "|-unboost|p2a: Pawmot|atk|1"
+        },
+        {
+          "line": 33,
+          "text": "|-unboost|p2b: Delphox|atk|1"
+        },
+        {
+          "line": 34,
+          "text": "|turn|1"
+        },
+        {
+          "line": 35,
+          "text": "|"
+        },
+        {
+          "line": 36,
+          "text": "|switch|p1a: Dragonite|Dragonite, L50, M|100/100"
+        },
+        {
+          "line": 37,
+          "text": "|detailschange|p1b: Gengar|Gengar-Mega, L50, F"
+        },
+        {
+          "line": 38,
+          "text": "|-mega|p1b: Gengar|Gengar|Gengarite"
+        },
+        {
+          "line": 39,
+          "text": "|move|p2a: Pawmot|Double Shock|p1b: Gengar"
+        },
+        {
+          "line": 40,
+          "text": "|-damage|p1b: Gengar|44/100"
+        },
+        {
+          "line": 41,
+          "text": "|-start|p2a: Pawmot|typechange|???/Fighting|[from] move: Double Shock"
+        },
+        {
+          "line": 42,
+          "text": "|move|p2b: Delphox|Psyshock|p1b: Gengar"
+        },
+        {
+          "line": 43,
+          "text": "|-supereffective|p1b: Gengar|1"
+        },
+        {
+          "line": 44,
+          "text": "|-damage|p1b: Gengar|0 fnt"
+        },
+        {
+          "line": 45,
+          "text": "|faint|p1b: Gengar"
+        }
+      ],
+      "trace": [
+        "|gametype|doubles",
+        "|player|p1|构筑方案||",
+        "|player|p2|对照策略||",
+        "|gen|9",
+        "|tier|[Gen 9 Champions] VGC 2026 Reg M-C",
+        "|rule|Species Clause: Limit one of each Pokémon",
+        "|rule|Item Clause: Limit 1 of each item",
+        "|raw|<div class=\"infobox\"><details class=\"readmore\" open><summary><strong>1 custom rule:</strong></summary> !Open Team Sheets</details></div>",
+        "|clearpoke",
+        "|poke|p1|Gengar, L50, F|",
+        "|poke|p1|Snorlax, L50, F|",
+        "|poke|p1|Incineroar, L50, M|",
+        "|poke|p1|Scrafty, L50, F|",
+        "|poke|p1|Dragonite, L50, M|",
+        "|poke|p1|Rillaboom, L50, M|",
+        "|poke|p2|Floette-Eternal, L50, F|",
+        "|poke|p2|Delphox, L50, F|",
+        "|poke|p2|Pawmot, L50, F|",
+        "|poke|p2|Incineroar, L50, M|",
+        "|poke|p2|Rillaboom, L50, F|",
+        "|poke|p2|Sinistcha, L50|",
+        "|teampreview|4",
+        "|",
+        "|teamsize|p1|4",
+        "|teamsize|p2|4",
+        "|start",
+        "|switch|p1a: Incineroar|Incineroar, L50, M|100/100",
+        "|switch|p1b: Gengar|Gengar, L50, F|100/100",
+        "|switch|p2a: Pawmot|Pawmot, L50, F|100/100",
+        "|switch|p2b: Delphox|Delphox, L50, F|100/100",
+        "|-ability|p1a: Incineroar|Intimidate|boost",
+        "|-unboost|p2a: Pawmot|atk|1",
+        "|-unboost|p2b: Delphox|atk|1",
+        "|turn|1",
+        "|",
+        "|switch|p1a: Dragonite|Dragonite, L50, M|100/100",
+        "|detailschange|p1b: Gengar|Gengar-Mega, L50, F",
+        "|-mega|p1b: Gengar|Gengar|Gengarite",
+        "|move|p2a: Pawmot|Double Shock|p1b: Gengar",
+        "|-damage|p1b: Gengar|44/100",
+        "|-start|p2a: Pawmot|typechange|???/Fighting|[from] move: Double Shock",
+        "|move|p2b: Delphox|Psyshock|p1b: Gengar",
+        "|-supereffective|p1b: Gengar|1",
+        "|-damage|p1b: Gengar|0 fnt",
+        "|faint|p1b: Gengar",
+        "|",
+        "|upkeep",
+        "|",
+        "|switch|p1b: Scrafty|Scrafty, L50, F|100/100",
+        "|-ability|p1b: Scrafty|Intimidate|boost",
+        "|-unboost|p2a: Pawmot|atk|1",
+        "|-unboost|p2b: Delphox|atk|1",
+        "|turn|2",
+        "|",
+        "|detailschange|p2b: Delphox|Delphox-Mega, L50, F",
+        "|-mega|p2b: Delphox|Delphox|Delphoxite",
+        "|move|p2b: Delphox|Heat Wave|p1a: Dragonite|[spread] p1b",
+        "|-miss|p2b: Delphox|p1a: Dragonite",
+        "|-damage|p1b: Scrafty|65/100",
+        "|move|p2a: Pawmot|Double Shock||[still]",
+        "|-fail|p2a: Pawmot|move: Double Shock",
+        "|move|p1a: Dragonite|Dragon Claw|p2b: Delphox",
+        "|-damage|p2b: Delphox|26/100",
+        "|-damage|p1a: Dragonite|90/100|[from] item: Life Orb",
+        "|move|p1b: Scrafty|Close Combat|p2a: Pawmot",
+        "|-damage|p2a: Pawmot|40/100",
+        "|-unboost|p1b: Scrafty|def|1",
+        "|-unboost|p1b: Scrafty|spd|1",
+        "|",
+        "|upkeep",
+        "|turn|3",
+        "|",
+        "|move|p1a: Dragonite|Extreme Speed|p2a: Pawmot",
+        "|-damage|p2a: Pawmot|0 fnt",
+        "|faint|p2a: Pawmot",
+        "|-damage|p1a: Dragonite|80/100|[from] item: Life Orb",
+        "|move|p2b: Delphox|Heat Wave|p1b: Scrafty|[spread] p1a,p1b",
+        "|-resisted|p1a: Dragonite|1",
+        "|-damage|p1a: Dragonite|62/100",
+        "|-damage|p1b: Scrafty|8/100",
+        "|move|p1b: Scrafty|Close Combat|p2b: Delphox",
+        "|-resisted|p2b: Delphox|1",
+        "|-damage|p2b: Delphox|3/100",
+        "|-unboost|p1b: Scrafty|def|1",
+        "|-unboost|p1b: Scrafty|spd|1",
+        "|",
+        "|upkeep",
+        "|",
+        "|switch|p2a: Floette|Floette-Eternal, L50, F|100/100",
+        "|turn|4",
+        "|",
+        "|move|p2b: Delphox|Heat Wave|p1b: Scrafty|[spread] p1a,p1b",
+        "|-resisted|p1a: Dragonite|1",
+        "|-damage|p1a: Dragonite|44/100",
+        "|-damage|p1b: Scrafty|0 fnt",
+        "|faint|p1b: Scrafty",
+        "|move|p2a: Floette|Dazzling Gleam|p1a: Dragonite",
+        "|-supereffective|p1a: Dragonite|1",
+        "|-damage|p1a: Dragonite|0 fnt",
+        "|faint|p1a: Dragonite",
+        "|",
+        "|upkeep",
+        "|",
+        "|switch|p1a: Incineroar|Incineroar, L50, M|100/100",
+        "|-ability|p1a: Incineroar|Intimidate|boost",
+        "|-unboost|p2a: Floette|atk|1",
+        "|-unboost|p2b: Delphox|atk|1",
+        "|turn|5",
+        "|",
+        "|move|p1a: Incineroar|Fake Out|p2b: Delphox",
+        "|-damage|p2b: Delphox|0 fnt",
+        "|faint|p2b: Delphox",
+        "|move|p2a: Floette|Dazzling Gleam|p1a: Incineroar",
+        "|-damage|p1a: Incineroar|68/100",
+        "|",
+        "|upkeep",
+        "|",
+        "|switch|p2b: Rillaboom|Rillaboom, L50, F|100/100",
+        "|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge|[of] p2b: Rillaboom",
+        "|turn|6",
+        "|",
+        "|move|p2a: Floette|Draining Kiss|p1a: Incineroar",
+        "|-damage|p1a: Incineroar|51/100",
+        "|move|p2b: Rillaboom|High Horsepower|p1a: Incineroar",
+        "|-supereffective|p1a: Incineroar|1",
+        "|-damage|p1a: Incineroar|4/100",
+        "|-enditem|p1a: Incineroar|Sitrus Berry|[eat]",
+        "|-heal|p1a: Incineroar|29/100|[from] item: Sitrus Berry",
+        "|move|p1a: Incineroar|Flare Blitz|p2b: Rillaboom",
+        "|-supereffective|p2b: Rillaboom|1",
+        "|-enditem|p2b: Rillaboom|Occa Berry|[eat]",
+        "|-enditem|p2b: Rillaboom|Occa Berry|[weaken]",
+        "|-damage|p2b: Rillaboom|57/100",
+        "|-damage|p1a: Incineroar|15/100|[from] Recoil",
+        "|",
+        "|-heal|p2b: Rillaboom|63/100|[from] Grassy Terrain",
+        "|-heal|p1a: Incineroar|21/100|[from] Grassy Terrain",
+        "|upkeep",
+        "|turn|7",
+        "|",
+        "|move|p1a: Incineroar|Protect|p1a: Incineroar",
+        "|-singleturn|p1a: Incineroar|Protect",
+        "|move|p2a: Floette|Dazzling Gleam|p1a: Incineroar",
+        "|-activate|p1a: Incineroar|move: Protect",
+        "|move|p2b: Rillaboom|Wood Hammer|p1a: Incineroar",
+        "|-activate|p1a: Incineroar|move: Protect",
+        "|",
+        "|-heal|p2b: Rillaboom|69/100|[from] Grassy Terrain",
+        "|-heal|p1a: Incineroar|27/100|[from] Grassy Terrain",
+        "|upkeep",
+        "|turn|8",
+        "|",
+        "|move|p2a: Floette|Dazzling Gleam|p1a: Incineroar",
+        "|-damage|p1a: Incineroar|1/100",
+        "|move|p2b: Rillaboom|Wood Hammer|p1a: Incineroar",
+        "|-resisted|p1a: Incineroar|1",
+        "|-damage|p1a: Incineroar|0 fnt",
+        "|faint|p1a: Incineroar",
+        "|-damage|p2b: Rillaboom|69/100|[from] Recoil",
+        "|",
+        "|win|对照策略"
+      ]
+    },
+    {
+      "category": "场地轻装",
+      "index": 2,
+      "finding": "首发轰擂金刚猩触发对手大狃拉的青草种子。化石翼龙选择广域防守，但对手使用单体克命爪；下一回合西狮海壬在顺风建立前倒下。开出顺风的化石翼龙同回合被木槌击倒。",
+      "source": "2001945654:MC100",
+      "opponent": "2001945654:MC104",
+      "strategy": "support",
+      "opponentPolicy": "damage",
+      "budget": "fixed-games",
+      "seed": 1540390651,
+      "turns": 4,
+      "initialCommands": [
+        {
+          "turn": 0,
+          "side": "p1",
+          "command": "team 2,4,3,5",
+          "informationKey": "bf72360905b76ab2fe23"
+        },
+        {
+          "turn": 0,
+          "side": "p2",
+          "command": "team 5,6,2,3",
+          "informationKey": "db4b01cafdf017f57926"
+        },
+        {
+          "turn": 1,
+          "side": "p1",
+          "command": "move 4 mega, move 4 1",
+          "informationKey": "842dea2d5249208e58d7"
+        },
+        {
+          "turn": 1,
+          "side": "p2",
+          "command": "move 1 1, move 3 2",
+          "informationKey": "df2771d3d1d26c67a237"
+        },
+        {
+          "turn": 1,
+          "side": "p1",
+          "command": "pass, switch 4",
+          "informationKey": "90c04797194f8a836479"
+        },
+        {
+          "turn": 1,
+          "side": "p2",
+          "command": "switch 4, pass",
+          "informationKey": "fd5c5cd7505e92f27fe6"
+        }
+      ],
+      "perishMoves": 0,
+      "evidence": [
+        {
+          "line": 27,
+          "text": "|switch|p1a: Aerodactyl|Aerodactyl, L50, F|100/100"
+        },
+        {
+          "line": 28,
+          "text": "|switch|p1b: Rillaboom|Rillaboom, L50, F|100/100"
+        },
+        {
+          "line": 29,
+          "text": "|switch|p2a: Sylveon|Sylveon, L50, F|100/100"
+        },
+        {
+          "line": 30,
+          "text": "|switch|p2b: Sneasler|Sneasler, L50, F|100/100"
+        },
+        {
+          "line": 31,
+          "text": "|-ability|p1a: Aerodactyl|Unnerve"
+        },
+        {
+          "line": 32,
+          "text": "|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge|[of] p1b: Rillaboom"
+        },
+        {
+          "line": 33,
+          "text": "|-enditem|p2b: Sneasler|Grassy Seed"
+        },
+        {
+          "line": 34,
+          "text": "|-boost|p2b: Sneasler|def|1|[from] item: Grassy Seed"
+        },
+        {
+          "line": 35,
+          "text": "|turn|1"
+        },
+        {
+          "line": 36,
+          "text": "|"
+        },
+        {
+          "line": 37,
+          "text": "|detailschange|p1a: Aerodactyl|Aerodactyl-Mega, L50, F"
+        },
+        {
+          "line": 38,
+          "text": "|-mega|p1a: Aerodactyl|Aerodactyl|Aerodactylite"
+        },
+        {
+          "line": 39,
+          "text": "|move|p1a: Aerodactyl|Wide Guard|p1a: Aerodactyl"
+        },
+        {
+          "line": 40,
+          "text": "|-singleturn|p1a: Aerodactyl|Wide Guard"
+        },
+        {
+          "line": 41,
+          "text": "|move|p2b: Sneasler|Dire Claw|p1b: Rillaboom"
+        },
+        {
+          "line": 42,
+          "text": "|-supereffective|p1b: Rillaboom|1"
+        },
+        {
+          "line": 43,
+          "text": "|-damage|p1b: Rillaboom|15/100"
+        },
+        {
+          "line": 44,
+          "text": "|move|p1b: Rillaboom|Wood Hammer|p2a: Sylveon"
+        },
+        {
+          "line": 45,
+          "text": "|-damage|p2a: Sylveon|0 fnt"
+        },
+        {
+          "line": 46,
+          "text": "|faint|p2a: Sylveon"
+        },
+        {
+          "line": 47,
+          "text": "|-damage|p1b: Rillaboom|0 fnt|[from] Recoil"
+        },
+        {
+          "line": 48,
+          "text": "|faint|p1b: Rillaboom"
+        },
+        {
+          "line": 49,
+          "text": "|"
+        },
+        {
+          "line": 50,
+          "text": "|upkeep"
+        },
+        {
+          "line": 51,
+          "text": "|"
+        },
+        {
+          "line": 52,
+          "text": "|switch|p1b: Primarina|Primarina, L50, F|100/100"
+        },
+        {
+          "line": 53,
+          "text": "|switch|p2a: Rillaboom|Rillaboom, L50, F|100/100"
+        },
+        {
+          "line": 54,
+          "text": "|turn|2"
+        },
+        {
+          "line": 55,
+          "text": "|"
+        },
+        {
+          "line": 56,
+          "text": "|move|p2b: Sneasler|Dire Claw|p1b: Primarina"
+        },
+        {
+          "line": 57,
+          "text": "|-supereffective|p1b: Primarina|1"
+        },
+        {
+          "line": 58,
+          "text": "|-damage|p1b: Primarina|0 fnt"
+        },
+        {
+          "line": 59,
+          "text": "|faint|p1b: Primarina"
+        },
+        {
+          "line": 60,
+          "text": "|move|p1a: Aerodactyl|Tailwind|p1a: Aerodactyl"
+        },
+        {
+          "line": 61,
+          "text": "|-sidestart|p1: 构筑方案|move: Tailwind"
+        },
+        {
+          "line": 62,
+          "text": "|move|p2a: Rillaboom|Wood Hammer|p1a: Aerodactyl"
+        },
+        {
+          "line": 63,
+          "text": "|-damage|p1a: Aerodactyl|0 fnt"
+        },
+        {
+          "line": 64,
+          "text": "|faint|p1a: Aerodactyl"
+        }
+      ],
+      "trace": [
+        "|gametype|doubles",
+        "|player|p1|构筑方案||",
+        "|player|p2|对照策略||",
+        "|gen|9",
+        "|tier|[Gen 9 Champions] VGC 2026 Reg M-C",
+        "|rule|Species Clause: Limit one of each Pokémon",
+        "|rule|Item Clause: Limit 1 of each item",
+        "|raw|<div class=\"infobox\"><details class=\"readmore\" open><summary><strong>1 custom rule:</strong></summary> !Open Team Sheets</details></div>",
+        "|clearpoke",
+        "|poke|p1|Lucario, L50, F|",
+        "|poke|p1|Aerodactyl, L50, F|",
+        "|poke|p1|Incineroar, L50, M|",
+        "|poke|p1|Rillaboom, L50, F|",
+        "|poke|p1|Primarina, L50, F|",
+        "|poke|p1|Sneasler, L50, F|",
+        "|poke|p2|Salamence, L50, M|",
+        "|poke|p2|Charizard, L50, F|",
+        "|poke|p2|Rillaboom, L50, F|",
+        "|poke|p2|Kingambit, L50, F|",
+        "|poke|p2|Sylveon, L50, F|",
+        "|poke|p2|Sneasler, L50, F|",
+        "|teampreview|4",
+        "|",
+        "|teamsize|p1|4",
+        "|teamsize|p2|4",
+        "|start",
+        "|switch|p1a: Aerodactyl|Aerodactyl, L50, F|100/100",
+        "|switch|p1b: Rillaboom|Rillaboom, L50, F|100/100",
+        "|switch|p2a: Sylveon|Sylveon, L50, F|100/100",
+        "|switch|p2b: Sneasler|Sneasler, L50, F|100/100",
+        "|-ability|p1a: Aerodactyl|Unnerve",
+        "|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge|[of] p1b: Rillaboom",
+        "|-enditem|p2b: Sneasler|Grassy Seed",
+        "|-boost|p2b: Sneasler|def|1|[from] item: Grassy Seed",
+        "|turn|1",
+        "|",
+        "|detailschange|p1a: Aerodactyl|Aerodactyl-Mega, L50, F",
+        "|-mega|p1a: Aerodactyl|Aerodactyl|Aerodactylite",
+        "|move|p1a: Aerodactyl|Wide Guard|p1a: Aerodactyl",
+        "|-singleturn|p1a: Aerodactyl|Wide Guard",
+        "|move|p2b: Sneasler|Dire Claw|p1b: Rillaboom",
+        "|-supereffective|p1b: Rillaboom|1",
+        "|-damage|p1b: Rillaboom|15/100",
+        "|move|p1b: Rillaboom|Wood Hammer|p2a: Sylveon",
+        "|-damage|p2a: Sylveon|0 fnt",
+        "|faint|p2a: Sylveon",
+        "|-damage|p1b: Rillaboom|0 fnt|[from] Recoil",
+        "|faint|p1b: Rillaboom",
+        "|",
+        "|upkeep",
+        "|",
+        "|switch|p1b: Primarina|Primarina, L50, F|100/100",
+        "|switch|p2a: Rillaboom|Rillaboom, L50, F|100/100",
+        "|turn|2",
+        "|",
+        "|move|p2b: Sneasler|Dire Claw|p1b: Primarina",
+        "|-supereffective|p1b: Primarina|1",
+        "|-damage|p1b: Primarina|0 fnt",
+        "|faint|p1b: Primarina",
+        "|move|p1a: Aerodactyl|Tailwind|p1a: Aerodactyl",
+        "|-sidestart|p1: 构筑方案|move: Tailwind",
+        "|move|p2a: Rillaboom|Wood Hammer|p1a: Aerodactyl",
+        "|-damage|p1a: Aerodactyl|0 fnt",
+        "|faint|p1a: Aerodactyl",
+        "|-damage|p2a: Rillaboom|74/100|[from] Recoil",
+        "|",
+        "|-heal|p2a: Rillaboom|80/100|[from] Grassy Terrain",
+        "|upkeep",
+        "|",
+        "|switch|p1b: Incineroar|Incineroar, L50, M|100/100",
+        "|-ability|p1b: Incineroar|Intimidate|boost",
+        "|-unboost|p2a: Rillaboom|atk|1",
+        "|-unboost|p2b: Sneasler|atk|1",
+        "|turn|3",
+        "|",
+        "|move|p2a: Rillaboom|Grassy Glide|p1b: Incineroar",
+        "|-resisted|p1b: Incineroar|1",
+        "|-crit|p1b: Incineroar",
+        "|-damage|p1b: Incineroar|81/100",
+        "|move|p2b: Sneasler|Dire Claw|p1b: Incineroar",
+        "|-damage|p1b: Incineroar|59/100",
+        "|move|p1b: Incineroar|Flare Blitz|p2b: Sneasler",
+        "|-damage|p2b: Sneasler|57/100",
+        "|-damage|p1b: Incineroar|46/100|[from] Recoil",
+        "|-enditem|p1b: Incineroar|Sitrus Berry|[eat]",
+        "|-heal|p1b: Incineroar|71/100|[from] item: Sitrus Berry",
+        "|",
+        "|-heal|p2b: Sneasler|63/100|[from] Grassy Terrain",
+        "|-heal|p1b: Incineroar|77/100|[from] Grassy Terrain",
+        "|-heal|p2a: Rillaboom|86/100|[from] Grassy Terrain",
+        "|upkeep",
+        "|turn|4",
+        "|",
+        "|move|p2a: Rillaboom|Grassy Glide|p1b: Incineroar",
+        "|-resisted|p1b: Incineroar|1",
+        "|-damage|p1b: Incineroar|68/100",
+        "|move|p2b: Sneasler|Close Combat|p1b: Incineroar",
+        "|-supereffective|p1b: Incineroar|1",
+        "|-crit|p1b: Incineroar",
+        "|-damage|p1b: Incineroar|0 fnt",
+        "|-unboost|p2b: Sneasler|def|1",
+        "|-unboost|p2b: Sneasler|spd|1",
+        "|faint|p1b: Incineroar",
+        "|",
+        "|win|对照策略"
+      ]
+    },
+    {
+      "category": "常规轮转",
+      "index": 1,
+      "finding": "雪天修复后，戟脊龙首回合选择 Mega 加守住，挡住龙爪，九尾选择月亮之力削弱快龙；本场最终仍失利，末回合大狃拉未能越过气势披带并被耿鬼击倒。天气适配正确不保证整条路线有效。",
+      "source": "2001945654:MC103",
+      "opponent": "2001945654:MC101",
+      "strategy": "support",
+      "opponentPolicy": "mixed",
+      "budget": "fixed-games",
+      "seed": 1540494466,
+      "turns": 6,
+      "initialCommands": [
+        {
+          "turn": 0,
+          "side": "p1",
+          "command": "team 1,2,3,4",
+          "informationKey": "06dd7ca5c72715d786fe"
+        },
+        {
+          "turn": 0,
+          "side": "p2",
+          "command": "team 5,3,1,4",
+          "informationKey": "8b51c66440e6ee44e7b1"
+        },
+        {
+          "turn": 1,
+          "side": "p1",
+          "command": "move 4 mega, move 3 1",
+          "informationKey": "8be3bc4a4c3467f0dcb8"
+        },
+        {
+          "turn": 1,
+          "side": "p2",
+          "command": "move 1 1, move 1 2",
+          "informationKey": "4940048bbc77d003d4a2"
+        }
+      ],
+      "perishMoves": 0,
+      "evidence": [
+        {
+          "line": 27,
+          "text": "|switch|p1a: Baxcalibur|Baxcalibur, L50, M|100/100"
+        },
+        {
+          "line": 28,
+          "text": "|switch|p1b: Ninetales|Ninetales-Alola, L50, F|100/100"
+        },
+        {
+          "line": 29,
+          "text": "|switch|p2a: Dragonite|Dragonite, L50, F|100/100"
+        },
+        {
+          "line": 30,
+          "text": "|switch|p2b: Incineroar|Incineroar, L50, F|100/100"
+        },
+        {
+          "line": 31,
+          "text": "|-weather|Snowscape|[from] ability: Snow Warning|[of] p1b: Ninetales"
+        },
+        {
+          "line": 32,
+          "text": "|-ability|p2b: Incineroar|Intimidate|boost"
+        },
+        {
+          "line": 33,
+          "text": "|-unboost|p1a: Baxcalibur|atk|1"
+        },
+        {
+          "line": 34,
+          "text": "|-unboost|p1b: Ninetales|atk|1"
+        },
+        {
+          "line": 35,
+          "text": "|turn|1"
+        },
+        {
+          "line": 36,
+          "text": "|"
+        },
+        {
+          "line": 37,
+          "text": "|detailschange|p1a: Baxcalibur|Baxcalibur-Mega, L50, M"
+        },
+        {
+          "line": 38,
+          "text": "|-mega|p1a: Baxcalibur|Baxcalibur|Baxcalibrite"
+        },
+        {
+          "line": 39,
+          "text": "|move|p1a: Baxcalibur|Protect|p1a: Baxcalibur"
+        },
+        {
+          "line": 40,
+          "text": "|-singleturn|p1a: Baxcalibur|Protect"
+        },
+        {
+          "line": 41,
+          "text": "|move|p1b: Ninetales|Moonblast|p2a: Dragonite"
+        },
+        {
+          "line": 42,
+          "text": "|-supereffective|p2a: Dragonite|1"
+        },
+        {
+          "line": 43,
+          "text": "|-damage|p2a: Dragonite|39/100"
+        },
+        {
+          "line": 44,
+          "text": "|move|p2a: Dragonite|Dragon Claw|p1a: Baxcalibur"
+        },
+        {
+          "line": 45,
+          "text": "|-activate|p1a: Baxcalibur|move: Protect"
+        },
+        {
+          "line": 46,
+          "text": "|move|p2b: Incineroar|Flare Blitz|p1b: Ninetales"
+        },
+        {
+          "line": 47,
+          "text": "|-supereffective|p1b: Ninetales|1"
+        },
+        {
+          "line": 48,
+          "text": "|-damage|p1b: Ninetales|16/100"
+        },
+        {
+          "line": 49,
+          "text": "|-damage|p2b: Incineroar|79/100|[from] Recoil"
+        },
+        {
+          "line": 50,
+          "text": "|"
+        },
+        {
+          "line": 51,
+          "text": "|-weather|Snowscape|[upkeep]"
+        },
+        {
+          "line": 130,
+          "text": "|turn|6"
+        },
+        {
+          "line": 131,
+          "text": "|"
+        },
+        {
+          "line": 132,
+          "text": "|move|p1a: Sneasler|Close Combat|p2b: Scrafty"
+        },
+        {
+          "line": 133,
+          "text": "|-supereffective|p2b: Scrafty|1"
+        },
+        {
+          "line": 134,
+          "text": "|-enditem|p2b: Scrafty|Focus Sash"
+        },
+        {
+          "line": 135,
+          "text": "|-damage|p2b: Scrafty|1/100"
+        },
+        {
+          "line": 136,
+          "text": "|-unboost|p1a: Sneasler|def|1"
+        },
+        {
+          "line": 137,
+          "text": "|-unboost|p1a: Sneasler|spd|1"
+        },
+        {
+          "line": 138,
+          "text": "|move|p2a: Gengar|Shadow Ball|p1a: Sneasler"
+        },
+        {
+          "line": 139,
+          "text": "|-damage|p1a: Sneasler|0 fnt"
+        },
+        {
+          "line": 140,
+          "text": "|faint|p1a: Sneasler"
+        },
+        {
+          "line": 141,
+          "text": "|"
+        },
+        {
+          "line": 142,
+          "text": "|win|对照策略"
+        }
+      ],
+      "trace": [
+        "|gametype|doubles",
+        "|player|p1|构筑方案||",
+        "|player|p2|对照策略||",
+        "|gen|9",
+        "|tier|[Gen 9 Champions] VGC 2026 Reg M-C",
+        "|rule|Species Clause: Limit one of each Pokémon",
+        "|rule|Item Clause: Limit 1 of each item",
+        "|raw|<div class=\"infobox\"><details class=\"readmore\" open><summary><strong>1 custom rule:</strong></summary> !Open Team Sheets</details></div>",
+        "|clearpoke",
+        "|poke|p1|Baxcalibur, L50, M|",
+        "|poke|p1|Ninetales-Alola, L50, F|",
+        "|poke|p1|Sneasler, L50, F|",
+        "|poke|p1|Basculegion, L50, M|",
+        "|poke|p1|Rillaboom, L50, M|",
+        "|poke|p1|Incineroar, L50, M|",
+        "|poke|p2|Gengar, L50, F|",
+        "|poke|p2|Snorlax, L50, M|",
+        "|poke|p2|Incineroar, L50, F|",
+        "|poke|p2|Scrafty, L50, F|",
+        "|poke|p2|Dragonite, L50, F|",
+        "|poke|p2|Rillaboom, L50, M|",
+        "|teampreview|4",
+        "|",
+        "|teamsize|p1|4",
+        "|teamsize|p2|4",
+        "|start",
+        "|switch|p1a: Baxcalibur|Baxcalibur, L50, M|100/100",
+        "|switch|p1b: Ninetales|Ninetales-Alola, L50, F|100/100",
+        "|switch|p2a: Dragonite|Dragonite, L50, F|100/100",
+        "|switch|p2b: Incineroar|Incineroar, L50, F|100/100",
+        "|-weather|Snowscape|[from] ability: Snow Warning|[of] p1b: Ninetales",
+        "|-ability|p2b: Incineroar|Intimidate|boost",
+        "|-unboost|p1a: Baxcalibur|atk|1",
+        "|-unboost|p1b: Ninetales|atk|1",
+        "|turn|1",
+        "|",
+        "|detailschange|p1a: Baxcalibur|Baxcalibur-Mega, L50, M",
+        "|-mega|p1a: Baxcalibur|Baxcalibur|Baxcalibrite",
+        "|move|p1a: Baxcalibur|Protect|p1a: Baxcalibur",
+        "|-singleturn|p1a: Baxcalibur|Protect",
+        "|move|p1b: Ninetales|Moonblast|p2a: Dragonite",
+        "|-supereffective|p2a: Dragonite|1",
+        "|-damage|p2a: Dragonite|39/100",
+        "|move|p2a: Dragonite|Dragon Claw|p1a: Baxcalibur",
+        "|-activate|p1a: Baxcalibur|move: Protect",
+        "|move|p2b: Incineroar|Flare Blitz|p1b: Ninetales",
+        "|-supereffective|p1b: Ninetales|1",
+        "|-damage|p1b: Ninetales|16/100",
+        "|-damage|p2b: Incineroar|79/100|[from] Recoil",
+        "|",
+        "|-weather|Snowscape|[upkeep]",
+        "|upkeep",
+        "|turn|2",
+        "|",
+        "|move|p1b: Ninetales|Moonblast|p2a: Dragonite",
+        "|-supereffective|p2a: Dragonite|1",
+        "|-damage|p2a: Dragonite|0 fnt",
+        "|faint|p2a: Dragonite",
+        "|move|p1a: Baxcalibur|Glaive Rush|p2b: Incineroar",
+        "|-damage|p2b: Incineroar|40/100",
+        "|-singlemove|p1a: Baxcalibur|Glaive Rush|[silent]",
+        "|-enditem|p2b: Incineroar|Sitrus Berry|[eat]",
+        "|-heal|p2b: Incineroar|65/100|[from] item: Sitrus Berry",
+        "|move|p2b: Incineroar|Flare Blitz|p1b: Ninetales",
+        "|-supereffective|p1b: Ninetales|1",
+        "|-damage|p1b: Ninetales|0 fnt",
+        "|faint|p1b: Ninetales",
+        "|-damage|p2b: Incineroar|61/100|[from] Recoil",
+        "|",
+        "|-weather|Snowscape|[upkeep]",
+        "|upkeep",
+        "|",
+        "|switch|p1b: Basculegion|Basculegion, L50, M|100/100",
+        "|switch|p2a: Gengar|Gengar, L50, F|100/100",
+        "|turn|3",
+        "|",
+        "|move|p1b: Basculegion|Aqua Jet|p2b: Incineroar",
+        "|-supereffective|p2b: Incineroar|1",
+        "|-damage|p2b: Incineroar|15/100",
+        "|move|p2a: Gengar|Shadow Ball|p1b: Basculegion",
+        "|-supereffective|p1b: Basculegion|1",
+        "|-damage|p1b: Basculegion|3/100",
+        "|-unboost|p1b: Basculegion|spd|1",
+        "|move|p1a: Baxcalibur|Glaive Rush|p2b: Incineroar",
+        "|-damage|p2b: Incineroar|0 fnt",
+        "|-singlemove|p1a: Baxcalibur|Glaive Rush|[silent]",
+        "|faint|p2b: Incineroar",
+        "|",
+        "|-weather|Snowscape|[upkeep]",
+        "|upkeep",
+        "|",
+        "|switch|p2b: Scrafty|Scrafty, L50, F|100/100",
+        "|-ability|p2b: Scrafty|Intimidate|boost",
+        "|-unboost|p1a: Baxcalibur|atk|1",
+        "|-unboost|p1b: Basculegion|atk|1",
+        "|turn|4",
+        "|",
+        "|detailschange|p2a: Gengar|Gengar-Mega, L50, F",
+        "|-mega|p2a: Gengar|Gengar|Gengarite",
+        "|move|p2a: Gengar|Shadow Ball|p1b: Basculegion",
+        "|-supereffective|p1b: Basculegion|1",
+        "|-damage|p1b: Basculegion|0 fnt",
+        "|faint|p1b: Basculegion",
+        "|move|p1a: Baxcalibur|Glaive Rush|p2a: Gengar",
+        "|-damage|p2a: Gengar|53/100",
+        "|-singlemove|p1a: Baxcalibur|Glaive Rush|[silent]",
+        "|move|p2b: Scrafty|Close Combat|p1a: Baxcalibur",
+        "|-supereffective|p1a: Baxcalibur|1",
+        "|-crit|p1a: Baxcalibur",
+        "|-damage|p1a: Baxcalibur|0 fnt",
+        "|-unboost|p2b: Scrafty|def|1",
+        "|-unboost|p2b: Scrafty|spd|1",
+        "|faint|p1a: Baxcalibur",
+        "|",
+        "|-weather|Snowscape|[upkeep]",
+        "|upkeep",
+        "|",
+        "|switch|p1a: Sneasler|Sneasler, L50, F|100/100",
+        "|turn|5",
+        "|",
+        "|move|p2b: Scrafty|Protect|p2b: Scrafty",
+        "|-singleturn|p2b: Scrafty|Protect",
+        "|move|p1a: Sneasler|Close Combat|p2b: Scrafty",
+        "|-activate|p2b: Scrafty|move: Protect",
+        "|move|p2a: Gengar|Shadow Ball|p1a: Sneasler",
+        "|-damage|p1a: Sneasler|44/100",
+        "|",
+        "|-weather|none",
+        "|upkeep",
+        "|turn|6",
+        "|",
+        "|move|p1a: Sneasler|Close Combat|p2b: Scrafty",
+        "|-supereffective|p2b: Scrafty|1",
+        "|-enditem|p2b: Scrafty|Focus Sash",
+        "|-damage|p2b: Scrafty|1/100",
+        "|-unboost|p1a: Sneasler|def|1",
+        "|-unboost|p1a: Sneasler|spd|1",
+        "|move|p2a: Gengar|Shadow Ball|p1a: Sneasler",
+        "|-damage|p1a: Sneasler|0 fnt",
+        "|faint|p1a: Sneasler",
+        "|",
+        "|win|对照策略"
+      ]
+    }
+  ],
+  "regressions": [
+    "tests/simulation.test.ts: 灭歌策略识别本回合Mega后的踩影，并在真实回合建立倒数",
+    "tests/simulation.test.ts: 队友共享本回合Mega建立的天气，历史晴雨队的气象球按晴天计算",
+    "tests/simulation.test.ts: 雪天对局从真实天气协议读取物防加成，不按无天气评分"
+  ],
+  "notes": [
+    "固定场数成绩低于旧版：混合15/36、伤害16/36、支援18/36；不得将正确性修复宣传为胜率提高。",
+    "默认策略、温度与权重未依据这批开发用例重新调节。"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "createdAt": "2026-09-14T07:59:08.667Z",
+  "algorithmVersion": "mc-1.4.0",
+  "environment": "gen9championsvgc2026regmc-6f3adc360ac7fcbad629",
+  "corpusVersion": "f0158f7803f502521a76",
+  "modelVersion": "9501d285e5a21cfff044",
+  "input": {
+    "sourceCorpusVersion": "44cdfd0e4846242f486a",
+    "showdown": "aa17ca0fac8bc5605df673bd8774c2d0e91efa43",
+    "calc": "e7fd7e59f3eef7ea42fba3c8b83261cb4a14109d",
+    "modifications": [
+      "禁止 Rillaboom",
+      "Salamence 攻击种族值 135 → 136",
+      "Water 对 Rock 从两倍变为一倍"
+    ]
+  },
+  "before": {
+    "validationMs": 17161.27656,
+    "modelMs": 70903.685512
+  },
+  "after": {
+    "validationMs": 3590.1407910000003,
+    "modelMs": 47042.515236
+  },
+  "persistedModelIdentical": true,
+  "modelJSONSHA256": "71dbccc0f4a8900a1ddcca368a7dae91ce93de431899740a51e2aec73c22f76a",
+  "profilingEnabled": true,
+  "changes": [
+    "批量重校验共用同一环境快照",
+    "预先统计各强度使用的同一先验证据",
+    "复用参考速度与角色标签",
+    "复用各候选切分的 bootstrap 分组及 medoid 成本",
+    "数值数组存储同一距离堆，保持比较和相同距离顺序"
+  ],
+  "limits": [
+    "单次完整语料诊断，含 CPU 采样开销，不代表所有规则和机器。",
+    "全部配置、八次 bootstrap、候选切分与内部校准均保留。",
+    "正式桌面流程耗时另由成品测试记录。"
+  ]
+}

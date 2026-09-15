@@ -1,0 +1,13 @@
+
+> poke-teambuilder@0.1.0 test /home/zonazcy/Projects/poke_teambuilder
+> vitest run
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+
+ Test Files  5 passed (5)
+      Tests  44 passed (44)
+   Start at  08:01:47
+   Duration  13.71s (tests 71%, import 26%, transform 2%)
+

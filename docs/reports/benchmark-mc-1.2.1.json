@@ -1,0 +1,982 @@
+{
+  "createdAt": "2026-09-13T22:07:55.852Z",
+  "algorithm": "mc-1.2.1",
+  "environment": {
+    "id": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+    "engineId": "a08863c8f297-e7fd7e59f3ee",
+    "formatId": "gen9championsvgc2026regmc",
+    "name": "[Gen 9 Champions] VGC 2026 Reg M-C",
+    "season": "M-C",
+    "mod": "champions",
+    "rules": [
+      "-nonexistent",
+      "-tag:mythical",
+      "-tag:restrictedlegendary",
+      "-tag:unobtainable",
+      "-unreleased",
+      "adjustlevel",
+      "cancelmod",
+      "dctimerbank",
+      "evlimit",
+      "flatrules",
+      "itemclause",
+      "minteamsize",
+      "nicknameclause",
+      "obtainable",
+      "obtainableabilities",
+      "obtainableformes",
+      "obtainablemisc",
+      "obtainablemoves",
+      "openteamsheets",
+      "pickedteamsize",
+      "speciesclause",
+      "teampreview",
+      "timeoutautochoose",
+      "timeraddperturn",
+      "timergrace",
+      "timermaxfirstturn",
+      "timermaxperturn",
+      "timerstarting",
+      "vgctimer"
+    ],
+    "ruleHash": "3e622d0b3e684860f0aa",
+    "generatedAt": "2026-09-13T22:03:36.161Z",
+    "sourceRevision": "aa17ca0fac8bc5605df673bd8774c2d0e91efa43",
+    "calcRevision": "e7fd7e59f3eef7ea42fba3c8b83261cb4a14109d",
+    "points": {
+      "total": 66,
+      "perStat": 32
+    },
+    "teamSize": 6,
+    "pickedTeamSize": 4,
+    "speciesIds": [
+      "abomasnow",
+      "absol",
+      "aegislash",
+      "aerodactyl",
+      "aggron",
+      "alakazam",
+      "alcremie",
+      "alcremiecaramelswirl",
+      "alcremielemoncream",
+      "alcremiematchacream",
+      "alcremiemintcream",
+      "alcremierainbowswirl",
+      "alcremierubycream",
+      "alcremierubyswirl",
+      "altaria",
+      "ampharos",
+      "annihilape",
+      "appletun",
+      "araquanid",
+      "arbok",
+      "arboliva",
+      "arcanine",
+      "arcaninehisui",
+      "archaludon",
+      "ariados",
+      "armarouge",
+      "aromatisse",
+      "audino",
+      "aurorus",
+      "avalugg",
+      "avalugghisui",
+      "azumarill",
+      "banette",
+      "barbaracle",
+      "basculegion",
+      "basculegionf",
+      "bastiodon",
+      "baxcalibur",
+      "beartic",
+      "beedrill",
+      "bellibolt",
+      "blastoise",
+      "blaziken",
+      "camerupt",
+      "castform",
+      "ceruledge",
+      "chandelure",
+      "charizard",
+      "chesnaught",
+      "chimecho",
+      "cinderace",
+      "clawitzer",
+      "clefable",
+      "cofagrigus",
+      "conkeldurr",
+      "corviknight",
+      "crabominable",
+      "decidueye",
+      "decidueyehisui",
+      "dedenne",
+      "delphox",
+      "diggersby",
+      "ditto",
+      "dragalge",
+      "dragapult",
+      "dragonite",
+      "drampa",
+      "eelektross",
+      "emboar",
+      "emolga",
+      "empoleon",
+      "espathra",
+      "espeon",
+      "excadrill",
+      "falinks",
+      "farfetchd",
+      "farigiraf",
+      "feraligatr",
+      "flapple",
+      "flareon",
+      "floetteeternal",
+      "florges",
+      "forretress",
+      "froslass",
+      "furfrou",
+      "gallade",
+      "garbodor",
+      "garchomp",
+      "gardevoir",
+      "garganacl",
+      "gengar",
+      "gholdengo",
+      "glaceon",
+      "glalie",
+      "glimmora",
+      "gliscor",
+      "gogoat",
+      "golisopod",
+      "golurk",
+      "goodra",
+      "goodrahisui",
+      "gourgeist",
+      "gourgeistlarge",
+      "gourgeistsmall",
+      "gourgeistsuper",
+      "grapploct",
+      "greninja",
+      "grimmsnarl",
+      "gyarados",
+      "hatterene",
+      "hawlucha",
+      "heliolisk",
+      "heracross",
+      "hippowdon",
+      "houndoom",
+      "houndstone",
+      "hydrapple",
+      "hydreigon",
+      "incineroar",
+      "indeedee",
+      "indeedeef",
+      "infernape",
+      "inteleon",
+      "jolteon",
+      "kangaskhan",
+      "kingambit",
+      "kleavor",
+      "klefki",
+      "kommoo",
+      "krookodile",
+      "leafeon",
+      "liepard",
+      "lopunny",
+      "lucario",
+      "luxray",
+      "lycanroc",
+      "lycanrocdusk",
+      "lycanrocmidnight",
+      "mabosstiff",
+      "machamp",
+      "malamar",
+      "mamoswine",
+      "manectric",
+      "maushold",
+      "mausholdfour",
+      "mawile",
+      "medicham",
+      "meganium",
+      "meowscarada",
+      "meowstic",
+      "meowsticf",
+      "metagross",
+      "milotic",
+      "mimikyu",
+      "morpeko",
+      "mrmime",
+      "mrrime",
+      "mudsdale",
+      "musharna",
+      "ninetales",
+      "ninetalesalola",
+      "noivern",
+      "oranguru",
+      "orthworm",
+      "overqwil",
+      "palafin",
+      "pangoro",
+      "passimian",
+      "pawmot",
+      "pelipper",
+      "perrserker",
+      "persian",
+      "persianalola",
+      "pidgeot",
+      "pikachu",
+      "pincurchin",
+      "pinsir",
+      "politoed",
+      "polteageist",
+      "polteageistantique",
+      "primarina",
+      "pyroar",
+      "quaquaval",
+      "qwilfish",
+      "raichu",
+      "raichualola",
+      "rampardos",
+      "reuniclus",
+      "rhyperior",
+      "rillaboom",
+      "roserade",
+      "rotom",
+      "rotomfan",
+      "rotomfrost",
+      "rotomheat",
+      "rotommow",
+      "rotomwash",
+      "runerigus",
+      "sableye",
+      "salamence",
+      "salazzle",
+      "samurott",
+      "samurotthisui",
+      "sandaconda",
+      "sceptile",
+      "scizor",
+      "scolipede",
+      "scovillain",
+      "scrafty",
+      "serperior",
+      "sharpedo",
+      "simipour",
+      "simisage",
+      "simisear",
+      "sinistcha",
+      "sinistchamasterpiece",
+      "sirfetchd",
+      "skarmory",
+      "skeledirge",
+      "slowbro",
+      "slowbrogalar",
+      "slowking",
+      "slowkinggalar",
+      "slurpuff",
+      "sneasler",
+      "snorlax",
+      "spiritomb",
+      "squawkabilly",
+      "squawkabillyblue",
+      "squawkabillywhite",
+      "squawkabillyyellow",
+      "staraptor",
+      "starmie",
+      "steelix",
+      "stunfisk",
+      "stunfiskgalar",
+      "swalot",
+      "swampert",
+      "sylveon",
+      "talonflame",
+      "tauros",
+      "taurospaldeaaqua",
+      "taurospaldeablaze",
+      "taurospaldeacombat",
+      "thievul",
+      "tinkaton",
+      "torkoal",
+      "torterra",
+      "toucannon",
+      "toxapex",
+      "toxicroak",
+      "toxtricity",
+      "toxtricitylowkey",
+      "trevenant",
+      "tsareena",
+      "typhlosion",
+      "typhlosionhisui",
+      "tyranitar",
+      "tyrantrum",
+      "umbreon",
+      "vanilluxe",
+      "vaporeon",
+      "venusaur",
+      "victreebel",
+      "vileplume",
+      "vivillon",
+      "vivillonarchipelago",
+      "vivilloncontinental",
+      "vivillonelegant",
+      "vivillonfancy",
+      "vivillongarden",
+      "vivillonhighplains",
+      "vivillonicysnow",
+      "vivillonjungle",
+      "vivillonmarine",
+      "vivillonmodern",
+      "vivillonmonsoon",
+      "vivillonocean",
+      "vivillonpokeball",
+      "vivillonpolar",
+      "vivillonriver",
+      "vivillonsandstorm",
+      "vivillonsavanna",
+      "vivillonsun",
+      "vivillontundra",
+      "volcarona",
+      "watchog",
+      "weavile",
+      "whimsicott",
+      "wigglytuff",
+      "wyrdeer",
+      "zoroark",
+      "zoroarkhisui"
+    ],
+    "verified": true
+  },
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "trainingCorpusVersion": "f2037e2e6158f1b2f72d",
+  "modelVersion": "8bf7f59d9fcec7565518",
+  "machine": {
+    "cpu": "AMD Ryzen AI 9 H 365 w/ Radeon 880M",
+    "threads": 20,
+    "ramGiB": 30.625621795654297
+  },
+  "split": {
+    "cutoff": "2026-09-10T16:00:00.000Z",
+    "trainingSources": 1927,
+    "heldTeams": 48,
+    "heldObservations": 288,
+    "excludedAuthors": 44,
+    "originLinksIsolated": 47
+  },
+  "configurationReconstruction": {
+    "popular": {
+      "samples": 288,
+      "available": 0.9791666666666666,
+      "item": 0.5798611111111112,
+      "ability": 0.9305555555555556,
+      "moves": 0.609556878306877,
+      "exact": 0.03125,
+      "top3": 0.05555555555555555,
+      "pointMAE": 5.235815602836878
+    },
+    "legacyClusters": {
+      "samples": 288,
+      "available": 0.9791666666666666,
+      "item": 0.5868055555555556,
+      "ability": 0.9340277777777778,
+      "moves": 0.639847883597882,
+      "exact": 0.013888888888888888,
+      "top3": 0.020833333333333332,
+      "pointMAE": 4.814420803782505
+    },
+    "conditionalModel": {
+      "samples": 288,
+      "available": 0.9791666666666666,
+      "item": 0.5972222222222222,
+      "ability": 0.9027777777777778,
+      "moves": 0.6344907407407393,
+      "exact": 0.03125,
+      "top3": 0.041666666666666664,
+      "pointMAE": 5.341016548463358
+    }
+  },
+  "constructions": [
+    {
+      "source": "2001945654:MC136",
+      "method": "newSearch",
+      "recovery": 0.75,
+      "species": [
+        "basculegion",
+        "glimmora",
+        "volcarona",
+        "pawmot",
+        "salamence",
+        "rillaboom"
+      ],
+      "fingerprint": "8a5ea450e6772cf1aa37",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC136",
+      "method": "popular",
+      "recovery": 0.5,
+      "species": [
+        "basculegion",
+        "glimmora",
+        "sneasler",
+        "rillaboom",
+        "incineroar",
+        "salamence"
+      ],
+      "fingerprint": "a7a7794733f0b170e2cb",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC136",
+      "method": "legacyHeuristic",
+      "recovery": 0,
+      "species": [
+        "basculegion",
+        "glimmora",
+        "whimsicott",
+        "delphox",
+        "corviknight",
+        "garchomp"
+      ],
+      "fingerprint": "3c509ff1e83f648f0d57",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC144",
+      "method": "newSearch",
+      "recovery": 0.5,
+      "species": [
+        "lucario",
+        "rillaboom",
+        "volcarona",
+        "salamence",
+        "basculegion",
+        "pawmot"
+      ],
+      "fingerprint": "343a47d88a3d990e0b36",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC144",
+      "method": "popular",
+      "recovery": 0.75,
+      "species": [
+        "lucario",
+        "rillaboom",
+        "sneasler",
+        "incineroar",
+        "salamence",
+        "basculegion"
+      ],
+      "fingerprint": "725b8cf530b94fbcc8db",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC144",
+      "method": "legacyHeuristic",
+      "recovery": 0,
+      "species": [
+        "lucario",
+        "rillaboom",
+        "basculegionf",
+        "aerodactyl",
+        "garchomp",
+        "indeedeef"
+      ],
+      "fingerprint": "c530a4076c2a691c32f1",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC152",
+      "method": "newSearch",
+      "recovery": 0.25,
+      "species": [
+        "lycanrocdusk",
+        "milotic",
+        "charizard",
+        "salamence",
+        "rillaboom",
+        "pawmot"
+      ],
+      "fingerprint": "e160d4f5a6de7efb48e9",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC152",
+      "method": "popular",
+      "recovery": 0.25,
+      "species": [
+        "lycanrocdusk",
+        "milotic",
+        "sneasler",
+        "rillaboom",
+        "incineroar",
+        "salamence"
+      ],
+      "fingerprint": "0761a11909dec8a52e8e",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC152",
+      "method": "legacyHeuristic",
+      "recovery": 0,
+      "species": [
+        "lycanrocdusk",
+        "milotic",
+        "hydreigon",
+        "ninetalesalola",
+        "gengar",
+        "corviknight"
+      ],
+      "fingerprint": "5b45bedba56798651c03",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC160",
+      "method": "newSearch",
+      "recovery": 0.25,
+      "species": [
+        "indeedee",
+        "sneasler",
+        "salamence",
+        "charizard",
+        "gholdengo",
+        "corviknight"
+      ],
+      "fingerprint": "d86d0eabaa73d520636f",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC160",
+      "method": "popular",
+      "recovery": 0.25,
+      "species": [
+        "indeedee",
+        "sneasler",
+        "rillaboom",
+        "incineroar",
+        "salamence",
+        "basculegion"
+      ],
+      "fingerprint": "10ccb5ec6112f0bf100f",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC160",
+      "method": "legacyHeuristic",
+      "recovery": 0,
+      "species": [
+        "indeedee",
+        "sneasler",
+        "tyranitar",
+        "delphox",
+        "excadrill",
+        "salamence"
+      ],
+      "fingerprint": "e6d0ae6ab24ae46ce9ae",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC168",
+      "method": "newSearch",
+      "recovery": 0.5,
+      "species": [
+        "salamence",
+        "gholdengo",
+        "pawmot",
+        "incineroar",
+        "rillaboom",
+        "milotic"
+      ],
+      "fingerprint": "1a1047f33e6312255400",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC168",
+      "method": "popular",
+      "recovery": 0.5,
+      "species": [
+        "salamence",
+        "gholdengo",
+        "sneasler",
+        "rillaboom",
+        "incineroar",
+        "golisopod"
+      ],
+      "fingerprint": "ea33bdf1479c6950ba1c",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC168",
+      "method": "legacyHeuristic",
+      "recovery": 0.25,
+      "species": [
+        "salamence",
+        "gholdengo",
+        "tyranitar",
+        "pelipper",
+        "swampert",
+        "sinistcha"
+      ],
+      "fingerprint": "cb908cb8b8dbeac7f80f",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC177",
+      "method": "newSearch",
+      "recovery": 0,
+      "species": [
+        "tyranitar",
+        "excadrill",
+        "talonflame",
+        "pawmot",
+        "salamence",
+        "rillaboom"
+      ],
+      "fingerprint": "f92f00c030f8f7e5d746",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC177",
+      "method": "popular",
+      "recovery": 0.25,
+      "species": [
+        "tyranitar",
+        "excadrill",
+        "sneasler",
+        "rillaboom",
+        "incineroar",
+        "salamence"
+      ],
+      "fingerprint": "e461759435d31160fb84",
+      "legal": true
+    },
+    {
+      "source": "2001945654:MC177",
+      "method": "legacyHeuristic",
+      "recovery": 0.25,
+      "species": [
+        "tyranitar",
+        "excadrill",
+        "sneasler",
+        "sinistcha",
+        "delphox",
+        "salamence"
+      ],
+      "fingerprint": "06b55b4a7282e99bac79",
+      "legal": true
+    }
+  ],
+  "simulationResults": [
+    {
+      "source": "2001945654:MC136",
+      "opponentSource": "2001945654:MC137",
+      "method": "newSearch",
+      "completed": 24,
+      "wins": 11,
+      "ties": 0,
+      "interval": [
+        0.278913337312114,
+        0.6492513464108005
+      ],
+      "elapsedMs": 1299.5018090000012,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC136",
+      "opponentSource": "2001945654:MC137",
+      "method": "popular",
+      "completed": 24,
+      "wins": 14,
+      "ties": 0,
+      "interval": [
+        0.38834665865229256,
+        0.7553239739018787
+      ],
+      "elapsedMs": 1094.4118579999995,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC136",
+      "opponentSource": "2001945654:MC137",
+      "method": "legacyHeuristic",
+      "completed": 24,
+      "wins": 10,
+      "ties": 0,
+      "interval": [
+        0.2446760260981215,
+        0.6116533413477077
+      ],
+      "elapsedMs": 1165.8510580000002,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC144",
+      "opponentSource": "2001945654:MC144",
+      "method": "newSearch",
+      "completed": 24,
+      "wins": 12,
+      "ties": 0,
+      "interval": [
+        0.31427425819573795,
+        0.685725741804262
+      ],
+      "elapsedMs": 1009.2579369999876,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC144",
+      "opponentSource": "2001945654:MC144",
+      "method": "popular",
+      "completed": 24,
+      "wins": 13,
+      "ties": 0,
+      "interval": [
+        0.3507486535891995,
+        0.721086662687886
+      ],
+      "elapsedMs": 1067.6515289999952,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC144",
+      "opponentSource": "2001945654:MC144",
+      "method": "legacyHeuristic",
+      "completed": 24,
+      "wins": 12,
+      "ties": 0,
+      "interval": [
+        0.31427425819573795,
+        0.685725741804262
+      ],
+      "elapsedMs": 1005.0588019999996,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC152",
+      "opponentSource": "2001945654:MC151",
+      "method": "newSearch",
+      "completed": 24,
+      "wins": 16,
+      "ties": 0,
+      "interval": [
+        0.4670631683813228,
+        0.8202780967270192
+      ],
+      "elapsedMs": 1126.9341419999982,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC152",
+      "opponentSource": "2001945654:MC151",
+      "method": "popular",
+      "completed": 24,
+      "wins": 12,
+      "ties": 0,
+      "interval": [
+        0.31427425819573795,
+        0.685725741804262
+      ],
+      "elapsedMs": 1068.7267079999874,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC152",
+      "opponentSource": "2001945654:MC151",
+      "method": "legacyHeuristic",
+      "completed": 24,
+      "wins": 17,
+      "ties": 0,
+      "interval": [
+        0.5083230633550392,
+        0.8508535180303886
+      ],
+      "elapsedMs": 971.2091899999941,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC160",
+      "opponentSource": "2001945654:MC158",
+      "method": "newSearch",
+      "completed": 24,
+      "wins": 19,
+      "ties": 0,
+      "interval": [
+        0.5952954674681193,
+        0.9075517464714794
+      ],
+      "elapsedMs": 1233.5076049999916,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC160",
+      "opponentSource": "2001945654:MC158",
+      "method": "popular",
+      "completed": 24,
+      "wins": 10,
+      "ties": 0,
+      "interval": [
+        0.2446760260981215,
+        0.6116533413477077
+      ],
+      "elapsedMs": 1094.891711999997,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC160",
+      "opponentSource": "2001945654:MC158",
+      "method": "legacyHeuristic",
+      "completed": 24,
+      "wins": 16,
+      "ties": 0,
+      "interval": [
+        0.4670631683813228,
+        0.8202780967270192
+      ],
+      "elapsedMs": 900.5283570000029,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC168",
+      "opponentSource": "2001945654:MC165",
+      "method": "newSearch",
+      "completed": 24,
+      "wins": 8,
+      "ties": 0,
+      "interval": [
+        0.17972190327298068,
+        0.5329368316186772
+      ],
+      "elapsedMs": 1087.3770049999875,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC168",
+      "opponentSource": "2001945654:MC165",
+      "method": "popular",
+      "completed": 24,
+      "wins": 19,
+      "ties": 0,
+      "interval": [
+        0.5952954674681193,
+        0.9075517464714794
+      ],
+      "elapsedMs": 991.6644009999873,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC168",
+      "opponentSource": "2001945654:MC165",
+      "method": "legacyHeuristic",
+      "completed": 24,
+      "wins": 12,
+      "ties": 0,
+      "interval": [
+        0.31427425819573795,
+        0.685725741804262
+      ],
+      "elapsedMs": 1135.271443000005,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC177",
+      "opponentSource": "2001945654:MC173",
+      "method": "newSearch",
+      "completed": 24,
+      "wins": 12,
+      "ties": 0,
+      "interval": [
+        0.31427425819573795,
+        0.685725741804262
+      ],
+      "elapsedMs": 927.9296610000019,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC177",
+      "opponentSource": "2001945654:MC173",
+      "method": "popular",
+      "completed": 24,
+      "wins": 14,
+      "ties": 0,
+      "interval": [
+        0.38834665865229256,
+        0.7553239739018787
+      ],
+      "elapsedMs": 908.1192580000206,
+      "trainingGames": 48
+    },
+    {
+      "source": "2001945654:MC177",
+      "opponentSource": "2001945654:MC173",
+      "method": "legacyHeuristic",
+      "completed": 24,
+      "wins": 12,
+      "ties": 0,
+      "interval": [
+        0.31427425819573795,
+        0.685725741804262
+      ],
+      "elapsedMs": 893.6921989999828,
+      "trainingGames": 48
+    }
+  ],
+  "timings": [
+    {
+      "source": "2001945654:MC136",
+      "operation": "complete",
+      "ms": 4985.6862459999975
+    },
+    {
+      "source": "2001945654:MC144",
+      "operation": "complete",
+      "ms": 4032.352367000007
+    },
+    {
+      "source": "2001945654:MC152",
+      "operation": "complete",
+      "ms": 4280.626405999996
+    },
+    {
+      "source": "2001945654:MC160",
+      "operation": "complete",
+      "ms": 2688.2498500000074
+    },
+    {
+      "source": "2001945654:MC168",
+      "operation": "complete",
+      "ms": 3989.196114999999
+    },
+    {
+      "source": "2001945654:MC177",
+      "operation": "complete",
+      "ms": 2809.911890999996
+    },
+    {
+      "operation": "warm-add",
+      "ms": 58.67064599998412
+    },
+    {
+      "operation": "warm-add",
+      "ms": 58.53118499999982
+    },
+    {
+      "operation": "warm-add",
+      "ms": 54.34248300001491
+    },
+    {
+      "operation": "warm-add",
+      "ms": 55.775542999996105
+    },
+    {
+      "operation": "warm-add",
+      "ms": 49.213366999989375
+    }
+  ],
+  "method": [
+    "配置复原与实际对局分别报告；精确配置命中包括性格、六维点数、招式、道具与特性。",
+    "旧聚类为 vgcpastes.py 的固定三类、去重后等权距离与 medoid 的 TypeScript 移植；平均链接使用等价增量更新。",
+    "旧启发式直接加载旧项目 recommendConfigs 原函数；三种构筑方法使用相同训练候选库与规则校验，使用训练样本构造其频率和搭档输入。",
+    "构筑案例按留出来源顺序等间隔选择，核心固定原队伍前两只；复原率不等于构筑强度。",
+    "模拟为固定场数、相同种子、三种对手策略；有限模拟样本不代表真实排位胜率或统计显著的优势。"
+  ]
+}

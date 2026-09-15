@@ -1,0 +1,49 @@
+
+> poke-teambuilder@0.3.0 test:ui /home/zonazcy/Projects/poke_teambuilder
+> playwright test
+
+
+Running 17 tests using 1 worker
+
+(node:642050) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop/artwork.spec.ts:8:1 › 雌性爱管侍使用独立高清素材，加入队伍和窄窗口后图片仍正确 (3.3s)
+  ✓   2 tests/desktop/configurations.spec.ts:11:1 › 中英文筛选非代表配置，保留准确配点来源并选择技术招式变体 (15.6s)
+  ✓   3 tests/desktop/configurations.spec.ts:51:1 › 应用升级使用同语料的新模型，保留旧模型和已保存偏好 (9.5s)
+  ✓   4 tests/desktop/configurations.spec.ts:81:1 › 自定义语料自动重建新算法模型，完成后恢复原队伍 (3.1s)
+  ✓   5 tests/desktop/configurations.spec.ts:107:1 › 启动页显示自定义模型重建并可取消，取消保留旧语料与模型 (11.4s)
+  ✓   6 tests/desktop/editing.spec.ts:8:1 › 导入满队、配点错误与预览、伤害条件、模拟期间编辑和取消 (11.0s)
+  ✘   7 tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 (1.0m)
+(node:644224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/desktop/history.spec.ts:12:1 › 零样本赛季显示历史配置、保存开关，并以历史对手完成真实模拟 (15.0s)
+  -   9 tests/desktop/ime.spec.ts:10:1 › 系统 Fcitx5／Rime 的真实中文组合输入、确认候选与搜索焦点
+  ✓  10 tests/desktop/interaction.spec.ts:7:1 › 后台构筑期间搜索与编辑保持响应，记录输入到渲染反馈的延迟 (12.5s)
+  ✓  11 tests/desktop/research-tools.spec.ts:8:1 › 具体速度线、回合条件保留、构筑笔记和指定位置替换 (22.4s)
+  ✓  12 tests/desktop/research-workflows.spec.ts:17:1 › 多路线计划、实践快照、元数据编辑保留建议和重启记录 (30.0s)
+  ✓  13 tests/desktop/research-workflows.spec.ts:51:1 › 条件模板、风险比较与配点入口使用同一上下文 (8.9s)
+  ✓  14 tests/desktop/research-workflows.spec.ts:68:1 › 独立资料核对、存储报告与主要页面可访问性 (5.7s)
+  ✓  15 tests/desktop/research-workflows.spec.ts:89:1 › 来源意图、偏好持久化与构筑编辑可访问性 (10.9s)
+  ✓  16 tests/desktop/research-workflows.spec.ts:121:1 › 键盘搜索自动滚入视野，窄窗放大后仍能搜索配置 (3.6s)
+  ✓  17 tests/desktop/workspace.spec.ts:8:1 › 核心构筑、方案比较、撤销、保存恢复与窄窗口 (18.9s)
+
+
+  1) tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 ───────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error Context: test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/environment-实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 ────────────────────────────
+  1 skipped
+  15 passed (4.1m)
+ ELIFECYCLE  Command failed with exit code 1.

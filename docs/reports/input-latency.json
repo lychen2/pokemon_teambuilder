@@ -1,0 +1,193 @@
+{
+  "createdAt": "2026-09-14T08:16:53.893Z",
+  "samples": 26,
+  "medianMs": 23.80000001192093,
+  "p95Ms": 30.200000002980232,
+  "maxMs": 36.20000000298023,
+  "rows": [
+    {
+      "field": "搜索宝可梦",
+      "value": "i",
+      "feedbackMs": 36.20000000298023,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "in",
+      "feedbackMs": 17.5,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "inc",
+      "feedbackMs": 21.599999994039536,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "inci",
+      "feedbackMs": 21.80000001192093,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "incin",
+      "feedbackMs": 22.100000008940697,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "incine",
+      "feedbackMs": 22.30000001192093,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "inciner",
+      "feedbackMs": 22.5,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "incinero",
+      "feedbackMs": 24.200000002980232,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "incineroa",
+      "feedbackMs": 24.399999991059303,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "搜索宝可梦",
+      "value": "incineroar",
+      "feedbackMs": 26.799999997019768,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "",
+      "feedbackMs": 29.799999997019768,
+      "trusted": true,
+      "valuePreserved": false
+    },
+    {
+      "field": "队伍名称",
+      "value": "R",
+      "feedbackMs": 24.899999991059303,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Re",
+      "feedbackMs": 23.80000001192093,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Res",
+      "feedbackMs": 23.5,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Resp",
+      "feedbackMs": 23,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Respo",
+      "feedbackMs": 21.099999994039536,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Respon",
+      "feedbackMs": 19.80000001192093,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Respons",
+      "feedbackMs": 19.299999997019768,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsi",
+      "feedbackMs": 18,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsiv",
+      "feedbackMs": 16.399999991059303,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsive",
+      "feedbackMs": 30.200000002980232,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsive ",
+      "feedbackMs": 29.599999994039536,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsive t",
+      "feedbackMs": 27,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsive te",
+      "feedbackMs": 26.600000008940697,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsive tea",
+      "feedbackMs": 25.400000005960464,
+      "trusted": true,
+      "valuePreserved": true
+    },
+    {
+      "field": "队伍名称",
+      "value": "Responsive team",
+      "feedbackMs": 24.5,
+      "trusted": true,
+      "valuePreserved": true
+    }
+  ],
+  "method": "Electron X11 自动键盘输入；从 input 事件到第二次 requestAnimationFrame 的反馈延迟。计算线程同时进行完整构筑搜索。",
+  "limits": "测量应用事件到渲染反馈的代理指标，不是物理按键到屏幕显示的硬件延迟。中文输入法另行验证。"
+}

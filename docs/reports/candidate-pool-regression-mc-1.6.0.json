@@ -1,0 +1,24 @@
+{
+  "createdAt": "2026-09-14T14:09:22.190263+00:00",
+  "algorithmVersion": "mc-1.6.0",
+  "source": "2001945654:MC177",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "modelVersion": "64b896c0c2c39ad06eea",
+  "before": {
+    "candidates": 48,
+    "species": 4,
+    "sinistchaVariants": 45,
+    "speciesIncludingCore": 5,
+    "complete": false
+  },
+  "after": {
+    "candidates": 48,
+    "species": 32,
+    "sinistchaVariants": 5,
+    "complete": true,
+    "corePreserved": true,
+    "legal": true
+  },
+  "method": "候选名额在基础物种间按相关性作递减分配；保留用户指定变体，不增加候选预算或固定每物种上限。",
+  "regression": "tests/mechanisms.test.ts:机制候选不能被单一物种的变体占满，沙暴核心能保留原配置补齐"
+}

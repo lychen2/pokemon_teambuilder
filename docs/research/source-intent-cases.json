@@ -1,0 +1,39 @@
+[
+  {
+    "id": "mawile-setup-balance-week91",
+    "title": "Mega Mawile Setup Balance",
+    "author": "MegaHappyDragonite",
+    "sharedBy": "Code",
+    "publishedAt": "2026-08-05T23:28:23-0400",
+    "season": "M-B",
+    "url": "https://www.smogon.com/forums/threads/vgc-teams-of-the-week-accepting-regulation-m-b.3727451/page-4#post-11086322",
+    "pasteUrl": "https://pokepast.es/4bd0f376f5730e32",
+    "raw": "Mega Dragonite and Mega Mawile are Megas that work well together. Mawile beats MFroslass, MTtar, and Mfloette, which Mega Dnite struggles into. Mega Dnite beats Zardy. Alolan Ninetales is for the Garchomp mu where it ohkos it and also offers screens into any team. Sinistcha sets TR for mawile, helps into mega swampert, can can re-activate Dragonite's multiscale, and has redirection so Mawile can set up with Swords Dance. Scarf Basculegion helps with the fast mode and can sweep in the endgame when TR is down and for consistent damage. Incin is for intimidate help, fake out to help set tr , and for abit of chip damage.",
+    "setText": "Dragonite-Mega @ Dragoninite  \r\nAbility: Multiscale  \r\nLevel: 50  \r\nEVs: 24 HP / 2 Def / 20 SpA / 4 SpD / 16 Spe  \r\nModest Nature  \r\n- Thunderbolt  \r\n- Dragon Pulse  \r\n- Protect  \r\n- Heat Wave  \r\n\r\nMawile-Mega @ Mawilite  \r\nAbility: Huge Power  \r\nLevel: 50  \r\nEVs: 32 HP / 32 Atk / 2 SpD  \r\nBrave Nature  \r\n- Play Rough  \r\n- Swords Dance  \r\n- Sucker Punch  \r\n- Protect  \r\n\r\nNinetales-Alola @ Focus Sash  \r\nAbility: Snow Warning  \r\nLevel: 50  \r\nEVs: 2 HP / 32 SpA / 32 Spe  \r\nTimid Nature  \r\n- Blizzard  \r\n- Freeze-Dry  \r\n- Protect  \r\n- Aurora Veil  \r\n\r\nSinistcha @ Kasib Berry  \r\nAbility: Hospitality  \r\nLevel: 50  \r\nEVs: 32 HP / 3 Def / 1 SpA / 30 SpD  \r\nRelaxed Nature  \r\n- Rage Powder  \r\n- Protect  \r\n- Trick Room  \r\n- Matcha Gotcha  \r\n\r\nIncineroar @ Passho Berry  \r\nAbility: Intimidate  \r\nLevel: 50  \r\nEVs: 32 HP / 1 Atk / 20 Def / 13 SpD  \r\nRelaxed Nature  \r\n- Flare Blitz  \r\n- Darkest Lariat  \r\n- Fake Out  \r\n- Parting Shot  \r\n\r\nBasculegion @ Choice Scarf  \r\nAbility: Adaptability  \r\nLevel: 50  \r\nEVs: 2 HP / 32 Atk / 32 Spe  \r\nJolly Nature  \r\n- Wave Crash  \r\n- Last Respects  \r\n- Aqua Jet  \r\n- Flip Turn  \r\n\r\n",
+    "actualSelections": null,
+    "battleOutcomes": null,
+    "sampleMethod": "论坛每周队伍栏目；作者自述构筑意图。不是随机排位样本，也没有附实战选出与胜负。",
+    "claims": [
+      {
+        "quote": "Sinistcha sets TR for mawile",
+        "interpretation": "来悲粗茶为低速大嘴娃提供空间路线。"
+      },
+      {
+        "quote": "can can re-activate Dragonite's multiscale",
+        "interpretation": "款待通过回复满血恢复多重鳞片；需要核对实际剩余 HP。"
+      },
+      {
+        "quote": "has redirection so Mawile can set up with Swords Dance",
+        "interpretation": "愤怒粉保护大嘴娃剑舞的行动窗口。"
+      },
+      {
+        "quote": "Scarf Basculegion helps with the fast mode and can sweep in the endgame when TR is down",
+        "interpretation": "幽尾玄鱼承担空间以外的高速路线。"
+      },
+      {
+        "quote": "fake out to help set tr",
+        "interpretation": "炽焰咆哮虎通过击掌奇袭支援开空间。"
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "file": "tests/artwork.test.ts",
+    "code": 0,
+    "elapsed": 1.9362220019975211
+  },
+  {
+    "file": "tests/configurations.test.ts",
+    "code": 0,
+    "elapsed": 8.931945192991407
+  },
+  {
+    "file": "tests/core.test.ts",
+    "code": 0,
+    "elapsed": 5.137139391998062
+  },
+  {
+    "file": "tests/history.test.ts",
+    "code": 0,
+    "elapsed": 5.140036388009321
+  },
+  {
+    "file": "tests/lineups.test.ts",
+    "code": 0,
+    "elapsed": 5.234752855001716
+  },
+  {
+    "file": "tests/mechanisms.test.ts",
+    "code": 0,
+    "elapsed": 2.8723096629983047
+  },
+  {
+    "file": "tests/research-mechanics.test.ts",
+    "code": 0,
+    "elapsed": 3.157783038986963
+  },
+  {
+    "file": "tests/research.test.ts",
+    "code": 0,
+    "elapsed": 4.1784223270078655
+  },
+  {
+    "file": "tests/simulation.test.ts",
+    "code": 0,
+    "elapsed": 20.190830328996526
+  }
+]

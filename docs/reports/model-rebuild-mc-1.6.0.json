@@ -1,0 +1,21 @@
+{
+  "createdAt": "2026-09-14T12:43:31.599160+00:00",
+  "algorithmVersion": "mc-1.6.0",
+  "environmentId": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "corpusVersion": "44cdfd0e4846242f486a",
+  "previousModel": "4ab4b1884f323b06602b",
+  "modelVersion": "64b896c0c2c39ad06eea",
+  "previousArchetypes": 890,
+  "archetypes": 933,
+  "beforeSHA256": "4f5df0528b84426c17d4d4375ba149d8c0fa914aea1a245ae79e6e54dd94edf3",
+  "afterSHA256": "481315f97aeb5c2a8d2e994919e9a42f0236e21e36954c699d8633aed8dea7f1",
+  "unchangedInputs": {
+    "engine": true,
+    "dex": true,
+    "translations": true,
+    "sameTeams": true,
+    "sameObservations": true,
+    "sameCorpusVersion": true
+  },
+  "note": "使用固定共享表语料重建；机制角色分组改变聚类距离与代表，未并入新时间窗口样本。"
+}

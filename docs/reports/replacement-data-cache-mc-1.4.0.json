@@ -1,0 +1,41 @@
+{
+  "createdAt": "2026-09-14T11:04:38.283397+00:00",
+  "algorithmVersion": "mc-1.4.0",
+  "modelVersion": "f60b1f44c4508ff285e8",
+  "inputSHA256": "cf8b104fa4e5fb8f295c2dc77d53c30150a6606b551e1b1ac730d6da869e1540",
+  "threats": 24,
+  "scenarios": 147,
+  "beforeMs": 77944.83664899999,
+  "afterMs": 46754.041284,
+  "damageQueries": 137664,
+  "search": {
+    "budgetMs": null,
+    "deadlineReached": false,
+    "evaluatedStates": 3917,
+    "reusedStates": 1229,
+    "completedLayers": 1
+  },
+  "normalizedProposalsExactlyEqual": true,
+  "normalizedProposalsSHA256": "2fd323402ca979485b03ce5120d69647ed9fe78d4e1d1ce069d347d17d8451f4",
+  "beforeMemory": {
+    "rss": 1996193792,
+    "heapTotal": 1817489408,
+    "heapUsed": 1758511280,
+    "external": 24359983,
+    "arrayBuffers": 16987076
+  },
+  "afterMemory": {
+    "rss": 2051833856,
+    "heapTotal": 1877340160,
+    "heapUsed": 1828252024,
+    "external": 25390724,
+    "arrayBuffers": 18010418
+  },
+  "maxNumericDifferenceFromElectron": 1.1102230246251565e-16,
+  "scope": "同一完整队伍、全部原候选、同一Node运行时的冷缓存构筑搜索，各测一次；界面实际耗时另行验证。",
+  "limits": [
+    "这不是总体三秒目标达成，也不证明策略更强。",
+    "峰值内存未在这个检查中采样，memory为搜索完成时的进程值。",
+    "跨Electron/Node比较先序列化数据，最大浮点差为约1.1e-16；同一Node运行时优化前后逐项完全相等。"
+  ]
+}

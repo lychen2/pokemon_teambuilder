@@ -1,0 +1,13 @@
+
+Running 5 tests using 1 worker
+
+(node:666675) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/desktop/artwork.spec.ts:8:1 › 雌性爱管侍使用独立高清素材，加入队伍和窄窗口后图片仍正确 (5.4s)
+  ✓  2 tests/desktop/configurations.spec.ts:51:1 › 应用升级使用同语料的新模型，保留旧模型和已保存偏好 (12.2s)
+{"ruleUpdate":{"executable":"/home/zonazcy/Projects/poke_teambuilder/release/0.3.0/poke-teambuilder-0.3.0-x86_64.AppImage","preparedMs":40244.829024,"verifiedWorkflowMs":59479.10832199999}}
+  ✓  3 tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 (1.1m)
+  ✓  4 tests/desktop/history.spec.ts:12:1 › 零样本赛季显示历史配置、保存开关，并以历史对手完成真实模拟 (20.8s)
+  ✓  5 tests/desktop/workspace.spec.ts:8:1 › 核心构筑、方案比较、撤销、保存恢复与窄窗口 (25.1s)
+
+  5 passed (2.2m)

@@ -1,0 +1,150 @@
+{
+  "readyMs": 2851.540013,
+  "viewport": {
+    "width": 805,
+    "height": 953
+  },
+  "runtime": {
+    "version": "0.3.0",
+    "packaged": true,
+    "dataDirectory": "/tmp/poke-native-0.3.0-zV9Vxc",
+    "windowVisible": true,
+    "testMode": false,
+    "gpuDisabled": false,
+    "ozonePlatform": "wayland",
+    "gpu": {
+      "2d_canvas": "enabled",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "enabled",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "enabled_on",
+      "rasterization": "enabled",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "enabled",
+      "video_encode": "disabled_software",
+      "vulkan": "disabled_off",
+      "webgl": "enabled",
+      "webgpu": "enabled",
+      "webgpu_on_vk_via_gl_interop": "disabled_off",
+      "webnn": "disabled_off"
+    }
+  }
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: locator('.proposal-card:not(.stale):visible').first()
+Expected: visible
+Timeout: 25000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" locator('.proposal-card:not(.stale):visible').first() with timeout 25000ms
+  - waiting for locator('.proposal-card:not(.stale):visible').first()
+
+    at captureRawStack (/home/zonazcy/Projects/poke_teambuilder/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:8588:17)
+    at callMatcherAsStep (/home/zonazcy/Projects/poke_teambuilder/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13310:57)
+    at Object.toBeVisible (/home/zonazcy/Projects/poke_teambuilder/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13302:23)
+    at /home/zonazcy/Projects/poke_teambuilder/tools/smoke-release.mjs:59:76 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: locator('.proposal-card:not(.stale):visible').first()\n" +
+      'Expected: visible\n' +
+      'Timeout: 25000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeVisible" locator('.proposal-card:not(.stale):visible').first() with timeout 25000ms\n` +
+      "  - waiting for locator('.proposal-card:not(.stale):visible').first()\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      `  - Expect "toBeVisible" locator('.proposal-card:not(.stale):visible').first() with timeout 25000ms`,
+      "  - waiting for locator('.proposal-card:not(.stale):visible').first()"
+    ],
+    timeout: 25000,
+    ariaSnapshot: '- banner\n' +
+      '- dialog "构筑推荐":\n' +
+      '  - heading "构筑推荐" [level=2]\n' +
+      '  - paragraph: 构筑推荐\n' +
+      '  - button "关闭"\n' +
+      '  - complementary:\n' +
+      '    - text: 一起构筑 配置级推荐\n' +
+      '    - button "搭档" [disabled]\n' +
+      '    - button "完整方案"\n' +
+      '    - button "替换"\n' +
+      '    - group: 推荐偏好与保留变体\n' +
+      '    - heading "寻找值得尝试的调整" [level=3]\n' +
+      '    - paragraph: 结合真实配置、双打配合与伤害阈值，保留你的核心约束。\n' +
+      '    - button [disabled]:\n' +
+      '      - status: 比较配置与对局\n' +
+      '    - paragraph: 正在检查配置合法性、伤害与速度关系。你可以继续编辑队伍。\n' +
+      '    - article:\n' +
+      '      - text: 方案 01 已过期\n' +
+      '      - heading "方案 1 · 控速 / 范围输出" [level=3]\n' +
+      '      - img "大狃拉"\n' +
+      '      - img "暴飞龙"\n' +
+      '      - img "烈箭鹰"\n' +
+      '      - img "轰擂金刚猩"\n' +
+      '      - img "大嘴鸥"\n' +
+      '      - img "班基拉斯"\n' +
+      '      - paragraph: 对幽尾玄鱼：最佳最低乱数 25% → 232%；先手成员 0 → 1；平均承伤（单成员最多计100%） 100% → 70%；命中时击杀概率 0.0% → 100.0%\n' +
+      '      - paragraph: 对赛富豪：最佳最低乱数 0% → 97%；先手成员 1 → 3；平均承伤（单成员最多计100%） 85% → 84%；命中时击杀概率 0.0% → 87.5%\n' +
+      '      - paragraph: 对班基拉斯的处理变难：先手成员 1 → 3；平均承伤（单成员最多计100%） 52% → 72%\n' +
+      '      - text: 12 个原始来源\n' +
+      '      - button "比较并应用" [disabled]\n' +
+      '    - article:\n' +
+      '      - text: 方案 02 已过期\n' +
+      '      - heading "方案 2 · 控速 / 威吓" [level=3]\n' +
+      '      - img "大狃拉"\n' +
+      '      - img "暴飞龙"\n' +
+      '      - img "轰擂金刚猩"\n' +
+      '      - img "烈箭鹰"\n' +
+      '      - img "大嘴鸥"\n' +
+      '      - img "钢铠鸦"\n' +
+      '      - paragraph: 对幽尾玄鱼：最佳最低乱数 25% → 237%；先手成员 0 → 1；平均承伤（单成员最多计100%） 100% → 71%；命中时击杀概率 0.0% → 100.0%\n' +
+      '      - paragraph: 对赛富豪：最佳最低乱数 0% → 97%；先手成员 1 → 3；平均承伤（单成员最多计100%） 85% → 81%；命中时击杀概率 0.0% → 87.5%\n' +
+      '      - paragraph: 对班基拉斯的处理变难：先手成员 1 → 3；平均承伤（单成员最多计100%） 52% → 72%\n' +
+      '      - text: 7 个原始来源\n' +
+      '      - button "比较并应用" [disabled]\n' +
+      '    - article:\n' +
+      '      - text: 方案 03 已过期\n' +
+      '      - heading "方案 3 · 控速 / 威吓" [level=3]\n' +
+      '      - img "大狃拉"\n' +
+      '      - img "暴飞龙"\n' +
+      '      - img "烈箭鹰"\n' +
+      '      - img "轰擂金刚猩"\n' +
+      '      - img "大嘴鸥"\n' +
+      '      - img "化石翼龙"\n' +
+      '      - paragraph: 对幽尾玄鱼：最佳最低乱数 25% → 232%；先手成员 0 → 1；平均承伤（单成员最多计100%） 100% → 71%；命中时击杀概率 0.0% → 100.0%\n' +
+      '      - paragraph: 对赛富豪：最佳最低乱数 0% → 97%；先手成员 1 → 3；平均承伤（单成员最多计100%） 85% → 82%；命中时击杀概率 0.0% → 87.5%\n' +
+      '      - paragraph: 对班基拉斯的处理变难：先手成员 1 → 3；平均承伤（单成员最多计100%） 52% → 73%\n' +
+      '      - text: 9 个原始来源\n' +
+      '      - button "比较并应用" [disabled]\n' +
+      '    - article:\n' +
+      '      - text: 方案 04 已过期\n' +
+      '      - heading "方案 4 · 控速 / 范围输出" [level=3]\n' +
+      '      - img "大狃拉"\n' +
+      '      - img "暴飞龙"\n' +
+      '      - img "烈箭鹰"\n' +
+      '      - img "轰擂金刚猩"\n' +
+      '      - img "煤炭龟"\n' +
+      '      - img "班基拉斯"\n' +
+      '      - paragraph: 对幽尾玄鱼：最佳最低乱数 25% → 232%；先手成员 0 → 1；平均承伤（单成员最多计100%） 100% → 70%；命中时击杀概率 0.0% → 100.0%\n' +
+      '      - paragraph: 对赛富豪：最佳最低乱数 0% → 97%；先手成员 1 → 3；平均承伤（单成员最多计100%） 85% → 84%；命中时击杀概率 0.0% → 87.5%\n' +
+      '      - paragraph: 对班基拉斯的处理变难：先手成员 1 → 3；平均承伤（单成员最多计100%） 52% → 72%\n' +
+      '      - text: 18 个原始来源\n' +
+      '      - button "比较并应用" [disabled]\n' +
+      '    - text: 手动改动和锁定内容始终由你决定'
+  }
+}
+
+Node.js v26.8.2

@@ -1,0 +1,22 @@
+
+> poke-teambuilder@0.1.0 test:ui /home/zonazcy/Projects/poke_teambuilder
+> playwright test
+
+
+Running 10 tests using 1 worker
+
+(node:351603) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop/editing.spec.ts:8:1 › 导入满队、配点错误与预览、伤害条件、模拟期间编辑和取消 (4.5s)
+  ✓   2 tests/desktop/environment.spec.ts:8:1 › 实际本地规则重建、候选检查、激活、保留旧队伍及迁移冲突 (41.2s)
+  -   3 tests/desktop/ime.spec.ts:10:1 › 系统 Fcitx5／Rime 的真实中文组合输入、确认候选与搜索焦点
+  ✓   4 tests/desktop/research-tools.spec.ts:8:1 › 具体速度线、回合条件保留、构筑笔记和指定位置替换 (6.7s)
+  ✓   5 tests/desktop/research-workflows.spec.ts:17:1 › 多路线计划、实践快照、元数据编辑保留建议和重启记录 (11.3s)
+  ✓   6 tests/desktop/research-workflows.spec.ts:51:1 › 条件模板、风险比较与配点入口使用同一上下文 (5.1s)
+  ✓   7 tests/desktop/research-workflows.spec.ts:68:1 › 独立资料核对、存储报告与主要页面可访问性 (2.1s)
+  ✓   8 tests/desktop/research-workflows.spec.ts:89:1 › 来源意图、偏好持久化与构筑编辑可访问性 (3.6s)
+  ✓   9 tests/desktop/research-workflows.spec.ts:121:1 › 键盘搜索自动滚入视野，窄窗放大后仍能搜索配置 (1.7s)
+  ✓  10 tests/desktop/workspace.spec.ts:8:1 › 核心构筑、方案比较、撤销、保存恢复与窄窗口 (10.0s)
+
+  1 skipped
+  9 passed (1.4m)

@@ -1,0 +1,8 @@
+
+> poke-teambuilder@0.3.0 test /home/zonazcy/Projects/poke_teambuilder
+> vitest run
+
+
+ RUN  v5.0.0 /home/zonazcy/Projects/poke_teambuilder
+
+ ELIFECYCLE  Test failed. See above for more details.
