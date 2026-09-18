@@ -172,9 +172,13 @@ export class TeamSearch {
       const target = kind === 'add' ? draft.members.length + 1 : this.evaluator.engine.ruleTable.maxTeamSize;
       while (beam.length && beam[0].members.length < target) {
         const expanded: State[] = [];
-        expand: for (const s of beam) for (const candidate of pool) {
+        // Share candidate identities across this layer's branches so repeated
+        // lineups can hit the request cache. Each layer gets fresh identities:
+        // custom formats without Species Clause may select a set twice.
+        const additions = pool.map(candidate => member(candidate.set));
+        expand: for (const s of beam) for (const candidate of additions) {
           if (expired()) break expand;
-          const members = [...s.members, member(candidate.set)];
+          const members = [...s.members, candidate];
           if (this.isLegal(members)) expanded.push(state(members));
         }
         beam = ranked(expanded, beamWidth);

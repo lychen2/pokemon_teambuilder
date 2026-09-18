@@ -3,7 +3,7 @@ import {STAT_KEYS} from '../../../../packages/core/types';
 import type {ResearchPreferences} from '../../../../packages/core/research/types';
 import type {Workspace} from './useWorkspace';
 import {useResearch} from './useResearch';
-import {SearchSelect, useDex} from './ui';
+import {SearchSelect, PokemonIcon, useDex} from './ui';
 
 const defaultWeights = {pressure: 3, resilience: 1, speed: .6, coverage: 1, tailRisk: 1.5};
 export function SearchPreferences({workspace: w}: {workspace: Workspace}) {
@@ -24,7 +24,7 @@ export function SearchPreferences({workspace: w}: {workspace: Workspace}) {
     <div className="preference-weights">{(Object.keys(defaultWeights) as (keyof typeof defaultWeights)[]).map(key => <label key={key}>{({pressure: '进攻压力', resilience: '承伤能力', speed: '速度关系', coverage: '打点覆盖', tailRisk: '困难对局代价'})[key]}<input aria-label={`偏好${key}`} type="number" min="0" step="0.1" value={value.weights[key]} onChange={e => update({weights: {...value.weights, [key]: Number(e.target.value)}})}/></label>)}</div>
     <SearchSelect label="选择要保留变体的宝可梦" value={speciesId} options={dex.species.filter(species => availableSpecies.has(species.id))} onChange={setSpeciesId}/>
     {speciesId && <SearchSelect label="保留在候选池的配置" value={null} options={options} onChange={id => update({retainedConfigurationIds: [...value.retainedConfigurationIds, id]})}/>}
-    <div className="chip-list">{value.retainedConfigurationIds.map(id => {const c = byId.get(id); return <button className="button small secondary" key={id} title={c?.set.moves.map(id => dex.names('moves', id)).join(' / ')} onClick={() => update({retainedConfigurationIds: value.retainedConfigurationIds.filter(v => v !== id)})}>{c ? `${dex.names('species', c.speciesId)} · ${dex.names('items', c.set.itemId)} · ${c.isRepresentative ? '代表' : '变体'}` : '原配置已不在当前模型'} ×</button>;})}</div>
+    <div className="chip-list">{value.retainedConfigurationIds.map(id => {const c = byId.get(id); return <button className="button small secondary" key={id} title={c?.set.moves.map(id => dex.names('moves', id)).join(' / ')} onClick={() => update({retainedConfigurationIds: value.retainedConfigurationIds.filter(v => v !== id)})}>{c && <PokemonIcon id={c.speciesId} gender={c.set.gender} size={32}/>}<span>{c ? `${dex.names('species', c.speciesId)} · ${dex.names('items', c.set.itemId)} · ${c.isRepresentative ? '代表' : '变体'}` : '原配置已不在当前模型'} ×</span></button>;})}</div>
     <p className="field-help">保留候选不代表强制加入队伍；需要固定成员时使用核心锁。</p><button className="button secondary small" disabled={research.busy || !research.data} onClick={() => void research.save(value).then(() => {setWorking(null); setSaved(true);}).catch(w.report)}>保存推荐偏好</button>{saved && <span className="success-text" role="status">已保存</span>}
   </details>;
 }

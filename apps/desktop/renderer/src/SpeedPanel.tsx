@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {ArrowUpRight, CircleHelp, Wind} from 'lucide-react';
 import type {BattleField, PokemonSet, SpeedAnalysis, Proposal, SpreadResult} from '../../../../packages/core/types';
 import type {Workspace} from './useWorkspace';
-import {PokemonIcon, Spinner, useDex} from './ui';
+import {PokemonIcon, PokemonLabel, Spinner, useDex} from './ui';
 import {SpreadOutcome} from './SpreadOutcome';
 
 export function SpeedPanel({workspace: w, onDamage, onProposal}: {workspace: Workspace; onProposal: (p: Proposal) => void; onDamage: (a: PokemonSet, d: PokemonSet, field?: BattleField) => void}) {
@@ -49,6 +49,7 @@ export function SpeedPanel({workspace: w, onDamage, onProposal}: {workspace: Wor
     {busy && <Spinner label="计算当前条件下的速度关系"/>}{error && <div className="notice warning" role="alert">{error}</div>}
     {spread && <SpreadOutcome result={spread}/>}
     {result && <>
+      <div className="pokemon-list"><PokemonLabel id={selected.set.speciesId} gender={selected.set.gender} itemId={selected.set.itemId} mega={field.attackerMega ?? true}/></div>
       <div className="speed-summary"><span>速度能力值 <b>{result.naturalSpeed}</b></span><span className="before">先手 <b>{result.rows.filter(r => r.order === 'before').length}</b></span><span>同速 <b>{result.rows.filter(r => r.order === 'tie').length}</b></span><span className="after">后手 <b>{result.rows.filter(r => r.order === 'after').length}</b></span></div>
       <p className="field-help">上方为未计入道具等修正的能力值；下表的对局速度已计入围巾、特性与所选条件。</p>
       <div className="speed-filter"><input aria-label="筛选速度对手" placeholder="查找对手或配置…" value={query} onChange={e => setQuery(e.target.value)}/><select aria-label="筛选速度关系" value={order} onChange={e => setOrder(e.target.value)}><option value="all">全部关系</option><option value="before">我方先手</option><option value="tie">双方同速</option><option value="after">我方后手</option></select></div>

@@ -1,0 +1,56 @@
+{
+  "createdAt": "2026-09-18T06:11:14.811Z",
+  "executable": "/home/zonazcy/Projects/poke_teambuilder/release/0.1.1/linux-unpacked/sixfold",
+  "desktop": "niri",
+  "sessionType": "wayland",
+  "readyMs": 2737.248134,
+  "viewport": {
+    "width": 805,
+    "height": 953
+  },
+  "runtime": {
+    "version": "0.1.1",
+    "packaged": true,
+    "dataDirectory": "/tmp/poke-native-0.1.1-RMg8wE",
+    "windowVisible": true,
+    "testMode": false,
+    "gpuDisabled": false,
+    "ozonePlatform": "wayland",
+    "gpu": {
+      "2d_canvas": "enabled",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "enabled",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "enabled_on",
+      "rasterization": "enabled",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "enabled",
+      "video_encode": "disabled_software",
+      "vulkan": "disabled_off",
+      "webgl": "enabled",
+      "webgpu": "enabled",
+      "webgpu_on_vk_via_gl_interop": "disabled_off",
+      "webnn": "disabled_off"
+    }
+  },
+  "rendererErrors": [],
+  "searchTimings": {
+    "completeMs": 12673.312529,
+    "replaceMs": 19283.69264,
+    "completeWithinThreeSeconds": false,
+    "replaceWithinThreeSeconds": false
+  },
+  "checks": [
+    "visible packaged window",
+    "isolated data directory",
+    "search",
+    "core lock",
+    "complete team",
+    "current analysis",
+    "replacement proposals",
+    "autosave"
+  ],
+  "limits": "普通桌面会话启动并操作，无 POKE_TEST 或禁用 GPU 参数；整队改进最多等待60秒，仅检查功能完成，实际耗时与三秒目标分别记录。自动操作不等同于物理设备与人工读屏验收。"
+}

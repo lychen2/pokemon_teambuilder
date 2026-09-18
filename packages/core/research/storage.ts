@@ -32,7 +32,10 @@ export class ResearchStore {
       const old = JSON.parse(previous.data) as ResearchEntry;
       if (entry.revision !== previous.revision + 1) throw new Error('研究记录已被修改，请重新读取后保存。');
       if (old.kind !== entry.kind || old.environmentId !== entry.environmentId) throw new Error('记录类型与环境不能改变，请建立新记录。');
-      if (old.kind === 'match' && entry.kind === 'match' && JSON.stringify(old.snapshot) !== JSON.stringify(entry.snapshot)) throw new Error('实战记录的队伍版本不可改写。');
+      if (old.kind === 'match' && entry.kind === 'match') {
+        if (JSON.stringify(old.snapshot) !== JSON.stringify(entry.snapshot)) throw new Error('实战记录的队伍版本不可改写。');
+        if (old.planId !== entry.planId || JSON.stringify(old.planContext) !== JSON.stringify(entry.planContext)) throw new Error('实战记录的计划路线证据不可改写。');
+      }
     } else if (entry.revision !== 0) throw new Error('新研究记录必须从修订 0 开始。');
     const subject = 'draftId' in entry ? entry.draftId : entry.kind === 'source' ? entry.sourceId : entry.url;
     this.db.prepare('INSERT OR REPLACE INTO research_entries(id,kind,subject,environment_id,revision,data) VALUES(?,?,?,?,?,?)')

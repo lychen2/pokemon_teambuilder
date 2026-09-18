@@ -21,6 +21,12 @@ export function PokemonIcon({id, size = 48, gender, itemId, mega = false}: {id: 
   if (!source) return <span className="pokemon-icon artwork-missing" role="img" aria-label={`${label}：待补图`} title={`${label}的当前形态素材尚未收录`} style={{width: size, height: size}}>待补图</span>;
   return <img className="pokemon-icon" src={source} width={size} height={size} alt={label} data-species-id={artworkId} data-artwork-source={record.source} decoding="async" draggable={false}/>;
 }
+export function PokemonLabel({id, size = 32, gender, itemId, mega = false}: Parameters<typeof PokemonIcon>[0]) {
+  const dex = useDex();
+  const form = mega ? dex.speciesById.get(id)?.megaForms.find(form => form.itemId === itemId)?.speciesId : undefined;
+  const name = dex.names('species', form || id) + (id === 'pyroar' && gender === 'F' ? '（雌性）' : '');
+  return <span className="pokemon-label"><PokemonIcon id={id} gender={gender} itemId={itemId} mega={mega} size={size}/><span aria-hidden="true">{name}</span></span>;
+}
 export function TypeBadge({type}: {type: string}) {return <span className="type-badge" style={{'--type-color': typeColor[type]} as CSSProperties}>{typeZh[type] || type}</span>;}
 export function OriginBadge({kind}: {kind: PokemonSet['sourceKind']}) {return <span className={`origin-badge ${kind}`}>{({observed: '当前样本', historical: '历史迁移', generated: '算法生成', manual: '手动配置'})[kind]}</span>;}
 export function Spinner({label = '正在计算'}: {label?: string}) {return <span className="loading-inline" role="status"><LoaderCircle className="spin" size={15}/>{label}</span>;}

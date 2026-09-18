@@ -1,5 +1,19 @@
 import type {EnvironmentSnapshot, TeamDraft} from '../types';
+import {calculationContent} from '../revisions';
 import type {MatchRecord, MatchSummary, ResearchEntry} from './types';
+
+export interface MatchFilters {
+  currentDraft?: TeamDraft;
+  category?: MatchRecord['category'];
+  opponentSpecies?: string;
+}
+
+export function filterMatches(records: readonly MatchRecord[], filters: MatchFilters): MatchRecord[] {
+  const content = filters.currentDraft && calculationContent(filters.currentDraft);
+  return records.filter(record => (!filters.currentDraft || (record.draftId === filters.currentDraft.id && calculationContent(record.snapshot) === content))
+    && (!filters.category || record.category === filters.category)
+    && (!filters.opponentSpecies || record.opponentSpecies.includes(filters.opponentSpecies)));
+}
 
 export function validateResearch(entry: ResearchEntry, environment: EnvironmentSnapshot): void {
   if (entry.environmentId !== environment.id) throw new Error('记录与规则环境不一致。');
@@ -14,7 +28,13 @@ export function validateResearch(entry: ResearchEntry, environment: EnvironmentS
     if (entry.opponentSpecies.length > environment.teamSize) throw new Error('对手物种数超过规则队伍人数。');
   }
   if (entry.kind === 'plan') for (const route of entry.routes) checkSelection(entry.snapshot, route.selection, route.leads, route.status === 'tested');
-  if (entry.kind === 'match') checkSelection(entry.snapshot, entry.selection, entry.leads, false);
+  if (entry.kind === 'match') {
+    checkSelection(entry.snapshot, entry.selection, entry.leads, false);
+    if (entry.planContext) {
+      if (!entry.planId) throw new Error('路线证据必须关联对局计划。');
+      checkSelection(entry.snapshot, entry.planContext.route.selection, entry.planContext.route.leads, entry.planContext.route.status === 'tested');
+    }
+  }
   if (entry.kind === 'source' && entry.parentSourceIds.includes(entry.sourceId)) throw new Error('来源不能作为自己的上游。');
   if (entry.kind === 'document') for (const claim of entry.claims) {
     if (!claim.quote.trim() || !entry.raw.includes(claim.quote)) throw new Error('每项提取结论必须包含可在原文定位的引文。');

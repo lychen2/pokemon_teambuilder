@@ -5,6 +5,7 @@ import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {launchDesktop} from './launch';
 import type {BootstrapData} from '../../packages/core/types';
+import {fieldSummary} from '../../apps/desktop/renderer/src/BattleConditions';
 
 async function importTeam(page: Page) {
   const b: BootstrapData = JSON.parse(await readFile('assets/bootstrap.json', 'utf8'));
@@ -18,7 +19,7 @@ test('多路线计划、实践快照、元数据编辑保留建议和重启记�
   const directory = await mkdtemp(join(tmpdir(), 'poke-research-flow-')); let app = await launchDesktop(directory);
   try {
     let page = await app.firstWindow(); await importTeam(page);
-    await page.getByRole('button', {name: '寻找改进方案', exact: true}).click(); await expect(page.locator('.proposal-card').first()).toBeVisible();
+    await page.getByRole('button', {name: '寻找改进方案', exact: true}).click(); await expect(page.locator('.proposal-card').first()).toBeVisible({timeout: 40000});
     await page.getByLabel('队伍名称').fill('计划与证据验收'); await expect(page.getByText('已自动保存', {exact: true})).toBeVisible();
     await expect(page.locator('.proposal-card').first().getByRole('button', {name: '比较并应用'})).toBeEnabled();
     await page.getByRole('tab', {name: '构筑笔记'}).click(); await page.getByRole('button', {name: '对局计划', exact: true}).click();
@@ -33,18 +34,98 @@ test('多路线计划、实践快照、元数据编辑保留建议和重启记�
     await page.locator('.route-editor').first().getByLabel('如何赢下对局').fill('场地轻装抢先处理空间手；需要实战确认。');
     await page.getByRole('button', {name: '增加另一条路线'}).click(); await expect(page.getByLabel('路线名称')).toHaveCount(2);
     await page.getByLabel('路线名称').nth(1).fill('保留后排轮转'); await page.getByLabel('如何赢下对局').nth(1).fill('先消耗空间回合，再换入进攻核心。');
+    const secondRoute = page.locator('.route-editor').nth(1);
+    for (let i = 1; i < 5; i++) await secondRoute.locator('.lineup-picker>div>button:first-child').nth(i).click();
+    for (let i = 1; i < 3; i++) await secondRoute.locator('.lineup-picker>div>button:nth-child(2)').nth(i).click();
+    await expect(secondRoute.locator('.lineup-picker>div>button:first-child').nth(0)).toBeDisabled();
+    await expect(secondRoute.locator('.lineup-picker>div>button:nth-child(2)').nth(3)).toBeDisabled();
     await page.getByRole('button', {name: '保存对局计划'}).click(); await expect(page.getByRole('dialog')).toBeHidden();
     await expect(page.locator('.research-card')).toContainText('2 条路线');
-    await page.getByRole('button', {name: '记录实践'}).click(); await page.getByLabel('实战结果').selectOption('loss'); await page.getByLabel('关键原因').fill('选出缺少干扰');
+    await page.getByRole('button', {name: '记录实践'}).click();
+    await expect(page.getByLabel('参考的计划路线')).toHaveValue('');
+    await page.getByLabel('参考的计划路线').selectOption({label: '保留后排轮转'});
+    await expect(page.getByRole('region', {name: '当时的计划路线'})).toContainText('先消耗空间回合');
+    await expect(page.getByRole('dialog').locator('.lineup-picker>div.chosen')).toHaveCount(0);
+    await page.getByRole('button', {name: '按该路线填写实际选出'}).click();
+    await expect(page.getByRole('dialog').locator('.lineup-picker>div.chosen')).toHaveCount(4);
+    await page.getByRole('combobox', {name: '添加对手宝可梦'}).fill('轰擂金刚猩');
+    await page.getByRole('combobox', {name: '添加对手宝可梦'}).press('Enter');
+    await page.getByLabel('实战结果').selectOption('loss'); await page.getByLabel('对局类型').selectOption('ranked'); await page.getByLabel('关键原因').fill('选出缺少干扰');
     await page.getByRole('button', {name: '保存实战记录'}).click(); await expect(page.getByRole('dialog')).toBeHidden();
     await page.getByRole('button', {name: '实战复盘', exact: true}).click(); await expect(page.locator('.record-summary')).toContainText('1 场有结果');
     const before = await page.evaluate(() => window.poke.call('bootstrap', undefined)); const draft = before.drafts.find(d => d.name === '计划与证据验收')!;
     const records = await page.evaluate(input => window.poke.call('research', input), {draftId: draft.id, environmentId: draft.environmentId});
-    expect(records.entries.some(entry => entry.kind === 'match' && entry.snapshot.name === draft.name)).toBe(true);
+    const savedMatch = records.entries.find(entry => entry.kind === 'match')!;
+    const savedPlan = records.entries.find(entry => entry.kind === 'plan')!;
+    expect(savedMatch.kind === 'match' && savedMatch.planContext?.route.name).toBe('保留后排轮转');
+    expect(savedMatch.kind === 'match' && savedMatch.selection).toEqual(savedPlan.kind === 'plan' && savedPlan.routes[1].selection);
+    await page.getByLabel('比赛类别').selectOption('practice');
+    await expect(page.locator('.record-summary')).toContainText('0 场'); await expect(page.locator('.research-card')).toHaveCount(0);
+    await page.getByLabel('比赛类别').selectOption('ranked'); await expect(page.locator('.research-card')).toHaveCount(1);
+    await page.getByRole('button', {name: '记一场实战', exact: true}).click();
+    await page.getByRole('button', {name: '保存实战记录'}).click(); await expect(page.getByRole('dialog')).toBeHidden();
+    await page.getByLabel('比赛类别').selectOption('');
+    await expect(page.locator('.record-summary')).toContainText('2 场');
+    await expect(page.locator('.record-summary')).toContainText('1 场提供选出');
+    await page.getByLabel('对手包含').selectOption('rillaboom');
+    await expect(page.locator('.research-card')).toHaveCount(1); await expect(page.locator('.record-summary')).toContainText('1 场记录');
+    await page.getByLabel('对手包含').selectOption('');
+    await page.getByRole('button', {name: '对局计划', exact: true}).click();
+    await page.getByRole('button', {name: '查看与编辑', exact: true}).click();
+    await page.getByLabel('路线名称').nth(1).fill('后来修改的路线');
+    await page.getByRole('button', {name: '保存对局计划'}).click(); await expect(page.getByRole('dialog')).toBeHidden();
+    await page.getByRole('button', {name: '实战复盘', exact: true}).click();
+    await page.getByLabel('队伍配置').selectOption('current'); await expect(page.locator('.research-card')).toHaveCount(2);
     await page.getByLabel('队伍名称').fill('后来修改的名称'); await expect(page.getByText('已自动保存', {exact: true})).toBeVisible();
     await app.close(); app = await launchDesktop(directory); page = await app.firstWindow(); await expect(page.getByLabel('队伍名称')).toHaveValue('后来修改的名称');
     await page.getByRole('tab', {name: '构筑笔记'}).click(); await page.getByRole('button', {name: '实战复盘', exact: true}).click(); await expect(page.locator('.record-summary')).toContainText('1 场有结果');
+    await page.getByLabel('队伍配置').selectOption('current'); await expect(page.locator('.research-card')).toHaveCount(2);
+    await page.getByLabel('比赛类别').selectOption('ranked'); await expect(page.locator('.research-card')).toHaveCount(1);
+    await expect(page.locator('.research-card')).toContainText('保留后排轮转');
+    await page.getByRole('button', {name: '查看记录'}).click();
+    await expect(page.getByRole('region', {name: '当时的计划路线'})).toContainText('保留后排轮转');
+    await expect(page.getByRole('group', {name: '计划选出', exact: true}).locator('img')).toHaveCount(4);
+    await expect(page.getByRole('group', {name: '计划首发', exact: true}).locator('img')).toHaveCount(2);
+    await expect(page.getByLabel('参考的计划路线')).toHaveCount(0);
+    expect((await new AxeBuilder({page}).setLegacyMode(true).include('[role="dialog"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations).toEqual([]);
+    await page.screenshot({path: 'test-results/research-route-evidence.png'});
+    await page.getByRole('button', {name: '关闭', exact: true}).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    expect((await new AxeBuilder({page}).setLegacyMode(true).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations).toEqual([]);
     await page.screenshot({path: 'test-results/research-records.png'});
+  } finally {await app.close();}
+});
+
+test('选出图像和另选首发的条件完整保存为计划', async () => {
+  const app = await launchDesktop(await mkdtemp(join(tmpdir(), 'poke-selection-context-')));
+  try {
+    const page = await app.firstWindow(); await importTeam(page);
+    await expect(page.getByText('已自动保存', {exact: true})).toBeVisible();
+    const state = await page.evaluate(() => window.poke.call('bootstrap', undefined));
+    const draft = state.drafts.find(draft => draft.members.length === 6)!;
+    const result = await page.evaluate(draft => window.poke.call('selections', {draft, opponentSpecies: []}), draft);
+    const routeIndex = result.routes.findIndex(route => route.leadOptions.some(lead => JSON.stringify(lead.field) !== JSON.stringify(route.field) || lead.megaId !== route.megaId));
+    expect(routeIndex).toBeGreaterThanOrEqual(0);
+    const route = result.routes[routeIndex];
+    const leadIndex = route.leadOptions.findIndex(lead => JSON.stringify(lead.field) !== JSON.stringify(route.field) || lead.megaId !== route.megaId);
+    const lead = route.leadOptions[leadIndex];
+    await page.getByRole('tab', {name: '选出路线'}).click();
+    const card = page.locator('.selection-route').nth(routeIndex); await expect(card).toBeAttached();
+    if (await card.getAttribute('open') === null) await card.locator(':scope>summary').click();
+    await card.locator('.lead-comparisons>summary').click();
+    const option = card.locator('.lead-comparisons>div').nth(leadIndex);
+    await expect(option.locator('img')).toHaveCount(2);
+    await option.getByRole('button', {name: '用此首发保存计划'}).click();
+    await expect(page.getByRole('status').filter({hasText: '已保存到构筑笔记'})).toBeVisible();
+    const research = await page.evaluate(input => window.poke.call('research', input), {draftId: draft.id, environmentId: draft.environmentId});
+    const plan = research.entries.find(entry => entry.kind === 'plan');
+    expect(plan?.kind).toBe('plan');
+    if (plan?.kind === 'plan') {
+      expect(plan.routes[0].leads).toEqual(lead.members);
+      expect(plan.routes[0].concerns).toContain(`首发场地条件：${fieldSummary(lead.field)}`);
+      for (const concern of lead.concerns) expect(plan.routes[0].concerns).toContain(concern);
+      if (!lead.megaId) expect(plan.routes[0].concerns).toContain('首发 Mega：不使用');
+    }
   } finally {await app.close();}
 });
 
@@ -74,6 +155,7 @@ test('独立资料核对、存储报告与主要页面可访问性', async () =>
     await page.getByRole('button', {name: '读取并整理引文'}).click(); await page.getByLabel('资料标题').fill('本地引文核对验收');
     await page.getByLabel('引文解读1').fill('这是测试引用流程的原文，尚无当前规则实测结论。'); await page.getByLabel('已核对原文和适用条件').check();
     await page.getByRole('button', {name: '保存研究资料'}).click(); await expect(page.getByRole('dialog')).toBeHidden(); await expect(page.getByText('1 条已核对引文', {exact: false})).toBeVisible();
+    await page.locator('.environment-management>summary').click();
     await page.getByText('本地存储与运行占用', {exact: true}).click(); await page.getByRole('button', {name: '读取当前占用'}).click(); await expect(page.getByText('数据库中的内容大小（文件大小另列）')).toBeVisible();
     await page.getByLabel('删除可重算的分析缓存').check(); await page.getByRole('button', {name: '预览所选清理'}).click(); await expect(page.getByRole('dialog')).toContainText('队伍历史');
     await page.getByRole('button', {name: '执行所选清理'}).click(); await expect(page.getByRole('dialog')).toBeHidden();

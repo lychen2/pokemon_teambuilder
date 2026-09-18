@@ -4,6 +4,7 @@ import type {ScenarioResult} from './analysis/scenarios';
 import type {SelectionAnalysis} from './analysis/selections';
 import type {RoleKnowledge} from './analysis/role-knowledge';
 import type {RiskComparison} from './battle/risk';
+import type {EnvironmentBenchmarkRequest, EnvironmentBenchmarks, DurabilityRequest, DurabilityAnalysis} from './analysis/environment-benchmarks';
 import type {MaintenanceReport, StorageReport} from './maintenance';
 export const STAT_KEYS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
 export type Stat = typeof STAT_KEYS[number];
@@ -428,6 +429,8 @@ export interface AppState {
 }
 export interface BootstrapData {environment: EnvironmentSnapshot; engine: EngineManifest; dex: DexData; corpus: Corpus; model: Model; translations: Record<string, string>}
 export interface ServiceMethods {
+  environmentBenchmarks: {input: EnvironmentBenchmarkRequest; output: EnvironmentBenchmarks};
+  durabilityBenchmarks: {input: DurabilityRequest; output: DurabilityAnalysis};
   documents: {input: {environmentId: string}; output: ResearchDocument[]};
   prepareDocument: {input: DocumentInput; output: ResearchDocument};
   maintenance: {input: undefined; output: MaintenanceReport};

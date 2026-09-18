@@ -5,6 +5,7 @@ import {Contexts} from '../../../packages/core/context';
 import {TeamSearch} from '../../../packages/core/analysis/search';
 import {optimizeSpread} from '../../../packages/core/analysis/spread';
 import {speedBenchmarks} from '../../../packages/core/analysis/speed';
+import {environmentBenchmarks, durabilityBenchmarks} from '../../../packages/core/analysis/environment-benchmarks';
 import {evaluateScenarios} from '../../../packages/core/analysis/scenarios';
 import {analyzeSelections} from '../../../packages/core/analysis/selections';
 import {simulate} from '../../../packages/core/battle/simulation';
@@ -79,6 +80,8 @@ parentPort!.on('message', async task => {
     else if (task.method === 'optimizeSpread') result = optimizeSpread(evaluator, input);
     else if (task.method === 'damage') result = engine.damage(input.attacker, input.defender, input.field);
     else if (task.method === 'speed') result = speedBenchmarks(engine, meta, input);
+    else if (task.method === 'environmentBenchmarks') result = environmentBenchmarks(engine, meta, input);
+    else if (task.method === 'durabilityBenchmarks') result = durabilityBenchmarks(engine, meta, input);
     else if (task.method === 'scenarios') result = evaluateScenarios(engine, input);
     else if (task.method === 'risk') result = compareRisks(engine, input.attacker, input.defender, input.field);
     else if (task.method === 'selections') result = analyzeSelections(evaluator, input.draft, input.opponentSpecies);

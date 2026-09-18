@@ -13,6 +13,8 @@ const field = fieldSchema;
 const metrics = z.object({pressure: z.number(), resilience: z.number(), speed: z.number(), coverage: z.number(), tailRisk: z.number()});
 const proposal = z.object({id, draftId: id, inputHash: id, modelVersion: id, kind: z.enum(['add', 'complete', 'replace', 'spread']), title: z.string(), baseRevision: z.number().int().nonnegative(), environmentId: id, corpusVersion: id, algorithmVersion: id, members: z.array(member), benefits: z.array(z.string()), tradeoffs: z.array(z.string()), metrics, sourceUrls: z.array(z.string()), generated: z.boolean(), elapsedMs: z.number()});
 const schemas: Record<Method, z.ZodType> = {
+  environmentBenchmarks: z.object({environmentId: id, field}),
+  durabilityBenchmarks: z.object({environmentId: id, field, attackerId: id, moveId: id}),
   documents: z.object({environmentId: id}), prepareDocument: z.object({environmentId: id, sourceType: z.enum(['rmt', 'forum', 'social', 'guide', 'replay']), url: z.string(), raw: z.string().optional()}).refine(value => !!value.raw?.trim() || /^https?:\/\//.test(value.url), '请输入公开来源链接或原文'),
   maintenance: z.undefined(), cleanStorage: z.object({planHash: id, analysisCache: z.boolean(), unusedVersions: z.boolean(), compact: z.boolean(), memoryCache: z.boolean()}),
   risk: z.object({environmentId: id, attacker: setSchema, defender: setSchema, field}),

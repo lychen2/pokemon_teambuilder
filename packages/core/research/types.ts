@@ -38,6 +38,7 @@ export interface MatchRecord extends Entry {
   notes: string;
   replayUrl: string;
   planId?: string;
+  planContext?: {title: string; revision: number; route: MatchupRoute};
 }
 export interface ConditionTemplate extends Entry {
   kind: 'condition';

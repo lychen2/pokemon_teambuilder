@@ -1,6 +1,8 @@
-import {expect, test} from 'vitest';
+import {expect, test, vi} from 'vitest';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {BattleEngine} from '../packages/core/battle/engine';
 import {bootstrap, engine, meta, fullDraft} from './fixtures';
 import {MetaModel} from '../packages/core/analysis/model';
 import {Evaluator} from '../packages/core/analysis/evaluate';
@@ -100,6 +102,50 @@ test('显式搜索时间预算不足时不返回未完成队伍，正常调用�
   const configuration = meta.configurations.find(c => c.currentCount > 0)!;
   const result = search.recommend({draft: createDraft(engine.snapshot().id), kind: 'add', options: {candidateBudget: 1, retainedConfigurationIds: [configuration.id]}});
   expect(result[0].search?.budgetMs).toBeNull(); expect(result[0].search?.deadlineReached).toBe(false);
+});
+
+test('补齐提案保持核心与选出引用，重复请求结果一致且候选标识独立', () => {
+  const original = fullDraft();
+  const draft = {...original, members: original.members.slice(0, 2)};
+  const evaluator = new Evaluator(engine, meta); const search = new TeamSearch(evaluator);
+  const pool = original.members.slice(2).map(member => meta.configurations.find(configuration => setKey(configuration.set) === setKey(member.set))!);
+  expect(pool.every(Boolean)).toBe(true);
+  const candidates = vi.spyOn(search, 'candidates').mockReturnValue(pool);
+  try {
+    const first = search.recommend({draft, kind: 'complete'});
+    expect(first.length).toBeGreaterThan(0);
+    for (const proposal of first) {
+      expect(engine.validateDraft({...draft, members: proposal.members})).toEqual([]);
+      expect(proposal.members.slice(0, 2)).toEqual(draft.members);
+      expect(new Set(proposal.members.map(member => member.id)).size).toBe(6);
+      for (const comparison of proposal.lineupComparisons ?? []) {
+        expect(comparison.before.members.every(id => draft.members.some(member => member.id === id))).toBe(true);
+        expect(comparison.after.members.every(id => proposal.members.some(member => member.id === id))).toBe(true);
+        expect(comparison.after.megaId === null || comparison.after.members.includes(comparison.after.megaId)).toBe(true);
+      }
+    }
+    const second = search.recommend({draft, kind: 'complete'});
+    expect(second.map(proposal => proposal.members.map(member => setKey(member.set)))).toEqual(first.map(proposal => proposal.members.map(member => setKey(member.set))));
+    expect(second.map(proposal => proposal.metrics)).toEqual(first.map(proposal => proposal.metrics));
+    const firstIds = new Set(first.flatMap(proposal => proposal.members.slice(2).map(member => member.id)));
+    expect(second.every(proposal => proposal.members.slice(2).every(member => !firstIds.has(member.id)))).toBe(true);
+  } finally {candidates.mockRestore();}
+});
+
+test('允许重复物种的规则下跨层补齐仍为每位成员分配独立标识', () => {
+  const next = new BattleEngine(resolve('assets/engines', bootstrap.engine.id), `${engine.formatId}@@@!Species Clause,!Item Clause`, bootstrap.translations);
+  expect(next.ruleTable.has('speciesclause')).toBe(false);
+  const search = new TeamSearch(new Evaluator(next, meta));
+  const configuration = meta.configurations.find(configuration => configuration.set.speciesId === 'rillaboom' && configuration.currentCount > 0)!;
+  const candidates = vi.spyOn(search, 'candidates').mockReturnValue([configuration]);
+  try {
+    const draft = createDraft(next.snapshot().id);
+    const proposals = search.recommend({draft, kind: 'complete'});
+    expect(proposals).toHaveLength(1);
+    expect(proposals[0].members).toHaveLength(6);
+    expect(new Set(proposals[0].members.map(member => member.id)).size).toBe(6);
+    expect(next.validateDraft({...draft, members: proposals[0].members})).toEqual([]);
+  } finally {candidates.mockRestore();}
 });
 
 test('作者队报的掩护、空间及款待路线随关键队友改变，未知初始特性不冒充原配置', () => {

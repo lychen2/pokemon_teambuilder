@@ -53,6 +53,7 @@ test('核心构筑、方案比较、撤销、保存恢复与窄窗口', async ()
     await expect(page.getByTestId('team-member')).toHaveCount(6);
     await expect(page.getByRole('button', {name: '解锁大狃拉核心', exact: true})).toBeVisible();
     await page.getByRole('button', {name: '环境', exact: true}).click();
+    await page.locator('.environment-management>summary').click();
     await expect(page.getByText('Champions M-C', {exact: true})).toBeVisible();
     await expect(page.getByText('184 份来源', {exact: true})).toBeVisible();
     await page.screenshot({path: 'test-results/environment.png'});

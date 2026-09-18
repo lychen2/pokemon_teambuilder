@@ -1,0 +1,54 @@
+import {test, expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {mkdtemp} from 'node:fs/promises';
+import {join} from 'node:path';
+import {tmpdir} from 'node:os';
+import {launchDesktop} from './launch';
+
+test('环境速度、真实耐久阈值、图像和计算条件可以一起检查', async () => {
+  const app = await launchDesktop(await mkdtemp(join(tmpdir(), 'poke-environment-lines-')));
+  try {
+    const page = await app.firstWindow();
+    await page.getByRole('button', {name: '环境', exact: true}).click();
+    const panel = page.getByRole('region', {name: '环境对局基准'});
+    await expect(panel.locator('tbody tr')).toHaveCount(24);
+    await expect(panel.locator('.benchmark-config img').first()).toBeVisible();
+    await page.screenshot({path: 'test-results/environment-speed.png'});
+    await panel.getByLabel('筛选环境配置').fill('不存在的配置');
+    await expect(panel.locator('tbody tr')).toHaveCount(0);
+    await panel.getByLabel('筛选环境配置').fill('');
+    await panel.getByRole('button', {name: '输出与耐久', exact: true}).click();
+    await panel.getByLabel('筛选环境配置').fill('木槌');
+    const output = panel.locator('tr[data-configuration-id="8e55c2c64636514b1a1c"][data-move-id="woodhammer"]');
+    await output.getByRole('button', {name: '查看耐久线：木槌', exact: true}).click();
+    const durability = panel.getByRole('region', {name: '对应耐久配置'});
+    await expect(durability.getByRole('heading')).toBeInViewport();
+    const froslass = durability.locator('[data-configuration-id="5130cbbc0e80fb205f86"]');
+    await expect(froslass).toContainText('169'); await expect(froslass).toContainText('170 HP');
+    await expect(froslass).toContainText('HP 25 → 24 点');
+    await expect(froslass.locator('img[data-species-id="froslassmega"]')).toBeVisible();
+    await froslass.locator('.benchmark-config').click();
+    await expect(page.getByRole('dialog')).toContainText('HP 25');
+    await expect(page.getByRole('dialog').locator('.reading-links button').first()).toBeVisible();
+    await page.getByRole('dialog').getByRole('button', {name: '关闭', exact: true}).click();
+    await froslass.getByRole('button', {name: '查看伤害详情与修改条件'}).click();
+    const damage = page.getByRole('dialog').locator('.damage-card').filter({has: page.getByRole('heading', {name: '木槌', exact: true})});
+    await expect(damage).toContainText('144–169 / 170 HP');
+    await page.getByRole('dialog').getByRole('button', {name: '关闭', exact: true}).click();
+    await panel.getByRole('button', {name: '计算条件', exact: true}).click();
+    await page.getByRole('dialog').getByLabel('场地', {exact: true}).selectOption('Grassy');
+    await page.getByRole('dialog').getByRole('button', {name: '查看结果', exact: true}).click();
+    await expect(froslass).toHaveCount(0);
+    await panel.getByRole('button', {name: '计算条件', exact: true}).click();
+    await page.getByRole('dialog').getByLabel('场地', {exact: true}).selectOption('');
+    expect((await new AxeBuilder({page}).setLegacyMode(true).include('[role="dialog"]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([]);
+    await page.getByRole('dialog').getByRole('button', {name: '查看结果', exact: true}).click();
+    await expect(froslass).toBeVisible();
+    expect((await new AxeBuilder({page}).setLegacyMode(true).include('.environment-benchmarks').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([]);
+    await panel.scrollIntoViewIfNeeded();
+    await page.screenshot({path: 'test-results/environment-durability.png'});
+    await app.evaluate(({BrowserWindow}) => {BrowserWindow.getAllWindows()[0].setSize(1024, 768);});
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({path: 'test-results/environment-durability-narrow.png'});
+  } finally {await app.close();}
+});

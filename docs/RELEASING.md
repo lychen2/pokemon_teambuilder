@@ -38,7 +38,9 @@
    |---|---|
    | Linux | `sixfold-<版本>-linux-x86_64.AppImage`、`sixfold-<版本>-linux-x64.tar.gz` |
    | Windows | `sixfold-<版本>-windows-x64-setup.exe`、`sixfold-<版本>-windows-x64.zip` |
-   | 通用 | `SHA256SUMS`、`builder-debug.yml` |
+   | 通用 | `SHA256SUMS` |
+
+发布说明同时保留对应版本的 `docs/releases/<版本>.md`；Release 创建后将该内容写入正文，并保留 Windows 未签名说明。`builder-debug.yml` 是本地打包诊断文件，当前工作流不将其上传到 Release。
 
 ## 手动触发
 

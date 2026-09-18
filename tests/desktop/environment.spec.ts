@@ -25,6 +25,7 @@ test('实际本地规则重建、候选检查、激活、保留旧队伍及迁�
     await page.getByRole('button', {name: '导入', exact: true}).click();
     await page.getByLabel('Showdown 队伍文本').fill(team.raw); await page.getByRole('button', {name: '解析队伍'}).click(); await page.getByRole('button', {name: '开始构筑'}).click();
     await page.getByRole('button', {name: '环境', exact: true}).click();
+    await page.locator('.environment-management>summary').click();
     await page.getByRole('button', {name: '使用本地 Showdown 文件'}).click();
     await page.getByLabel('本地 Showdown 目录').fill(source);
     const started = performance.now();

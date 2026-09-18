@@ -1,0 +1,304 @@
+{
+  "createdAt": "2026-09-18T04:35:28.023Z",
+  "applicationVersion": "0.1.0",
+  "algorithmVersion": "mc-1.6.0",
+  "revision": "0f989f59f0aee86892ffa6d95f607369cc88c3d6",
+  "runtime": {
+    "node": "v26.8.2",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "AMD Ryzen AI 9 H 365 w/ Radeon 880M"
+  },
+  "sourceSha256": {
+    "packages/core/analysis/search.ts": "5d3e968384203a72f9f63be5162f009dc986f2c8bf840065562c4737629d8082",
+    "packages/core/analysis/lineups.ts": "d78a5469a1334d9c5331810b1579a6d68f9ec28c71f4275dfdd415001dcaa147",
+    "packages/core/analysis/evaluate.ts": "4b1afd3c3a2c659069de2400c7bc30f8784d95b14ff264556d95551a4e90e577",
+    "tools/search-benchmark.ts": "f1cf922a6ba6159aafbd2647c3c9d0e45d21a4439ecf90ee24fb9303c6a8c23c",
+    "assets/bootstrap.json": "481315f97aeb5c2a8d2e994919e9a42f0236e21e36954c699d8633aed8dea7f1"
+  },
+  "engine": "a08863c8f297-e7fd7e59f3ee",
+  "environment": "gen9championsvgc2026regmc-b93855027bc29c2f645c",
+  "corpus": "44cdfd0e4846242f486a",
+  "model": "64b896c0c2c39ad06eea",
+  "budget": {
+    "threats": 24,
+    "candidates": 48,
+    "beam": 7,
+    "neighbors": 12,
+    "solutions": 4
+  },
+  "rows": [
+    {
+      "category": "perish-song",
+      "source": "2001945654:MC101",
+      "url": "https://pokepast.es/60458cc1a20c2440",
+      "cache": "cold",
+      "input": [
+        "gengar|gengarite|cursedbody|modest|30,0,19,1,11,5|perishsong,protect,shadowball,sludgebomb||50",
+        "snorlax|leftovers|thickfat|relaxed|32,0,32,0,2,0|encore,fissure,protect,yawn||50"
+      ],
+      "elapsedMs": 7260.041845000001,
+      "damageQueries": 8880,
+      "lineupEvaluations": 14061,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 1450,
+        "reusedStates": 354,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "470c3c9df931cfb63513244a8e06c2de90518fda6ef08999b15662b4e852f6d3"
+    },
+    {
+      "category": "perish-song",
+      "source": "2001945654:MC101",
+      "url": "https://pokepast.es/60458cc1a20c2440",
+      "cache": "warm",
+      "input": [
+        "gengar|gengarite|cursedbody|modest|30,0,19,1,11,5|perishsong,protect,shadowball,sludgebomb||50",
+        "snorlax|leftovers|thickfat|relaxed|32,0,32,0,2,0|encore,fissure,protect,yawn||50"
+      ],
+      "elapsedMs": 3921.962245999999,
+      "damageQueries": 0,
+      "lineupEvaluations": 14061,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 1450,
+        "reusedStates": 354,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "470c3c9df931cfb63513244a8e06c2de90518fda6ef08999b15662b4e852f6d3"
+    },
+    {
+      "category": "revival",
+      "source": "2001945654:MC111",
+      "url": "https://pokepast.es/d65b60024d63d8bd",
+      "cache": "cold",
+      "input": [
+        "floetteeternal|floettite|flowerveil|timid|20,0,25,0,0,21|calmmind,dazzlinggleam,drainingkiss,protect|F|50",
+        "delphox|delphoxite|blaze|timid|15,0,17,12,0,22|heatwave,nastyplot,protect,psyshock||50"
+      ],
+      "elapsedMs": 11592.153488999998,
+      "damageQueries": 10176,
+      "lineupEvaluations": 33475,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2633,
+        "reusedStates": 580,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "d091a27d7cad148beb0dbea3295c51f7287cc7d9f80cd8120a277759eee30e0c"
+    },
+    {
+      "category": "revival",
+      "source": "2001945654:MC111",
+      "url": "https://pokepast.es/d65b60024d63d8bd",
+      "cache": "warm",
+      "input": [
+        "floetteeternal|floettite|flowerveil|timid|20,0,25,0,0,21|calmmind,dazzlinggleam,drainingkiss,protect|F|50",
+        "delphox|delphoxite|blaze|timid|15,0,17,12,0,22|heatwave,nastyplot,protect,psyshock||50"
+      ],
+      "elapsedMs": 9369.588433000004,
+      "damageQueries": 0,
+      "lineupEvaluations": 33475,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2633,
+        "reusedStates": 580,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "d091a27d7cad148beb0dbea3295c51f7287cc7d9f80cd8120a277759eee30e0c"
+    },
+    {
+      "category": "trick-room",
+      "source": "2001945654:MC1",
+      "url": "https://pokepast.es/f088ca02dfea05be",
+      "cache": "cold",
+      "input": [
+        "indeedeef|colburberry|psychicsurge|relaxed|32,0,32,0,2,0|followme,helpinghand,terrainpulse,trickroom|F|50",
+        "torkoal|charcoal|drought|quiet|32,0,1,32,1,0|eruption,heatwave,protect,weatherball||50"
+      ],
+      "elapsedMs": 9837.805311000004,
+      "damageQueries": 12768,
+      "lineupEvaluations": 20234,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2083,
+        "reusedStates": 238,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "3e582f11e7671658ecb24a48dbb74960aa61d513de126e7004a6119c1801763a"
+    },
+    {
+      "category": "trick-room",
+      "source": "2001945654:MC1",
+      "url": "https://pokepast.es/f088ca02dfea05be",
+      "cache": "warm",
+      "input": [
+        "indeedeef|colburberry|psychicsurge|relaxed|32,0,32,0,2,0|followme,helpinghand,terrainpulse,trickroom|F|50",
+        "torkoal|charcoal|drought|quiet|32,0,1,32,1,0|eruption,heatwave,protect,weatherball||50"
+      ],
+      "elapsedMs": 5943.425337000001,
+      "damageQueries": 0,
+      "lineupEvaluations": 20234,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2083,
+        "reusedStates": 238,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "3e582f11e7671658ecb24a48dbb74960aa61d513de126e7004a6119c1801763a"
+    },
+    {
+      "category": "terrain-unburden",
+      "source": "2001945654:MC100",
+      "url": "https://pokepast.es/36cd120de5ec394c",
+      "cache": "cold",
+      "input": [
+        "lucario|lucarionitez|innerfocus|timid|17,0,32,0,0,17|aurasphere,calmmind,flashcannon,protect||50",
+        "aerodactyl|aerodactylite|unnerve|jolly|2,32,0,0,0,32|dualwingbeat,rockslide,tailwind,wideguard||50"
+      ],
+      "elapsedMs": 10734.487121999999,
+      "damageQueries": 6480,
+      "lineupEvaluations": 28207,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2729,
+        "reusedStates": 561,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "9963a4fa0d2a204d73d02d1ae4ca86a0af310f8170c406846b7432eb1f1a9b48"
+    },
+    {
+      "category": "terrain-unburden",
+      "source": "2001945654:MC100",
+      "url": "https://pokepast.es/36cd120de5ec394c",
+      "cache": "warm",
+      "input": [
+        "lucario|lucarionitez|innerfocus|timid|17,0,32,0,0,17|aurasphere,calmmind,flashcannon,protect||50",
+        "aerodactyl|aerodactylite|unnerve|jolly|2,32,0,0,0,32|dualwingbeat,rockslide,tailwind,wideguard||50"
+      ],
+      "elapsedMs": 8305.689735999993,
+      "damageQueries": 0,
+      "lineupEvaluations": 28207,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2729,
+        "reusedStates": 561,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "9963a4fa0d2a204d73d02d1ae4ca86a0af310f8170c406846b7432eb1f1a9b48"
+    },
+    {
+      "category": "sun",
+      "source": "2001945654:MC104",
+      "url": "https://pokepast.es/ede01efa45931c7c",
+      "cache": "cold",
+      "input": [
+        "salamence|salamencite|intimidate|hasty|2,0,0,32,0,32|doubleedge,hypervoice,protect,tailwind||50",
+        "charizard|charizarditey|blaze|modest|22,0,20,11,0,13|ancientpower,heatwave,protect,weatherball||50"
+      ],
+      "elapsedMs": 14064.297019000005,
+      "damageQueries": 16944,
+      "lineupEvaluations": 26118,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2632,
+        "reusedStates": 783,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "3572c9e6117d2444ab7814c5b9e6362317c15e593c0f8dfa81fddd0c47246986"
+    },
+    {
+      "category": "sun",
+      "source": "2001945654:MC104",
+      "url": "https://pokepast.es/ede01efa45931c7c",
+      "cache": "warm",
+      "input": [
+        "salamence|salamencite|intimidate|hasty|2,0,0,32,0,32|doubleedge,hypervoice,protect,tailwind||50",
+        "charizard|charizarditey|blaze|modest|22,0,20,11,0,13|ancientpower,heatwave,protect,weatherball||50"
+      ],
+      "elapsedMs": 8331.326117000004,
+      "damageQueries": 0,
+      "lineupEvaluations": 26118,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 2632,
+        "reusedStates": 783,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "3572c9e6117d2444ab7814c5b9e6362317c15e593c0f8dfa81fddd0c47246986"
+    },
+    {
+      "category": "pivot",
+      "source": "2001945654:MC103",
+      "url": "https://pokepast.es/134747480705edc0",
+      "cache": "cold",
+      "input": [
+        "baxcalibur|baxcalibrite|thermalexchange|adamant|32,23,0,0,5,6|glaiverush,iceshard,protect,swordsdance||50",
+        "ninetalesalola|lightclay|snowwarning|timid|5,0,7,22,0,32|auroraveil,blizzard,moonblast,protect||50"
+      ],
+      "elapsedMs": 7847.807379999998,
+      "damageQueries": 9840,
+      "lineupEvaluations": 21263,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 1958,
+        "reusedStates": 237,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "b1bd0239fad82ddba99674426ac180ceeeda0bf9b346afe3d352b90631163d38"
+    },
+    {
+      "category": "pivot",
+      "source": "2001945654:MC103",
+      "url": "https://pokepast.es/134747480705edc0",
+      "cache": "warm",
+      "input": [
+        "baxcalibur|baxcalibrite|thermalexchange|adamant|32,23,0,0,5,6|glaiverush,iceshard,protect,swordsdance||50",
+        "ninetalesalola|lightclay|snowwarning|timid|5,0,7,22,0,32|auroraveil,blizzard,moonblast,protect||50"
+      ],
+      "elapsedMs": 5662.923078000007,
+      "damageQueries": 0,
+      "lineupEvaluations": 21263,
+      "search": {
+        "budgetMs": null,
+        "deadlineReached": false,
+        "evaluatedStates": 1958,
+        "reusedStates": 237,
+        "completedLayers": 4
+      },
+      "solutions": 4,
+      "signature": "b1bd0239fad82ddba99674426ac180ceeeda0bf9b346afe3d352b90631163d38"
+    }
+  ],
+  "comparison": null,
+  "notes": [
+    "Six distinct real development sources; complete their first two members using the default search without a deadline.",
+    "Cold means a new Evaluator and TeamSearch; warm repeats that request on those instances. Module and process caches may already be warm.",
+    "Elapsed time covers recommend including proposal explanations, excluding fixture loading and assertions. One observation per case/cache, not a latency percentile.",
+    "Signatures cover ordered sets, locks, scores, search counts, explanations and normalized lineup references; wall time and random IDs are excluded.",
+    "This is a performance and equivalence check, not independent battle-quality evidence."
+  ]
+}

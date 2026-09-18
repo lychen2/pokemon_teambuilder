@@ -73,7 +73,7 @@ export class LocalService {
       if (preference?.kind === 'preferences') input = {...input, options: {weights: preference.weights, retainedConfigurationIds: preference.retainedConfigurationIds, allowHistorical: preference.allowHistorical, ...input.options}};
     }
     const env = input?.environmentId || input?.draft?.environmentId || this.store.activeEnvironment();
-    if (['bootstrap', 'environmentState', 'posterior', 'analyze', 'recommend', 'optimizeSpread', 'damage', 'speed', 'scenarios', 'selections', 'risk', 'simulate', 'validate', 'export', 'parse', 'roleKnowledge', 'applyProposal', 'migrateDraft'].includes(method)) await this.ensureModel(env);
+    if (['bootstrap', 'environmentState', 'posterior', 'analyze', 'recommend', 'optimizeSpread', 'damage', 'speed', 'environmentBenchmarks', 'durabilityBenchmarks', 'scenarios', 'selections', 'risk', 'simulate', 'validate', 'export', 'parse', 'roleKnowledge', 'applyProposal', 'migrateDraft'].includes(method)) await this.ensureModel(env);
     const record = this.store.environment(env);
     const context = () => this.contexts.get(env);
     let result: any;
@@ -116,7 +116,7 @@ export class LocalService {
       // A tiny stat query bypasses long recommendation jobs and persistent caches.
       case 'memberStats': result = memberStats(context().engine, input.set, input.field); break;
       case 'posterior': result = context().meta.configurationPosterior(input.speciesId, input.teammates, input.known); break;
-      case 'analyze': case 'recommend': case 'optimizeSpread': case 'damage': case 'speed': case 'scenarios': case 'selections': case 'risk': {
+      case 'analyze': case 'recommend': case 'optimizeSpread': case 'damage': case 'speed': case 'environmentBenchmarks': case 'durabilityBenchmarks': case 'scenarios': case 'selections': case 'risk': {
         const draft = input.draft ?? (method === 'analyze' ? input : undefined);
         const computationInput = draft ? {...input, ...(method === 'analyze' ? {name: '', notes: '', updatedAt: '', revision: draft.analysisRevision} : {draft: {...draft, name: '', notes: '', updatedAt: '', revision: draft.analysisRevision}})} : input;
         const key = hash([method, computationInput, record.corpusVersion, record.modelVersion, ALGORITHM_VERSION]);

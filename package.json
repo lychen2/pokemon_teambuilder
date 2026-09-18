@@ -1,6 +1,6 @@
 {
   "name": "sixfold",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "license": "Apache-2.0",
   "author": "lychen2",
@@ -28,6 +28,7 @@
     "package:win": "pnpm build && pnpm licenses:collect && electron-builder --win nsis zip --publish never",
     "licenses:collect": "node tools/collect-licenses.mjs",
     "benchmark:research": "tsx tools/research-benchmark.ts",
+    "benchmark:search": "tsx tools/search-benchmark.ts",
     "benchmark:strategies": "tsx tools/strategy-benchmark.ts",
     "benchmark:information": "tsx tools/information-benchmark.ts",
     "benchmark:external": "tsx tools/external-benchmark.ts",
